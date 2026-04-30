@@ -1,13 +1,13 @@
 """
-CMGAN 多任务模型: T60估计 + 去噪
-基于原始 TSCNet，仅增加 T60 回归头
+CMGAN backbone for single-task T60 estimation.
+
+This branch keeps the DenseEncoder + TSCB acoustic backbone and removes the
+enhancement decoders entirely. The model only predicts normalized T60.
 """
 
 import torch
 import torch.nn as nn
-from models.generator import (
-    DenseEncoder, TSCB, MaskDecoder, ComplexDecoder,
-)
+from models.generator import DenseEncoder, TSCB
 
 
 class MultiStatsPool(nn.Module):
@@ -51,16 +51,12 @@ class T60HeadWithPool(nn.Module):
         return self.fc(x).squeeze(-1)  # (B,)
 
 
-class TSCNet_MultiTask(nn.Module):
-    """CMGAN 多任务模型: 去噪 + T60估计
-
-    与原始 TSCNet 的区别:
-      - forward 额外返回 t60_pred
-      - 其他完全一致
-    """
+class TSCNet_T60Estimator(nn.Module):
+    """CMGAN encoder/TSCB backbone for single-task T60 estimation."""
 
     def __init__(self, num_channel=64, num_features=201):
         super().__init__()
+        del num_features  # Kept for CLI/checkpoint compatibility with old constructors.
         self.dense_encoder = DenseEncoder(in_channel=3, channels=num_channel)
 
         self.TSCB_1 = TSCB(num_channel=num_channel)
@@ -68,12 +64,6 @@ class TSCNet_MultiTask(nn.Module):
         self.TSCB_3 = TSCB(num_channel=num_channel)
         self.TSCB_4 = TSCB(num_channel=num_channel)
 
-        self.mask_decoder = MaskDecoder(
-            num_features, num_channel=num_channel, out_channel=1
-        )
-        self.complex_decoder = ComplexDecoder(num_channel=num_channel)
-
-        # 唯一新增: T60 回归头
         self.t60_head = T60HeadWithPool(bottleneck_dim=num_channel, hidden_dim=128)
 
     def forward(self, x):
@@ -81,15 +71,10 @@ class TSCNet_MultiTask(nn.Module):
         参数:
             x: (B, 2, T, F) 复数STFT [real, imag]，已 permute
         返回:
-            est_real:   (B, 1, F, T) 增强后的实部
-            est_imag:   (B, 1, F, T) 增强后的虚部
             t60_pred:   (B,) 归一化T60预测 [0, 1]
         """
-        # 提取幅度和相位
+        # 提取幅度，与原始复数谱一起作为 3 通道输入。
         mag = torch.sqrt(x[:, 0, :, :] ** 2 + x[:, 1, :, :] ** 2).unsqueeze(1)
-        noisy_phase = torch.angle(
-            torch.complex(x[:, 0, :, :], x[:, 1, :, :])
-        ).unsqueeze(1)
         x_in = torch.cat([mag, x], dim=1)
 
         # 编码器 + Conformer
@@ -100,26 +85,13 @@ class TSCNet_MultiTask(nn.Module):
         out_5 = self.TSCB_4(out_4)
 
         # T60 估计 (新增)
-        t60_pred = self.t60_head(out_5)
-
-        # 去噪: 幅度掩码
-        mask = self.mask_decoder(out_5)
-        out_mag = mask * mag
-
-        # 去噪: 复数残差
-        complex_out = self.complex_decoder(out_5)
-        mag_real = out_mag * torch.cos(noisy_phase)
-        mag_imag = out_mag * torch.sin(noisy_phase)
-        final_real = mag_real + complex_out[:, 0, :, :].unsqueeze(1)
-        final_imag = mag_imag + complex_out[:, 1, :, :].unsqueeze(1)
-
-        return final_real, final_imag, t60_pred
+        return self.t60_head(out_5)
 
 
-class TSCNet_MultiTask_2TSCB(nn.Module):
-    """CMGAN 多任务模型 (2层TSCB): 去噪 + T60估计
+class TSCNet_T60Estimator_2TSCB(nn.Module):
+    """CMGAN single-task T60 estimator with 2 TSCB blocks.
 
-    与 TSCNet_MultiTask 的区别:
+    与 TSCNet_T60Estimator 的区别:
       - 只用 2 层 TSCB（砍掉 TSCB_3 和 TSCB_4）
       - 计算量减半，训练速度约 2-3x
       - 参数: 1.87M → ~1.35M
@@ -127,38 +99,20 @@ class TSCNet_MultiTask_2TSCB(nn.Module):
 
     def __init__(self, num_channel=64, num_features=201):
         super().__init__()
+        del num_features  # Kept for CLI/checkpoint compatibility with old constructors.
         self.dense_encoder = DenseEncoder(in_channel=3, channels=num_channel)
 
         self.TSCB_1 = TSCB(num_channel=num_channel)
         self.TSCB_2 = TSCB(num_channel=num_channel)
 
-        self.mask_decoder = MaskDecoder(
-            num_features, num_channel=num_channel, out_channel=1
-        )
-        self.complex_decoder = ComplexDecoder(num_channel=num_channel)
-
         self.t60_head = T60HeadWithPool(bottleneck_dim=num_channel, hidden_dim=128)
 
     def forward(self, x):
         mag = torch.sqrt(x[:, 0, :, :] ** 2 + x[:, 1, :, :] ** 2).unsqueeze(1)
-        noisy_phase = torch.angle(
-            torch.complex(x[:, 0, :, :], x[:, 1, :, :])
-        ).unsqueeze(1)
         x_in = torch.cat([mag, x], dim=1)
 
         out_1 = self.dense_encoder(x_in)
         out_2 = self.TSCB_1(out_1)
         out_3 = self.TSCB_2(out_2)
 
-        t60_pred = self.t60_head(out_3)
-
-        mask = self.mask_decoder(out_3)
-        out_mag = mask * mag
-
-        complex_out = self.complex_decoder(out_3)
-        mag_real = out_mag * torch.cos(noisy_phase)
-        mag_imag = out_mag * torch.sin(noisy_phase)
-        final_real = mag_real + complex_out[:, 0, :, :].unsqueeze(1)
-        final_imag = mag_imag + complex_out[:, 1, :, :].unsqueeze(1)
-
-        return final_real, final_imag, t60_pred
+        return self.t60_head(out_3)

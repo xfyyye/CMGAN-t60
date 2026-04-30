@@ -1,6 +1,6 @@
 """
-CMGAN 多任务训练: T60估计 + 去噪
-- 多任务损失: α×denoise_loss + β×t60_loss
+CMGAN 单任务训练: T60估计
+- 只保留 CMGAN encoder/TSCB backbone + T60 head
 - SwanLab 实验追踪
 - ReduceLROnPlateau + Early Stopping
 """
@@ -9,97 +9,38 @@ import os
 import sys
 import json
 import argparse
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from models.generator_t60 import TSCNet_MultiTask, TSCNet_MultiTask_2TSCB
-from dataset import DEFAULT_DATASET_ROOT, create_dataloaders, resolve_dataset_root, T60Normalizer
-from utils import power_compress, power_uncompress
+from models.generator_t60 import TSCNet_T60Estimator, TSCNet_T60Estimator_2TSCB
+from dataset import DEFAULT_DATASET_ROOT, create_dataloaders, resolve_dataset_root
+from utils import power_compress
 
 
-# ─── 多任务损失 ──────────────────────────────────────────────────
+# ─── T60 单任务损失 ──────────────────────────────────────────────
 
-class MultiTaskLoss(nn.Module):
-    """CMGAN 多任务损失
+class T60Loss(nn.Module):
+    """T60 regression loss on normalized labels."""
 
-    denoise_loss = w_ri × L_RI + w_mag × L_mag + w_time × L_time
-    t60_loss = MSE(t60_pred, t60_target)
-    total = alpha × denoise_loss + beta × t60_loss
-    """
-
-    def __init__(
-        self,
-        n_fft=400, hop=100,
-        w_ri=0.1, w_mag=0.9, w_time=0.2,
-        alpha=0.1, beta=1.0,
-    ):
+    def __init__(self, loss_type='mse', huber_delta=1.0):
         super().__init__()
-        self.n_fft = n_fft
-        self.hop = hop
-        self.w_ri = w_ri
-        self.w_mag = w_mag
-        self.w_time = w_time
-        self.alpha = alpha
-        self.beta = beta
+        if loss_type not in {'mse', 'mae', 'huber'}:
+            raise ValueError(f'Unsupported loss_type: {loss_type}')
+        self.loss_type = loss_type
+        self.huber_delta = huber_delta
 
-    def forward(self, est_real, est_imag, clean_spec, t60_pred, t60_target, clean_wav=None):
-        """
-        参数:
-            est_real: (B, 1, T, F) 模型输出的增强实部 (压缩域)
-            est_imag: (B, 1, T, F) 模型输出的增强虚部 (压缩域)
-            clean_spec: (B, 2, T, F) 干净混响的原始复数STFT (未压缩)
-            t60_pred: (B,) T60预测
-            t60_target: (B,) T60标签
-            clean_wav: (B, T_wav) 干净波形 (用于时域损失)
-        """
-        # ── 去噪损失 (功率压缩域，与原始论文一致) ──
-        # 压缩 clean_spec: (B, 2, T, F) → (B, F, T, 2) → power_compress → (B, 2, F, T)
-        clean_pc = power_compress(clean_spec.permute(0, 3, 2, 1))
-        clean_real = clean_pc[:, 0, :, :].unsqueeze(1)  # (B, 1, F, T)
-        clean_imag = clean_pc[:, 1, :, :].unsqueeze(1)
-        clean_mag = torch.sqrt(clean_real ** 2 + clean_imag ** 2)
+    def forward(self, t60_pred, t60_target):
+        if self.loss_type == 'mse':
+            loss = F.mse_loss(t60_pred, t60_target)
+        elif self.loss_type == 'mae':
+            loss = F.l1_loss(t60_pred, t60_target)
+        else:
+            loss = F.huber_loss(t60_pred, t60_target, delta=self.huber_delta)
 
-        # 模型输出 permute 到 (B, 1, F, T) 与 clean 对齐
-        est_real_f = est_real.permute(0, 1, 3, 2)
-        est_imag_f = est_imag.permute(0, 1, 3, 2)
-        est_mag = torch.sqrt(est_real_f ** 2 + est_imag_f ** 2)
-
-        # RI 损失
-        loss_ri = F.mse_loss(est_real_f, clean_real) + F.mse_loss(est_imag_f, clean_imag)
-        # 幅度损失
-        loss_mag = F.mse_loss(est_mag, clean_mag)
-
-        # 时域损失 (解压 → ISTFT → L1)
-        loss_time = torch.tensor(0.0, device=est_real.device)
-        if self.w_time > 0 and clean_wav is not None:
-            est_spec_uncompress = power_uncompress(est_real_f, est_imag_f).squeeze(1)  # (B, F, T, 2)
-            est_spec_complex = torch.complex(est_spec_uncompress[..., 0], est_spec_uncompress[..., 1])
-            est_audio = torch.istft(
-                est_spec_complex,
-                self.n_fft, self.hop,
-                window=torch.hamming_window(self.n_fft).to(est_real.device),
-                onesided=True,
-            )
-            min_len = min(est_audio.size(-1), clean_wav.size(-1))
-            loss_time = F.l1_loss(est_audio[..., :min_len], clean_wav[..., :min_len])
-
-        denoise_loss = self.w_ri * loss_ri + self.w_mag * loss_mag + self.w_time * loss_time
-
-        # ── T60 损失 ──
-        t60_loss = F.mse_loss(t60_pred, t60_target)
-
-        # ── 总损失 ──
-        total = self.alpha * denoise_loss + self.beta * t60_loss
-
-        return total, {
-            'denoise_loss': denoise_loss.item(),
-            'loss_ri': loss_ri.item(),
-            'loss_mag': loss_mag.item(),
-            'loss_time': loss_time.item(),
-            't60_loss': t60_loss.item(),
-            'total_loss': total.item(),
+        return loss, {
+            't60_loss': loss.item(),
+            'total_loss': loss.item(),
         }
 
 
@@ -142,6 +83,8 @@ class EarlyStopping:
 
 def train(args):
     args.dataset_root = resolve_dataset_root(args.dataset_root)
+    if args.config:
+        print(f'配置文件: {args.config}')
     print(f'数据集路径: {args.dataset_root}')
     print(f'固定音频长度: {args.audio_length:.2f}s ({int(args.audio_length * args.target_sr)} samples)')
 
@@ -177,9 +120,9 @@ def train(args):
 
     # 模型
     if args.n_tscb == 2:
-        model = TSCNet_MultiTask_2TSCB(num_channel=64, num_features=args.n_fft // 2 + 1)
+        model = TSCNet_T60Estimator_2TSCB(num_channel=64, num_features=args.n_fft // 2 + 1)
     else:
-        model = TSCNet_MultiTask(num_channel=64, num_features=args.n_fft // 2 + 1)
+        model = TSCNet_T60Estimator(num_channel=64, num_features=args.n_fft // 2 + 1)
     model = model.to(device)
     if n_gpu > 1:
         model = nn.DataParallel(model)
@@ -189,11 +132,8 @@ def train(args):
     print(f'模型参数: {raw_params:,} ({raw_params / 1e6:.2f}M)')
 
     # 损失
-    criterion = MultiTaskLoss(
-        n_fft=args.n_fft, hop=args.hop_length,
-        w_ri=args.w_ri, w_mag=args.w_mag, w_time=args.w_time,
-        alpha=args.alpha, beta=args.beta,
-    )
+    criterion = T60Loss(loss_type=args.loss, huber_delta=args.huber_delta)
+    print(f'T60 loss: {args.loss}')
 
     # 优化器 + AMP
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -209,13 +149,10 @@ def train(args):
         save_path=os.path.join(args.save_dir, 'best_model.pth'),
     )
 
-    # T60归一化器
-    t60_normalizer = T60Normalizer(args.t60_min, args.t60_max)
-
     # 训练循环
     history = []
-    print(f'\n{"Epoch":>6} {"Train Loss":>10} {"Val Loss":>10} {"Denoise":>10} {"T60":>10} {"LR":>12}')
-    print('─' * 66)
+    print(f'\n{"Epoch":>6} {"Train Loss":>10} {"Val Loss":>10} {"T60":>10} {"LR":>12}')
+    print('─' * 54)
 
     # 梯度累积步数 (有效 batch = batch_size × accum_steps)
     accum_steps = args.accum_steps
@@ -236,8 +173,6 @@ def train(args):
 
         for step_idx, batch in enumerate(train_loader):
             noisy_spec = batch['noisy_spec'].to(device)  # (B, 2, T, F) 原始STFT
-            clean_spec = batch['clean_spec'].to(device)
-            clean_wav = batch['clean_wav'].to(device)
             t60_target = batch['t60'].to(device)
 
             # 功率压缩: (B, 2, T, F) → (B, F, T, 2) → power_compress → (B, 2, F, T) → permute → (B, 2, T, F)
@@ -245,12 +180,8 @@ def train(args):
 
             # AMP 混合精度前向
             with torch.amp.autocast('cuda'):
-                est_real, est_imag, t60_pred = model(noisy_input)
-                loss, metrics = criterion(
-                    est_real, est_imag, clean_spec,
-                    t60_pred, t60_target,
-                    clean_wav=clean_wav,
-                )
+                t60_pred = model(noisy_input)
+                loss, metrics = criterion(t60_pred, t60_target)
                 # 梯度累积: 缩放损失
                 scaled_loss = loss / accum_steps
 
@@ -291,19 +222,13 @@ def train(args):
         with torch.no_grad():
             for batch in eval_loader:
                 noisy_spec = batch['noisy_spec'].to(device)
-                clean_spec = batch['clean_spec'].to(device)
-                clean_wav = batch['clean_wav'].to(device)
                 t60_target = batch['t60'].to(device)
 
                 noisy_input = power_compress(noisy_spec.permute(0, 3, 2, 1)).permute(0, 1, 3, 2)
 
                 with torch.cuda.amp.autocast():
-                    est_real, est_imag, t60_pred = model(noisy_input)
-                    loss, metrics = criterion(
-                        est_real, est_imag, clean_spec,
-                        t60_pred, t60_target,
-                        clean_wav=clean_wav,
-                    )
+                    t60_pred = model(noisy_input)
+                    loss, metrics = criterion(t60_pred, t60_target)
 
                 val_loss_sum += metrics['total_loss']
                 for k, v in metrics.items():
@@ -332,7 +257,6 @@ def train(args):
 
         # 打印
         print(f'{epoch:>6d} {avg_train_loss:>10.4f} {avg_val_loss:>10.4f} '
-              f'{avg_val_metrics.get("denoise_loss", 0):>10.4f} '
               f'{avg_val_metrics.get("t60_loss", 0):>10.4f} '
               f'{current_lr:>12.2e}{marker}')
 
@@ -382,40 +306,125 @@ def train(args):
 
 # ─── 入口 ────────────────────────────────────────────────────────
 
+def load_config_defaults(config_path):
+    if not config_path:
+        return {}
+
+    try:
+        import yaml
+    except ImportError as exc:
+        raise ImportError('使用 --config 需要安装 PyYAML: pip install PyYAML') from exc
+
+    with open(config_path, 'r') as f:
+        cfg = yaml.safe_load(f) or {}
+
+    defaults = {}
+
+    def section(name):
+        value = cfg.get(name, {})
+        return value if isinstance(value, dict) else {}
+
+    data_cfg = section('data')
+    for key in ['dataset_root', 'n_fft', 'hop_length', 'audio_length', 'target_sr', 't60_min', 't60_max']:
+        if key in data_cfg:
+            defaults[key] = data_cfg[key]
+
+    train_cfg = section('train')
+    for key in [
+        'batch_size', 'max_epochs', 'lr', 'weight_decay',
+        'early_stop_patience', 'num_workers', 'accum_steps',
+    ]:
+        if key in train_cfg:
+            defaults[key] = train_cfg[key]
+
+    test_cfg = section('test')
+    if 'batch_size' in test_cfg:
+        defaults['test_batch_size'] = test_cfg['batch_size']
+    if 'num_workers' in test_cfg:
+        defaults['test_num_workers'] = test_cfg['num_workers']
+    if 'gpu_id' in test_cfg:
+        defaults['test_gpu_id'] = test_cfg['gpu_id']
+
+    model_cfg = section('model')
+    if 'n_tscb' in model_cfg:
+        defaults['n_tscb'] = model_cfg['n_tscb']
+
+    loss_cfg = section('loss')
+    if 'name' in loss_cfg:
+        defaults['loss'] = loss_cfg['name']
+    if 'huber_delta' in loss_cfg:
+        defaults['huber_delta'] = loss_cfg['huber_delta']
+
+    exp_cfg = section('experiment')
+    exp_name = exp_cfg.get('name')
+    output_root = exp_cfg.get('output_root')
+    if exp_name:
+        defaults['experiment_name'] = exp_name
+    if 'save_dir' in exp_cfg:
+        defaults['save_dir'] = exp_cfg['save_dir']
+    elif output_root and exp_name:
+        defaults['save_dir'] = os.path.join(output_root, exp_name)
+    elif output_root:
+        defaults['save_dir'] = output_root
+    if 'save_dir' in test_cfg:
+        defaults['test_save_dir'] = test_cfg['save_dir']
+    elif output_root and exp_name:
+        defaults['test_save_dir'] = os.path.join(output_root, exp_name, 'test')
+
+    logging_cfg = section('logging')
+    if 'swanlab_project' in logging_cfg:
+        defaults['swanlab_project'] = logging_cfg['swanlab_project']
+
+    return defaults
+
+
 def parse_args():
-    parser = argparse.ArgumentParser(description='CMGAN 多任务训练: T60估计 + 去噪')
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument('--config', type=str, default=None)
+    pre_args, _ = pre_parser.parse_known_args()
+    config_defaults = load_config_defaults(pre_args.config)
+
+    parser = argparse.ArgumentParser(description='CMGAN 单任务训练: T60估计')
+    parser.add_argument('--config', type=str, default=pre_args.config,
+                        help='YAML实验配置文件路径')
 
     # 数据
     parser.add_argument('--dataset_root', type=str,
-                        default=DEFAULT_DATASET_ROOT)
-    parser.add_argument('--n_fft', type=int, default=400)
-    parser.add_argument('--hop_length', type=int, default=100)
-    parser.add_argument('--audio_length', type=float, default=4.0)
-    parser.add_argument('--target_sr', type=int, default=16000)
-    parser.add_argument('--t60_min', type=float, default=0.1)
-    parser.add_argument('--t60_max', type=float, default=1.5)
+                        default=config_defaults.get('dataset_root', DEFAULT_DATASET_ROOT))
+    parser.add_argument('--n_fft', type=int, default=config_defaults.get('n_fft', 400))
+    parser.add_argument('--hop_length', type=int, default=config_defaults.get('hop_length', 100))
+    parser.add_argument('--audio_length', type=float, default=config_defaults.get('audio_length', 4.0))
+    parser.add_argument('--target_sr', type=int, default=config_defaults.get('target_sr', 16000))
+    parser.add_argument('--t60_min', type=float, default=config_defaults.get('t60_min', 0.1))
+    parser.add_argument('--t60_max', type=float, default=config_defaults.get('t60_max', 1.5))
 
     # 训练
-    parser.add_argument('--batch_size', type=int, default=8)
-    parser.add_argument('--max_epochs', type=int, default=100)
-    parser.add_argument('--lr', type=float, default=5e-4)
-    parser.add_argument('--weight_decay', type=float, default=1e-5)
-    parser.add_argument('--early_stop_patience', type=int, default=15)
-    parser.add_argument('--num_workers', type=int, default=4)
-    parser.add_argument('--accum_steps', type=int, default=2, help='梯度累积步数')
-    parser.add_argument('--n_tscb', type=int, default=4, choices=[2, 4], help='TSCB层数')
+    parser.add_argument('--batch_size', type=int, default=config_defaults.get('batch_size', 8))
+    parser.add_argument('--max_epochs', type=int, default=config_defaults.get('max_epochs', 100))
+    parser.add_argument('--lr', type=float, default=config_defaults.get('lr', 5e-4))
+    parser.add_argument('--weight_decay', type=float, default=config_defaults.get('weight_decay', 1e-5))
+    parser.add_argument('--early_stop_patience', type=int, default=config_defaults.get('early_stop_patience', 15))
+    parser.add_argument('--num_workers', type=int, default=config_defaults.get('num_workers', 4))
+    parser.add_argument('--accum_steps', type=int, default=config_defaults.get('accum_steps', 2), help='梯度累积步数')
+    parser.add_argument('--n_tscb', type=int, default=config_defaults.get('n_tscb', 4), choices=[2, 4], help='TSCB层数')
 
-    # 损失权重
-    parser.add_argument('--w_ri', type=float, default=0.1)
-    parser.add_argument('--w_mag', type=float, default=0.9)
-    parser.add_argument('--w_time', type=float, default=0.2)
-    parser.add_argument('--alpha', type=float, default=0.1, help='去噪损失权重')
-    parser.add_argument('--beta', type=float, default=1.0, help='T60损失权重')
+    # 损失
+    parser.add_argument('--loss', type=str, default=config_defaults.get('loss', 'mse'),
+                        choices=['mse', 'mae', 'huber'], help='T60单任务损失')
+    parser.add_argument('--huber_delta', type=float, default=config_defaults.get('huber_delta', 1.0))
 
     # 输出
-    parser.add_argument('--save_dir', type=str, default='runs')
-    parser.add_argument('--experiment_name', type=str, default='CMGAN_t60_multitask')
-    parser.add_argument('--swanlab_project', type=str, default='T60_Estimation')
+    parser.add_argument('--save_dir', type=str, default=config_defaults.get('save_dir', 'runs'))
+    parser.add_argument('--experiment_name', type=str, default=config_defaults.get('experiment_name', 'CMGAN_single_t60'))
+    parser.add_argument('--swanlab_project', type=str, default=config_defaults.get('swanlab_project', 'T60_Estimation'))
+
+    # 测试配置。train-and-test.sh 会在训练结束后沿用这些参数自动评估 test1-test4。
+    parser.add_argument('--test_batch_size', type=int,
+                        default=config_defaults.get('test_batch_size', config_defaults.get('batch_size', 8)))
+    parser.add_argument('--test_num_workers', type=int,
+                        default=config_defaults.get('test_num_workers', config_defaults.get('num_workers', 4)))
+    parser.add_argument('--test_save_dir', type=str, default=config_defaults.get('test_save_dir', None))
+    parser.add_argument('--test_gpu_id', type=int, default=config_defaults.get('test_gpu_id', 0))
 
     # GPU
     parser.add_argument('--gpu_id', type=int, default=0)
@@ -439,8 +448,14 @@ if __name__ == '__main__':
             exit(0)
 
         # 训练后自动测试
-        args.model_path = os.path.join(args.save_dir, 'best_model.pth')
+        test_args = argparse.Namespace(**vars(args))
+        test_args.model_path = os.path.join(args.save_dir, 'best_model.pth')
+        test_args.batch_size = args.test_batch_size
+        test_args.num_workers = args.test_num_workers
+        test_args.save_dir = args.test_save_dir or os.path.join(args.save_dir, 'test')
+        test_args.gpu_id = args.test_gpu_id
+        args.model_path = test_args.model_path
 
     if args.model_path:
         from test import run_tests
-        run_tests(args)
+        run_tests(test_args if not args.test_only else args)

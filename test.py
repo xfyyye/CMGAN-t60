@@ -1,5 +1,5 @@
 """
-CMGAN T60 多任务评估脚本
+CMGAN T60 单任务评估脚本
 对 test1-test4 全部运行，输出标准T60指标
 JSON 格式与 /compare skill 的 Format B 兼容
 """
@@ -11,7 +11,7 @@ import numpy as np
 import torch
 from scipy import stats
 
-from models.generator_t60 import TSCNet_MultiTask, TSCNet_MultiTask_2TSCB
+from models.generator_t60 import TSCNet_T60Estimator, TSCNet_T60Estimator_2TSCB
 from dataset import DEFAULT_DATASET_ROOT, create_test_loader, resolve_dataset_root, T60Normalizer
 from utils import power_compress
 
@@ -104,9 +104,9 @@ def run_tests(args):
 
     # 加载模型
     if args.n_tscb == 2:
-        model = TSCNet_MultiTask_2TSCB(num_channel=64, num_features=args.n_fft // 2 + 1)
+        model = TSCNet_T60Estimator_2TSCB(num_channel=64, num_features=args.n_fft // 2 + 1)
     else:
-        model = TSCNet_MultiTask(num_channel=64, num_features=args.n_fft // 2 + 1)
+        model = TSCNet_T60Estimator(num_channel=64, num_features=args.n_fft // 2 + 1)
     ckpt = torch.load(args.model_path, map_location=device)
     model.load_state_dict(ckpt['model_state_dict'] if 'model_state_dict' in ckpt else ckpt)
     model = model.to(device)
@@ -145,7 +145,7 @@ def run_tests(args):
                 noisy_input = power_compress(noisy_spec.permute(0, 3, 2, 1)).permute(0, 1, 3, 2)
 
                 with torch.cuda.amp.autocast():
-                    _, _, t60_pred = model(noisy_input)
+                    t60_pred = model(noisy_input)
 
                 pred_t60 = t60_pred.cpu().numpy()
                 pred_t60 = t60_normalizer.denormalize(pred_t60)
@@ -201,23 +201,76 @@ def run_tests(args):
     return summary
 
 
+def load_config_defaults(config_path):
+    if not config_path:
+        return {}
+
+    try:
+        import yaml
+    except ImportError as exc:
+        raise ImportError('使用 --config 需要安装 PyYAML: pip install PyYAML') from exc
+
+    with open(config_path, 'r') as f:
+        cfg = yaml.safe_load(f) or {}
+
+    defaults = {}
+
+    def section(name):
+        value = cfg.get(name, {})
+        return value if isinstance(value, dict) else {}
+
+    data_cfg = section('data')
+    for key in ['dataset_root', 'n_fft', 'hop_length', 'audio_length', 'target_sr', 't60_min', 't60_max']:
+        if key in data_cfg:
+            defaults[key] = data_cfg[key]
+
+    model_cfg = section('model')
+    if 'n_tscb' in model_cfg:
+        defaults['n_tscb'] = model_cfg['n_tscb']
+
+    test_cfg = section('test')
+    for key in ['batch_size', 'num_workers', 'gpu_id']:
+        if key in test_cfg:
+            defaults[key] = test_cfg[key]
+
+    exp_cfg = section('experiment')
+    exp_name = exp_cfg.get('name')
+    output_root = exp_cfg.get('output_root')
+    if exp_name:
+        defaults['experiment_name'] = exp_name
+    if 'save_dir' in test_cfg:
+        defaults['save_dir'] = test_cfg['save_dir']
+    elif output_root and exp_name:
+        defaults['save_dir'] = os.path.join(output_root, exp_name, 'test')
+
+    return defaults
+
+
 def parse_args():
+    pre_parser = argparse.ArgumentParser(add_help=False)
+    pre_parser.add_argument('--config', type=str, default=None)
+    pre_args, _ = pre_parser.parse_known_args()
+    config_defaults = load_config_defaults(pre_args.config)
+
     parser = argparse.ArgumentParser(description='CMGAN T60 测试')
+    parser.add_argument('--config', type=str, default=pre_args.config,
+                        help='YAML实验配置文件路径')
     parser.add_argument('--model_path', type=str, required=True)
     parser.add_argument('--dataset_root', type=str,
-                        default=DEFAULT_DATASET_ROOT)
-    parser.add_argument('--n_fft', type=int, default=400)
-    parser.add_argument('--hop_length', type=int, default=100)
-    parser.add_argument('--audio_length', type=float, default=4.0)
-    parser.add_argument('--target_sr', type=int, default=16000)
-    parser.add_argument('--t60_min', type=float, default=0.1)
-    parser.add_argument('--t60_max', type=float, default=1.5)
-    parser.add_argument('--batch_size', type=int, default=8)
-    parser.add_argument('--n_tscb', type=int, default=4, choices=[2, 4])
-    parser.add_argument('--num_workers', type=int, default=4)
-    parser.add_argument('--save_dir', type=str, default='test_results')
-    parser.add_argument('--experiment_name', type=str, default='CMGAN_t60_multitask')
-    parser.add_argument('--gpu_id', type=int, default=0)
+                        default=config_defaults.get('dataset_root', DEFAULT_DATASET_ROOT))
+    parser.add_argument('--n_fft', type=int, default=config_defaults.get('n_fft', 400))
+    parser.add_argument('--hop_length', type=int, default=config_defaults.get('hop_length', 100))
+    parser.add_argument('--audio_length', type=float, default=config_defaults.get('audio_length', 4.0))
+    parser.add_argument('--target_sr', type=int, default=config_defaults.get('target_sr', 16000))
+    parser.add_argument('--t60_min', type=float, default=config_defaults.get('t60_min', 0.1))
+    parser.add_argument('--t60_max', type=float, default=config_defaults.get('t60_max', 1.5))
+    parser.add_argument('--batch_size', type=int, default=config_defaults.get('batch_size', 8))
+    parser.add_argument('--n_tscb', type=int, default=config_defaults.get('n_tscb', 4), choices=[2, 4])
+    parser.add_argument('--num_workers', type=int, default=config_defaults.get('num_workers', 4))
+    parser.add_argument('--save_dir', type=str, default=config_defaults.get('save_dir', 'test_results'))
+    parser.add_argument('--experiment_name', type=str,
+                        default=config_defaults.get('experiment_name', 'CMGAN_single_t60'))
+    parser.add_argument('--gpu_id', type=int, default=config_defaults.get('gpu_id', 0))
     return parser.parse_args()
 
 

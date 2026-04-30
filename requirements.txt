@@ -2,6 +2,7 @@ torch>=2.0
 torchaudio>=2.0
 numpy>=1.24
 scipy>=1.10
+PyYAML>=6.0
 einops>=0.6
 swanlab>=0.3
 soundfile>=0.12

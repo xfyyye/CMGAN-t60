@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Usage: ./train.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
+# Usage: ./train-and-test.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
 
 set -euo pipefail
 
@@ -16,6 +16,7 @@ usage() {
     echo "  -c CONFIG       YAML config path. Default: configs/t60_single/mlp_mse.yaml"
     echo "  -d DATASET_PATH Optional override for data.dataset_root in YAML"
     echo "  -g GPUS         CUDA_VISIBLE_DEVICES value, e.g. 0 or 0,1"
+    echo "  -- extra args   Passed to train.py. Do not pass --train_only if you want testing."
 }
 
 while [[ $# -gt 0 ]]; do
@@ -52,13 +53,13 @@ elif [[ "$USE_CONDA" == "1" ]]; then
     echo "未找到 conda，使用当前 Python 环境"
 fi
 
-cmd=("$PYTHON" train.py --config "$CONFIG" --train_only)
+cmd=("$PYTHON" train.py --config "$CONFIG")
 if [[ -n "$DATASET_ROOT_OVERRIDE" ]]; then
     cmd+=(--dataset_root "$DATASET_ROOT_OVERRIDE")
 fi
 cmd+=("${EXTRA_ARGS[@]}")
 
-echo "Train: config=$CONFIG gpus=$GPUS"
+echo "Train + test: config=$CONFIG gpus=$GPUS"
 if [[ -n "$DATASET_ROOT_OVERRIDE" ]]; then
     echo "Dataset override: $DATASET_ROOT_OVERRIDE"
 else
@@ -68,4 +69,4 @@ fi
 CUDA_VISIBLE_DEVICES="$GPUS" "${cmd[@]}"
 
 echo ""
-echo "训练完成: $CONFIG"
+echo "训练和测试完成: $CONFIG"
