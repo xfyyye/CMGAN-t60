@@ -15,13 +15,14 @@ data:
   t60_max: 1.5                      # T60归一化上界，单位秒
 
 train:
-  batch_size: 4                     # 单步batch；按显存调整
-  accum_steps: 8                    # 梯度累积步数；等效batch=batch_size*accum_steps
+  batch_size: 4                     # 单步batch；按显存调整，A100试试32？
+  accum_steps: 8                    # 梯度累积步数；等效batch=batch_size*accum_steps，A100不需要梯度累积，可以直接设为1
   max_epochs: 100                   # 最大训练轮数
   lr: 0.0005                        # AdamW学习率
   weight_decay: 0.00001             # AdamW权重衰减
   early_stop_patience: 15           # 验证集loss连续多少轮不提升后早停
-  num_workers: 4                    # DataLoader进程数
+  num_workers: 4                    # DataLoader进程数，默认 4，A100 可以试 8~16。
+  # 判断方法：看训练时 GPU 利用率（nvidia-smi），如果忽高忽低（波动大）说明在等 I/O，就加 num_workers。
 
 test:
   batch_size: 8                     # 测试batch；只前向推理，通常可大于训练batch

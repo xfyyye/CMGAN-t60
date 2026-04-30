@@ -1,8 +1,22 @@
+# Python >= 3.9 required (for torch.amp.autocast and type hint syntax)
+# CUDA 11.8 or 12.x recommended for GPU training
+
+# Core deep learning
 torch>=2.0
 torchaudio>=2.0
+
+# Conformer attention (einops.layers.torch used in conformer.py)
+einops>=0.6
+
+# Numerics & signal processing
 numpy>=1.24
 scipy>=1.10
-PyYAML>=6.0
-einops>=0.6
-swanlab>=0.3
+
+# Audio I/O backend (required by torchaudio)
 soundfile>=0.12
+
+# Config file parsing
+PyYAML>=6.0
+
+# Experiment tracking (optional — training continues if SwanLab is unavailable)
+swanlab>=0.3
