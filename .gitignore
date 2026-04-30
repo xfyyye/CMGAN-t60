@@ -4,9 +4,6 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 
-# Model artifacts
-*.pth
-
 # OS/editor files
 .DS_Store
 .idea/
