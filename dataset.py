@@ -5,10 +5,18 @@ CMGAN T60 多任务数据集
 """
 
 import os
-import random
 import torch
 import torchaudio
 from torch.utils.data import Dataset, DataLoader
+
+DEFAULT_DATASET_ROOT = os.environ.get('T60_DATASET_ROOT')
+
+
+def resolve_dataset_root(dataset_root=None):
+    root = dataset_root or os.environ.get('T60_DATASET_ROOT')
+    if not root:
+        raise ValueError('未指定数据集路径: 请设置 T60_DATASET_ROOT 或传入 --dataset_root/-d')
+    return os.path.abspath(os.path.expanduser(root))
 
 
 # ─── 标签提取 ────────────────────────────────────────────────────
@@ -58,28 +66,29 @@ class CMGANT60Dataset(Dataset):
 
     def __init__(
         self,
-        dataset_root='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7',
+        dataset_root=DEFAULT_DATASET_ROOT,
         split='train',
         n_fft=400,
         hop_length=100,
         audio_length=4.0,
         target_sr=16000,
         t60_range=(0.1, 1.5),
-        crop_mode=None,
     ):
-        self.dataset_root = dataset_root
+        self.dataset_root = resolve_dataset_root(dataset_root)
         self.split = self.SPLIT_MAP.get(split, split)
         self.n_fft = n_fft
         self.hop_length = hop_length
         self.target_sr = target_sr
         self.target_samples = int(audio_length * target_sr)
-        self.crop_mode = crop_mode or ('random' if self.split == 'train' else 'center')
         self.t60_normalizer = T60Normalizer(*t60_range)
-        self.split_dir = os.path.join(dataset_root, self.split)
+        self.split_dir = os.path.join(self.dataset_root, self.split)
         self.register_buffer = None  # 延迟创建
         self.samples = self._scan_samples()
 
     def _scan_samples(self):
+        if not os.path.isdir(self.split_dir):
+            raise FileNotFoundError(f'数据集 split 目录不存在: {self.split_dir}')
+
         samples = []
         for dirname in sorted(os.listdir(self.split_dir)):
             dirpath = os.path.join(self.split_dir, dirname)
@@ -101,16 +110,12 @@ class CMGANT60Dataset(Dataset):
             wav = wav.mean(dim=0, keepdim=True)
         return wav.squeeze(0)
 
-    def _crop_audio(self, wav):
-        if wav.shape[0] > self.target_samples:
-            if self.crop_mode == 'random':
-                start = random.randint(0, wav.shape[0] - self.target_samples)
-            else:
-                start = (wav.shape[0] - self.target_samples) // 2
-            wav = wav[start:start + self.target_samples]
-        elif wav.shape[0] < self.target_samples:
-            repeats = (self.target_samples // wav.shape[0]) + 1
-            wav = wav.repeat(repeats)[:self.target_samples]
+    def _ensure_audio_length(self, wav, filepath):
+        if wav.shape[0] != self.target_samples:
+            raise ValueError(
+                f'音频长度不匹配: {filepath}, '
+                f'expected {self.target_samples} samples, got {wav.shape[0]}'
+            )
         return wav
 
     def _energy_normalize(self, wav):
@@ -140,13 +145,14 @@ class CMGANT60Dataset(Dataset):
         t60, snr = parse_sample_name(dirname)
 
         # 加载含噪混响音频
-        noisy_wav = self._load_audio(os.path.join(dirpath, f'{dirname}.wav'))
-        noisy_wav = self._crop_audio(noisy_wav)
+        noisy_path = os.path.join(dirpath, f'{dirname}.wav')
+        noisy_wav = self._load_audio(noisy_path)
+        noisy_wav = self._ensure_audio_length(noisy_wav, noisy_path)
 
         # 加载纯混响音频（去噪target）
         clean_path = os.path.join(dirpath, f'{dirname}_denoised.wav')
         clean_wav = self._load_audio(clean_path) if os.path.exists(clean_path) else torch.zeros_like(noisy_wav)
-        clean_wav = self._crop_audio(clean_wav)
+        clean_wav = self._ensure_audio_length(clean_wav, clean_path)
 
         # 能量归一化（对 noisy 和 clean 使用相同的系数）
         c = torch.sqrt(noisy_wav.size(-1) / (torch.sum(noisy_wav ** 2.0, dim=-1) + 1e-8))
@@ -208,7 +214,7 @@ def collate_fn(batch):
 # ─── DataLoader 工厂 ──────────────────────────────────────────────
 
 def create_dataloaders(
-    dataset_root='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7',
+    dataset_root=DEFAULT_DATASET_ROOT,
     n_fft=400,
     hop_length=100,
     batch_size=8,
@@ -227,8 +233,8 @@ def create_dataloaders(
         t60_range=t60_range,
     )
 
-    train_ds = CMGANT60Dataset(split='train', crop_mode='random', **common)
-    eval_ds = CMGANT60Dataset(split='eval', crop_mode='center', **common)
+    train_ds = CMGANT60Dataset(split='train', **common)
+    eval_ds = CMGANT60Dataset(split='eval', **common)
 
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
@@ -246,7 +252,7 @@ def create_dataloaders(
 
 def create_test_loader(
     test_split='test1',
-    dataset_root='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7',
+    dataset_root=DEFAULT_DATASET_ROOT,
     n_fft=400,
     hop_length=100,
     batch_size=8,
@@ -259,7 +265,7 @@ def create_test_loader(
         dataset_root=dataset_root, split=test_split,
         n_fft=n_fft, hop_length=hop_length,
         audio_length=audio_length, target_sr=target_sr,
-        t60_range=t60_range, crop_mode='center',
+        t60_range=t60_range,
     )
     return DataLoader(
         ds, batch_size=batch_size, shuffle=False,

@@ -12,6 +12,7 @@ import torch
 import torchaudio
 
 from models.generator_t60 import TSCNet_MultiTask, TSCNet_MultiTask_2TSCB
+from dataset import DEFAULT_DATASET_ROOT, resolve_dataset_root
 from utils import power_compress, power_uncompress
 
 
@@ -29,6 +30,9 @@ def si_sdr(est, ref):
 def run_denoise_test(args):
     from pesq import pesq as calc_pesq
     from pystoi import stoi as calc_stoi
+
+    args.dataset_root = resolve_dataset_root(args.dataset_root)
+    print(f'数据集路径: {args.dataset_root}')
 
     device = torch.device(f'cuda:{args.gpu_id}' if torch.cuda.is_available() else 'cpu')
 
@@ -66,7 +70,6 @@ def run_denoise_test(args):
             dataset_root=args.dataset_root, split=test_split,
             n_fft=n_fft, hop_length=hop,
             audio_length=args.audio_length, target_sr=args.target_sr,
-            crop_mode='center',
         )
         loader = DataLoader(ds, batch_size=1, shuffle=False, num_workers=2, collate_fn=collate_fn)
 
@@ -224,7 +227,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='CMGAN 去噪评估')
     parser.add_argument('--model_path', type=str, required=True)
     parser.add_argument('--dataset_root', type=str,
-                        default='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7')
+                        default=DEFAULT_DATASET_ROOT)
     parser.add_argument('--n_fft', type=int, default=400)
     parser.add_argument('--hop_length', type=int, default=100)
     parser.add_argument('--audio_length', type=float, default=4.0)

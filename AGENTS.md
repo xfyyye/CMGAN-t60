@@ -1,4 +1,4 @@
-# CLAUDE.md — CMGAN T60 混响时间估计
+# AGENTS.md — CMGAN T60 混响时间估计
 
 ## 项目目标
 

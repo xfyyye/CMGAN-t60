@@ -12,7 +12,7 @@ import torch
 from scipy import stats
 
 from models.generator_t60 import TSCNet_MultiTask, TSCNet_MultiTask_2TSCB
-from dataset import create_test_loader, T60Normalizer
+from dataset import DEFAULT_DATASET_ROOT, create_test_loader, resolve_dataset_root, T60Normalizer
 from utils import power_compress
 
 
@@ -97,6 +97,9 @@ def compute_grouped_metrics(y_true, y_pred, t60_raw, snr_values):
 # ─── 测试主逻辑 ──────────────────────────────────────────────────
 
 def run_tests(args):
+    args.dataset_root = resolve_dataset_root(args.dataset_root)
+    print(f'数据集路径: {args.dataset_root}')
+
     device = torch.device(f'cuda:{args.gpu_id}' if torch.cuda.is_available() else 'cpu')
 
     # 加载模型
@@ -202,7 +205,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='CMGAN T60 测试')
     parser.add_argument('--model_path', type=str, required=True)
     parser.add_argument('--dataset_root', type=str,
-                        default='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7')
+                        default=DEFAULT_DATASET_ROOT)
     parser.add_argument('--n_fft', type=int, default=400)
     parser.add_argument('--hop_length', type=int, default=100)
     parser.add_argument('--audio_length', type=float, default=4.0)

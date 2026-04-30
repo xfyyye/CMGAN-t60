@@ -15,7 +15,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from models.generator_t60 import TSCNet_MultiTask, TSCNet_MultiTask_2TSCB
-from dataset import create_dataloaders, T60Normalizer
+from dataset import DEFAULT_DATASET_ROOT, create_dataloaders, resolve_dataset_root, T60Normalizer
 from utils import power_compress, power_uncompress
 
 
@@ -141,6 +141,10 @@ class EarlyStopping:
 # ─── 主训练逻辑 ──────────────────────────────────────────────────
 
 def train(args):
+    args.dataset_root = resolve_dataset_root(args.dataset_root)
+    print(f'数据集路径: {args.dataset_root}')
+    print(f'固定音频长度: {args.audio_length:.2f}s ({int(args.audio_length * args.target_sr)} samples)')
+
     # 设备 & 多 GPU
     n_gpu = torch.cuda.device_count()
     device = torch.device('cuda:0')
@@ -383,7 +387,7 @@ def parse_args():
 
     # 数据
     parser.add_argument('--dataset_root', type=str,
-                        default='/mnt/st16t/xxn/program/dataset/T60_Dataset_v7')
+                        default=DEFAULT_DATASET_ROOT)
     parser.add_argument('--n_fft', type=int, default=400)
     parser.add_argument('--hop_length', type=int, default=100)
     parser.add_argument('--audio_length', type=float, default=4.0)

@@ -1,78 +1,82 @@
-#!/bin/bash
-# CMGAN T60 多任务训练 + 测试 (双GPU DataParallel)
-# 用法:
-#   ./train.sh                       # 训练 + 测试 (默认双GPU)
-#   ./train.sh --train-only          # 仅训练
-#   ./train.sh --test-only -m 路径   # 仅测试
-#   ./train.sh -e 实验名 -b 16       # 指定实验名和batch_size
+#!/usr/bin/env bash
+# Usage: ./train.sh [-d /path/to/T60_Dataset_v7] [-e EXP] [-g 0,1] [-b 4] [-- extra train.py args]
 
-set -e
+set -euo pipefail
 
-# 默认参数
-EXPERIMENT="CMGAN_t60_multitask"
-GPUS="0,1"
-BATCH_SIZE=4
-EPOCHS=100
-LR=5e-4
-ALPHA=0.1
-BETA=1.0
-AUDIO_LENGTH=4.0
-ACCUM_STEPS=8
-N_TSCB=2
-EXTRA_ARGS=""
+EXPERIMENT="${EXPERIMENT:-expname}" # 修改为你想要的实验名称，输出log和模型都会保存在 runs/expname 目录下
+# 本机默认数据集路径；可把下一行空字符串改成 "/path/to/T60_Dataset_v7"，也可用 -d 覆盖。
+T60_DATASET_ROOT="${T60_DATASET_ROOT:-/path/to/T60_Dataset_v7}" # 在这里更改T60_Dataset_v7路径
+GPUS="${CUDA_VISIBLE_DEVICES:-0,1}" # 修改为你要使用的GPU ID，例如 "0" 或 "0,1"
+BATCH_SIZE="${BATCH_SIZE:-4}" # 修改为你想要的批大小
+MAX_EPOCHS="${MAX_EPOCHS:-100}" # 修改为你想要的训练轮数
+LR="${LR:-5e-4}"
+ACCUM_STEPS="${ACCUM_STEPS:-8}"
+N_TSCB="${N_TSCB:-2}"
+AUDIO_LENGTH="${AUDIO_LENGTH:-4.0}"
+CONDA_ENV="${CONDA_ENV:-demucs_xxn}"
+PYTHON="${PYTHON:-python}"
+USE_CONDA=1
+EXTRA_ARGS=()
 
-# 解析参数
+usage() {
+    echo "Usage: $0 [-d DATASET_PATH] [-e EXP] [-g GPUS] [-b BATCH] [--conda-env ENV] [-- extra train.py args]"
+}
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         -e) EXPERIMENT="$2"; shift 2 ;;
         -g) GPUS="$2"; shift 2 ;;
         -b) BATCH_SIZE="$2"; shift 2 ;;
-        --epochs) EPOCHS="$2"; shift 2 ;;
+        -d|--dataset-root) T60_DATASET_ROOT="$2"; shift 2 ;;
+        --epochs|--max-epochs) MAX_EPOCHS="$2"; shift 2 ;;
         --lr) LR="$2"; shift 2 ;;
-        --alpha) ALPHA="$2"; shift 2 ;;
-        --beta) BETA="$2"; shift 2 ;;
-        --n_tscb) N_TSCB="$2"; shift 2 ;;
+        --accum-steps) ACCUM_STEPS="$2"; shift 2 ;;
+        --n-tscb|--n_tscb) N_TSCB="$2"; shift 2 ;;
         --audio-length) AUDIO_LENGTH="$2"; shift 2 ;;
-        --train-only) EXTRA_ARGS="$EXTRA_ARGS --train_only"; shift ;;
-        --test-only) EXTRA_ARGS="$EXTRA_ARGS --test_only"; shift ;;
-        -m) EXTRA_ARGS="$EXTRA_ARGS --model_path $2"; shift 2 ;;
-        *) echo "未知参数: $1"; exit 1 ;;
+        --conda-env) CONDA_ENV="$2"; shift 2 ;;
+        --no-conda) USE_CONDA=0; shift ;;
+        --) shift; EXTRA_ARGS+=("$@"); break ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "未知参数: $1"; usage; exit 1 ;;
     esac
 done
 
 SAVE_DIR="runs/${EXPERIMENT}"
 
-echo "============================================"
-echo "CMGAN T60 多任务训练 (DataParallel)"
-echo "============================================"
-echo "  实验名:   $EXPERIMENT"
-echo "  GPUs:     $GPUS"
-echo "  Batch:    $BATCH_SIZE × ${ACCUM_STEPS}累积 = 等效$((BATCH_SIZE * ACCUM_STEPS))"
-echo "  Epochs:   $EPOCHS"
-echo "  LR:       $LR"
-echo "  α(去噪):  $ALPHA"
-echo "  β(T60):   $BETA"
-echo "  音频长度: ${AUDIO_LENGTH}s"
-echo "  TSCB层数: $N_TSCB"
-echo "  累积步数: $ACCUM_STEPS"
-echo "  保存目录: $SAVE_DIR"
-echo "============================================"
+if [[ -z "$T60_DATASET_ROOT" ]]; then
+    echo "未指定数据集路径: 请在 train.sh 中设置 T60_DATASET_ROOT，或运行时传入 -d"
+    usage
+    exit 1
+fi
 
-source /home/ps/anaconda3/etc/profile.d/conda.sh
-conda activate demucs_xxn
+if [[ ! -d "$T60_DATASET_ROOT" ]]; then
+    echo "数据集目录不存在: $T60_DATASET_ROOT"
+    exit 1
+fi
 
-CUDA_VISIBLE_DEVICES=$GPUS python train.py \
+export T60_DATASET_ROOT
+
+if [[ "$USE_CONDA" == "1" ]] && command -v conda >/dev/null 2>&1; then
+    eval "$(conda shell.bash hook)"
+    conda activate "$CONDA_ENV"
+elif [[ "$USE_CONDA" == "1" ]]; then
+    echo "未找到 conda，使用当前 Python 环境"
+fi
+
+echo "Train: exp=$EXPERIMENT gpus=$GPUS batch=$BATCH_SIZE accum=$ACCUM_STEPS dataset=$T60_DATASET_ROOT"
+
+CUDA_VISIBLE_DEVICES=$GPUS "$PYTHON" train.py \
+    --dataset_root "$T60_DATASET_ROOT" \
     --experiment_name "$EXPERIMENT" \
     --batch_size $BATCH_SIZE \
-    --max_epochs $EPOCHS \
+    --max_epochs $MAX_EPOCHS \
     --lr $LR \
-    --alpha $ALPHA \
-    --beta $BETA \
     --audio_length $AUDIO_LENGTH \
     --accum_steps $ACCUM_STEPS \
     --n_tscb $N_TSCB \
     --save_dir "$SAVE_DIR" \
-    $EXTRA_ARGS
+    --train_only \
+    "${EXTRA_ARGS[@]}"
 
 echo ""
-echo "完成! 结果保存在: $SAVE_DIR"
+echo "训练完成: $SAVE_DIR"

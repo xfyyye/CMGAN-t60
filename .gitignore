@@ -1,0 +1,13 @@
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Model artifacts
+*.pth
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
