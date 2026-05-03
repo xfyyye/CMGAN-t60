@@ -1,5 +1,5 @@
 experiment:
-  name: single_t60_mlp_huber        # 实验名；输出目录默认是 output_root/name
+  name: single_t60_mlp_huber_delta0.05        # 实验名；输出目录默认是 output_root/name
   output_root: runs                 # 训练权重、日志和测试结果的根目录
 
 model:
@@ -30,7 +30,7 @@ test:
 
 loss:
   name: huber                       # T60归一化标签上的Huber损失
-  huber_delta: 1.0                  # Huber转折点；误差小于该值近似MSE，大于该值近似MAE
+  huber_delta: 0.05                 # Huber转折点；误差小于该值近似MSE精细优化，大于该值近似MAE抑制异常值。对应实际T60误差约70ms（MAE水平）。
 
 logging:
   swanlab_project: T60_Estimation   # SwanLab项目名
