@@ -215,7 +215,7 @@ def train(args):
             # 累积完成后才更新参数
             if (step_idx + 1) % accum_steps == 0:
                 scaler.unscale_(optimizer)
-                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
                 scaler.step(optimizer)
                 scaler.update()
                 optimizer.zero_grad()
@@ -351,7 +351,7 @@ def load_config_defaults(config_path):
     train_cfg = section('train')
     for key in [
         'batch_size', 'max_epochs', 'lr', 'weight_decay',
-        'early_stop_patience', 'num_workers', 'accum_steps',
+        'early_stop_patience', 'num_workers', 'accum_steps', 'clip_grad_norm',
     ]:
         if key in train_cfg:
             defaults[key] = train_cfg[key]
@@ -435,6 +435,7 @@ def parse_args():
     parser.add_argument('--early_stop_patience', type=int, default=config_defaults.get('early_stop_patience', 15))
     parser.add_argument('--num_workers', type=int, default=config_defaults.get('num_workers', 4))
     parser.add_argument('--accum_steps', type=int, default=config_defaults.get('accum_steps', 2), help='梯度累积步数')
+    parser.add_argument('--clip_grad_norm', type=float, default=config_defaults.get('clip_grad_norm', 5.0), help='梯度裁剪 max_norm')
     parser.add_argument('--n_tscb', type=int, default=config_defaults.get('n_tscb', 4), choices=[2, 4], help='TSCB层数')
 
     # T60 head 类型与超参数

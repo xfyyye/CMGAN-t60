@@ -185,34 +185,84 @@ out_5: (B, 64, F, T)
 |------|------|
 | `configs/t60_single/kan_v2_mse.yaml` | KAN v2 + MSE loss |
 | `configs/t60_single/kan_v2_mae.yaml` | KAN v2 + MAE loss |
-| `configs/t60_single/kan_v2_huber.yaml` | KAN v2 + Huber loss |
+| `configs/t60_single/kan_v2_huber_delta0.05.yaml` | KAN v2 + Huber loss（delta=0.05） |
 
 旧的 `kan_*.yaml` 保留不动，供历史对比。
 
 **运行命令：**
 
 ```bash
-mkdir -p logs
-nohup bash train.sh -c configs/t60_single/kan_v2_mse.yaml   -g 0 > logs/kan_v2_mse.log   2>&1 &
-nohup bash train.sh -c configs/t60_single/kan_v2_mae.yaml   -g 1 > logs/kan_v2_mae.log   2>&1 &
-nohup bash train.sh -c configs/t60_single/kan_v2_huber.yaml -g 2 > logs/kan_v2_huber.log 2>&1 &
+./train-and-test.sh -c configs/t60_single/kan_v2_mse.yaml   -g 0,1
+./train-and-test.sh -c configs/t60_single/kan_v2_mae.yaml   -g 2,3
+./train-and-test.sh -c configs/t60_single/kan_v2_huber_delta0.05.yaml -g 4,5
 ```
+
+**v2 实验结果（4 测试集平均）：**
+
+| 实验 | RMSE (ms) | MAE (ms) | Pearson r | R² | 平均 bias |
+|------|----------:|----------:|----------:|----:|----------:|
+| MLP MSE | 113.1 | 70.0 | 0.9439 | 0.8894 | +2.5 ms |
+| MLP MAE | 111.5 | **65.5** | 0.9452 | 0.8923 | -5.5 ms |
+| KAN v2 MSE | **111.2** | 72.4 | **0.9484** | **0.8931** | **+26.4 ms** ⚠️ |
+| KAN v2 MAE | 118.2 | 70.6 | 0.9379 | 0.8790 | -5.8 ms |
+| KAN v2 Huber δ=0.05 | 114.7 | 67.5 | 0.9420 | 0.8860 | -0.7 ms |
+
+**v2 关键发现：**
+
+1. **KAN v2 MSE 的 RMSE 最低（111.2ms），但 bias 异常大（+26.4ms）**：MSE 损失在 KAN 的非凸 Fourier 参数空间里容易陷入系统性偏高的局部极值；MLP+MSE 只有 +2.5ms bias，说明这是 KAN 架构特有的问题。
+
+2. **KAN v2 MAE 的 RMSE 最差（118.2ms），且 bias 正常（-5.8ms）**：训练不稳定是根本原因——val loss 在全程剧烈振荡（振幅 ±0.01），最优点出现在 ep14，此后从未突破，早停在 ep29 触发。若 MAE 能稳定收敛，bias 本可与 MLP+MAE 接近。
+
+3. **MAE × KAN 梯度不稳定的根因**：MAE 梯度幅度恒定（±1），不随误差缩小而衰减，无法给 Fourier 权重的多模态 loss landscape 提供"软着陆"；而代码里的梯度裁剪 `max_norm=5.0` 太松，几乎不触发。
+
+4. **Huber δ=0.05 最接近无偏（-0.7ms）**，但在归一化 [0,1] 空间中 δ=0.05 等价于 70ms T60 误差，大多数样本仍落在 MAE 的线性区，本质上仍偏 MAE 特性，训练稳定性改善有限。
+
+---
+
+### v2.1：训练稳定性修正（`kan_v2_mae_clip1.yaml`）
+
+**问题：** KAN v2 + MAE 训练振荡，早停过早，潜力未充分发挥。
+
+**改动（仅 `train.py` 一处 + 新增 YAML）：**
+
+```python
+# 之前（硬编码）
+torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+
+# 之后（从 args/YAML 读取）
+torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
+```
+
+同时在 `parse_args()` 和 YAML 读取中增加了 `clip_grad_norm` 参数，默认值仍为 5.0 以保持向后兼容。
+
+**新配置：** `configs/t60_single/kan_v2_mae_clip1.yaml`
+
+关键字段：`loss: mae` + `clip_grad_norm: 1.0`（从 5.0 收紧到 1.0）。
+
+**运行命令：**
+
+```bash
+./train-and-test.sh -c configs/t60_single/kan_v2_mae_clip1.yaml -g 0,1
+```
+
+**预期：** 收紧梯度裁剪后，每步 Fourier 权重更新幅度受限，振荡减小，val loss 能持续下降到更低值；若成功，RMSE 和 bias 应同时优于 KAN v2 MSE。
 
 ---
 
 ## 当前有效的 YAML 配置一览
 
-| 文件 | head | loss | Omega 配置 | 备注 |
+| 文件 | head | loss | Omega 配置 | 状态 |
 |------|------|------|-----------|------|
-| `mlp_mse.yaml` | MLP | MSE | — | baseline |
-| `mlp_mae.yaml` | MLP | MAE | — | baseline |
-| `mlp_huber.yaml` | MLP | Huber | — | baseline |
-| `kan_mse.yaml` | KAN v1 | MSE | 全层 Ω=4 + Tanh | 已跑，存档对比 |
-| `kan_mae.yaml` | KAN v1 | MAE | 全层 Ω=4 + Tanh | 已跑，存档对比 |
-| `kan_huber.yaml` | KAN v1 | Huber | 全层 Ω=4 + Tanh | 已跑，存档对比 |
-| `kan_v2_mse.yaml` | KAN v2 | MSE | 第一层 Ω=16，隐层 Ω=8，无 Tanh | 当前实验 |
-| `kan_v2_mae.yaml` | KAN v2 | MAE | 同上 | 当前实验 |
-| `kan_v2_huber.yaml` | KAN v2 | Huber | 同上 | 当前实验 |
+| `mlp_mse.yaml` | MLP | MSE | — | 已完成 |
+| `mlp_mae.yaml` | MLP | MAE | — | 已完成 |
+| `mlp_huber.yaml` | MLP | Huber | — | 已完成 |
+| `kan_mse.yaml` | KAN v1 | MSE | 全层 Ω=4 + Tanh | 已完成，存档 |
+| `kan_mae.yaml` | KAN v1 | MAE | 全层 Ω=4 + Tanh | 已完成，存档 |
+| `kan_huber.yaml` | KAN v1 | Huber | 全层 Ω=4 + Tanh | 已完成，存档 |
+| `kan_v2_mse.yaml` | KAN v2 | MSE | 第一层 Ω=16，隐层 Ω=8，无 Tanh | 已完成 |
+| `kan_v2_mae.yaml` | KAN v2 | MAE | 同上 | 已完成 |
+| `kan_v2_huber_delta0.05.yaml` | KAN v2 | Huber δ=0.05 | 同上 | 已完成 |
+| `kan_v2_mae_clip1.yaml` | KAN v2 | MAE | 同上 + clip_norm=1.0 | 待运行 |
 
 ---
 

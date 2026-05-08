@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import json,sys; h=json.load\\(sys.stdin\\); print\\('best val loss:', min\\(e['val_loss'] for e in h['epochs']\\)\\)\")",
+      "Bash(python3 *)"
+    ]
+  }
+}
