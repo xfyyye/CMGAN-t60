@@ -1,0 +1,41 @@
+experiment:
+  name: single_t60_kan_mae
+  output_root: runs
+
+model:
+  n_tscb: 2
+  t60_head_type: fourier_kan
+  t60_fourier_proj_dim: 64
+  t60_fourier_hidden_dims: [32, 16]
+  t60_fourier_num_frequencies: 4
+  t60_fourier_dropout: 0.1
+  t60_out_activation: sigmoid
+
+data:
+  dataset_root: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+  n_fft: 400
+  hop_length: 100
+  audio_length: 4.0
+  target_sr: 16000
+  t60_min: 0.1
+  t60_max: 1.5
+
+train:
+  batch_size: 32
+  accum_steps: 1
+  max_epochs: 100
+  lr: 0.0005
+  weight_decay: 0.00001
+  early_stop_patience: 15
+  num_workers: 16
+
+test:
+  batch_size: 8
+  num_workers: 4
+  gpu_id: 0
+
+loss:
+  name: mae
+
+logging:
+  swanlab_project: T60_Estimation

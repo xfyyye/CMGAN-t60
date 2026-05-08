@@ -1,0 +1,45 @@
+experiment:
+  name: single_t60_kan_v2_mse
+  output_root: runs
+
+model:
+  n_tscb: 2
+  t60_head_type: fourier_kan
+  t60_fourier_proj_dim: 64
+  t60_fourier_hidden_dims: [32, 16]
+  t60_fourier_first_num_frequencies: 16   # 第一层用大 Omega，对齐 Fourier-ASR input_grid_size
+  t60_fourier_hidden_num_frequencies: 8   # 后续隐层用小 Omega，对齐 Fourier-ASR hidden_grid_size
+  t60_fourier_dropout: 0.1
+  t60_out_activation: sigmoid
+  # 改动说明（相比 kan_mse.yaml）：
+  #   1. 去掉 proj 层的 Tanh，只保留 Linear + LayerNorm
+  #   2. 分层设置 Omega：第一层 16，隐层 8
+
+data:
+  dataset_root: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+  n_fft: 400
+  hop_length: 100
+  audio_length: 4.0
+  target_sr: 16000
+  t60_min: 0.1
+  t60_max: 1.5
+
+train:
+  batch_size: 32
+  accum_steps: 1
+  max_epochs: 100
+  lr: 0.0005
+  weight_decay: 0.00001
+  early_stop_patience: 15
+  num_workers: 16
+
+test:
+  batch_size: 8
+  num_workers: 4
+  gpu_id: 0
+
+loss:
+  name: mse
+
+logging:
+  swanlab_project: T60_Estimation

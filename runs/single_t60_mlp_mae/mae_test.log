@@ -1,0 +1,36 @@
+nohup: ignoring input
+Test: config=configs/t60_single/mlp_mae.yaml model=runs/single_t60_mlp_mae/best_model.pth gpu=0
+Dataset: read from YAML data.dataset_root
+/mnt/tidal-sh01/usr/chuan/youling/project/CMGAN-t60/test.py:110: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  ckpt = torch.load(args.model_path, map_location=device)
+数据集路径: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+已加载模型: runs/single_t60_mlp_mae/best_model.pth
+
+============================================================
+评估 test1
+============================================================
+/mnt/tidal-sh01/usr/chuan/youling/project/CMGAN-t60/test.py:147: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with torch.cuda.amp.autocast():
+  RMSE: 108.40 ms | MAE: 63.63 ms | Pearson r: 0.9484 | R²: 0.8986
+
+============================================================
+评估 test2
+============================================================
+  RMSE: 120.25 ms | MAE: 70.76 ms | Pearson r: 0.9361 | R²: 0.8753
+
+============================================================
+评估 test3
+============================================================
+  RMSE: 106.32 ms | MAE: 63.55 ms | Pearson r: 0.9511 | R²: 0.9029
+
+============================================================
+评估 test4
+============================================================
+  RMSE: 110.86 ms | MAE: 63.87 ms | Pearson r: 0.9451 | R²: 0.8925
+
+============================================================
+四测试集平均
+============================================================
+  RMSE: 111.46 ms | MAE: 65.45 ms | Pearson r: 0.9452 | R²: 0.8923
+
+测试完成

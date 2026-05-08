@@ -1,0 +1,41 @@
+experiment:
+  name: single_t60_kan_mse           # 实验名；输出目录默认是 output_root/name
+  output_root: runs                  # 训练权重、日志和测试结果的根目录
+
+model:
+  n_tscb: 2                          # TSCB层数；2更快，4更接近原始CMGAN
+  t60_head_type: fourier_kan         # 使用 Fourier-KAN 回归头
+  t60_fourier_proj_dim: 64           # 投影维度：pooling 后先降维到此处再送入 KAN
+  t60_fourier_hidden_dims: [32, 16]  # KAN 内部隐层维度序列（最后一维为输出维）
+  t60_fourier_num_frequencies: 4     # Fourier 频率分量数 Omega（第一轮用 4，稳定后再试 8）
+  t60_fourier_dropout: 0.1           # KAN 层间 Dropout
+  t60_out_activation: sigmoid        # 输出激活：sigmoid 与 MLP head 保持一致
+
+data:
+  dataset_root: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+  n_fft: 400                         # STFT窗口长度；沿用CMGAN默认设置
+  hop_length: 100                    # STFT hop；4s音频对应约641帧
+  audio_length: 4.0                  # 固定音频长度，单位秒
+  target_sr: 16000                   # 目标采样率
+  t60_min: 0.1                       # T60归一化下界，单位秒
+  t60_max: 1.5                       # T60归一化上界，单位秒
+
+train:
+  batch_size: 32                     # 单步batch；H800 79GB 显存
+  accum_steps: 1                     # H800 显存充足，无需梯度累积
+  max_epochs: 100
+  lr: 0.0005                         # AdamW学习率
+  weight_decay: 0.00001
+  early_stop_patience: 15
+  num_workers: 16
+
+test:
+  batch_size: 8
+  num_workers: 4
+  gpu_id: 0
+
+loss:
+  name: mse
+
+logging:
+  swanlab_project: T60_Estimation

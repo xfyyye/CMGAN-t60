@@ -1,0 +1,7670 @@
+{
+  "experiment_name": "single_t60_kan_mse",
+  "dataset_version": "T60_Dataset_v7",
+  "test_split": "test3",
+  "standard_metrics": {
+    "rmse_ms": 107.13,
+    "mae_ms": 67.69,
+    "bias_ms": 9.3,
+    "pearson_r": 0.951,
+    "r2_score": 0.9014,
+    "mean_rel_error_pct": 15.74
+  },
+  "bin_analysis": {
+    "T60_0.1-0.3s": {
+      "count": 278,
+      "bias_ms": 58.03,
+      "rmse_ms": 101.23,
+      "mae_ms": 62.44,
+      "pearson_r": 0.47
+    },
+    "T60_0.3-0.5s": {
+      "count": 259,
+      "bias_ms": 33.0,
+      "rmse_ms": 70.37,
+      "mae_ms": 50.8,
+      "pearson_r": 0.6764
+    },
+    "T60_0.5-0.7s": {
+      "count": 159,
+      "bias_ms": 11.83,
+      "rmse_ms": 93.59,
+      "mae_ms": 62.18,
+      "pearson_r": 0.4591
+    },
+    "T60_0.7-0.9s": {
+      "count": 182,
+      "bias_ms": -7.65,
+      "rmse_ms": 97.37,
+      "mae_ms": 62.54,
+      "pearson_r": 0.427
+    },
+    "T60_0.9-1.1s": {
+      "count": 95,
+      "bias_ms": -52.65,
+      "rmse_ms": 155.58,
+      "mae_ms": 101.27,
+      "pearson_r": 0.4051
+    },
+    "T60_1.1-1.3s": {
+      "count": 69,
+      "bias_ms": -61.4,
+      "rmse_ms": 114.1,
+      "mae_ms": 83.33,
+      "pearson_r": 0.3694
+    },
+    "T60_1.3-1.5s": {
+      "count": 37,
+      "bias_ms": -142.99,
+      "rmse_ms": 207.67,
+      "mae_ms": 144.69,
+      "pearson_r": 0.2031
+    }
+  },
+  "snr_analysis": {
+    "SNR_-5dB": {
+      "count": 180,
+      "bias_ms": 3.2,
+      "rmse_ms": 186.47,
+      "mae_ms": 124.03,
+      "pearson_r": 0.827
+    },
+    "SNR_0dB": {
+      "count": 180,
+      "bias_ms": 15.2,
+      "rmse_ms": 99.65,
+      "mae_ms": 73.39,
+      "pearson_r": 0.9621
+    },
+    "SNR_5dB": {
+      "count": 180,
+      "bias_ms": 18.91,
+      "rmse_ms": 75.92,
+      "mae_ms": 55.48,
+      "pearson_r": 0.9763
+    },
+    "SNR_10dB": {
+      "count": 180,
+      "bias_ms": 13.12,
+      "rmse_ms": 77.63,
+      "mae_ms": 52.0,
+      "pearson_r": 0.9719
+    },
+    "SNR_15dB": {
+      "count": 180,
+      "bias_ms": 2.01,
+      "rmse_ms": 74.46,
+      "mae_ms": 49.17,
+      "pearson_r": 0.9807
+    },
+    "SNR_20dB": {
+      "count": 180,
+      "bias_ms": 3.38,
+      "rmse_ms": 82.6,
+      "mae_ms": 52.05,
+      "pearson_r": 0.9738
+    }
+  },
+  "per_sample_results": [
+    {
+      "sample_name": "speech000001_reverb_0.601_-5dB",
+      "true_t60": 0.601,
+      "pred_t60": 0.4458,
+      "snr": -5.0,
+      "error_ms": -155.2
+    },
+    {
+      "sample_name": "speech000002_reverb_0.267_15dB",
+      "true_t60": 0.267,
+      "pred_t60": 0.271,
+      "snr": 15.0,
+      "error_ms": 4.0
+    },
+    {
+      "sample_name": "speech000003_reverb_0.385_15dB",
+      "true_t60": 0.385,
+      "pred_t60": 0.3032,
+      "snr": 15.0,
+      "error_ms": -81.78
+    },
+    {
+      "sample_name": "speech000004_reverb_0.773_5dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7007,
+      "snr": 5.0,
+      "error_ms": -72.32
+    },
+    {
+      "sample_name": "speech000005_reverb_0.362_-5dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.4009,
+      "snr": -5.0,
+      "error_ms": 38.88
+    },
+    {
+      "sample_name": "speech000006_reverb_0.196_10dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2312,
+      "snr": 10.0,
+      "error_ms": 35.2
+    },
+    {
+      "sample_name": "speech000007_reverb_0.676_15dB",
+      "true_t60": 0.676,
+      "pred_t60": 0.7729,
+      "snr": 15.0,
+      "error_ms": 96.95
+    },
+    {
+      "sample_name": "speech000008_reverb_0.828_-5dB",
+      "true_t60": 0.828,
+      "pred_t60": 0.7954,
+      "snr": -5.0,
+      "error_ms": -32.59
+    },
+    {
+      "sample_name": "speech000009_reverb_1.061_0dB",
+      "true_t60": 1.061,
+      "pred_t60": 0.9487,
+      "snr": 0.0,
+      "error_ms": -112.27
+    },
+    {
+      "sample_name": "speech000010_reverb_0.280_0dB",
+      "true_t60": 0.28,
+      "pred_t60": 0.457,
+      "snr": 0.0,
+      "error_ms": 177.03
+    },
+    {
+      "sample_name": "speech000011_reverb_0.305_20dB",
+      "true_t60": 0.305,
+      "pred_t60": 0.3667,
+      "snr": 20.0,
+      "error_ms": 61.7
+    },
+    {
+      "sample_name": "speech000012_reverb_0.903_0dB",
+      "true_t60": 0.903,
+      "pred_t60": 0.7241,
+      "snr": 0.0,
+      "error_ms": -178.88
+    },
+    {
+      "sample_name": "speech000013_reverb_0.550_5dB",
+      "true_t60": 0.55,
+      "pred_t60": 0.6562,
+      "snr": 5.0,
+      "error_ms": 106.25
+    },
+    {
+      "sample_name": "speech000014_reverb_0.229_5dB",
+      "true_t60": 0.229,
+      "pred_t60": 0.2307,
+      "snr": 5.0,
+      "error_ms": 1.71
+    },
+    {
+      "sample_name": "speech000015_reverb_1.311_-5dB",
+      "true_t60": 1.311,
+      "pred_t60": 1.002,
+      "snr": -5.0,
+      "error_ms": -309.05
+    },
+    {
+      "sample_name": "speech000016_reverb_0.288_10dB",
+      "true_t60": 0.288,
+      "pred_t60": 0.3433,
+      "snr": 10.0,
+      "error_ms": 55.26
+    },
+    {
+      "sample_name": "speech000017_reverb_0.820_0dB",
+      "true_t60": 0.82,
+      "pred_t60": 0.8359,
+      "snr": 0.0,
+      "error_ms": 15.94
+    },
+    {
+      "sample_name": "speech000018_reverb_0.494_5dB",
+      "true_t60": 0.494,
+      "pred_t60": 0.5,
+      "snr": 5.0,
+      "error_ms": 6.0
+    },
+    {
+      "sample_name": "speech000019_reverb_0.769_0dB",
+      "true_t60": 0.769,
+      "pred_t60": 0.791,
+      "snr": 0.0,
+      "error_ms": 22.02
+    },
+    {
+      "sample_name": "speech000020_reverb_0.152_5dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.1985,
+      "snr": 5.0,
+      "error_ms": 46.49
+    },
+    {
+      "sample_name": "speech000021_reverb_0.769_5dB",
+      "true_t60": 0.769,
+      "pred_t60": 0.8804,
+      "snr": 5.0,
+      "error_ms": 111.37
+    },
+    {
+      "sample_name": "speech000022_reverb_0.371_15dB",
+      "true_t60": 0.371,
+      "pred_t60": 0.3843,
+      "snr": 15.0,
+      "error_ms": 13.28
+    },
+    {
+      "sample_name": "speech000023_reverb_0.601_5dB",
+      "true_t60": 0.601,
+      "pred_t60": 0.5874,
+      "snr": 5.0,
+      "error_ms": -13.6
+    },
+    {
+      "sample_name": "speech000024_reverb_0.361_20dB",
+      "true_t60": 0.361,
+      "pred_t60": 0.3604,
+      "snr": 20.0,
+      "error_ms": -0.65
+    },
+    {
+      "sample_name": "speech000025_reverb_1.441_5dB",
+      "true_t60": 1.441,
+      "pred_t60": 1.2744,
+      "snr": 5.0,
+      "error_ms": -166.59
+    },
+    {
+      "sample_name": "speech000026_reverb_0.280_20dB",
+      "true_t60": 0.28,
+      "pred_t60": 0.3545,
+      "snr": 20.0,
+      "error_ms": 74.49
+    },
+    {
+      "sample_name": "speech000027_reverb_1.137_15dB",
+      "true_t60": 1.137,
+      "pred_t60": 1.1416,
+      "snr": 15.0,
+      "error_ms": 4.6
+    },
+    {
+      "sample_name": "speech000028_reverb_0.369_5dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.3687,
+      "snr": 5.0,
+      "error_ms": -0.35
+    },
+    {
+      "sample_name": "speech000029_reverb_0.550_0dB",
+      "true_t60": 0.55,
+      "pred_t60": 0.606,
+      "snr": 0.0,
+      "error_ms": 55.96
+    },
+    {
+      "sample_name": "speech000030_reverb_0.333_-5dB",
+      "true_t60": 0.333,
+      "pred_t60": 0.4902,
+      "snr": -5.0,
+      "error_ms": 157.23
+    },
+    {
+      "sample_name": "speech000031_reverb_1.145_5dB",
+      "true_t60": 1.145,
+      "pred_t60": 1.0713,
+      "snr": 5.0,
+      "error_ms": -73.71
+    },
+    {
+      "sample_name": "speech000032_reverb_0.273_0dB",
+      "true_t60": 0.273,
+      "pred_t60": 0.3135,
+      "snr": 0.0,
+      "error_ms": 40.48
+    },
+    {
+      "sample_name": "speech000033_reverb_0.277_20dB",
+      "true_t60": 0.277,
+      "pred_t60": 0.3169,
+      "snr": 20.0,
+      "error_ms": 39.89
+    },
+    {
+      "sample_name": "speech000034_reverb_0.266_0dB",
+      "true_t60": 0.266,
+      "pred_t60": 0.3003,
+      "snr": 0.0,
+      "error_ms": 34.29
+    },
+    {
+      "sample_name": "speech000035_reverb_0.185_15dB",
+      "true_t60": 0.185,
+      "pred_t60": 0.1953,
+      "snr": 15.0,
+      "error_ms": 10.31
+    },
+    {
+      "sample_name": "speech000036_reverb_0.419_15dB",
+      "true_t60": 0.419,
+      "pred_t60": 0.4761,
+      "snr": 15.0,
+      "error_ms": 57.07
+    },
+    {
+      "sample_name": "speech000037_reverb_0.318_-5dB",
+      "true_t60": 0.318,
+      "pred_t60": 0.3125,
+      "snr": -5.0,
+      "error_ms": -5.5
+    },
+    {
+      "sample_name": "speech000038_reverb_1.441_-5dB",
+      "true_t60": 1.441,
+      "pred_t60": 0.8442,
+      "snr": -5.0,
+      "error_ms": -596.76
+    },
+    {
+      "sample_name": "speech000039_reverb_0.780_5dB",
+      "true_t60": 0.78,
+      "pred_t60": 0.8066,
+      "snr": 5.0,
+      "error_ms": 26.64
+    },
+    {
+      "sample_name": "speech000040_reverb_0.349_20dB",
+      "true_t60": 0.349,
+      "pred_t60": 0.3882,
+      "snr": 20.0,
+      "error_ms": 39.18
+    },
+    {
+      "sample_name": "speech000041_reverb_0.141_15dB",
+      "true_t60": 0.141,
+      "pred_t60": 0.1375,
+      "snr": 15.0,
+      "error_ms": -3.55
+    },
+    {
+      "sample_name": "speech000042_reverb_0.698_-5dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.8003,
+      "snr": -5.0,
+      "error_ms": 102.29
+    },
+    {
+      "sample_name": "speech000043_reverb_0.903_5dB",
+      "true_t60": 0.903,
+      "pred_t60": 0.9199,
+      "snr": 5.0,
+      "error_ms": 16.92
+    },
+    {
+      "sample_name": "speech000044_reverb_0.762_0dB",
+      "true_t60": 0.762,
+      "pred_t60": 0.8989,
+      "snr": 0.0,
+      "error_ms": 136.93
+    },
+    {
+      "sample_name": "speech000045_reverb_0.385_5dB",
+      "true_t60": 0.385,
+      "pred_t60": 0.3193,
+      "snr": 5.0,
+      "error_ms": -65.66
+    },
+    {
+      "sample_name": "speech000046_reverb_1.331_20dB",
+      "true_t60": 1.331,
+      "pred_t60": 1.2822,
+      "snr": 20.0,
+      "error_ms": -48.77
+    },
+    {
+      "sample_name": "speech000047_reverb_0.440_15dB",
+      "true_t60": 0.44,
+      "pred_t60": 0.4292,
+      "snr": 15.0,
+      "error_ms": -10.8
+    },
+    {
+      "sample_name": "speech000048_reverb_0.520_15dB",
+      "true_t60": 0.52,
+      "pred_t60": 0.585,
+      "snr": 15.0,
+      "error_ms": 64.96
+    },
+    {
+      "sample_name": "speech000049_reverb_0.782_15dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.7227,
+      "snr": 15.0,
+      "error_ms": -59.34
+    },
+    {
+      "sample_name": "speech000050_reverb_1.273_15dB",
+      "true_t60": 1.273,
+      "pred_t60": 1.2158,
+      "snr": 15.0,
+      "error_ms": -57.18
+    },
+    {
+      "sample_name": "speech000051_reverb_0.364_15dB",
+      "true_t60": 0.364,
+      "pred_t60": 0.3384,
+      "snr": 15.0,
+      "error_ms": -25.62
+    },
+    {
+      "sample_name": "speech000052_reverb_0.808_-5dB",
+      "true_t60": 0.808,
+      "pred_t60": 0.6724,
+      "snr": -5.0,
+      "error_ms": -135.64
+    },
+    {
+      "sample_name": "speech000053_reverb_0.828_10dB",
+      "true_t60": 0.828,
+      "pred_t60": 1.0771,
+      "snr": 10.0,
+      "error_ms": 249.15
+    },
+    {
+      "sample_name": "speech000054_reverb_0.275_0dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.3206,
+      "snr": 0.0,
+      "error_ms": 45.56
+    },
+    {
+      "sample_name": "speech000055_reverb_1.010_5dB",
+      "true_t60": 1.01,
+      "pred_t60": 0.9741,
+      "snr": 5.0,
+      "error_ms": -35.88
+    },
+    {
+      "sample_name": "speech000056_reverb_0.763_-5dB",
+      "true_t60": 0.763,
+      "pred_t60": 0.814,
+      "snr": -5.0,
+      "error_ms": 50.96
+    },
+    {
+      "sample_name": "speech000057_reverb_0.932_15dB",
+      "true_t60": 0.932,
+      "pred_t60": 0.8838,
+      "snr": 15.0,
+      "error_ms": -48.21
+    },
+    {
+      "sample_name": "speech000058_reverb_1.491_5dB",
+      "true_t60": 1.491,
+      "pred_t60": 1.4453,
+      "snr": 5.0,
+      "error_ms": -45.69
+    },
+    {
+      "sample_name": "speech000059_reverb_0.476_15dB",
+      "true_t60": 0.476,
+      "pred_t60": 0.5063,
+      "snr": 15.0,
+      "error_ms": 30.35
+    },
+    {
+      "sample_name": "speech000060_reverb_0.742_-5dB",
+      "true_t60": 0.742,
+      "pred_t60": 0.4492,
+      "snr": -5.0,
+      "error_ms": -292.78
+    },
+    {
+      "sample_name": "speech000061_reverb_0.901_20dB",
+      "true_t60": 0.901,
+      "pred_t60": 0.8604,
+      "snr": 20.0,
+      "error_ms": -40.65
+    },
+    {
+      "sample_name": "speech000062_reverb_0.950_0dB",
+      "true_t60": 0.95,
+      "pred_t60": 1.0615,
+      "snr": 0.0,
+      "error_ms": 111.52
+    },
+    {
+      "sample_name": "speech000063_reverb_1.120_20dB",
+      "true_t60": 1.12,
+      "pred_t60": 1.1309,
+      "snr": 20.0,
+      "error_ms": 10.86
+    },
+    {
+      "sample_name": "speech000064_reverb_0.890_10dB",
+      "true_t60": 0.89,
+      "pred_t60": 0.8794,
+      "snr": 10.0,
+      "error_ms": -10.61
+    },
+    {
+      "sample_name": "speech000065_reverb_0.648_10dB",
+      "true_t60": 0.648,
+      "pred_t60": 0.6582,
+      "snr": 10.0,
+      "error_ms": 10.2
+    },
+    {
+      "sample_name": "speech000066_reverb_0.808_20dB",
+      "true_t60": 0.808,
+      "pred_t60": 0.7178,
+      "snr": 20.0,
+      "error_ms": -90.23
+    },
+    {
+      "sample_name": "speech000067_reverb_0.196_-5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2141,
+      "snr": -5.0,
+      "error_ms": 18.11
+    },
+    {
+      "sample_name": "speech000068_reverb_1.184_15dB",
+      "true_t60": 1.184,
+      "pred_t60": 1.0479,
+      "snr": 15.0,
+      "error_ms": -136.15
+    },
+    {
+      "sample_name": "speech000069_reverb_0.575_15dB",
+      "true_t60": 0.575,
+      "pred_t60": 0.6211,
+      "snr": 15.0,
+      "error_ms": 46.09
+    },
+    {
+      "sample_name": "speech000070_reverb_0.491_-5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4824,
+      "snr": -5.0,
+      "error_ms": -8.58
+    },
+    {
+      "sample_name": "speech000071_reverb_0.437_5dB",
+      "true_t60": 0.437,
+      "pred_t60": 0.4194,
+      "snr": 5.0,
+      "error_ms": -17.57
+    },
+    {
+      "sample_name": "speech000072_reverb_0.349_10dB",
+      "true_t60": 0.349,
+      "pred_t60": 0.3872,
+      "snr": 10.0,
+      "error_ms": 38.21
+    },
+    {
+      "sample_name": "speech000073_reverb_0.184_0dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.1436,
+      "snr": 0.0,
+      "error_ms": -40.45
+    },
+    {
+      "sample_name": "speech000074_reverb_0.267_-5dB",
+      "true_t60": 0.267,
+      "pred_t60": 0.3164,
+      "snr": -5.0,
+      "error_ms": 49.41
+    },
+    {
+      "sample_name": "speech000075_reverb_0.366_15dB",
+      "true_t60": 0.366,
+      "pred_t60": 0.3745,
+      "snr": 15.0,
+      "error_ms": 8.51
+    },
+    {
+      "sample_name": "speech000076_reverb_0.229_20dB",
+      "true_t60": 0.229,
+      "pred_t60": 0.2258,
+      "snr": 20.0,
+      "error_ms": -3.17
+    },
+    {
+      "sample_name": "speech000077_reverb_0.185_-5dB",
+      "true_t60": 0.185,
+      "pred_t60": 0.2163,
+      "snr": -5.0,
+      "error_ms": 31.31
+    },
+    {
+      "sample_name": "speech000078_reverb_0.770_5dB",
+      "true_t60": 0.77,
+      "pred_t60": 0.7803,
+      "snr": 5.0,
+      "error_ms": 10.27
+    },
+    {
+      "sample_name": "speech000079_reverb_0.270_5dB",
+      "true_t60": 0.27,
+      "pred_t60": 0.3071,
+      "snr": 5.0,
+      "error_ms": 37.13
+    },
+    {
+      "sample_name": "speech000080_reverb_0.821_15dB",
+      "true_t60": 0.821,
+      "pred_t60": 0.8755,
+      "snr": 15.0,
+      "error_ms": 54.49
+    },
+    {
+      "sample_name": "speech000081_reverb_0.147_-5dB",
+      "true_t60": 0.147,
+      "pred_t60": 0.2205,
+      "snr": -5.0,
+      "error_ms": 73.46
+    },
+    {
+      "sample_name": "speech000082_reverb_0.321_-5dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3896,
+      "snr": -5.0,
+      "error_ms": 68.65
+    },
+    {
+      "sample_name": "speech000083_reverb_0.517_0dB",
+      "true_t60": 0.517,
+      "pred_t60": 0.5337,
+      "snr": 0.0,
+      "error_ms": 16.69
+    },
+    {
+      "sample_name": "speech000084_reverb_0.895_-5dB",
+      "true_t60": 0.895,
+      "pred_t60": 0.8052,
+      "snr": -5.0,
+      "error_ms": -89.82
+    },
+    {
+      "sample_name": "speech000085_reverb_0.575_20dB",
+      "true_t60": 0.575,
+      "pred_t60": 0.5815,
+      "snr": 20.0,
+      "error_ms": 6.54
+    },
+    {
+      "sample_name": "speech000086_reverb_0.759_-5dB",
+      "true_t60": 0.759,
+      "pred_t60": 0.7886,
+      "snr": -5.0,
+      "error_ms": 29.57
+    },
+    {
+      "sample_name": "speech000087_reverb_1.368_15dB",
+      "true_t60": 1.368,
+      "pred_t60": 1.3291,
+      "snr": 15.0,
+      "error_ms": -38.9
+    },
+    {
+      "sample_name": "speech000088_reverb_0.537_5dB",
+      "true_t60": 0.537,
+      "pred_t60": 0.6074,
+      "snr": 5.0,
+      "error_ms": 70.42
+    },
+    {
+      "sample_name": "speech000089_reverb_0.301_0dB",
+      "true_t60": 0.301,
+      "pred_t60": 0.3247,
+      "snr": 0.0,
+      "error_ms": 23.71
+    },
+    {
+      "sample_name": "speech000090_reverb_0.196_5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2405,
+      "snr": 5.0,
+      "error_ms": 44.48
+    },
+    {
+      "sample_name": "speech000091_reverb_0.782_0dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.8569,
+      "snr": 0.0,
+      "error_ms": 74.93
+    },
+    {
+      "sample_name": "speech000092_reverb_0.285_5dB",
+      "true_t60": 0.285,
+      "pred_t60": 0.3481,
+      "snr": 5.0,
+      "error_ms": 63.14
+    },
+    {
+      "sample_name": "speech000093_reverb_0.289_20dB",
+      "true_t60": 0.289,
+      "pred_t60": 0.3376,
+      "snr": 20.0,
+      "error_ms": 48.65
+    },
+    {
+      "sample_name": "speech000094_reverb_0.626_0dB",
+      "true_t60": 0.626,
+      "pred_t60": 0.5386,
+      "snr": 0.0,
+      "error_ms": -87.43
+    },
+    {
+      "sample_name": "speech000095_reverb_0.294_15dB",
+      "true_t60": 0.294,
+      "pred_t60": 0.3579,
+      "snr": 15.0,
+      "error_ms": 63.91
+    },
+    {
+      "sample_name": "speech000096_reverb_0.219_20dB",
+      "true_t60": 0.219,
+      "pred_t60": 0.2397,
+      "snr": 20.0,
+      "error_ms": 20.75
+    },
+    {
+      "sample_name": "speech000097_reverb_0.758_10dB",
+      "true_t60": 0.758,
+      "pred_t60": 0.8486,
+      "snr": 10.0,
+      "error_ms": 90.63
+    },
+    {
+      "sample_name": "speech000098_reverb_0.860_10dB",
+      "true_t60": 0.86,
+      "pred_t60": 0.8516,
+      "snr": 10.0,
+      "error_ms": -8.44
+    },
+    {
+      "sample_name": "speech000099_reverb_0.145_5dB",
+      "true_t60": 0.145,
+      "pred_t60": 0.1733,
+      "snr": 5.0,
+      "error_ms": 28.34
+    },
+    {
+      "sample_name": "speech000100_reverb_0.229_20dB",
+      "true_t60": 0.229,
+      "pred_t60": 0.2087,
+      "snr": 20.0,
+      "error_ms": -20.26
+    },
+    {
+      "sample_name": "speech000101_reverb_0.335_5dB",
+      "true_t60": 0.335,
+      "pred_t60": 0.2957,
+      "snr": 5.0,
+      "error_ms": -39.35
+    },
+    {
+      "sample_name": "speech000102_reverb_0.362_0dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.4277,
+      "snr": 0.0,
+      "error_ms": 65.73
+    },
+    {
+      "sample_name": "speech000103_reverb_0.491_5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4473,
+      "snr": 5.0,
+      "error_ms": -43.73
+    },
+    {
+      "sample_name": "speech000104_reverb_0.712_15dB",
+      "true_t60": 0.712,
+      "pred_t60": 0.6685,
+      "snr": 15.0,
+      "error_ms": -43.54
+    },
+    {
+      "sample_name": "speech000105_reverb_0.145_5dB",
+      "true_t60": 0.145,
+      "pred_t60": 0.1677,
+      "snr": 5.0,
+      "error_ms": 22.72
+    },
+    {
+      "sample_name": "speech000106_reverb_0.899_5dB",
+      "true_t60": 0.899,
+      "pred_t60": 0.7812,
+      "snr": 5.0,
+      "error_ms": -117.75
+    },
+    {
+      "sample_name": "speech000107_reverb_0.774_-5dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.7734,
+      "snr": -5.0,
+      "error_ms": -0.56
+    },
+    {
+      "sample_name": "speech000108_reverb_1.311_10dB",
+      "true_t60": 1.311,
+      "pred_t60": 1.2812,
+      "snr": 10.0,
+      "error_ms": -29.75
+    },
+    {
+      "sample_name": "speech000109_reverb_0.402_20dB",
+      "true_t60": 0.402,
+      "pred_t60": 0.3931,
+      "snr": 20.0,
+      "error_ms": -8.93
+    },
+    {
+      "sample_name": "speech000110_reverb_0.758_0dB",
+      "true_t60": 0.758,
+      "pred_t60": 0.6431,
+      "snr": 0.0,
+      "error_ms": -114.93
+    },
+    {
+      "sample_name": "speech000111_reverb_0.601_15dB",
+      "true_t60": 0.601,
+      "pred_t60": 0.6323,
+      "snr": 15.0,
+      "error_ms": 31.32
+    },
+    {
+      "sample_name": "speech000112_reverb_1.014_-5dB",
+      "true_t60": 1.014,
+      "pred_t60": 0.687,
+      "snr": -5.0,
+      "error_ms": -326.99
+    },
+    {
+      "sample_name": "speech000113_reverb_1.388_20dB",
+      "true_t60": 1.388,
+      "pred_t60": 1.375,
+      "snr": 20.0,
+      "error_ms": -13.0
+    },
+    {
+      "sample_name": "speech000114_reverb_0.628_0dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.4424,
+      "snr": 0.0,
+      "error_ms": -185.62
+    },
+    {
+      "sample_name": "speech000115_reverb_0.146_5dB",
+      "true_t60": 0.146,
+      "pred_t60": 0.271,
+      "snr": 5.0,
+      "error_ms": 125.0
+    },
+    {
+      "sample_name": "speech000116_reverb_0.456_0dB",
+      "true_t60": 0.456,
+      "pred_t60": 0.4014,
+      "snr": 0.0,
+      "error_ms": -54.63
+    },
+    {
+      "sample_name": "speech000117_reverb_0.684_0dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.6528,
+      "snr": 0.0,
+      "error_ms": -31.17
+    },
+    {
+      "sample_name": "speech000118_reverb_0.164_10dB",
+      "true_t60": 0.164,
+      "pred_t60": 0.2435,
+      "snr": 10.0,
+      "error_ms": 79.53
+    },
+    {
+      "sample_name": "speech000119_reverb_1.368_0dB",
+      "true_t60": 1.368,
+      "pred_t60": 1.0859,
+      "snr": 0.0,
+      "error_ms": -282.06
+    },
+    {
+      "sample_name": "speech000120_reverb_0.460_10dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.4912,
+      "snr": 10.0,
+      "error_ms": 31.21
+    },
+    {
+      "sample_name": "speech000121_reverb_0.903_10dB",
+      "true_t60": 0.903,
+      "pred_t60": 1.0117,
+      "snr": 10.0,
+      "error_ms": 108.72
+    },
+    {
+      "sample_name": "speech000122_reverb_0.224_15dB",
+      "true_t60": 0.224,
+      "pred_t60": 0.2395,
+      "snr": 15.0,
+      "error_ms": 15.5
+    },
+    {
+      "sample_name": "speech000123_reverb_0.622_5dB",
+      "true_t60": 0.622,
+      "pred_t60": 0.6851,
+      "snr": 5.0,
+      "error_ms": 63.06
+    },
+    {
+      "sample_name": "speech000124_reverb_0.491_-5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4375,
+      "snr": -5.0,
+      "error_ms": -53.5
+    },
+    {
+      "sample_name": "speech000125_reverb_0.635_0dB",
+      "true_t60": 0.635,
+      "pred_t60": 0.665,
+      "snr": 0.0,
+      "error_ms": 30.04
+    },
+    {
+      "sample_name": "speech000126_reverb_0.228_0dB",
+      "true_t60": 0.228,
+      "pred_t60": 0.4502,
+      "snr": 0.0,
+      "error_ms": 222.2
+    },
+    {
+      "sample_name": "speech000127_reverb_0.758_15dB",
+      "true_t60": 0.758,
+      "pred_t60": 0.7026,
+      "snr": 15.0,
+      "error_ms": -55.36
+    },
+    {
+      "sample_name": "speech000128_reverb_0.184_15dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.2805,
+      "snr": 15.0,
+      "error_ms": 96.52
+    },
+    {
+      "sample_name": "speech000129_reverb_0.973_0dB",
+      "true_t60": 0.973,
+      "pred_t60": 1.1191,
+      "snr": 0.0,
+      "error_ms": 146.14
+    },
+    {
+      "sample_name": "speech000130_reverb_0.935_20dB",
+      "true_t60": 0.935,
+      "pred_t60": 0.917,
+      "snr": 20.0,
+      "error_ms": -18.01
+    },
+    {
+      "sample_name": "speech000131_reverb_0.722_0dB",
+      "true_t60": 0.722,
+      "pred_t60": 0.6611,
+      "snr": 0.0,
+      "error_ms": -60.87
+    },
+    {
+      "sample_name": "speech000132_reverb_0.844_10dB",
+      "true_t60": 0.844,
+      "pred_t60": 0.8032,
+      "snr": 10.0,
+      "error_ms": -40.78
+    },
+    {
+      "sample_name": "speech000133_reverb_0.293_10dB",
+      "true_t60": 0.293,
+      "pred_t60": 0.3579,
+      "snr": 10.0,
+      "error_ms": 64.91
+    },
+    {
+      "sample_name": "speech000134_reverb_0.222_15dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.2063,
+      "snr": 15.0,
+      "error_ms": -15.7
+    },
+    {
+      "sample_name": "speech000135_reverb_0.152_20dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.1709,
+      "snr": 20.0,
+      "error_ms": 18.9
+    },
+    {
+      "sample_name": "speech000136_reverb_0.452_15dB",
+      "true_t60": 0.452,
+      "pred_t60": 0.4766,
+      "snr": 15.0,
+      "error_ms": 24.56
+    },
+    {
+      "sample_name": "speech000137_reverb_0.196_-5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.6191,
+      "snr": -5.0,
+      "error_ms": 423.14
+    },
+    {
+      "sample_name": "speech000138_reverb_1.247_15dB",
+      "true_t60": 1.247,
+      "pred_t60": 1.2471,
+      "snr": 15.0,
+      "error_ms": 0.07
+    },
+    {
+      "sample_name": "speech000139_reverb_0.440_5dB",
+      "true_t60": 0.44,
+      "pred_t60": 0.4355,
+      "snr": 5.0,
+      "error_ms": -4.45
+    },
+    {
+      "sample_name": "speech000140_reverb_0.885_10dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.8794,
+      "snr": 10.0,
+      "error_ms": -5.61
+    },
+    {
+      "sample_name": "speech000141_reverb_0.437_15dB",
+      "true_t60": 0.437,
+      "pred_t60": 0.4224,
+      "snr": 15.0,
+      "error_ms": -14.64
+    },
+    {
+      "sample_name": "speech000142_reverb_0.628_10dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.5449,
+      "snr": 10.0,
+      "error_ms": -83.08
+    },
+    {
+      "sample_name": "speech000143_reverb_0.183_10dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.3315,
+      "snr": 10.0,
+      "error_ms": 148.54
+    },
+    {
+      "sample_name": "speech000144_reverb_0.863_5dB",
+      "true_t60": 0.863,
+      "pred_t60": 0.8311,
+      "snr": 5.0,
+      "error_ms": -31.95
+    },
+    {
+      "sample_name": "speech000145_reverb_1.041_5dB",
+      "true_t60": 1.041,
+      "pred_t60": 0.9595,
+      "snr": 5.0,
+      "error_ms": -81.53
+    },
+    {
+      "sample_name": "speech000146_reverb_0.885_-5dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.8589,
+      "snr": -5.0,
+      "error_ms": -26.11
+    },
+    {
+      "sample_name": "speech000147_reverb_0.537_5dB",
+      "true_t60": 0.537,
+      "pred_t60": 0.5576,
+      "snr": 5.0,
+      "error_ms": 20.62
+    },
+    {
+      "sample_name": "speech000148_reverb_0.539_10dB",
+      "true_t60": 0.539,
+      "pred_t60": 0.5298,
+      "snr": 10.0,
+      "error_ms": -9.21
+    },
+    {
+      "sample_name": "speech000149_reverb_0.366_5dB",
+      "true_t60": 0.366,
+      "pred_t60": 0.3223,
+      "snr": 5.0,
+      "error_ms": -43.73
+    },
+    {
+      "sample_name": "speech000150_reverb_0.708_-5dB",
+      "true_t60": 0.708,
+      "pred_t60": 0.7129,
+      "snr": -5.0,
+      "error_ms": 4.89
+    },
+    {
+      "sample_name": "speech000151_reverb_0.769_20dB",
+      "true_t60": 0.769,
+      "pred_t60": 0.8613,
+      "snr": 20.0,
+      "error_ms": 92.33
+    },
+    {
+      "sample_name": "speech000152_reverb_0.537_20dB",
+      "true_t60": 0.537,
+      "pred_t60": 0.5615,
+      "snr": 20.0,
+      "error_ms": 24.52
+    },
+    {
+      "sample_name": "speech000153_reverb_0.760_15dB",
+      "true_t60": 0.76,
+      "pred_t60": 0.7471,
+      "snr": 15.0,
+      "error_ms": -12.93
+    },
+    {
+      "sample_name": "speech000154_reverb_0.371_5dB",
+      "true_t60": 0.371,
+      "pred_t60": 0.4248,
+      "snr": 5.0,
+      "error_ms": 53.8
+    },
+    {
+      "sample_name": "speech000155_reverb_0.868_20dB",
+      "true_t60": 0.868,
+      "pred_t60": 0.7949,
+      "snr": 20.0,
+      "error_ms": -73.08
+    },
+    {
+      "sample_name": "speech000156_reverb_0.870_-5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.9697,
+      "snr": -5.0,
+      "error_ms": 99.73
+    },
+    {
+      "sample_name": "speech000157_reverb_0.530_5dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.4868,
+      "snr": 5.0,
+      "error_ms": -43.18
+    },
+    {
+      "sample_name": "speech000158_reverb_0.321_10dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3564,
+      "snr": 10.0,
+      "error_ms": 35.45
+    },
+    {
+      "sample_name": "speech000159_reverb_0.152_20dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.3003,
+      "snr": 20.0,
+      "error_ms": 148.29
+    },
+    {
+      "sample_name": "speech000160_reverb_1.388_-5dB",
+      "true_t60": 1.388,
+      "pred_t60": 1.251,
+      "snr": -5.0,
+      "error_ms": -137.02
+    },
+    {
+      "sample_name": "speech000161_reverb_0.721_5dB",
+      "true_t60": 0.721,
+      "pred_t60": 0.7656,
+      "snr": 5.0,
+      "error_ms": 44.62
+    },
+    {
+      "sample_name": "speech000162_reverb_0.901_0dB",
+      "true_t60": 0.901,
+      "pred_t60": 0.708,
+      "snr": 0.0,
+      "error_ms": -192.99
+    },
+    {
+      "sample_name": "speech000163_reverb_0.653_-5dB",
+      "true_t60": 0.653,
+      "pred_t60": 0.6694,
+      "snr": -5.0,
+      "error_ms": 16.43
+    },
+    {
+      "sample_name": "speech000164_reverb_0.870_-5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8726,
+      "snr": -5.0,
+      "error_ms": 2.56
+    },
+    {
+      "sample_name": "speech000165_reverb_0.497_-5dB",
+      "true_t60": 0.497,
+      "pred_t60": 0.6494,
+      "snr": -5.0,
+      "error_ms": 152.41
+    },
+    {
+      "sample_name": "speech000166_reverb_0.237_0dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.2947,
+      "snr": 0.0,
+      "error_ms": 57.68
+    },
+    {
+      "sample_name": "speech000167_reverb_0.841_20dB",
+      "true_t60": 0.841,
+      "pred_t60": 0.9883,
+      "snr": 20.0,
+      "error_ms": 147.28
+    },
+    {
+      "sample_name": "speech000168_reverb_0.631_5dB",
+      "true_t60": 0.631,
+      "pred_t60": 0.5928,
+      "snr": 5.0,
+      "error_ms": -38.23
+    },
+    {
+      "sample_name": "speech000169_reverb_0.210_0dB",
+      "true_t60": 0.21,
+      "pred_t60": 0.46,
+      "snr": 0.0,
+      "error_ms": 249.96
+    },
+    {
+      "sample_name": "speech000170_reverb_1.287_0dB",
+      "true_t60": 1.287,
+      "pred_t60": 1.2031,
+      "snr": 0.0,
+      "error_ms": -83.87
+    },
+    {
+      "sample_name": "speech000171_reverb_0.912_15dB",
+      "true_t60": 0.912,
+      "pred_t60": 0.5132,
+      "snr": 15.0,
+      "error_ms": -398.82
+    },
+    {
+      "sample_name": "speech000172_reverb_1.272_15dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.2979,
+      "snr": 15.0,
+      "error_ms": 25.85
+    },
+    {
+      "sample_name": "speech000173_reverb_0.676_-5dB",
+      "true_t60": 0.676,
+      "pred_t60": 0.7119,
+      "snr": -5.0,
+      "error_ms": 35.91
+    },
+    {
+      "sample_name": "speech000174_reverb_0.187_-5dB",
+      "true_t60": 0.187,
+      "pred_t60": 0.2271,
+      "snr": -5.0,
+      "error_ms": 40.05
+    },
+    {
+      "sample_name": "speech000175_reverb_0.329_20dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3428,
+      "snr": 20.0,
+      "error_ms": 13.77
+    },
+    {
+      "sample_name": "speech000176_reverb_0.336_20dB",
+      "true_t60": 0.336,
+      "pred_t60": 0.3672,
+      "snr": 20.0,
+      "error_ms": 31.19
+    },
+    {
+      "sample_name": "speech000177_reverb_0.225_20dB",
+      "true_t60": 0.225,
+      "pred_t60": 0.2268,
+      "snr": 20.0,
+      "error_ms": 1.81
+    },
+    {
+      "sample_name": "speech000178_reverb_0.504_0dB",
+      "true_t60": 0.504,
+      "pred_t60": 0.7993,
+      "snr": 0.0,
+      "error_ms": 295.32
+    },
+    {
+      "sample_name": "speech000179_reverb_0.420_-5dB",
+      "true_t60": 0.42,
+      "pred_t60": 0.6118,
+      "snr": -5.0,
+      "error_ms": 191.82
+    },
+    {
+      "sample_name": "speech000180_reverb_0.239_-5dB",
+      "true_t60": 0.239,
+      "pred_t60": 0.1824,
+      "snr": -5.0,
+      "error_ms": -56.63
+    },
+    {
+      "sample_name": "speech000181_reverb_0.183_5dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.2539,
+      "snr": 5.0,
+      "error_ms": 70.91
+    },
+    {
+      "sample_name": "speech000182_reverb_0.544_15dB",
+      "true_t60": 0.544,
+      "pred_t60": 0.5449,
+      "snr": 15.0,
+      "error_ms": 0.92
+    },
+    {
+      "sample_name": "speech000183_reverb_0.363_-5dB",
+      "true_t60": 0.363,
+      "pred_t60": 0.3481,
+      "snr": -5.0,
+      "error_ms": -14.86
+    },
+    {
+      "sample_name": "speech000184_reverb_0.260_20dB",
+      "true_t60": 0.26,
+      "pred_t60": 0.2839,
+      "snr": 20.0,
+      "error_ms": 23.94
+    },
+    {
+      "sample_name": "speech000185_reverb_0.825_15dB",
+      "true_t60": 0.825,
+      "pred_t60": 0.7622,
+      "snr": 15.0,
+      "error_ms": -62.79
+    },
+    {
+      "sample_name": "speech000186_reverb_0.657_5dB",
+      "true_t60": 0.657,
+      "pred_t60": 0.6377,
+      "snr": 5.0,
+      "error_ms": -19.3
+    },
+    {
+      "sample_name": "speech000187_reverb_0.582_-5dB",
+      "true_t60": 0.582,
+      "pred_t60": 0.5244,
+      "snr": -5.0,
+      "error_ms": -57.59
+    },
+    {
+      "sample_name": "speech000188_reverb_1.272_20dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.2646,
+      "snr": 20.0,
+      "error_ms": -7.35
+    },
+    {
+      "sample_name": "speech000189_reverb_0.325_10dB",
+      "true_t60": 0.325,
+      "pred_t60": 0.3657,
+      "snr": 10.0,
+      "error_ms": 40.72
+    },
+    {
+      "sample_name": "speech000190_reverb_0.167_20dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2529,
+      "snr": 20.0,
+      "error_ms": 85.93
+    },
+    {
+      "sample_name": "speech000191_reverb_0.766_10dB",
+      "true_t60": 0.766,
+      "pred_t60": 0.7378,
+      "snr": 10.0,
+      "error_ms": -28.21
+    },
+    {
+      "sample_name": "speech000192_reverb_0.457_20dB",
+      "true_t60": 0.457,
+      "pred_t60": 0.4424,
+      "snr": 20.0,
+      "error_ms": -14.62
+    },
+    {
+      "sample_name": "speech000193_reverb_0.321_5dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3118,
+      "snr": 5.0,
+      "error_ms": -9.23
+    },
+    {
+      "sample_name": "speech000194_reverb_0.296_10dB",
+      "true_t60": 0.296,
+      "pred_t60": 0.3198,
+      "snr": 10.0,
+      "error_ms": 23.82
+    },
+    {
+      "sample_name": "speech000195_reverb_0.885_15dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.8569,
+      "snr": 15.0,
+      "error_ms": -28.07
+    },
+    {
+      "sample_name": "speech000196_reverb_0.497_10dB",
+      "true_t60": 0.497,
+      "pred_t60": 0.5957,
+      "snr": 10.0,
+      "error_ms": 98.7
+    },
+    {
+      "sample_name": "speech000197_reverb_0.780_20dB",
+      "true_t60": 0.78,
+      "pred_t60": 0.688,
+      "snr": 20.0,
+      "error_ms": -92.01
+    },
+    {
+      "sample_name": "speech000198_reverb_0.705_0dB",
+      "true_t60": 0.705,
+      "pred_t60": 0.6191,
+      "snr": 0.0,
+      "error_ms": -85.86
+    },
+    {
+      "sample_name": "speech000199_reverb_0.763_0dB",
+      "true_t60": 0.763,
+      "pred_t60": 0.8521,
+      "snr": 0.0,
+      "error_ms": 89.05
+    },
+    {
+      "sample_name": "speech000200_reverb_0.460_0dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.4336,
+      "snr": 0.0,
+      "error_ms": -26.41
+    },
+    {
+      "sample_name": "speech000201_reverb_0.296_-5dB",
+      "true_t60": 0.296,
+      "pred_t60": 0.3408,
+      "snr": -5.0,
+      "error_ms": 44.82
+    },
+    {
+      "sample_name": "speech000202_reverb_0.355_-5dB",
+      "true_t60": 0.355,
+      "pred_t60": 0.4243,
+      "snr": -5.0,
+      "error_ms": 69.32
+    },
+    {
+      "sample_name": "speech000203_reverb_0.759_20dB",
+      "true_t60": 0.759,
+      "pred_t60": 0.7554,
+      "snr": 20.0,
+      "error_ms": -3.63
+    },
+    {
+      "sample_name": "speech000204_reverb_0.294_15dB",
+      "true_t60": 0.294,
+      "pred_t60": 0.3179,
+      "snr": 15.0,
+      "error_ms": 23.87
+    },
+    {
+      "sample_name": "speech000205_reverb_0.821_-5dB",
+      "true_t60": 0.821,
+      "pred_t60": 0.3359,
+      "snr": -5.0,
+      "error_ms": -485.06
+    },
+    {
+      "sample_name": "speech000206_reverb_0.190_0dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2217,
+      "snr": 0.0,
+      "error_ms": 31.68
+    },
+    {
+      "sample_name": "speech000207_reverb_0.261_0dB",
+      "true_t60": 0.261,
+      "pred_t60": 0.2593,
+      "snr": 0.0,
+      "error_ms": -1.72
+    },
+    {
+      "sample_name": "speech000208_reverb_0.545_15dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.5254,
+      "snr": 15.0,
+      "error_ms": -19.61
+    },
+    {
+      "sample_name": "speech000209_reverb_0.634_5dB",
+      "true_t60": 0.634,
+      "pred_t60": 0.6606,
+      "snr": 5.0,
+      "error_ms": 26.64
+    },
+    {
+      "sample_name": "speech000210_reverb_0.756_-5dB",
+      "true_t60": 0.756,
+      "pred_t60": 0.8682,
+      "snr": -5.0,
+      "error_ms": 112.16
+    },
+    {
+      "sample_name": "speech000211_reverb_0.559_15dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.5439,
+      "snr": 15.0,
+      "error_ms": -15.05
+    },
+    {
+      "sample_name": "speech000212_reverb_0.773_10dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7358,
+      "snr": 10.0,
+      "error_ms": -37.16
+    },
+    {
+      "sample_name": "speech000213_reverb_0.901_-5dB",
+      "true_t60": 0.901,
+      "pred_t60": 0.4146,
+      "snr": -5.0,
+      "error_ms": -486.45
+    },
+    {
+      "sample_name": "speech000214_reverb_0.641_5dB",
+      "true_t60": 0.641,
+      "pred_t60": 0.6665,
+      "snr": 5.0,
+      "error_ms": 25.5
+    },
+    {
+      "sample_name": "speech000215_reverb_0.829_20dB",
+      "true_t60": 0.829,
+      "pred_t60": 0.8193,
+      "snr": 20.0,
+      "error_ms": -9.66
+    },
+    {
+      "sample_name": "speech000216_reverb_0.225_-5dB",
+      "true_t60": 0.225,
+      "pred_t60": 0.3289,
+      "snr": -5.0,
+      "error_ms": 103.86
+    },
+    {
+      "sample_name": "speech000217_reverb_1.345_-5dB",
+      "true_t60": 1.345,
+      "pred_t60": 0.6821,
+      "snr": -5.0,
+      "error_ms": -662.87
+    },
+    {
+      "sample_name": "speech000218_reverb_0.201_-5dB",
+      "true_t60": 0.201,
+      "pred_t60": 0.5713,
+      "snr": -5.0,
+      "error_ms": 370.29
+    },
+    {
+      "sample_name": "speech000219_reverb_0.396_10dB",
+      "true_t60": 0.396,
+      "pred_t60": 0.3799,
+      "snr": 10.0,
+      "error_ms": -16.12
+    },
+    {
+      "sample_name": "speech000220_reverb_0.885_15dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.9111,
+      "snr": 15.0,
+      "error_ms": 26.13
+    },
+    {
+      "sample_name": "speech000221_reverb_0.265_10dB",
+      "true_t60": 0.265,
+      "pred_t60": 0.2974,
+      "snr": 10.0,
+      "error_ms": 32.36
+    },
+    {
+      "sample_name": "speech000222_reverb_1.014_0dB",
+      "true_t60": 1.014,
+      "pred_t60": 1.1885,
+      "snr": 0.0,
+      "error_ms": 174.48
+    },
+    {
+      "sample_name": "speech000223_reverb_0.628_10dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.6328,
+      "snr": 10.0,
+      "error_ms": 4.81
+    },
+    {
+      "sample_name": "speech000224_reverb_0.237_15dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.2344,
+      "snr": 15.0,
+      "error_ms": -2.63
+    },
+    {
+      "sample_name": "speech000225_reverb_0.763_5dB",
+      "true_t60": 0.763,
+      "pred_t60": 0.8521,
+      "snr": 5.0,
+      "error_ms": 89.05
+    },
+    {
+      "sample_name": "speech000226_reverb_1.184_5dB",
+      "true_t60": 1.184,
+      "pred_t60": 0.9966,
+      "snr": 5.0,
+      "error_ms": -187.42
+    },
+    {
+      "sample_name": "speech000227_reverb_0.318_20dB",
+      "true_t60": 0.318,
+      "pred_t60": 0.3193,
+      "snr": 20.0,
+      "error_ms": 1.34
+    },
+    {
+      "sample_name": "speech000228_reverb_0.485_10dB",
+      "true_t60": 0.485,
+      "pred_t60": 0.5059,
+      "snr": 10.0,
+      "error_ms": 20.86
+    },
+    {
+      "sample_name": "speech000229_reverb_0.296_0dB",
+      "true_t60": 0.296,
+      "pred_t60": 0.3418,
+      "snr": 0.0,
+      "error_ms": 45.8
+    },
+    {
+      "sample_name": "speech000230_reverb_1.107_0dB",
+      "true_t60": 1.107,
+      "pred_t60": 1.1475,
+      "snr": 0.0,
+      "error_ms": 40.46
+    },
+    {
+      "sample_name": "speech000231_reverb_0.714_5dB",
+      "true_t60": 0.714,
+      "pred_t60": 0.7695,
+      "snr": 5.0,
+      "error_ms": 55.53
+    },
+    {
+      "sample_name": "speech000232_reverb_0.470_0dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.2759,
+      "snr": 0.0,
+      "error_ms": -194.12
+    },
+    {
+      "sample_name": "speech000233_reverb_0.361_-5dB",
+      "true_t60": 0.361,
+      "pred_t60": 0.355,
+      "snr": -5.0,
+      "error_ms": -6.02
+    },
+    {
+      "sample_name": "speech000234_reverb_0.225_-5dB",
+      "true_t60": 0.225,
+      "pred_t60": 0.2629,
+      "snr": -5.0,
+      "error_ms": 37.94
+    },
+    {
+      "sample_name": "speech000235_reverb_0.420_0dB",
+      "true_t60": 0.42,
+      "pred_t60": 0.5,
+      "snr": 0.0,
+      "error_ms": 80.0
+    },
+    {
+      "sample_name": "speech000236_reverb_0.164_15dB",
+      "true_t60": 0.164,
+      "pred_t60": 0.1776,
+      "snr": 15.0,
+      "error_ms": 13.61
+    },
+    {
+      "sample_name": "speech000237_reverb_0.511_5dB",
+      "true_t60": 0.511,
+      "pred_t60": 0.561,
+      "snr": 5.0,
+      "error_ms": 50.04
+    },
+    {
+      "sample_name": "speech000238_reverb_0.152_5dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.1862,
+      "snr": 5.0,
+      "error_ms": 34.16
+    },
+    {
+      "sample_name": "speech000239_reverb_0.214_-5dB",
+      "true_t60": 0.214,
+      "pred_t60": 0.8911,
+      "snr": -5.0,
+      "error_ms": 677.11
+    },
+    {
+      "sample_name": "speech000240_reverb_0.173_5dB",
+      "true_t60": 0.173,
+      "pred_t60": 0.1799,
+      "snr": 5.0,
+      "error_ms": 6.93
+    },
+    {
+      "sample_name": "speech000241_reverb_0.554_15dB",
+      "true_t60": 0.554,
+      "pred_t60": 0.481,
+      "snr": 15.0,
+      "error_ms": -73.04
+    },
+    {
+      "sample_name": "speech000242_reverb_0.180_10dB",
+      "true_t60": 0.18,
+      "pred_t60": 0.1851,
+      "snr": 10.0,
+      "error_ms": 5.06
+    },
+    {
+      "sample_name": "speech000243_reverb_0.426_20dB",
+      "true_t60": 0.426,
+      "pred_t60": 0.4556,
+      "snr": 20.0,
+      "error_ms": 29.57
+    },
+    {
+      "sample_name": "speech000244_reverb_0.369_15dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.4126,
+      "snr": 15.0,
+      "error_ms": 43.6
+    },
+    {
+      "sample_name": "speech000245_reverb_0.456_5dB",
+      "true_t60": 0.456,
+      "pred_t60": 0.7495,
+      "snr": 5.0,
+      "error_ms": 293.51
+    },
+    {
+      "sample_name": "speech000246_reverb_1.272_10dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.1719,
+      "snr": 10.0,
+      "error_ms": -100.12
+    },
+    {
+      "sample_name": "speech000247_reverb_0.396_20dB",
+      "true_t60": 0.396,
+      "pred_t60": 0.3857,
+      "snr": 20.0,
+      "error_ms": -10.26
+    },
+    {
+      "sample_name": "speech000248_reverb_0.325_10dB",
+      "true_t60": 0.325,
+      "pred_t60": 0.3486,
+      "snr": 10.0,
+      "error_ms": 23.63
+    },
+    {
+      "sample_name": "speech000249_reverb_0.324_5dB",
+      "true_t60": 0.324,
+      "pred_t60": 0.3335,
+      "snr": 5.0,
+      "error_ms": 9.5
+    },
+    {
+      "sample_name": "speech000250_reverb_0.494_-5dB",
+      "true_t60": 0.494,
+      "pred_t60": 0.6421,
+      "snr": -5.0,
+      "error_ms": 148.09
+    },
+    {
+      "sample_name": "speech000251_reverb_0.214_5dB",
+      "true_t60": 0.214,
+      "pred_t60": 0.2715,
+      "snr": 5.0,
+      "error_ms": 57.48
+    },
+    {
+      "sample_name": "speech000252_reverb_0.914_0dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.9731,
+      "snr": 0.0,
+      "error_ms": 59.14
+    },
+    {
+      "sample_name": "speech000253_reverb_0.684_10dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.6973,
+      "snr": 10.0,
+      "error_ms": 13.27
+    },
+    {
+      "sample_name": "speech000254_reverb_0.653_-5dB",
+      "true_t60": 0.653,
+      "pred_t60": 0.6548,
+      "snr": -5.0,
+      "error_ms": 1.79
+    },
+    {
+      "sample_name": "speech000255_reverb_1.388_15dB",
+      "true_t60": 1.388,
+      "pred_t60": 1.376,
+      "snr": 15.0,
+      "error_ms": -12.02
+    },
+    {
+      "sample_name": "speech000256_reverb_0.631_5dB",
+      "true_t60": 0.631,
+      "pred_t60": 0.4517,
+      "snr": 5.0,
+      "error_ms": -179.34
+    },
+    {
+      "sample_name": "speech000257_reverb_0.782_10dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.7817,
+      "snr": 10.0,
+      "error_ms": -0.26
+    },
+    {
+      "sample_name": "speech000258_reverb_0.889_10dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.8784,
+      "snr": 10.0,
+      "error_ms": -10.58
+    },
+    {
+      "sample_name": "speech000259_reverb_1.079_15dB",
+      "true_t60": 1.079,
+      "pred_t60": 0.9761,
+      "snr": 15.0,
+      "error_ms": -102.93
+    },
+    {
+      "sample_name": "speech000260_reverb_1.176_20dB",
+      "true_t60": 1.176,
+      "pred_t60": 1.0605,
+      "snr": 20.0,
+      "error_ms": -115.45
+    },
+    {
+      "sample_name": "speech000261_reverb_0.312_15dB",
+      "true_t60": 0.312,
+      "pred_t60": 0.2844,
+      "snr": 15.0,
+      "error_ms": -27.58
+    },
+    {
+      "sample_name": "speech000262_reverb_0.762_-5dB",
+      "true_t60": 0.762,
+      "pred_t60": 0.8291,
+      "snr": -5.0,
+      "error_ms": 67.1
+    },
+    {
+      "sample_name": "speech000263_reverb_0.230_0dB",
+      "true_t60": 0.23,
+      "pred_t60": 0.311,
+      "snr": 0.0,
+      "error_ms": 81.04
+    },
+    {
+      "sample_name": "speech000264_reverb_0.126_5dB",
+      "true_t60": 0.126,
+      "pred_t60": 0.1348,
+      "snr": 5.0,
+      "error_ms": 8.77
+    },
+    {
+      "sample_name": "speech000265_reverb_1.222_-5dB",
+      "true_t60": 1.222,
+      "pred_t60": 1.0615,
+      "snr": -5.0,
+      "error_ms": -160.48
+    },
+    {
+      "sample_name": "speech000266_reverb_0.769_10dB",
+      "true_t60": 0.769,
+      "pred_t60": 0.7793,
+      "snr": 10.0,
+      "error_ms": 10.3
+    },
+    {
+      "sample_name": "speech000267_reverb_1.267_0dB",
+      "true_t60": 1.267,
+      "pred_t60": 1.1436,
+      "snr": 0.0,
+      "error_ms": -123.45
+    },
+    {
+      "sample_name": "speech000268_reverb_1.055_10dB",
+      "true_t60": 1.055,
+      "pred_t60": 1.0088,
+      "snr": 10.0,
+      "error_ms": -46.21
+    },
+    {
+      "sample_name": "speech000269_reverb_0.698_-5dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.6187,
+      "snr": -5.0,
+      "error_ms": -79.35
+    },
+    {
+      "sample_name": "speech000270_reverb_0.157_20dB",
+      "true_t60": 0.157,
+      "pred_t60": 0.2146,
+      "snr": 20.0,
+      "error_ms": 57.6
+    },
+    {
+      "sample_name": "speech000271_reverb_0.353_5dB",
+      "true_t60": 0.353,
+      "pred_t60": 0.4287,
+      "snr": 5.0,
+      "error_ms": 75.71
+    },
+    {
+      "sample_name": "speech000272_reverb_0.426_20dB",
+      "true_t60": 0.426,
+      "pred_t60": 0.5205,
+      "snr": 20.0,
+      "error_ms": 94.51
+    },
+    {
+      "sample_name": "speech000273_reverb_0.219_5dB",
+      "true_t60": 0.219,
+      "pred_t60": 0.2402,
+      "snr": 5.0,
+      "error_ms": 21.23
+    },
+    {
+      "sample_name": "speech000274_reverb_0.351_15dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.3804,
+      "snr": 15.0,
+      "error_ms": 29.37
+    },
+    {
+      "sample_name": "speech000275_reverb_0.774_20dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.7456,
+      "snr": 20.0,
+      "error_ms": -28.39
+    },
+    {
+      "sample_name": "speech000276_reverb_0.890_-5dB",
+      "true_t60": 0.89,
+      "pred_t60": 0.9971,
+      "snr": -5.0,
+      "error_ms": 107.07
+    },
+    {
+      "sample_name": "speech000277_reverb_0.456_20dB",
+      "true_t60": 0.456,
+      "pred_t60": 0.6514,
+      "snr": 20.0,
+      "error_ms": 195.37
+    },
+    {
+      "sample_name": "speech000278_reverb_0.912_20dB",
+      "true_t60": 0.912,
+      "pred_t60": 0.5747,
+      "snr": 20.0,
+      "error_ms": -337.29
+    },
+    {
+      "sample_name": "speech000279_reverb_0.611_20dB",
+      "true_t60": 0.611,
+      "pred_t60": 0.5288,
+      "snr": 20.0,
+      "error_ms": -82.19
+    },
+    {
+      "sample_name": "speech000280_reverb_0.208_15dB",
+      "true_t60": 0.208,
+      "pred_t60": 0.2063,
+      "snr": 15.0,
+      "error_ms": -1.7
+    },
+    {
+      "sample_name": "speech000281_reverb_0.196_-5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.3647,
+      "snr": -5.0,
+      "error_ms": 168.75
+    },
+    {
+      "sample_name": "speech000282_reverb_0.185_5dB",
+      "true_t60": 0.185,
+      "pred_t60": 0.1941,
+      "snr": 5.0,
+      "error_ms": 9.09
+    },
+    {
+      "sample_name": "speech000283_reverb_0.870_5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8306,
+      "snr": 5.0,
+      "error_ms": -39.43
+    },
+    {
+      "sample_name": "speech000284_reverb_0.285_20dB",
+      "true_t60": 0.285,
+      "pred_t60": 0.2986,
+      "snr": 20.0,
+      "error_ms": 13.58
+    },
+    {
+      "sample_name": "speech000285_reverb_0.184_5dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.1417,
+      "snr": 5.0,
+      "error_ms": -42.28
+    },
+    {
+      "sample_name": "speech000286_reverb_0.369_15dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.4233,
+      "snr": 15.0,
+      "error_ms": 54.34
+    },
+    {
+      "sample_name": "speech000287_reverb_0.766_-5dB",
+      "true_t60": 0.766,
+      "pred_t60": 0.752,
+      "snr": -5.0,
+      "error_ms": -14.05
+    },
+    {
+      "sample_name": "speech000288_reverb_0.182_-5dB",
+      "true_t60": 0.182,
+      "pred_t60": 0.1896,
+      "snr": -5.0,
+      "error_ms": 7.58
+    },
+    {
+      "sample_name": "speech000289_reverb_0.352_20dB",
+      "true_t60": 0.352,
+      "pred_t60": 0.3999,
+      "snr": 20.0,
+      "error_ms": 47.9
+    },
+    {
+      "sample_name": "speech000290_reverb_0.782_10dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.8174,
+      "snr": 10.0,
+      "error_ms": 35.38
+    },
+    {
+      "sample_name": "speech000291_reverb_0.293_5dB",
+      "true_t60": 0.293,
+      "pred_t60": 0.3911,
+      "snr": 5.0,
+      "error_ms": 98.11
+    },
+    {
+      "sample_name": "speech000292_reverb_0.285_0dB",
+      "true_t60": 0.285,
+      "pred_t60": 0.3325,
+      "snr": 0.0,
+      "error_ms": 47.52
+    },
+    {
+      "sample_name": "speech000293_reverb_0.863_20dB",
+      "true_t60": 0.863,
+      "pred_t60": 0.8105,
+      "snr": 20.0,
+      "error_ms": -52.45
+    },
+    {
+      "sample_name": "speech000294_reverb_0.503_15dB",
+      "true_t60": 0.503,
+      "pred_t60": 0.5664,
+      "snr": 15.0,
+      "error_ms": 63.41
+    },
+    {
+      "sample_name": "speech000295_reverb_1.487_5dB",
+      "true_t60": 1.487,
+      "pred_t60": 1.3135,
+      "snr": 5.0,
+      "error_ms": -173.52
+    },
+    {
+      "sample_name": "speech000296_reverb_1.272_15dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.2539,
+      "snr": 15.0,
+      "error_ms": -18.09
+    },
+    {
+      "sample_name": "speech000297_reverb_0.504_10dB",
+      "true_t60": 0.504,
+      "pred_t60": 0.7705,
+      "snr": 10.0,
+      "error_ms": 266.51
+    },
+    {
+      "sample_name": "speech000298_reverb_0.167_-5dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.3745,
+      "snr": -5.0,
+      "error_ms": 207.51
+    },
+    {
+      "sample_name": "speech000299_reverb_0.766_15dB",
+      "true_t60": 0.766,
+      "pred_t60": 0.7124,
+      "snr": 15.0,
+      "error_ms": -53.6
+    },
+    {
+      "sample_name": "speech000300_reverb_0.187_10dB",
+      "true_t60": 0.187,
+      "pred_t60": 0.1951,
+      "snr": 10.0,
+      "error_ms": 8.07
+    },
+    {
+      "sample_name": "speech000301_reverb_0.327_5dB",
+      "true_t60": 0.327,
+      "pred_t60": 0.3408,
+      "snr": 5.0,
+      "error_ms": 13.82
+    },
+    {
+      "sample_name": "speech000302_reverb_0.243_-5dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.2078,
+      "snr": -5.0,
+      "error_ms": -35.24
+    },
+    {
+      "sample_name": "speech000303_reverb_0.227_10dB",
+      "true_t60": 0.227,
+      "pred_t60": 0.2578,
+      "snr": 10.0,
+      "error_ms": 30.81
+    },
+    {
+      "sample_name": "speech000304_reverb_1.098_15dB",
+      "true_t60": 1.098,
+      "pred_t60": 1.085,
+      "snr": 15.0,
+      "error_ms": -13.04
+    },
+    {
+      "sample_name": "speech000305_reverb_0.774_0dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.8384,
+      "snr": 0.0,
+      "error_ms": 64.38
+    },
+    {
+      "sample_name": "speech000306_reverb_0.982_10dB",
+      "true_t60": 0.982,
+      "pred_t60": 0.9092,
+      "snr": 10.0,
+      "error_ms": -72.82
+    },
+    {
+      "sample_name": "speech000307_reverb_0.481_20dB",
+      "true_t60": 0.481,
+      "pred_t60": 0.5146,
+      "snr": 20.0,
+      "error_ms": 33.65
+    },
+    {
+      "sample_name": "speech000308_reverb_0.698_5dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.8135,
+      "snr": 5.0,
+      "error_ms": 115.48
+    },
+    {
+      "sample_name": "speech000309_reverb_1.476_0dB",
+      "true_t60": 1.476,
+      "pred_t60": 1.2715,
+      "snr": 0.0,
+      "error_ms": -204.52
+    },
+    {
+      "sample_name": "speech000310_reverb_0.483_20dB",
+      "true_t60": 0.483,
+      "pred_t60": 0.5396,
+      "snr": 20.0,
+      "error_ms": 56.55
+    },
+    {
+      "sample_name": "speech000311_reverb_0.214_0dB",
+      "true_t60": 0.214,
+      "pred_t60": 0.293,
+      "snr": 0.0,
+      "error_ms": 78.97
+    },
+    {
+      "sample_name": "speech000312_reverb_1.235_20dB",
+      "true_t60": 1.235,
+      "pred_t60": 1.2725,
+      "snr": 20.0,
+      "error_ms": 37.46
+    },
+    {
+      "sample_name": "speech000313_reverb_0.529_0dB",
+      "true_t60": 0.529,
+      "pred_t60": 0.5508,
+      "snr": 0.0,
+      "error_ms": 21.78
+    },
+    {
+      "sample_name": "speech000314_reverb_1.062_0dB",
+      "true_t60": 1.062,
+      "pred_t60": 1.207,
+      "snr": 0.0,
+      "error_ms": 145.03
+    },
+    {
+      "sample_name": "speech000315_reverb_0.265_0dB",
+      "true_t60": 0.265,
+      "pred_t60": 0.2664,
+      "snr": 0.0,
+      "error_ms": 1.36
+    },
+    {
+      "sample_name": "speech000316_reverb_0.550_20dB",
+      "true_t60": 0.55,
+      "pred_t60": 0.6172,
+      "snr": 20.0,
+      "error_ms": 67.19
+    },
+    {
+      "sample_name": "speech000317_reverb_0.736_5dB",
+      "true_t60": 0.736,
+      "pred_t60": 0.6992,
+      "snr": 5.0,
+      "error_ms": -36.78
+    },
+    {
+      "sample_name": "speech000318_reverb_0.336_10dB",
+      "true_t60": 0.336,
+      "pred_t60": 0.3628,
+      "snr": 10.0,
+      "error_ms": 26.79
+    },
+    {
+      "sample_name": "speech000319_reverb_0.799_20dB",
+      "true_t60": 0.799,
+      "pred_t60": 0.769,
+      "snr": 20.0,
+      "error_ms": -29.96
+    },
+    {
+      "sample_name": "speech000320_reverb_0.998_-5dB",
+      "true_t60": 0.998,
+      "pred_t60": 0.9185,
+      "snr": -5.0,
+      "error_ms": -79.54
+    },
+    {
+      "sample_name": "speech000321_reverb_1.014_-5dB",
+      "true_t60": 1.014,
+      "pred_t60": 0.2153,
+      "snr": -5.0,
+      "error_ms": -798.67
+    },
+    {
+      "sample_name": "speech000322_reverb_0.174_-5dB",
+      "true_t60": 0.174,
+      "pred_t60": 0.7656,
+      "snr": -5.0,
+      "error_ms": 591.63
+    },
+    {
+      "sample_name": "speech000323_reverb_1.491_0dB",
+      "true_t60": 1.491,
+      "pred_t60": 1.459,
+      "snr": 0.0,
+      "error_ms": -32.02
+    },
+    {
+      "sample_name": "speech000324_reverb_0.868_0dB",
+      "true_t60": 0.868,
+      "pred_t60": 0.9951,
+      "snr": 0.0,
+      "error_ms": 127.12
+    },
+    {
+      "sample_name": "speech000325_reverb_0.675_-5dB",
+      "true_t60": 0.675,
+      "pred_t60": 0.3638,
+      "snr": -5.0,
+      "error_ms": -311.23
+    },
+    {
+      "sample_name": "speech000326_reverb_0.722_-5dB",
+      "true_t60": 0.722,
+      "pred_t60": 0.7905,
+      "snr": -5.0,
+      "error_ms": 68.53
+    },
+    {
+      "sample_name": "speech000327_reverb_0.935_15dB",
+      "true_t60": 0.935,
+      "pred_t60": 0.9541,
+      "snr": 15.0,
+      "error_ms": 19.1
+    },
+    {
+      "sample_name": "speech000328_reverb_1.128_0dB",
+      "true_t60": 1.128,
+      "pred_t60": 0.8618,
+      "snr": 0.0,
+      "error_ms": -266.18
+    },
+    {
+      "sample_name": "speech000329_reverb_1.220_15dB",
+      "true_t60": 1.22,
+      "pred_t60": 1.1934,
+      "snr": 15.0,
+      "error_ms": -26.64
+    },
+    {
+      "sample_name": "speech000330_reverb_0.773_-5dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.6357,
+      "snr": -5.0,
+      "error_ms": -137.26
+    },
+    {
+      "sample_name": "speech000331_reverb_0.182_0dB",
+      "true_t60": 0.182,
+      "pred_t60": 0.2177,
+      "snr": 0.0,
+      "error_ms": 35.65
+    },
+    {
+      "sample_name": "speech000332_reverb_0.222_10dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.2202,
+      "snr": 10.0,
+      "error_ms": -1.79
+    },
+    {
+      "sample_name": "speech000333_reverb_0.393_20dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.3999,
+      "snr": 20.0,
+      "error_ms": 6.9
+    },
+    {
+      "sample_name": "speech000334_reverb_0.544_10dB",
+      "true_t60": 0.544,
+      "pred_t60": 0.5488,
+      "snr": 10.0,
+      "error_ms": 4.83
+    },
+    {
+      "sample_name": "speech000335_reverb_1.099_10dB",
+      "true_t60": 1.099,
+      "pred_t60": 1.0938,
+      "snr": 10.0,
+      "error_ms": -5.25
+    },
+    {
+      "sample_name": "speech000336_reverb_0.657_10dB",
+      "true_t60": 0.657,
+      "pred_t60": 0.7085,
+      "snr": 10.0,
+      "error_ms": 51.5
+    },
+    {
+      "sample_name": "speech000337_reverb_0.599_10dB",
+      "true_t60": 0.599,
+      "pred_t60": 0.585,
+      "snr": 10.0,
+      "error_ms": -14.04
+    },
+    {
+      "sample_name": "speech000338_reverb_0.704_10dB",
+      "true_t60": 0.704,
+      "pred_t60": 0.7495,
+      "snr": 10.0,
+      "error_ms": 45.51
+    },
+    {
+      "sample_name": "speech000339_reverb_1.041_10dB",
+      "true_t60": 1.041,
+      "pred_t60": 0.9692,
+      "snr": 10.0,
+      "error_ms": -71.76
+    },
+    {
+      "sample_name": "speech000340_reverb_0.901_-5dB",
+      "true_t60": 0.901,
+      "pred_t60": 0.623,
+      "snr": -5.0,
+      "error_ms": -277.95
+    },
+    {
+      "sample_name": "speech000341_reverb_0.280_0dB",
+      "true_t60": 0.28,
+      "pred_t60": 0.3342,
+      "snr": 0.0,
+      "error_ms": 54.23
+    },
+    {
+      "sample_name": "speech000342_reverb_0.746_10dB",
+      "true_t60": 0.746,
+      "pred_t60": 0.7905,
+      "snr": 10.0,
+      "error_ms": 44.53
+    },
+    {
+      "sample_name": "speech000343_reverb_0.294_20dB",
+      "true_t60": 0.294,
+      "pred_t60": 0.2637,
+      "snr": 20.0,
+      "error_ms": -30.33
+    },
+    {
+      "sample_name": "speech000344_reverb_0.229_5dB",
+      "true_t60": 0.229,
+      "pred_t60": 0.2915,
+      "snr": 5.0,
+      "error_ms": 62.5
+    },
+    {
+      "sample_name": "speech000345_reverb_0.353_10dB",
+      "true_t60": 0.353,
+      "pred_t60": 0.4502,
+      "snr": 10.0,
+      "error_ms": 97.2
+    },
+    {
+      "sample_name": "speech000346_reverb_0.163_20dB",
+      "true_t60": 0.163,
+      "pred_t60": 0.1472,
+      "snr": 20.0,
+      "error_ms": -15.78
+    },
+    {
+      "sample_name": "speech000347_reverb_0.285_15dB",
+      "true_t60": 0.285,
+      "pred_t60": 0.3174,
+      "snr": 15.0,
+      "error_ms": 32.38
+    },
+    {
+      "sample_name": "speech000348_reverb_0.454_20dB",
+      "true_t60": 0.454,
+      "pred_t60": 0.543,
+      "snr": 20.0,
+      "error_ms": 88.97
+    },
+    {
+      "sample_name": "speech000349_reverb_0.142_0dB",
+      "true_t60": 0.142,
+      "pred_t60": 0.1267,
+      "snr": 0.0,
+      "error_ms": -15.29
+    },
+    {
+      "sample_name": "speech000350_reverb_0.197_5dB",
+      "true_t60": 0.197,
+      "pred_t60": 0.2395,
+      "snr": 5.0,
+      "error_ms": 42.5
+    },
+    {
+      "sample_name": "speech000351_reverb_0.440_20dB",
+      "true_t60": 0.44,
+      "pred_t60": 0.481,
+      "snr": 20.0,
+      "error_ms": 40.96
+    },
+    {
+      "sample_name": "speech000352_reverb_1.222_15dB",
+      "true_t60": 1.222,
+      "pred_t60": 1.2852,
+      "snr": 15.0,
+      "error_ms": 63.16
+    },
+    {
+      "sample_name": "speech000353_reverb_0.288_0dB",
+      "true_t60": 0.288,
+      "pred_t60": 0.2981,
+      "snr": 0.0,
+      "error_ms": 10.1
+    },
+    {
+      "sample_name": "speech000354_reverb_0.123_5dB",
+      "true_t60": 0.123,
+      "pred_t60": 0.1714,
+      "snr": 5.0,
+      "error_ms": 48.39
+    },
+    {
+      "sample_name": "speech000355_reverb_1.022_0dB",
+      "true_t60": 1.022,
+      "pred_t60": 1.0156,
+      "snr": 0.0,
+      "error_ms": -6.37
+    },
+    {
+      "sample_name": "speech000356_reverb_0.714_5dB",
+      "true_t60": 0.714,
+      "pred_t60": 0.7759,
+      "snr": 5.0,
+      "error_ms": 61.88
+    },
+    {
+      "sample_name": "speech000357_reverb_0.714_-5dB",
+      "true_t60": 0.714,
+      "pred_t60": 0.8477,
+      "snr": -5.0,
+      "error_ms": 133.66
+    },
+    {
+      "sample_name": "speech000358_reverb_0.667_5dB",
+      "true_t60": 0.667,
+      "pred_t60": 0.6855,
+      "snr": 5.0,
+      "error_ms": 18.55
+    },
+    {
+      "sample_name": "speech000359_reverb_0.545_5dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.5894,
+      "snr": 5.0,
+      "error_ms": 44.36
+    },
+    {
+      "sample_name": "speech000360_reverb_1.176_15dB",
+      "true_t60": 1.176,
+      "pred_t60": 1.0635,
+      "snr": 15.0,
+      "error_ms": -112.52
+    },
+    {
+      "sample_name": "speech000361_reverb_0.911_10dB",
+      "true_t60": 0.911,
+      "pred_t60": 0.9556,
+      "snr": 10.0,
+      "error_ms": 44.57
+    },
+    {
+      "sample_name": "speech000362_reverb_0.419_20dB",
+      "true_t60": 0.419,
+      "pred_t60": 0.5142,
+      "snr": 20.0,
+      "error_ms": 95.16
+    },
+    {
+      "sample_name": "speech000363_reverb_0.658_10dB",
+      "true_t60": 0.658,
+      "pred_t60": 0.7231,
+      "snr": 10.0,
+      "error_ms": 65.14
+    },
+    {
+      "sample_name": "speech000364_reverb_0.628_-5dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.6621,
+      "snr": -5.0,
+      "error_ms": 34.11
+    },
+    {
+      "sample_name": "speech000365_reverb_0.190_10dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2302,
+      "snr": 10.0,
+      "error_ms": 40.22
+    },
+    {
+      "sample_name": "speech000366_reverb_0.712_-5dB",
+      "true_t60": 0.712,
+      "pred_t60": 0.6924,
+      "snr": -5.0,
+      "error_ms": -19.62
+    },
+    {
+      "sample_name": "speech000367_reverb_0.802_0dB",
+      "true_t60": 0.802,
+      "pred_t60": 0.8193,
+      "snr": 0.0,
+      "error_ms": 17.34
+    },
+    {
+      "sample_name": "speech000368_reverb_0.550_20dB",
+      "true_t60": 0.55,
+      "pred_t60": 0.6113,
+      "snr": 20.0,
+      "error_ms": 61.33
+    },
+    {
+      "sample_name": "speech000369_reverb_1.214_5dB",
+      "true_t60": 1.214,
+      "pred_t60": 1.2559,
+      "snr": 5.0,
+      "error_ms": 41.86
+    },
+    {
+      "sample_name": "speech000370_reverb_1.136_-5dB",
+      "true_t60": 1.136,
+      "pred_t60": 1.2686,
+      "snr": -5.0,
+      "error_ms": 132.55
+    },
+    {
+      "sample_name": "speech000371_reverb_0.631_10dB",
+      "true_t60": 0.631,
+      "pred_t60": 0.5063,
+      "snr": 10.0,
+      "error_ms": -124.65
+    },
+    {
+      "sample_name": "speech000372_reverb_0.889_5dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.7744,
+      "snr": 5.0,
+      "error_ms": -114.59
+    },
+    {
+      "sample_name": "speech000373_reverb_0.349_0dB",
+      "true_t60": 0.349,
+      "pred_t60": 0.4331,
+      "snr": 0.0,
+      "error_ms": 84.11
+    },
+    {
+      "sample_name": "speech000374_reverb_0.297_5dB",
+      "true_t60": 0.297,
+      "pred_t60": 0.282,
+      "snr": 5.0,
+      "error_ms": -15.02
+    },
+    {
+      "sample_name": "speech000375_reverb_0.803_20dB",
+      "true_t60": 0.803,
+      "pred_t60": 0.8213,
+      "snr": 20.0,
+      "error_ms": 18.29
+    },
+    {
+      "sample_name": "speech000376_reverb_0.275_10dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.3271,
+      "snr": 10.0,
+      "error_ms": 52.15
+    },
+    {
+      "sample_name": "speech000377_reverb_0.351_0dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.4131,
+      "snr": 0.0,
+      "error_ms": 62.09
+    },
+    {
+      "sample_name": "speech000378_reverb_1.268_15dB",
+      "true_t60": 1.268,
+      "pred_t60": 1.2568,
+      "snr": 15.0,
+      "error_ms": -11.16
+    },
+    {
+      "sample_name": "speech000379_reverb_0.307_20dB",
+      "true_t60": 0.307,
+      "pred_t60": 0.3652,
+      "snr": 20.0,
+      "error_ms": 58.23
+    },
+    {
+      "sample_name": "speech000380_reverb_0.476_5dB",
+      "true_t60": 0.476,
+      "pred_t60": 0.4414,
+      "snr": 5.0,
+      "error_ms": -34.59
+    },
+    {
+      "sample_name": "speech000381_reverb_0.870_10dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8291,
+      "snr": 10.0,
+      "error_ms": -40.9
+    },
+    {
+      "sample_name": "speech000382_reverb_0.156_20dB",
+      "true_t60": 0.156,
+      "pred_t60": 0.2505,
+      "snr": 20.0,
+      "error_ms": 94.49
+    },
+    {
+      "sample_name": "speech000383_reverb_0.491_-5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.5293,
+      "snr": -5.0,
+      "error_ms": 38.3
+    },
+    {
+      "sample_name": "speech000384_reverb_0.511_5dB",
+      "true_t60": 0.511,
+      "pred_t60": 0.5405,
+      "snr": 5.0,
+      "error_ms": 29.53
+    },
+    {
+      "sample_name": "speech000385_reverb_0.288_0dB",
+      "true_t60": 0.288,
+      "pred_t60": 0.3574,
+      "snr": 0.0,
+      "error_ms": 69.42
+    },
+    {
+      "sample_name": "speech000386_reverb_1.372_0dB",
+      "true_t60": 1.372,
+      "pred_t60": 1.2236,
+      "snr": 0.0,
+      "error_ms": -148.37
+    },
+    {
+      "sample_name": "speech000387_reverb_0.491_10dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.5605,
+      "snr": 10.0,
+      "error_ms": 69.55
+    },
+    {
+      "sample_name": "speech000388_reverb_0.517_5dB",
+      "true_t60": 0.517,
+      "pred_t60": 0.5688,
+      "snr": 5.0,
+      "error_ms": 51.85
+    },
+    {
+      "sample_name": "speech000389_reverb_0.619_10dB",
+      "true_t60": 0.619,
+      "pred_t60": 1.085,
+      "snr": 10.0,
+      "error_ms": 465.96
+    },
+    {
+      "sample_name": "speech000390_reverb_1.372_15dB",
+      "true_t60": 1.372,
+      "pred_t60": 1.2256,
+      "snr": 15.0,
+      "error_ms": -146.41
+    },
+    {
+      "sample_name": "speech000391_reverb_0.329_-5dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3804,
+      "snr": -5.0,
+      "error_ms": 51.37
+    },
+    {
+      "sample_name": "speech000392_reverb_0.911_-5dB",
+      "true_t60": 0.911,
+      "pred_t60": 0.8672,
+      "snr": -5.0,
+      "error_ms": -43.81
+    },
+    {
+      "sample_name": "speech000393_reverb_1.309_10dB",
+      "true_t60": 1.309,
+      "pred_t60": 1.2607,
+      "snr": 10.0,
+      "error_ms": -48.26
+    },
+    {
+      "sample_name": "speech000394_reverb_0.355_5dB",
+      "true_t60": 0.355,
+      "pred_t60": 0.3667,
+      "snr": 5.0,
+      "error_ms": 11.7
+    },
+    {
+      "sample_name": "speech000395_reverb_0.204_5dB",
+      "true_t60": 0.204,
+      "pred_t60": 0.437,
+      "snr": 5.0,
+      "error_ms": 233.01
+    },
+    {
+      "sample_name": "speech000396_reverb_0.559_10dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.5308,
+      "snr": 10.0,
+      "error_ms": -28.24
+    },
+    {
+      "sample_name": "speech000397_reverb_0.378_10dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.24,
+      "snr": 10.0,
+      "error_ms": -138.01
+    },
+    {
+      "sample_name": "speech000398_reverb_0.210_-5dB",
+      "true_t60": 0.21,
+      "pred_t60": 0.2512,
+      "snr": -5.0,
+      "error_ms": 41.22
+    },
+    {
+      "sample_name": "speech000399_reverb_0.183_15dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.3074,
+      "snr": 15.0,
+      "error_ms": 124.37
+    },
+    {
+      "sample_name": "speech000400_reverb_0.582_15dB",
+      "true_t60": 0.582,
+      "pred_t60": 0.5835,
+      "snr": 15.0,
+      "error_ms": 1.5
+    },
+    {
+      "sample_name": "speech000401_reverb_0.760_-5dB",
+      "true_t60": 0.76,
+      "pred_t60": 1.0869,
+      "snr": -5.0,
+      "error_ms": 326.91
+    },
+    {
+      "sample_name": "speech000402_reverb_0.575_10dB",
+      "true_t60": 0.575,
+      "pred_t60": 0.5957,
+      "snr": 10.0,
+      "error_ms": 20.7
+    },
+    {
+      "sample_name": "speech000403_reverb_0.910_20dB",
+      "true_t60": 0.91,
+      "pred_t60": 0.7808,
+      "snr": 20.0,
+      "error_ms": -129.24
+    },
+    {
+      "sample_name": "speech000404_reverb_0.773_20dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.77,
+      "snr": 20.0,
+      "error_ms": -2.98
+    },
+    {
+      "sample_name": "speech000405_reverb_0.851_-5dB",
+      "true_t60": 0.851,
+      "pred_t60": 0.7993,
+      "snr": -5.0,
+      "error_ms": -51.68
+    },
+    {
+      "sample_name": "speech000406_reverb_0.402_20dB",
+      "true_t60": 0.402,
+      "pred_t60": 0.436,
+      "snr": 20.0,
+      "error_ms": 34.04
+    },
+    {
+      "sample_name": "speech000407_reverb_0.901_0dB",
+      "true_t60": 0.901,
+      "pred_t60": 1.043,
+      "snr": 0.0,
+      "error_ms": 141.97
+    },
+    {
+      "sample_name": "speech000408_reverb_0.156_15dB",
+      "true_t60": 0.156,
+      "pred_t60": 0.1826,
+      "snr": 15.0,
+      "error_ms": 26.62
+    },
+    {
+      "sample_name": "speech000409_reverb_0.769_0dB",
+      "true_t60": 0.769,
+      "pred_t60": 0.8281,
+      "snr": 0.0,
+      "error_ms": 59.13
+    },
+    {
+      "sample_name": "speech000410_reverb_0.190_15dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2034,
+      "snr": 15.0,
+      "error_ms": 13.37
+    },
+    {
+      "sample_name": "speech000411_reverb_0.206_20dB",
+      "true_t60": 0.206,
+      "pred_t60": 0.1666,
+      "snr": 20.0,
+      "error_ms": -39.37
+    },
+    {
+      "sample_name": "speech000412_reverb_0.591_-5dB",
+      "true_t60": 0.591,
+      "pred_t60": 0.5269,
+      "snr": -5.0,
+      "error_ms": -64.14
+    },
+    {
+      "sample_name": "speech000413_reverb_0.617_5dB",
+      "true_t60": 0.617,
+      "pred_t60": 0.5781,
+      "snr": 5.0,
+      "error_ms": -38.87
+    },
+    {
+      "sample_name": "speech000414_reverb_0.287_10dB",
+      "true_t60": 0.287,
+      "pred_t60": 0.3369,
+      "snr": 10.0,
+      "error_ms": 49.91
+    },
+    {
+      "sample_name": "speech000415_reverb_0.243_20dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.3916,
+      "snr": 20.0,
+      "error_ms": 148.6
+    },
+    {
+      "sample_name": "speech000416_reverb_0.932_10dB",
+      "true_t60": 0.932,
+      "pred_t60": 0.876,
+      "snr": 10.0,
+      "error_ms": -56.02
+    },
+    {
+      "sample_name": "speech000417_reverb_0.419_5dB",
+      "true_t60": 0.419,
+      "pred_t60": 0.5728,
+      "snr": 5.0,
+      "error_ms": 153.75
+    },
+    {
+      "sample_name": "speech000418_reverb_0.167_20dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2333,
+      "snr": 20.0,
+      "error_ms": 66.28
+    },
+    {
+      "sample_name": "speech000419_reverb_0.265_10dB",
+      "true_t60": 0.265,
+      "pred_t60": 0.3228,
+      "snr": 10.0,
+      "error_ms": 57.75
+    },
+    {
+      "sample_name": "speech000420_reverb_0.969_15dB",
+      "true_t60": 0.969,
+      "pred_t60": 0.7744,
+      "snr": 15.0,
+      "error_ms": -194.59
+    },
+    {
+      "sample_name": "speech000421_reverb_0.610_-5dB",
+      "true_t60": 0.61,
+      "pred_t60": 0.8101,
+      "snr": -5.0,
+      "error_ms": 200.06
+    },
+    {
+      "sample_name": "speech000422_reverb_1.168_10dB",
+      "true_t60": 1.168,
+      "pred_t60": 1.1797,
+      "snr": 10.0,
+      "error_ms": 11.69
+    },
+    {
+      "sample_name": "speech000423_reverb_1.136_0dB",
+      "true_t60": 1.136,
+      "pred_t60": 1.2246,
+      "snr": 0.0,
+      "error_ms": 88.61
+    },
+    {
+      "sample_name": "speech000424_reverb_0.201_-5dB",
+      "true_t60": 0.201,
+      "pred_t60": 0.2227,
+      "snr": -5.0,
+      "error_ms": 21.66
+    },
+    {
+      "sample_name": "speech000425_reverb_0.388_-5dB",
+      "true_t60": 0.388,
+      "pred_t60": 0.2734,
+      "snr": -5.0,
+      "error_ms": -114.56
+    },
+    {
+      "sample_name": "speech000426_reverb_0.349_15dB",
+      "true_t60": 0.349,
+      "pred_t60": 0.4229,
+      "snr": 15.0,
+      "error_ms": 73.85
+    },
+    {
+      "sample_name": "speech000427_reverb_0.630_0dB",
+      "true_t60": 0.63,
+      "pred_t60": 0.7603,
+      "snr": 0.0,
+      "error_ms": 130.25
+    },
+    {
+      "sample_name": "speech000428_reverb_0.628_15dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.6777,
+      "snr": 15.0,
+      "error_ms": 49.73
+    },
+    {
+      "sample_name": "speech000429_reverb_0.261_0dB",
+      "true_t60": 0.261,
+      "pred_t60": 0.2487,
+      "snr": 0.0,
+      "error_ms": -12.34
+    },
+    {
+      "sample_name": "speech000430_reverb_0.385_5dB",
+      "true_t60": 0.385,
+      "pred_t60": 0.3892,
+      "snr": 5.0,
+      "error_ms": 4.16
+    },
+    {
+      "sample_name": "speech000431_reverb_0.860_-5dB",
+      "true_t60": 0.86,
+      "pred_t60": 0.8857,
+      "snr": -5.0,
+      "error_ms": 25.74
+    },
+    {
+      "sample_name": "speech000432_reverb_0.261_10dB",
+      "true_t60": 0.261,
+      "pred_t60": 0.2856,
+      "snr": 10.0,
+      "error_ms": 24.64
+    },
+    {
+      "sample_name": "speech000433_reverb_0.147_20dB",
+      "true_t60": 0.147,
+      "pred_t60": 0.155,
+      "snr": 20.0,
+      "error_ms": 8.03
+    },
+    {
+      "sample_name": "speech000434_reverb_0.494_10dB",
+      "true_t60": 0.494,
+      "pred_t60": 0.5493,
+      "snr": 10.0,
+      "error_ms": 55.32
+    },
+    {
+      "sample_name": "speech000435_reverb_0.773_5dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.8555,
+      "snr": 5.0,
+      "error_ms": 82.47
+    },
+    {
+      "sample_name": "speech000436_reverb_0.540_10dB",
+      "true_t60": 0.54,
+      "pred_t60": 0.5801,
+      "snr": 10.0,
+      "error_ms": 40.08
+    },
+    {
+      "sample_name": "speech000437_reverb_0.708_15dB",
+      "true_t60": 0.708,
+      "pred_t60": 0.6616,
+      "snr": 15.0,
+      "error_ms": -46.38
+    },
+    {
+      "sample_name": "speech000438_reverb_0.545_15dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.7354,
+      "snr": 15.0,
+      "error_ms": 190.35
+    },
+    {
+      "sample_name": "speech000439_reverb_0.167_0dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2026,
+      "snr": 0.0,
+      "error_ms": 35.64
+    },
+    {
+      "sample_name": "speech000440_reverb_0.325_10dB",
+      "true_t60": 0.325,
+      "pred_t60": 0.3484,
+      "snr": 10.0,
+      "error_ms": 23.39
+    },
+    {
+      "sample_name": "speech000441_reverb_0.593_20dB",
+      "true_t60": 0.593,
+      "pred_t60": 0.5962,
+      "snr": 20.0,
+      "error_ms": 3.19
+    },
+    {
+      "sample_name": "speech000442_reverb_0.214_5dB",
+      "true_t60": 0.214,
+      "pred_t60": 0.208,
+      "snr": 5.0,
+      "error_ms": -5.99
+    },
+    {
+      "sample_name": "speech000443_reverb_0.481_-5dB",
+      "true_t60": 0.481,
+      "pred_t60": 0.4639,
+      "snr": -5.0,
+      "error_ms": -17.13
+    },
+    {
+      "sample_name": "speech000444_reverb_0.275_5dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.3315,
+      "snr": 5.0,
+      "error_ms": 56.54
+    },
+    {
+      "sample_name": "speech000445_reverb_1.388_20dB",
+      "true_t60": 1.388,
+      "pred_t60": 1.3799,
+      "snr": 20.0,
+      "error_ms": -8.12
+    },
+    {
+      "sample_name": "speech000446_reverb_0.440_0dB",
+      "true_t60": 0.44,
+      "pred_t60": 0.4526,
+      "snr": 0.0,
+      "error_ms": 12.64
+    },
+    {
+      "sample_name": "speech000447_reverb_0.420_15dB",
+      "true_t60": 0.42,
+      "pred_t60": 0.4434,
+      "snr": 15.0,
+      "error_ms": 23.36
+    },
+    {
+      "sample_name": "speech000448_reverb_0.190_0dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2006,
+      "snr": 0.0,
+      "error_ms": 10.56
+    },
+    {
+      "sample_name": "speech000449_reverb_0.657_20dB",
+      "true_t60": 0.657,
+      "pred_t60": 0.6592,
+      "snr": 20.0,
+      "error_ms": 2.18
+    },
+    {
+      "sample_name": "speech000450_reverb_0.288_15dB",
+      "true_t60": 0.288,
+      "pred_t60": 0.3516,
+      "snr": 15.0,
+      "error_ms": 63.56
+    },
+    {
+      "sample_name": "speech000451_reverb_0.208_10dB",
+      "true_t60": 0.208,
+      "pred_t60": 0.2529,
+      "snr": 10.0,
+      "error_ms": 44.93
+    },
+    {
+      "sample_name": "speech000452_reverb_0.335_-5dB",
+      "true_t60": 0.335,
+      "pred_t60": 0.4883,
+      "snr": -5.0,
+      "error_ms": 153.28
+    },
+    {
+      "sample_name": "speech000453_reverb_0.126_5dB",
+      "true_t60": 0.126,
+      "pred_t60": 0.1782,
+      "snr": 5.0,
+      "error_ms": 52.22
+    },
+    {
+      "sample_name": "speech000454_reverb_0.312_20dB",
+      "true_t60": 0.312,
+      "pred_t60": 0.3347,
+      "snr": 20.0,
+      "error_ms": 22.72
+    },
+    {
+      "sample_name": "speech000455_reverb_0.204_5dB",
+      "true_t60": 0.204,
+      "pred_t60": 0.3867,
+      "snr": 5.0,
+      "error_ms": 182.72
+    },
+    {
+      "sample_name": "speech000456_reverb_1.319_10dB",
+      "true_t60": 1.319,
+      "pred_t60": 1.3105,
+      "snr": 10.0,
+      "error_ms": -8.45
+    },
+    {
+      "sample_name": "speech000457_reverb_0.787_-5dB",
+      "true_t60": 0.787,
+      "pred_t60": 0.6377,
+      "snr": -5.0,
+      "error_ms": -149.3
+    },
+    {
+      "sample_name": "speech000458_reverb_0.280_0dB",
+      "true_t60": 0.28,
+      "pred_t60": 0.436,
+      "snr": 0.0,
+      "error_ms": 156.04
+    },
+    {
+      "sample_name": "speech000459_reverb_0.631_-5dB",
+      "true_t60": 0.631,
+      "pred_t60": 0.6108,
+      "snr": -5.0,
+      "error_ms": -20.16
+    },
+    {
+      "sample_name": "speech000460_reverb_0.330_0dB",
+      "true_t60": 0.33,
+      "pred_t60": 0.3267,
+      "snr": 0.0,
+      "error_ms": -3.34
+    },
+    {
+      "sample_name": "speech000461_reverb_0.224_5dB",
+      "true_t60": 0.224,
+      "pred_t60": 0.2661,
+      "snr": 5.0,
+      "error_ms": 42.11
+    },
+    {
+      "sample_name": "speech000462_reverb_0.305_5dB",
+      "true_t60": 0.305,
+      "pred_t60": 0.3286,
+      "snr": 5.0,
+      "error_ms": 23.61
+    },
+    {
+      "sample_name": "speech000463_reverb_0.885_-5dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.9263,
+      "snr": -5.0,
+      "error_ms": 41.27
+    },
+    {
+      "sample_name": "speech000464_reverb_0.237_20dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.2534,
+      "snr": 20.0,
+      "error_ms": 16.42
+    },
+    {
+      "sample_name": "speech000465_reverb_0.351_5dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.3755,
+      "snr": 5.0,
+      "error_ms": 24.49
+    },
+    {
+      "sample_name": "speech000466_reverb_0.499_10dB",
+      "true_t60": 0.499,
+      "pred_t60": 0.585,
+      "snr": 10.0,
+      "error_ms": 85.96
+    },
+    {
+      "sample_name": "speech000467_reverb_0.201_10dB",
+      "true_t60": 0.201,
+      "pred_t60": 0.225,
+      "snr": 10.0,
+      "error_ms": 23.98
+    },
+    {
+      "sample_name": "speech000468_reverb_0.277_20dB",
+      "true_t60": 0.277,
+      "pred_t60": 0.3184,
+      "snr": 20.0,
+      "error_ms": 41.36
+    },
+    {
+      "sample_name": "speech000469_reverb_0.825_0dB",
+      "true_t60": 0.825,
+      "pred_t60": 0.7007,
+      "snr": 0.0,
+      "error_ms": -124.32
+    },
+    {
+      "sample_name": "speech000470_reverb_0.559_-5dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.4194,
+      "snr": -5.0,
+      "error_ms": -139.57
+    },
+    {
+      "sample_name": "speech000471_reverb_0.237_10dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.3862,
+      "snr": 10.0,
+      "error_ms": 149.23
+    },
+    {
+      "sample_name": "speech000472_reverb_0.491_10dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4907,
+      "snr": 10.0,
+      "error_ms": -0.28
+    },
+    {
+      "sample_name": "speech000473_reverb_0.452_-5dB",
+      "true_t60": 0.452,
+      "pred_t60": 0.5254,
+      "snr": -5.0,
+      "error_ms": 73.39
+    },
+    {
+      "sample_name": "speech000474_reverb_0.268_15dB",
+      "true_t60": 0.268,
+      "pred_t60": 0.3357,
+      "snr": 15.0,
+      "error_ms": 67.69
+    },
+    {
+      "sample_name": "speech000475_reverb_0.393_20dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.3877,
+      "snr": 20.0,
+      "error_ms": -5.3
+    },
+    {
+      "sample_name": "speech000476_reverb_0.180_0dB",
+      "true_t60": 0.18,
+      "pred_t60": 0.1465,
+      "snr": 0.0,
+      "error_ms": -33.52
+    },
+    {
+      "sample_name": "speech000477_reverb_0.362_0dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.415,
+      "snr": 0.0,
+      "error_ms": 53.04
+    },
+    {
+      "sample_name": "speech000478_reverb_0.263_0dB",
+      "true_t60": 0.263,
+      "pred_t60": 0.2971,
+      "snr": 0.0,
+      "error_ms": 34.12
+    },
+    {
+      "sample_name": "speech000479_reverb_0.658_15dB",
+      "true_t60": 0.658,
+      "pred_t60": 0.6709,
+      "snr": 15.0,
+      "error_ms": 12.9
+    },
+    {
+      "sample_name": "speech000480_reverb_1.184_0dB",
+      "true_t60": 1.184,
+      "pred_t60": 1.0615,
+      "snr": 0.0,
+      "error_ms": -122.48
+    },
+    {
+      "sample_name": "speech000481_reverb_0.288_15dB",
+      "true_t60": 0.288,
+      "pred_t60": 0.3447,
+      "snr": 15.0,
+      "error_ms": 56.73
+    },
+    {
+      "sample_name": "speech000482_reverb_0.651_5dB",
+      "true_t60": 0.651,
+      "pred_t60": 0.7397,
+      "snr": 5.0,
+      "error_ms": 88.75
+    },
+    {
+      "sample_name": "speech000483_reverb_0.782_20dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.8276,
+      "snr": 20.0,
+      "error_ms": 45.64
+    },
+    {
+      "sample_name": "speech000484_reverb_0.474_15dB",
+      "true_t60": 0.474,
+      "pred_t60": 0.4858,
+      "snr": 15.0,
+      "error_ms": 11.84
+    },
+    {
+      "sample_name": "speech000485_reverb_1.231_15dB",
+      "true_t60": 1.231,
+      "pred_t60": 1.1709,
+      "snr": 15.0,
+      "error_ms": -60.1
+    },
+    {
+      "sample_name": "speech000486_reverb_1.272_15dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.2725,
+      "snr": 15.0,
+      "error_ms": 0.46
+    },
+    {
+      "sample_name": "speech000487_reverb_0.268_20dB",
+      "true_t60": 0.268,
+      "pred_t60": 0.334,
+      "snr": 20.0,
+      "error_ms": 65.98
+    },
+    {
+      "sample_name": "speech000488_reverb_0.287_10dB",
+      "true_t60": 0.287,
+      "pred_t60": 0.3218,
+      "snr": 10.0,
+      "error_ms": 34.78
+    },
+    {
+      "sample_name": "speech000489_reverb_0.625_20dB",
+      "true_t60": 0.625,
+      "pred_t60": 0.6094,
+      "snr": 20.0,
+      "error_ms": -15.62
+    },
+    {
+      "sample_name": "speech000490_reverb_0.582_5dB",
+      "true_t60": 0.582,
+      "pred_t60": 0.5132,
+      "snr": 5.0,
+      "error_ms": -68.82
+    },
+    {
+      "sample_name": "speech000491_reverb_1.484_15dB",
+      "true_t60": 1.484,
+      "pred_t60": 1.3389,
+      "snr": 15.0,
+      "error_ms": -145.13
+    },
+    {
+      "sample_name": "speech000492_reverb_0.332_15dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.3633,
+      "snr": 15.0,
+      "error_ms": 31.28
+    },
+    {
+      "sample_name": "speech000493_reverb_0.470_20dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.3789,
+      "snr": 20.0,
+      "error_ms": -91.09
+    },
+    {
+      "sample_name": "speech000494_reverb_0.116_10dB",
+      "true_t60": 0.116,
+      "pred_t60": 0.1247,
+      "snr": 10.0,
+      "error_ms": 8.69
+    },
+    {
+      "sample_name": "speech000495_reverb_0.204_-5dB",
+      "true_t60": 0.204,
+      "pred_t60": 0.4946,
+      "snr": -5.0,
+      "error_ms": 290.63
+    },
+    {
+      "sample_name": "speech000496_reverb_0.889_15dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.8477,
+      "snr": 15.0,
+      "error_ms": -41.34
+    },
+    {
+      "sample_name": "speech000497_reverb_0.191_0dB",
+      "true_t60": 0.191,
+      "pred_t60": 0.2117,
+      "snr": 0.0,
+      "error_ms": 20.67
+    },
+    {
+      "sample_name": "speech000498_reverb_1.368_15dB",
+      "true_t60": 1.368,
+      "pred_t60": 1.0332,
+      "snr": 15.0,
+      "error_ms": -334.8
+    },
+    {
+      "sample_name": "speech000499_reverb_0.863_10dB",
+      "true_t60": 0.863,
+      "pred_t60": 0.8501,
+      "snr": 10.0,
+      "error_ms": -12.9
+    },
+    {
+      "sample_name": "speech000500_reverb_0.876_20dB",
+      "true_t60": 0.876,
+      "pred_t60": 0.8755,
+      "snr": 20.0,
+      "error_ms": -0.51
+    },
+    {
+      "sample_name": "speech000501_reverb_0.233_10dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2676,
+      "snr": 10.0,
+      "error_ms": 34.58
+    },
+    {
+      "sample_name": "speech000502_reverb_0.774_20dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.7441,
+      "snr": 20.0,
+      "error_ms": -29.86
+    },
+    {
+      "sample_name": "speech000503_reverb_0.870_-5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8447,
+      "snr": -5.0,
+      "error_ms": -25.27
+    },
+    {
+      "sample_name": "speech000504_reverb_1.388_0dB",
+      "true_t60": 1.388,
+      "pred_t60": 1.3555,
+      "snr": 0.0,
+      "error_ms": -32.53
+    },
+    {
+      "sample_name": "speech000505_reverb_0.829_-5dB",
+      "true_t60": 0.829,
+      "pred_t60": 0.812,
+      "snr": -5.0,
+      "error_ms": -16.99
+    },
+    {
+      "sample_name": "speech000506_reverb_0.130_0dB",
+      "true_t60": 0.13,
+      "pred_t60": 0.1606,
+      "snr": 0.0,
+      "error_ms": 30.64
+    },
+    {
+      "sample_name": "speech000507_reverb_0.491_5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4448,
+      "snr": 5.0,
+      "error_ms": -46.18
+    },
+    {
+      "sample_name": "speech000508_reverb_0.762_0dB",
+      "true_t60": 0.762,
+      "pred_t60": 0.7007,
+      "snr": 0.0,
+      "error_ms": -61.32
+    },
+    {
+      "sample_name": "speech000509_reverb_1.311_0dB",
+      "true_t60": 1.311,
+      "pred_t60": 1.2012,
+      "snr": 0.0,
+      "error_ms": -109.83
+    },
+    {
+      "sample_name": "speech000510_reverb_0.508_5dB",
+      "true_t60": 0.508,
+      "pred_t60": 0.5669,
+      "snr": 5.0,
+      "error_ms": 58.89
+    },
+    {
+      "sample_name": "speech000511_reverb_1.272_-5dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.252,
+      "snr": -5.0,
+      "error_ms": -20.05
+    },
+    {
+      "sample_name": "speech000512_reverb_0.190_10dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.1924,
+      "snr": 10.0,
+      "error_ms": 2.38
+    },
+    {
+      "sample_name": "speech000513_reverb_0.329_-5dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3423,
+      "snr": -5.0,
+      "error_ms": 13.29
+    },
+    {
+      "sample_name": "speech000514_reverb_0.545_15dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.5786,
+      "snr": 15.0,
+      "error_ms": 33.61
+    },
+    {
+      "sample_name": "speech000515_reverb_0.342_10dB",
+      "true_t60": 0.342,
+      "pred_t60": 0.3535,
+      "snr": 10.0,
+      "error_ms": 11.52
+    },
+    {
+      "sample_name": "speech000516_reverb_0.452_20dB",
+      "true_t60": 0.452,
+      "pred_t60": 0.4937,
+      "snr": 20.0,
+      "error_ms": 41.65
+    },
+    {
+      "sample_name": "speech000517_reverb_0.196_15dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2314,
+      "snr": 15.0,
+      "error_ms": 35.45
+    },
+    {
+      "sample_name": "speech000518_reverb_0.787_15dB",
+      "true_t60": 0.787,
+      "pred_t60": 0.8613,
+      "snr": 15.0,
+      "error_ms": 74.33
+    },
+    {
+      "sample_name": "speech000519_reverb_0.575_5dB",
+      "true_t60": 0.575,
+      "pred_t60": 0.5703,
+      "snr": 5.0,
+      "error_ms": -4.69
+    },
+    {
+      "sample_name": "speech000520_reverb_0.491_20dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4697,
+      "snr": 20.0,
+      "error_ms": -21.27
+    },
+    {
+      "sample_name": "speech000521_reverb_0.233_0dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2764,
+      "snr": 0.0,
+      "error_ms": 43.37
+    },
+    {
+      "sample_name": "speech000522_reverb_1.441_10dB",
+      "true_t60": 1.441,
+      "pred_t60": 1.1357,
+      "snr": 10.0,
+      "error_ms": -305.26
+    },
+    {
+      "sample_name": "speech000523_reverb_0.658_10dB",
+      "true_t60": 0.658,
+      "pred_t60": 0.6289,
+      "snr": 10.0,
+      "error_ms": -29.09
+    },
+    {
+      "sample_name": "speech000524_reverb_1.061_5dB",
+      "true_t60": 1.061,
+      "pred_t60": 0.9678,
+      "snr": 5.0,
+      "error_ms": -93.23
+    },
+    {
+      "sample_name": "speech000525_reverb_0.237_-5dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.3042,
+      "snr": -5.0,
+      "error_ms": 67.2
+    },
+    {
+      "sample_name": "speech000526_reverb_0.152_10dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.1707,
+      "snr": 10.0,
+      "error_ms": 18.65
+    },
+    {
+      "sample_name": "speech000527_reverb_0.607_20dB",
+      "true_t60": 0.607,
+      "pred_t60": 0.5552,
+      "snr": 20.0,
+      "error_ms": -51.82
+    },
+    {
+      "sample_name": "speech000528_reverb_0.426_-5dB",
+      "true_t60": 0.426,
+      "pred_t60": 0.5723,
+      "snr": -5.0,
+      "error_ms": 146.27
+    },
+    {
+      "sample_name": "speech000529_reverb_0.111_-5dB",
+      "true_t60": 0.111,
+      "pred_t60": 0.2036,
+      "snr": -5.0,
+      "error_ms": 92.61
+    },
+    {
+      "sample_name": "speech000530_reverb_0.774_20dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.7812,
+      "snr": 20.0,
+      "error_ms": 7.25
+    },
+    {
+      "sample_name": "speech000531_reverb_0.230_-5dB",
+      "true_t60": 0.23,
+      "pred_t60": 0.4453,
+      "snr": -5.0,
+      "error_ms": 215.31
+    },
+    {
+      "sample_name": "speech000532_reverb_1.311_10dB",
+      "true_t60": 1.311,
+      "pred_t60": 1.248,
+      "snr": 10.0,
+      "error_ms": -62.95
+    },
+    {
+      "sample_name": "speech000533_reverb_0.350_10dB",
+      "true_t60": 0.35,
+      "pred_t60": 0.4053,
+      "snr": 10.0,
+      "error_ms": 55.27
+    },
+    {
+      "sample_name": "speech000534_reverb_1.220_15dB",
+      "true_t60": 1.22,
+      "pred_t60": 1.1016,
+      "snr": 15.0,
+      "error_ms": -118.44
+    },
+    {
+      "sample_name": "speech000535_reverb_0.256_15dB",
+      "true_t60": 0.256,
+      "pred_t60": 0.3005,
+      "snr": 15.0,
+      "error_ms": 44.54
+    },
+    {
+      "sample_name": "speech000536_reverb_1.280_15dB",
+      "true_t60": 1.28,
+      "pred_t60": 1.1143,
+      "snr": 15.0,
+      "error_ms": -165.74
+    },
+    {
+      "sample_name": "speech000537_reverb_0.270_5dB",
+      "true_t60": 0.27,
+      "pred_t60": 0.3271,
+      "snr": 5.0,
+      "error_ms": 57.15
+    },
+    {
+      "sample_name": "speech000538_reverb_0.467_15dB",
+      "true_t60": 0.467,
+      "pred_t60": 0.457,
+      "snr": 15.0,
+      "error_ms": -9.97
+    },
+    {
+      "sample_name": "speech000539_reverb_0.825_20dB",
+      "true_t60": 0.825,
+      "pred_t60": 0.6885,
+      "snr": 20.0,
+      "error_ms": -136.52
+    },
+    {
+      "sample_name": "speech000540_reverb_0.336_10dB",
+      "true_t60": 0.336,
+      "pred_t60": 0.3516,
+      "snr": 10.0,
+      "error_ms": 15.56
+    },
+    {
+      "sample_name": "speech000541_reverb_0.667_10dB",
+      "true_t60": 0.667,
+      "pred_t60": 0.6504,
+      "snr": 10.0,
+      "error_ms": -16.61
+    },
+    {
+      "sample_name": "speech000542_reverb_0.273_20dB",
+      "true_t60": 0.273,
+      "pred_t60": 0.3564,
+      "snr": 20.0,
+      "error_ms": 83.45
+    },
+    {
+      "sample_name": "speech000543_reverb_1.145_10dB",
+      "true_t60": 1.145,
+      "pred_t60": 1.1455,
+      "snr": 10.0,
+      "error_ms": 0.51
+    },
+    {
+      "sample_name": "speech000544_reverb_0.196_15dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2559,
+      "snr": 15.0,
+      "error_ms": 59.86
+    },
+    {
+      "sample_name": "speech000545_reverb_0.335_0dB",
+      "true_t60": 0.335,
+      "pred_t60": 0.5679,
+      "snr": 0.0,
+      "error_ms": 232.87
+    },
+    {
+      "sample_name": "speech000546_reverb_0.351_0dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.3716,
+      "snr": 0.0,
+      "error_ms": 20.58
+    },
+    {
+      "sample_name": "speech000547_reverb_0.481_15dB",
+      "true_t60": 0.481,
+      "pred_t60": 0.5454,
+      "snr": 15.0,
+      "error_ms": 64.41
+    },
+    {
+      "sample_name": "speech000548_reverb_0.808_10dB",
+      "true_t60": 0.808,
+      "pred_t60": 0.7134,
+      "snr": 10.0,
+      "error_ms": -94.62
+    },
+    {
+      "sample_name": "speech000549_reverb_0.652_10dB",
+      "true_t60": 0.652,
+      "pred_t60": 0.7017,
+      "snr": 10.0,
+      "error_ms": 49.66
+    },
+    {
+      "sample_name": "speech000550_reverb_0.969_20dB",
+      "true_t60": 0.969,
+      "pred_t60": 0.8428,
+      "snr": 20.0,
+      "error_ms": -126.23
+    },
+    {
+      "sample_name": "speech000551_reverb_0.332_5dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.3506,
+      "snr": 5.0,
+      "error_ms": 18.59
+    },
+    {
+      "sample_name": "speech000552_reverb_0.539_0dB",
+      "true_t60": 0.539,
+      "pred_t60": 0.585,
+      "snr": 0.0,
+      "error_ms": 45.96
+    },
+    {
+      "sample_name": "speech000553_reverb_0.181_0dB",
+      "true_t60": 0.181,
+      "pred_t60": 0.179,
+      "snr": 0.0,
+      "error_ms": -2.04
+    },
+    {
+      "sample_name": "speech000554_reverb_1.050_15dB",
+      "true_t60": 1.05,
+      "pred_t60": 0.9341,
+      "snr": 15.0,
+      "error_ms": -115.92
+    },
+    {
+      "sample_name": "speech000555_reverb_0.291_-5dB",
+      "true_t60": 0.291,
+      "pred_t60": 0.3716,
+      "snr": -5.0,
+      "error_ms": 80.58
+    },
+    {
+      "sample_name": "speech000556_reverb_1.110_5dB",
+      "true_t60": 1.11,
+      "pred_t60": 1.1221,
+      "snr": 5.0,
+      "error_ms": 12.07
+    },
+    {
+      "sample_name": "speech000557_reverb_0.126_0dB",
+      "true_t60": 0.126,
+      "pred_t60": 0.1434,
+      "snr": 0.0,
+      "error_ms": 17.43
+    },
+    {
+      "sample_name": "speech000558_reverb_0.530_10dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.5742,
+      "snr": 10.0,
+      "error_ms": 44.22
+    },
+    {
+      "sample_name": "speech000559_reverb_0.325_15dB",
+      "true_t60": 0.325,
+      "pred_t60": 0.3511,
+      "snr": 15.0,
+      "error_ms": 26.07
+    },
+    {
+      "sample_name": "speech000560_reverb_0.487_10dB",
+      "true_t60": 0.487,
+      "pred_t60": 0.5747,
+      "snr": 10.0,
+      "error_ms": 87.71
+    },
+    {
+      "sample_name": "speech000561_reverb_0.307_10dB",
+      "true_t60": 0.307,
+      "pred_t60": 0.335,
+      "snr": 10.0,
+      "error_ms": 27.96
+    },
+    {
+      "sample_name": "speech000562_reverb_0.648_15dB",
+      "true_t60": 0.648,
+      "pred_t60": 0.6641,
+      "snr": 15.0,
+      "error_ms": 16.06
+    },
+    {
+      "sample_name": "speech000563_reverb_0.607_10dB",
+      "true_t60": 0.607,
+      "pred_t60": 0.5952,
+      "snr": 10.0,
+      "error_ms": -11.79
+    },
+    {
+      "sample_name": "speech000564_reverb_0.889_15dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.8125,
+      "snr": 15.0,
+      "error_ms": -76.5
+    },
+    {
+      "sample_name": "speech000565_reverb_1.280_20dB",
+      "true_t60": 1.28,
+      "pred_t60": 1.2344,
+      "snr": 20.0,
+      "error_ms": -45.62
+    },
+    {
+      "sample_name": "speech000566_reverb_0.272_20dB",
+      "true_t60": 0.272,
+      "pred_t60": 0.3535,
+      "snr": 20.0,
+      "error_ms": 81.52
+    },
+    {
+      "sample_name": "speech000567_reverb_0.233_10dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2839,
+      "snr": 10.0,
+      "error_ms": 50.94
+    },
+    {
+      "sample_name": "speech000568_reverb_0.196_20dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2347,
+      "snr": 20.0,
+      "error_ms": 38.74
+    },
+    {
+      "sample_name": "speech000569_reverb_0.998_15dB",
+      "true_t60": 0.998,
+      "pred_t60": 1.0039,
+      "snr": 15.0,
+      "error_ms": 5.91
+    },
+    {
+      "sample_name": "speech000570_reverb_0.267_5dB",
+      "true_t60": 0.267,
+      "pred_t60": 0.3315,
+      "snr": 5.0,
+      "error_ms": 64.54
+    },
+    {
+      "sample_name": "speech000571_reverb_0.355_15dB",
+      "true_t60": 0.355,
+      "pred_t60": 0.3857,
+      "snr": 15.0,
+      "error_ms": 30.74
+    },
+    {
+      "sample_name": "speech000572_reverb_0.868_-5dB",
+      "true_t60": 0.868,
+      "pred_t60": 0.8496,
+      "snr": -5.0,
+      "error_ms": -18.39
+    },
+    {
+      "sample_name": "speech000573_reverb_1.211_0dB",
+      "true_t60": 1.211,
+      "pred_t60": 1.1113,
+      "snr": 0.0,
+      "error_ms": -99.67
+    },
+    {
+      "sample_name": "speech000574_reverb_0.452_0dB",
+      "true_t60": 0.452,
+      "pred_t60": 0.5537,
+      "snr": 0.0,
+      "error_ms": 101.71
+    },
+    {
+      "sample_name": "speech000575_reverb_0.780_0dB",
+      "true_t60": 0.78,
+      "pred_t60": 0.812,
+      "snr": 0.0,
+      "error_ms": 32.01
+    },
+    {
+      "sample_name": "speech000576_reverb_0.225_10dB",
+      "true_t60": 0.225,
+      "pred_t60": 0.2529,
+      "snr": 10.0,
+      "error_ms": 27.93
+    },
+    {
+      "sample_name": "speech000577_reverb_0.508_-5dB",
+      "true_t60": 0.508,
+      "pred_t60": 0.5454,
+      "snr": -5.0,
+      "error_ms": 37.41
+    },
+    {
+      "sample_name": "speech000578_reverb_1.104_-5dB",
+      "true_t60": 1.104,
+      "pred_t60": 1.2773,
+      "snr": -5.0,
+      "error_ms": 173.34
+    },
+    {
+      "sample_name": "speech000579_reverb_0.243_15dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.3032,
+      "snr": 15.0,
+      "error_ms": 60.22
+    },
+    {
+      "sample_name": "speech000580_reverb_0.508_20dB",
+      "true_t60": 0.508,
+      "pred_t60": 0.5322,
+      "snr": 20.0,
+      "error_ms": 24.23
+    },
+    {
+      "sample_name": "speech000581_reverb_0.178_-5dB",
+      "true_t60": 0.178,
+      "pred_t60": 0.2,
+      "snr": -5.0,
+      "error_ms": 21.95
+    },
+    {
+      "sample_name": "speech000582_reverb_0.773_15dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7837,
+      "snr": 15.0,
+      "error_ms": 10.69
+    },
+    {
+      "sample_name": "speech000583_reverb_0.371_20dB",
+      "true_t60": 0.371,
+      "pred_t60": 0.4111,
+      "snr": 20.0,
+      "error_ms": 40.13
+    },
+    {
+      "sample_name": "speech000584_reverb_0.829_15dB",
+      "true_t60": 0.829,
+      "pred_t60": 0.8052,
+      "snr": 15.0,
+      "error_ms": -23.82
+    },
+    {
+      "sample_name": "speech000585_reverb_0.164_15dB",
+      "true_t60": 0.164,
+      "pred_t60": 0.1638,
+      "snr": 15.0,
+      "error_ms": -0.18
+    },
+    {
+      "sample_name": "speech000586_reverb_0.631_-5dB",
+      "true_t60": 0.631,
+      "pred_t60": 0.7314,
+      "snr": -5.0,
+      "error_ms": 100.45
+    },
+    {
+      "sample_name": "speech000587_reverb_0.382_20dB",
+      "true_t60": 0.382,
+      "pred_t60": 0.4443,
+      "snr": 20.0,
+      "error_ms": 62.34
+    },
+    {
+      "sample_name": "speech000588_reverb_0.152_0dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.2073,
+      "snr": 0.0,
+      "error_ms": 55.28
+    },
+    {
+      "sample_name": "speech000589_reverb_0.754_15dB",
+      "true_t60": 0.754,
+      "pred_t60": 0.7246,
+      "snr": 15.0,
+      "error_ms": -29.39
+    },
+    {
+      "sample_name": "speech000590_reverb_0.378_-5dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.5151,
+      "snr": -5.0,
+      "error_ms": 137.14
+    },
+    {
+      "sample_name": "speech000591_reverb_1.016_-5dB",
+      "true_t60": 1.016,
+      "pred_t60": 1.0801,
+      "snr": -5.0,
+      "error_ms": 64.08
+    },
+    {
+      "sample_name": "speech000592_reverb_0.554_10dB",
+      "true_t60": 0.554,
+      "pred_t60": 0.5312,
+      "snr": 10.0,
+      "error_ms": -22.75
+    },
+    {
+      "sample_name": "speech000593_reverb_0.190_20dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2291,
+      "snr": 20.0,
+      "error_ms": 39.13
+    },
+    {
+      "sample_name": "speech000594_reverb_0.497_20dB",
+      "true_t60": 0.497,
+      "pred_t60": 0.5063,
+      "snr": 20.0,
+      "error_ms": 9.35
+    },
+    {
+      "sample_name": "speech000595_reverb_0.243_20dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.3032,
+      "snr": 20.0,
+      "error_ms": 60.22
+    },
+    {
+      "sample_name": "speech000596_reverb_0.684_10dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.6948,
+      "snr": 10.0,
+      "error_ms": 10.82
+    },
+    {
+      "sample_name": "speech000597_reverb_0.481_0dB",
+      "true_t60": 0.481,
+      "pred_t60": 0.4976,
+      "snr": 0.0,
+      "error_ms": 16.56
+    },
+    {
+      "sample_name": "speech000598_reverb_1.214_5dB",
+      "true_t60": 1.214,
+      "pred_t60": 1.1064,
+      "snr": 5.0,
+      "error_ms": -107.55
+    },
+    {
+      "sample_name": "speech000599_reverb_0.384_15dB",
+      "true_t60": 0.384,
+      "pred_t60": 0.377,
+      "snr": 15.0,
+      "error_ms": -7.05
+    },
+    {
+      "sample_name": "speech000600_reverb_0.567_5dB",
+      "true_t60": 0.567,
+      "pred_t60": 0.6514,
+      "snr": 5.0,
+      "error_ms": 84.37
+    },
+    {
+      "sample_name": "speech000601_reverb_0.886_0dB",
+      "true_t60": 0.886,
+      "pred_t60": 0.8379,
+      "snr": 0.0,
+      "error_ms": -48.11
+    },
+    {
+      "sample_name": "speech000602_reverb_0.680_5dB",
+      "true_t60": 0.68,
+      "pred_t60": 0.6846,
+      "snr": 5.0,
+      "error_ms": 4.57
+    },
+    {
+      "sample_name": "speech000603_reverb_0.329_0dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3496,
+      "snr": 0.0,
+      "error_ms": 20.61
+    },
+    {
+      "sample_name": "speech000604_reverb_0.517_0dB",
+      "true_t60": 0.517,
+      "pred_t60": 0.5811,
+      "snr": 0.0,
+      "error_ms": 64.05
+    },
+    {
+      "sample_name": "speech000605_reverb_0.491_5dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.5234,
+      "snr": 5.0,
+      "error_ms": 32.44
+    },
+    {
+      "sample_name": "speech000606_reverb_0.185_5dB",
+      "true_t60": 0.185,
+      "pred_t60": 0.2512,
+      "snr": 5.0,
+      "error_ms": 66.22
+    },
+    {
+      "sample_name": "speech000607_reverb_0.222_5dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.5303,
+      "snr": 5.0,
+      "error_ms": 308.27
+    },
+    {
+      "sample_name": "speech000608_reverb_0.371_-5dB",
+      "true_t60": 0.371,
+      "pred_t60": 0.4438,
+      "snr": -5.0,
+      "error_ms": 72.85
+    },
+    {
+      "sample_name": "speech000609_reverb_0.321_20dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3794,
+      "snr": 20.0,
+      "error_ms": 58.39
+    },
+    {
+      "sample_name": "speech000610_reverb_0.330_15dB",
+      "true_t60": 0.33,
+      "pred_t60": 0.3809,
+      "snr": 15.0,
+      "error_ms": 50.86
+    },
+    {
+      "sample_name": "speech000611_reverb_0.402_20dB",
+      "true_t60": 0.402,
+      "pred_t60": 0.4263,
+      "snr": 20.0,
+      "error_ms": 24.27
+    },
+    {
+      "sample_name": "speech000612_reverb_0.698_15dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.7988,
+      "snr": 15.0,
+      "error_ms": 100.83
+    },
+    {
+      "sample_name": "speech000613_reverb_0.490_15dB",
+      "true_t60": 0.49,
+      "pred_t60": 0.5195,
+      "snr": 15.0,
+      "error_ms": 29.53
+    },
+    {
+      "sample_name": "speech000614_reverb_1.010_10dB",
+      "true_t60": 1.01,
+      "pred_t60": 0.9238,
+      "snr": 10.0,
+      "error_ms": -86.17
+    },
+    {
+      "sample_name": "speech000615_reverb_1.144_15dB",
+      "true_t60": 1.144,
+      "pred_t60": 1.1201,
+      "snr": 15.0,
+      "error_ms": -23.88
+    },
+    {
+      "sample_name": "speech000616_reverb_0.224_15dB",
+      "true_t60": 0.224,
+      "pred_t60": 0.2651,
+      "snr": 15.0,
+      "error_ms": 41.14
+    },
+    {
+      "sample_name": "speech000617_reverb_1.010_-5dB",
+      "true_t60": 1.01,
+      "pred_t60": 0.9473,
+      "snr": -5.0,
+      "error_ms": -62.73
+    },
+    {
+      "sample_name": "speech000618_reverb_0.291_5dB",
+      "true_t60": 0.291,
+      "pred_t60": 0.374,
+      "snr": 5.0,
+      "error_ms": 83.02
+    },
+    {
+      "sample_name": "speech000619_reverb_0.491_10dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4902,
+      "snr": 10.0,
+      "error_ms": -0.77
+    },
+    {
+      "sample_name": "speech000620_reverb_0.332_10dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.3613,
+      "snr": 10.0,
+      "error_ms": 29.33
+    },
+    {
+      "sample_name": "speech000621_reverb_0.591_15dB",
+      "true_t60": 0.591,
+      "pred_t60": 0.6675,
+      "snr": 15.0,
+      "error_ms": 76.48
+    },
+    {
+      "sample_name": "speech000622_reverb_0.361_0dB",
+      "true_t60": 0.361,
+      "pred_t60": 0.48,
+      "snr": 0.0,
+      "error_ms": 118.98
+    },
+    {
+      "sample_name": "speech000623_reverb_0.130_15dB",
+      "true_t60": 0.13,
+      "pred_t60": 0.16,
+      "snr": 15.0,
+      "error_ms": 30.03
+    },
+    {
+      "sample_name": "speech000624_reverb_0.191_5dB",
+      "true_t60": 0.191,
+      "pred_t60": 0.2471,
+      "snr": 5.0,
+      "error_ms": 56.07
+    },
+    {
+      "sample_name": "speech000625_reverb_0.196_0dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2424,
+      "snr": 0.0,
+      "error_ms": 46.43
+    },
+    {
+      "sample_name": "speech000626_reverb_0.287_5dB",
+      "true_t60": 0.287,
+      "pred_t60": 0.2822,
+      "snr": 5.0,
+      "error_ms": -4.77
+    },
+    {
+      "sample_name": "speech000627_reverb_0.471_10dB",
+      "true_t60": 0.471,
+      "pred_t60": 0.3506,
+      "snr": 10.0,
+      "error_ms": -120.41
+    },
+    {
+      "sample_name": "speech000628_reverb_0.829_10dB",
+      "true_t60": 0.829,
+      "pred_t60": 0.8413,
+      "snr": 10.0,
+      "error_ms": 12.31
+    },
+    {
+      "sample_name": "speech000629_reverb_0.205_5dB",
+      "true_t60": 0.205,
+      "pred_t60": 0.2876,
+      "snr": 5.0,
+      "error_ms": 82.6
+    },
+    {
+      "sample_name": "speech000630_reverb_1.144_20dB",
+      "true_t60": 1.144,
+      "pred_t60": 1.0645,
+      "snr": 20.0,
+      "error_ms": -79.55
+    },
+    {
+      "sample_name": "speech000631_reverb_0.228_10dB",
+      "true_t60": 0.228,
+      "pred_t60": 0.2505,
+      "snr": 10.0,
+      "error_ms": 22.49
+    },
+    {
+      "sample_name": "speech000632_reverb_0.762_0dB",
+      "true_t60": 0.762,
+      "pred_t60": 0.7642,
+      "snr": 0.0,
+      "error_ms": 2.16
+    },
+    {
+      "sample_name": "speech000633_reverb_1.145_-5dB",
+      "true_t60": 1.145,
+      "pred_t60": 1.1182,
+      "snr": -5.0,
+      "error_ms": -26.84
+    },
+    {
+      "sample_name": "speech000634_reverb_0.582_15dB",
+      "true_t60": 0.582,
+      "pred_t60": 0.5708,
+      "snr": 15.0,
+      "error_ms": -11.2
+    },
+    {
+      "sample_name": "speech000635_reverb_0.912_0dB",
+      "true_t60": 0.912,
+      "pred_t60": 0.7925,
+      "snr": 0.0,
+      "error_ms": -119.52
+    },
+    {
+      "sample_name": "speech000636_reverb_0.170_20dB",
+      "true_t60": 0.17,
+      "pred_t60": 0.2023,
+      "snr": 20.0,
+      "error_ms": 32.27
+    },
+    {
+      "sample_name": "speech000637_reverb_0.110_5dB",
+      "true_t60": 0.11,
+      "pred_t60": 0.1715,
+      "snr": 5.0,
+      "error_ms": 61.51
+    },
+    {
+      "sample_name": "speech000638_reverb_0.252_0dB",
+      "true_t60": 0.252,
+      "pred_t60": 0.3486,
+      "snr": 0.0,
+      "error_ms": 96.63
+    },
+    {
+      "sample_name": "speech000639_reverb_0.350_-5dB",
+      "true_t60": 0.35,
+      "pred_t60": 0.394,
+      "snr": -5.0,
+      "error_ms": 44.04
+    },
+    {
+      "sample_name": "speech000640_reverb_0.903_0dB",
+      "true_t60": 0.903,
+      "pred_t60": 0.9556,
+      "snr": 0.0,
+      "error_ms": 52.57
+    },
+    {
+      "sample_name": "speech000641_reverb_0.327_15dB",
+      "true_t60": 0.327,
+      "pred_t60": 0.3093,
+      "snr": 15.0,
+      "error_ms": -17.67
+    },
+    {
+      "sample_name": "speech000642_reverb_0.318_10dB",
+      "true_t60": 0.318,
+      "pred_t60": 0.3618,
+      "snr": 10.0,
+      "error_ms": 43.82
+    },
+    {
+      "sample_name": "speech000643_reverb_0.263_-5dB",
+      "true_t60": 0.263,
+      "pred_t60": 0.3589,
+      "snr": -5.0,
+      "error_ms": 95.89
+    },
+    {
+      "sample_name": "speech000644_reverb_0.270_20dB",
+      "true_t60": 0.27,
+      "pred_t60": 0.304,
+      "snr": 20.0,
+      "error_ms": 33.96
+    },
+    {
+      "sample_name": "speech000645_reverb_1.168_0dB",
+      "true_t60": 1.168,
+      "pred_t60": 1.0527,
+      "snr": 0.0,
+      "error_ms": -115.27
+    },
+    {
+      "sample_name": "speech000646_reverb_0.551_20dB",
+      "true_t60": 0.551,
+      "pred_t60": 0.5654,
+      "snr": 20.0,
+      "error_ms": 14.43
+    },
+    {
+      "sample_name": "speech000647_reverb_0.243_10dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.2727,
+      "snr": 10.0,
+      "error_ms": 29.71
+    },
+    {
+      "sample_name": "speech000648_reverb_1.055_5dB",
+      "true_t60": 1.055,
+      "pred_t60": 0.9883,
+      "snr": 5.0,
+      "error_ms": -66.72
+    },
+    {
+      "sample_name": "speech000649_reverb_0.481_10dB",
+      "true_t60": 0.481,
+      "pred_t60": 0.4414,
+      "snr": 10.0,
+      "error_ms": -39.59
+    },
+    {
+      "sample_name": "speech000650_reverb_0.365_15dB",
+      "true_t60": 0.365,
+      "pred_t60": 0.3594,
+      "snr": 15.0,
+      "error_ms": -5.63
+    },
+    {
+      "sample_name": "speech000651_reverb_0.628_-5dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.5352,
+      "snr": -5.0,
+      "error_ms": -92.84
+    },
+    {
+      "sample_name": "speech000652_reverb_0.172_10dB",
+      "true_t60": 0.172,
+      "pred_t60": 0.2305,
+      "snr": 10.0,
+      "error_ms": 58.47
+    },
+    {
+      "sample_name": "speech000653_reverb_0.111_-5dB",
+      "true_t60": 0.111,
+      "pred_t60": 0.4062,
+      "snr": -5.0,
+      "error_ms": 295.25
+    },
+    {
+      "sample_name": "speech000654_reverb_0.698_0dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.8105,
+      "snr": 0.0,
+      "error_ms": 112.55
+    },
+    {
+      "sample_name": "speech000655_reverb_0.396_10dB",
+      "true_t60": 0.396,
+      "pred_t60": 0.4189,
+      "snr": 10.0,
+      "error_ms": 22.95
+    },
+    {
+      "sample_name": "speech000656_reverb_0.975_0dB",
+      "true_t60": 0.975,
+      "pred_t60": 1.0439,
+      "snr": 0.0,
+      "error_ms": 68.95
+    },
+    {
+      "sample_name": "speech000657_reverb_0.354_10dB",
+      "true_t60": 0.354,
+      "pred_t60": 0.3989,
+      "snr": 10.0,
+      "error_ms": 44.93
+    },
+    {
+      "sample_name": "speech000658_reverb_0.184_20dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.1321,
+      "snr": 20.0,
+      "error_ms": -51.92
+    },
+    {
+      "sample_name": "speech000659_reverb_0.378_5dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.395,
+      "snr": 5.0,
+      "error_ms": 17.02
+    },
+    {
+      "sample_name": "speech000660_reverb_0.436_5dB",
+      "true_t60": 0.436,
+      "pred_t60": 0.5063,
+      "snr": 5.0,
+      "error_ms": 70.35
+    },
+    {
+      "sample_name": "speech000661_reverb_1.211_10dB",
+      "true_t60": 1.211,
+      "pred_t60": 1.293,
+      "snr": 10.0,
+      "error_ms": 81.97
+    },
+    {
+      "sample_name": "speech000662_reverb_0.567_10dB",
+      "true_t60": 0.567,
+      "pred_t60": 0.5972,
+      "snr": 10.0,
+      "error_ms": 30.17
+    },
+    {
+      "sample_name": "speech000663_reverb_1.491_15dB",
+      "true_t60": 1.491,
+      "pred_t60": 1.2568,
+      "snr": 15.0,
+      "error_ms": -234.16
+    },
+    {
+      "sample_name": "speech000664_reverb_0.457_0dB",
+      "true_t60": 0.457,
+      "pred_t60": 0.4531,
+      "snr": 0.0,
+      "error_ms": -3.87
+    },
+    {
+      "sample_name": "speech000665_reverb_0.142_5dB",
+      "true_t60": 0.142,
+      "pred_t60": 0.158,
+      "snr": 5.0,
+      "error_ms": 15.96
+    },
+    {
+      "sample_name": "speech000666_reverb_0.684_10dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.7197,
+      "snr": 10.0,
+      "error_ms": 35.73
+    },
+    {
+      "sample_name": "speech000667_reverb_0.321_15dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3225,
+      "snr": 15.0,
+      "error_ms": 1.51
+    },
+    {
+      "sample_name": "speech000668_reverb_1.273_0dB",
+      "true_t60": 1.273,
+      "pred_t60": 1.1064,
+      "snr": 0.0,
+      "error_ms": -166.55
+    },
+    {
+      "sample_name": "speech000669_reverb_0.351_15dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.4355,
+      "snr": 15.0,
+      "error_ms": 84.55
+    },
+    {
+      "sample_name": "speech000670_reverb_0.196_5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2085,
+      "snr": 5.0,
+      "error_ms": 12.5
+    },
+    {
+      "sample_name": "speech000671_reverb_0.116_0dB",
+      "true_t60": 0.116,
+      "pred_t60": 0.16,
+      "snr": 0.0,
+      "error_ms": 44.03
+    },
+    {
+      "sample_name": "speech000672_reverb_0.680_15dB",
+      "true_t60": 0.68,
+      "pred_t60": 0.666,
+      "snr": 15.0,
+      "error_ms": -13.98
+    },
+    {
+      "sample_name": "speech000673_reverb_0.310_-5dB",
+      "true_t60": 0.31,
+      "pred_t60": 0.2588,
+      "snr": -5.0,
+      "error_ms": -51.21
+    },
+    {
+      "sample_name": "speech000674_reverb_0.263_15dB",
+      "true_t60": 0.263,
+      "pred_t60": 0.2681,
+      "snr": 15.0,
+      "error_ms": 5.07
+    },
+    {
+      "sample_name": "speech000675_reverb_0.256_-5dB",
+      "true_t60": 0.256,
+      "pred_t60": 0.5181,
+      "snr": -5.0,
+      "error_ms": 262.07
+    },
+    {
+      "sample_name": "speech000676_reverb_0.180_15dB",
+      "true_t60": 0.18,
+      "pred_t60": 0.1831,
+      "snr": 15.0,
+      "error_ms": 3.11
+    },
+    {
+      "sample_name": "speech000677_reverb_0.860_15dB",
+      "true_t60": 0.86,
+      "pred_t60": 0.79,
+      "snr": 15.0,
+      "error_ms": -69.96
+    },
+    {
+      "sample_name": "speech000678_reverb_1.031_20dB",
+      "true_t60": 1.031,
+      "pred_t60": 1.0684,
+      "snr": 20.0,
+      "error_ms": 37.36
+    },
+    {
+      "sample_name": "speech000679_reverb_1.016_15dB",
+      "true_t60": 1.016,
+      "pred_t60": 1.0098,
+      "snr": 15.0,
+      "error_ms": -6.23
+    },
+    {
+      "sample_name": "speech000680_reverb_0.321_0dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3408,
+      "snr": 0.0,
+      "error_ms": 19.82
+    },
+    {
+      "sample_name": "speech000681_reverb_0.218_10dB",
+      "true_t60": 0.218,
+      "pred_t60": 0.2137,
+      "snr": 10.0,
+      "error_ms": -4.25
+    },
+    {
+      "sample_name": "speech000682_reverb_0.635_5dB",
+      "true_t60": 0.635,
+      "pred_t60": 0.6431,
+      "snr": 5.0,
+      "error_ms": 8.07
+    },
+    {
+      "sample_name": "speech000683_reverb_0.491_0dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4707,
+      "snr": 0.0,
+      "error_ms": -20.3
+    },
+    {
+      "sample_name": "speech000684_reverb_0.470_5dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.5635,
+      "snr": 5.0,
+      "error_ms": 93.48
+    },
+    {
+      "sample_name": "speech000685_reverb_0.379_20dB",
+      "true_t60": 0.379,
+      "pred_t60": 0.4585,
+      "snr": 20.0,
+      "error_ms": 79.5
+    },
+    {
+      "sample_name": "speech000686_reverb_0.423_15dB",
+      "true_t60": 0.423,
+      "pred_t60": 0.4741,
+      "snr": 15.0,
+      "error_ms": 51.12
+    },
+    {
+      "sample_name": "speech000687_reverb_0.478_-5dB",
+      "true_t60": 0.478,
+      "pred_t60": 0.5059,
+      "snr": -5.0,
+      "error_ms": 27.86
+    },
+    {
+      "sample_name": "speech000688_reverb_1.211_15dB",
+      "true_t60": 1.211,
+      "pred_t60": 1.0996,
+      "snr": 15.0,
+      "error_ms": -111.39
+    },
+    {
+      "sample_name": "speech000689_reverb_0.559_15dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.52,
+      "snr": 15.0,
+      "error_ms": -38.98
+    },
+    {
+      "sample_name": "speech000690_reverb_0.490_0dB",
+      "true_t60": 0.49,
+      "pred_t60": 0.5303,
+      "snr": 0.0,
+      "error_ms": 40.27
+    },
+    {
+      "sample_name": "speech000691_reverb_0.830_-5dB",
+      "true_t60": 0.83,
+      "pred_t60": 0.4248,
+      "snr": -5.0,
+      "error_ms": -405.2
+    },
+    {
+      "sample_name": "speech000692_reverb_1.273_20dB",
+      "true_t60": 1.273,
+      "pred_t60": 1.1064,
+      "snr": 20.0,
+      "error_ms": -166.55
+    },
+    {
+      "sample_name": "speech000693_reverb_0.876_10dB",
+      "true_t60": 0.876,
+      "pred_t60": 0.9409,
+      "snr": 10.0,
+      "error_ms": 64.92
+    },
+    {
+      "sample_name": "speech000694_reverb_0.364_5dB",
+      "true_t60": 0.364,
+      "pred_t60": 0.3726,
+      "snr": 5.0,
+      "error_ms": 8.56
+    },
+    {
+      "sample_name": "speech000695_reverb_0.914_-5dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.9912,
+      "snr": -5.0,
+      "error_ms": 77.21
+    },
+    {
+      "sample_name": "speech000696_reverb_1.491_10dB",
+      "true_t60": 1.491,
+      "pred_t60": 1.252,
+      "snr": 10.0,
+      "error_ms": -239.05
+    },
+    {
+      "sample_name": "speech000697_reverb_0.219_20dB",
+      "true_t60": 0.219,
+      "pred_t60": 0.2499,
+      "snr": 20.0,
+      "error_ms": 30.88
+    },
+    {
+      "sample_name": "speech000698_reverb_0.773_20dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7881,
+      "snr": 20.0,
+      "error_ms": 15.09
+    },
+    {
+      "sample_name": "speech000699_reverb_0.540_5dB",
+      "true_t60": 0.54,
+      "pred_t60": 0.5889,
+      "snr": 5.0,
+      "error_ms": 48.87
+    },
+    {
+      "sample_name": "speech000700_reverb_1.099_20dB",
+      "true_t60": 1.099,
+      "pred_t60": 1.085,
+      "snr": 20.0,
+      "error_ms": -14.04
+    },
+    {
+      "sample_name": "speech000701_reverb_0.233_-5dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2729,
+      "snr": -5.0,
+      "error_ms": 39.95
+    },
+    {
+      "sample_name": "speech000702_reverb_0.564_5dB",
+      "true_t60": 0.564,
+      "pred_t60": 0.6406,
+      "snr": 5.0,
+      "error_ms": 76.62
+    },
+    {
+      "sample_name": "speech000703_reverb_0.211_0dB",
+      "true_t60": 0.211,
+      "pred_t60": 0.2051,
+      "snr": 0.0,
+      "error_ms": -5.92
+    },
+    {
+      "sample_name": "speech000704_reverb_0.495_5dB",
+      "true_t60": 0.495,
+      "pred_t60": 0.4648,
+      "snr": 5.0,
+      "error_ms": -30.16
+    },
+    {
+      "sample_name": "speech000705_reverb_1.110_0dB",
+      "true_t60": 1.11,
+      "pred_t60": 1.1182,
+      "snr": 0.0,
+      "error_ms": 8.16
+    },
+    {
+      "sample_name": "speech000706_reverb_0.364_20dB",
+      "true_t60": 0.364,
+      "pred_t60": 0.373,
+      "snr": 20.0,
+      "error_ms": 9.05
+    },
+    {
+      "sample_name": "speech000707_reverb_0.975_15dB",
+      "true_t60": 0.975,
+      "pred_t60": 0.8604,
+      "snr": 15.0,
+      "error_ms": -114.65
+    },
+    {
+      "sample_name": "speech000708_reverb_0.362_20dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.3926,
+      "snr": 20.0,
+      "error_ms": 30.58
+    },
+    {
+      "sample_name": "speech000709_reverb_0.181_20dB",
+      "true_t60": 0.181,
+      "pred_t60": 0.2266,
+      "snr": 20.0,
+      "error_ms": 45.56
+    },
+    {
+      "sample_name": "speech000710_reverb_1.098_20dB",
+      "true_t60": 1.098,
+      "pred_t60": 1.0596,
+      "snr": 20.0,
+      "error_ms": -38.43
+    },
+    {
+      "sample_name": "speech000711_reverb_0.193_0dB",
+      "true_t60": 0.193,
+      "pred_t60": 0.3127,
+      "snr": 0.0,
+      "error_ms": 119.74
+    },
+    {
+      "sample_name": "speech000712_reverb_0.766_15dB",
+      "true_t60": 0.766,
+      "pred_t60": 0.7573,
+      "snr": 15.0,
+      "error_ms": -8.68
+    },
+    {
+      "sample_name": "speech000713_reverb_0.483_0dB",
+      "true_t60": 0.483,
+      "pred_t60": 0.5039,
+      "snr": 0.0,
+      "error_ms": 20.91
+    },
+    {
+      "sample_name": "speech000714_reverb_0.889_-5dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.5703,
+      "snr": -5.0,
+      "error_ms": -318.69
+    },
+    {
+      "sample_name": "speech000715_reverb_1.055_20dB",
+      "true_t60": 1.055,
+      "pred_t60": 0.9697,
+      "snr": 20.0,
+      "error_ms": -85.27
+    },
+    {
+      "sample_name": "speech000716_reverb_0.890_20dB",
+      "true_t60": 0.89,
+      "pred_t60": 0.9058,
+      "snr": 20.0,
+      "error_ms": 15.76
+    },
+    {
+      "sample_name": "speech000717_reverb_0.566_20dB",
+      "true_t60": 0.566,
+      "pred_t60": 0.4888,
+      "snr": 20.0,
+      "error_ms": -77.23
+    },
+    {
+      "sample_name": "speech000718_reverb_0.529_10dB",
+      "true_t60": 0.529,
+      "pred_t60": 0.603,
+      "snr": 10.0,
+      "error_ms": 74.03
+    },
+    {
+      "sample_name": "speech000719_reverb_0.607_20dB",
+      "true_t60": 0.607,
+      "pred_t60": 0.6196,
+      "snr": 20.0,
+      "error_ms": 12.63
+    },
+    {
+      "sample_name": "speech000720_reverb_0.474_20dB",
+      "true_t60": 0.474,
+      "pred_t60": 0.5034,
+      "snr": 20.0,
+      "error_ms": 29.42
+    },
+    {
+      "sample_name": "speech000721_reverb_0.897_20dB",
+      "true_t60": 0.897,
+      "pred_t60": 0.8569,
+      "snr": 20.0,
+      "error_ms": -40.07
+    },
+    {
+      "sample_name": "speech000722_reverb_0.460_5dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.4766,
+      "snr": 5.0,
+      "error_ms": 16.56
+    },
+    {
+      "sample_name": "speech000723_reverb_1.137_-5dB",
+      "true_t60": 1.137,
+      "pred_t60": 0.9185,
+      "snr": -5.0,
+      "error_ms": -218.54
+    },
+    {
+      "sample_name": "speech000724_reverb_0.535_15dB",
+      "true_t60": 0.535,
+      "pred_t60": 0.5356,
+      "snr": 15.0,
+      "error_ms": 0.64
+    },
+    {
+      "sample_name": "speech000725_reverb_0.229_5dB",
+      "true_t60": 0.229,
+      "pred_t60": 0.2131,
+      "snr": 5.0,
+      "error_ms": -15.87
+    },
+    {
+      "sample_name": "speech000726_reverb_0.419_10dB",
+      "true_t60": 0.419,
+      "pred_t60": 0.5195,
+      "snr": 10.0,
+      "error_ms": 100.53
+    },
+    {
+      "sample_name": "speech000727_reverb_0.141_20dB",
+      "true_t60": 0.141,
+      "pred_t60": 0.1519,
+      "snr": 20.0,
+      "error_ms": 10.86
+    },
+    {
+      "sample_name": "speech000728_reverb_0.897_-5dB",
+      "true_t60": 0.897,
+      "pred_t60": 0.563,
+      "snr": -5.0,
+      "error_ms": -334.01
+    },
+    {
+      "sample_name": "speech000729_reverb_1.037_0dB",
+      "true_t60": 1.037,
+      "pred_t60": 0.7026,
+      "snr": 0.0,
+      "error_ms": -334.36
+    },
+    {
+      "sample_name": "speech000730_reverb_1.168_5dB",
+      "true_t60": 1.168,
+      "pred_t60": 1.1016,
+      "snr": 5.0,
+      "error_ms": -66.44
+    },
+    {
+      "sample_name": "speech000731_reverb_0.268_0dB",
+      "true_t60": 0.268,
+      "pred_t60": 0.312,
+      "snr": 0.0,
+      "error_ms": 44.01
+    },
+    {
+      "sample_name": "speech000732_reverb_1.031_-5dB",
+      "true_t60": 1.031,
+      "pred_t60": 1.0234,
+      "snr": -5.0,
+      "error_ms": -7.56
+    },
+    {
+      "sample_name": "speech000733_reverb_0.301_15dB",
+      "true_t60": 0.301,
+      "pred_t60": 0.3467,
+      "snr": 15.0,
+      "error_ms": 45.68
+    },
+    {
+      "sample_name": "speech000734_reverb_0.172_15dB",
+      "true_t60": 0.172,
+      "pred_t60": 0.2866,
+      "snr": 15.0,
+      "error_ms": 114.62
+    },
+    {
+      "sample_name": "speech000735_reverb_0.362_5dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.3843,
+      "snr": 5.0,
+      "error_ms": 22.28
+    },
+    {
+      "sample_name": "speech000736_reverb_0.393_10dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.3677,
+      "snr": 10.0,
+      "error_ms": -25.32
+    },
+    {
+      "sample_name": "speech000737_reverb_0.461_20dB",
+      "true_t60": 0.461,
+      "pred_t60": 0.4673,
+      "snr": 20.0,
+      "error_ms": 6.29
+    },
+    {
+      "sample_name": "speech000738_reverb_0.423_20dB",
+      "true_t60": 0.423,
+      "pred_t60": 0.4326,
+      "snr": 20.0,
+      "error_ms": 9.62
+    },
+    {
+      "sample_name": "speech000739_reverb_0.825_20dB",
+      "true_t60": 0.825,
+      "pred_t60": 0.7979,
+      "snr": 20.0,
+      "error_ms": -27.15
+    },
+    {
+      "sample_name": "speech000740_reverb_1.376_5dB",
+      "true_t60": 1.376,
+      "pred_t60": 1.3154,
+      "snr": 5.0,
+      "error_ms": -60.57
+    },
+    {
+      "sample_name": "speech000741_reverb_0.773_-5dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.6958,
+      "snr": -5.0,
+      "error_ms": -77.2
+    },
+    {
+      "sample_name": "speech000742_reverb_0.903_20dB",
+      "true_t60": 0.903,
+      "pred_t60": 0.9727,
+      "snr": 20.0,
+      "error_ms": 69.66
+    },
+    {
+      "sample_name": "speech000743_reverb_0.821_5dB",
+      "true_t60": 0.821,
+      "pred_t60": 0.8921,
+      "snr": 5.0,
+      "error_ms": 71.09
+    },
+    {
+      "sample_name": "speech000744_reverb_0.173_-5dB",
+      "true_t60": 0.173,
+      "pred_t60": 0.3911,
+      "snr": -5.0,
+      "error_ms": 218.11
+    },
+    {
+      "sample_name": "speech000745_reverb_0.218_-5dB",
+      "true_t60": 0.218,
+      "pred_t60": 0.3193,
+      "snr": -5.0,
+      "error_ms": 101.34
+    },
+    {
+      "sample_name": "speech000746_reverb_0.938_20dB",
+      "true_t60": 0.938,
+      "pred_t60": 0.9536,
+      "snr": 20.0,
+      "error_ms": 15.61
+    },
+    {
+      "sample_name": "speech000747_reverb_0.889_10dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.7236,
+      "snr": 10.0,
+      "error_ms": -165.37
+    },
+    {
+      "sample_name": "speech000748_reverb_0.491_10dB",
+      "true_t60": 0.491,
+      "pred_t60": 0.4946,
+      "snr": 10.0,
+      "error_ms": 3.63
+    },
+    {
+      "sample_name": "speech000749_reverb_0.228_0dB",
+      "true_t60": 0.228,
+      "pred_t60": 0.2385,
+      "snr": 0.0,
+      "error_ms": 10.53
+    },
+    {
+      "sample_name": "speech000750_reverb_1.050_5dB",
+      "true_t60": 1.05,
+      "pred_t60": 1.0439,
+      "snr": 5.0,
+      "error_ms": -6.05
+    },
+    {
+      "sample_name": "speech000751_reverb_0.530_15dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.4995,
+      "snr": 15.0,
+      "error_ms": -30.49
+    },
+    {
+      "sample_name": "speech000752_reverb_0.271_-5dB",
+      "true_t60": 0.271,
+      "pred_t60": 0.4062,
+      "snr": -5.0,
+      "error_ms": 135.25
+    },
+    {
+      "sample_name": "speech000753_reverb_0.535_0dB",
+      "true_t60": 0.535,
+      "pred_t60": 0.521,
+      "snr": 0.0,
+      "error_ms": -14.0
+    },
+    {
+      "sample_name": "speech000754_reverb_0.402_0dB",
+      "true_t60": 0.402,
+      "pred_t60": 0.4302,
+      "snr": 0.0,
+      "error_ms": 28.18
+    },
+    {
+      "sample_name": "speech000755_reverb_0.619_0dB",
+      "true_t60": 0.619,
+      "pred_t60": 0.6865,
+      "snr": 0.0,
+      "error_ms": 67.52
+    },
+    {
+      "sample_name": "speech000756_reverb_0.190_15dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.1954,
+      "snr": 15.0,
+      "error_ms": 5.43
+    },
+    {
+      "sample_name": "speech000757_reverb_0.545_0dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.6172,
+      "snr": 0.0,
+      "error_ms": 72.19
+    },
+    {
+      "sample_name": "speech000758_reverb_0.191_-5dB",
+      "true_t60": 0.191,
+      "pred_t60": 0.2291,
+      "snr": -5.0,
+      "error_ms": 38.13
+    },
+    {
+      "sample_name": "speech000759_reverb_0.470_15dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.3301,
+      "snr": 15.0,
+      "error_ms": -139.92
+    },
+    {
+      "sample_name": "speech000760_reverb_0.487_20dB",
+      "true_t60": 0.487,
+      "pred_t60": 0.5483,
+      "snr": 20.0,
+      "error_ms": 61.34
+    },
+    {
+      "sample_name": "speech000761_reverb_0.497_20dB",
+      "true_t60": 0.497,
+      "pred_t60": 0.5742,
+      "snr": 20.0,
+      "error_ms": 77.22
+    },
+    {
+      "sample_name": "speech000762_reverb_0.222_-5dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.2236,
+      "snr": -5.0,
+      "error_ms": 1.63
+    },
+    {
+      "sample_name": "speech000763_reverb_0.336_5dB",
+      "true_t60": 0.336,
+      "pred_t60": 0.3232,
+      "snr": 5.0,
+      "error_ms": -12.76
+    },
+    {
+      "sample_name": "speech000764_reverb_0.272_10dB",
+      "true_t60": 0.272,
+      "pred_t60": 0.3113,
+      "snr": 10.0,
+      "error_ms": 39.28
+    },
+    {
+      "sample_name": "speech000765_reverb_0.369_0dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.5234,
+      "snr": 0.0,
+      "error_ms": 154.44
+    },
+    {
+      "sample_name": "speech000766_reverb_0.460_-5dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.3677,
+      "snr": -5.0,
+      "error_ms": -92.32
+    },
+    {
+      "sample_name": "speech000767_reverb_0.554_20dB",
+      "true_t60": 0.554,
+      "pred_t60": 0.5601,
+      "snr": 20.0,
+      "error_ms": 6.06
+    },
+    {
+      "sample_name": "speech000768_reverb_0.559_0dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.3225,
+      "snr": 0.0,
+      "error_ms": -236.49
+    },
+    {
+      "sample_name": "speech000769_reverb_0.684_-5dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.6616,
+      "snr": -5.0,
+      "error_ms": -22.38
+    },
+    {
+      "sample_name": "speech000770_reverb_0.782_0dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.8179,
+      "snr": 0.0,
+      "error_ms": 35.87
+    },
+    {
+      "sample_name": "speech000771_reverb_0.211_15dB",
+      "true_t60": 0.211,
+      "pred_t60": 0.2152,
+      "snr": 15.0,
+      "error_ms": 4.21
+    },
+    {
+      "sample_name": "speech000772_reverb_0.110_-5dB",
+      "true_t60": 0.11,
+      "pred_t60": 0.2292,
+      "snr": -5.0,
+      "error_ms": 119.25
+    },
+    {
+      "sample_name": "speech000773_reverb_0.275_5dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.311,
+      "snr": 5.0,
+      "error_ms": 36.04
+    },
+    {
+      "sample_name": "speech000774_reverb_1.137_10dB",
+      "true_t60": 1.137,
+      "pred_t60": 1.0908,
+      "snr": 10.0,
+      "error_ms": -46.18
+    },
+    {
+      "sample_name": "speech000775_reverb_0.332_-5dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.4004,
+      "snr": -5.0,
+      "error_ms": 68.39
+    },
+    {
+      "sample_name": "speech000776_reverb_0.268_0dB",
+      "true_t60": 0.268,
+      "pred_t60": 0.2347,
+      "snr": 0.0,
+      "error_ms": -33.26
+    },
+    {
+      "sample_name": "speech000777_reverb_0.894_10dB",
+      "true_t60": 0.894,
+      "pred_t60": 0.8647,
+      "snr": 10.0,
+      "error_ms": -29.25
+    },
+    {
+      "sample_name": "speech000778_reverb_0.393_10dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.3716,
+      "snr": 10.0,
+      "error_ms": -21.42
+    },
+    {
+      "sample_name": "speech000779_reverb_0.678_15dB",
+      "true_t60": 0.678,
+      "pred_t60": 0.6694,
+      "snr": 15.0,
+      "error_ms": -8.57
+    },
+    {
+      "sample_name": "speech000780_reverb_0.410_-5dB",
+      "true_t60": 0.41,
+      "pred_t60": 0.4785,
+      "snr": -5.0,
+      "error_ms": 68.52
+    },
+    {
+      "sample_name": "speech000781_reverb_0.828_20dB",
+      "true_t60": 0.828,
+      "pred_t60": 1.1357,
+      "snr": 20.0,
+      "error_ms": 307.74
+    },
+    {
+      "sample_name": "speech000782_reverb_0.230_0dB",
+      "true_t60": 0.23,
+      "pred_t60": 0.2861,
+      "snr": 0.0,
+      "error_ms": 56.13
+    },
+    {
+      "sample_name": "speech000783_reverb_1.002_0dB",
+      "true_t60": 1.002,
+      "pred_t60": 0.9561,
+      "snr": 0.0,
+      "error_ms": -45.95
+    },
+    {
+      "sample_name": "speech000784_reverb_1.107_-5dB",
+      "true_t60": 1.107,
+      "pred_t60": 1.1299,
+      "snr": -5.0,
+      "error_ms": 22.88
+    },
+    {
+      "sample_name": "speech000785_reverb_0.821_20dB",
+      "true_t60": 0.821,
+      "pred_t60": 0.7876,
+      "snr": 20.0,
+      "error_ms": -33.4
+    },
+    {
+      "sample_name": "speech000786_reverb_0.530_10dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.5464,
+      "snr": 10.0,
+      "error_ms": 16.39
+    },
+    {
+      "sample_name": "speech000787_reverb_0.890_10dB",
+      "true_t60": 0.89,
+      "pred_t60": 0.9658,
+      "snr": 10.0,
+      "error_ms": 75.82
+    },
+    {
+      "sample_name": "speech000788_reverb_0.128_0dB",
+      "true_t60": 0.128,
+      "pred_t60": 0.2371,
+      "snr": 0.0,
+      "error_ms": 109.06
+    },
+    {
+      "sample_name": "speech000789_reverb_0.738_-5dB",
+      "true_t60": 0.738,
+      "pred_t60": 0.7246,
+      "snr": -5.0,
+      "error_ms": -13.39
+    },
+    {
+      "sample_name": "speech000790_reverb_0.292_5dB",
+      "true_t60": 0.292,
+      "pred_t60": 0.2971,
+      "snr": 5.0,
+      "error_ms": 5.12
+    },
+    {
+      "sample_name": "speech000791_reverb_0.530_20dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.5303,
+      "snr": 20.0,
+      "error_ms": 0.27
+    },
+    {
+      "sample_name": "speech000792_reverb_0.341_15dB",
+      "true_t60": 0.341,
+      "pred_t60": 0.3354,
+      "snr": 15.0,
+      "error_ms": -5.55
+    },
+    {
+      "sample_name": "speech000793_reverb_0.969_20dB",
+      "true_t60": 0.969,
+      "pred_t60": 0.9043,
+      "snr": 20.0,
+      "error_ms": -64.7
+    },
+    {
+      "sample_name": "speech000794_reverb_0.932_0dB",
+      "true_t60": 0.932,
+      "pred_t60": 0.8818,
+      "snr": 0.0,
+      "error_ms": -50.16
+    },
+    {
+      "sample_name": "speech000795_reverb_0.222_10dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.377,
+      "snr": 10.0,
+      "error_ms": 154.95
+    },
+    {
+      "sample_name": "speech000796_reverb_0.330_0dB",
+      "true_t60": 0.33,
+      "pred_t60": 0.3491,
+      "snr": 0.0,
+      "error_ms": 19.12
+    },
+    {
+      "sample_name": "speech000797_reverb_0.899_20dB",
+      "true_t60": 0.899,
+      "pred_t60": 0.7896,
+      "snr": 20.0,
+      "error_ms": -109.45
+    },
+    {
+      "sample_name": "speech000798_reverb_0.899_15dB",
+      "true_t60": 0.899,
+      "pred_t60": 0.8999,
+      "snr": 15.0,
+      "error_ms": 0.9
+    },
+    {
+      "sample_name": "speech000799_reverb_0.152_5dB",
+      "true_t60": 0.152,
+      "pred_t60": 0.1844,
+      "snr": 5.0,
+      "error_ms": 32.45
+    },
+    {
+      "sample_name": "speech000800_reverb_0.760_-5dB",
+      "true_t60": 0.76,
+      "pred_t60": 0.7896,
+      "snr": -5.0,
+      "error_ms": 29.55
+    },
+    {
+      "sample_name": "speech000801_reverb_0.958_0dB",
+      "true_t60": 0.958,
+      "pred_t60": 0.9438,
+      "snr": 0.0,
+      "error_ms": -14.15
+    },
+    {
+      "sample_name": "speech000802_reverb_0.973_20dB",
+      "true_t60": 0.973,
+      "pred_t60": 1.0068,
+      "snr": 20.0,
+      "error_ms": 33.84
+    },
+    {
+      "sample_name": "speech000803_reverb_0.183_10dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.2888,
+      "snr": 10.0,
+      "error_ms": 105.82
+    },
+    {
+      "sample_name": "speech000804_reverb_1.106_0dB",
+      "true_t60": 1.106,
+      "pred_t60": 1.0371,
+      "snr": 0.0,
+      "error_ms": -68.89
+    },
+    {
+      "sample_name": "speech000805_reverb_0.634_10dB",
+      "true_t60": 0.634,
+      "pred_t60": 0.6714,
+      "snr": 10.0,
+      "error_ms": 37.39
+    },
+    {
+      "sample_name": "speech000806_reverb_0.423_-5dB",
+      "true_t60": 0.423,
+      "pred_t60": 0.5024,
+      "snr": -5.0,
+      "error_ms": 79.44
+    },
+    {
+      "sample_name": "speech000807_reverb_0.641_-5dB",
+      "true_t60": 0.641,
+      "pred_t60": 0.5195,
+      "snr": -5.0,
+      "error_ms": -121.47
+    },
+    {
+      "sample_name": "speech000808_reverb_1.500_20dB",
+      "true_t60": 1.5,
+      "pred_t60": 0.9067,
+      "snr": 20.0,
+      "error_ms": -593.26
+    },
+    {
+      "sample_name": "speech000809_reverb_0.669_10dB",
+      "true_t60": 0.669,
+      "pred_t60": 0.6343,
+      "snr": 10.0,
+      "error_ms": -34.72
+    },
+    {
+      "sample_name": "speech000810_reverb_1.107_15dB",
+      "true_t60": 1.107,
+      "pred_t60": 1.0752,
+      "snr": 15.0,
+      "error_ms": -31.8
+    },
+    {
+      "sample_name": "speech000811_reverb_0.196_10dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.233,
+      "snr": 10.0,
+      "error_ms": 37.03
+    },
+    {
+      "sample_name": "speech000812_reverb_0.182_0dB",
+      "true_t60": 0.182,
+      "pred_t60": 0.2295,
+      "snr": 0.0,
+      "error_ms": 47.49
+    },
+    {
+      "sample_name": "speech000813_reverb_1.376_5dB",
+      "true_t60": 1.376,
+      "pred_t60": 1.2451,
+      "snr": 5.0,
+      "error_ms": -130.88
+    },
+    {
+      "sample_name": "speech000814_reverb_1.073_-5dB",
+      "true_t60": 1.073,
+      "pred_t60": 0.9478,
+      "snr": -5.0,
+      "error_ms": -125.25
+    },
+    {
+      "sample_name": "speech000815_reverb_1.061_20dB",
+      "true_t60": 1.061,
+      "pred_t60": 0.9077,
+      "snr": 20.0,
+      "error_ms": -153.29
+    },
+    {
+      "sample_name": "speech000816_reverb_0.667_20dB",
+      "true_t60": 0.667,
+      "pred_t60": 0.6255,
+      "snr": 20.0,
+      "error_ms": -41.51
+    },
+    {
+      "sample_name": "speech000817_reverb_0.329_5dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3779,
+      "snr": 5.0,
+      "error_ms": 48.93
+    },
+    {
+      "sample_name": "speech000818_reverb_0.341_20dB",
+      "true_t60": 0.341,
+      "pred_t60": 0.3481,
+      "snr": 20.0,
+      "error_ms": 7.14
+    },
+    {
+      "sample_name": "speech000819_reverb_0.622_10dB",
+      "true_t60": 0.622,
+      "pred_t60": 0.6084,
+      "snr": 10.0,
+      "error_ms": -13.6
+    },
+    {
+      "sample_name": "speech000820_reverb_0.291_5dB",
+      "true_t60": 0.291,
+      "pred_t60": 0.3511,
+      "snr": 5.0,
+      "error_ms": 60.07
+    },
+    {
+      "sample_name": "speech000821_reverb_0.899_5dB",
+      "true_t60": 0.899,
+      "pred_t60": 0.855,
+      "snr": 5.0,
+      "error_ms": -44.02
+    },
+    {
+      "sample_name": "speech000822_reverb_0.298_5dB",
+      "true_t60": 0.298,
+      "pred_t60": 0.3223,
+      "snr": 5.0,
+      "error_ms": 24.27
+    },
+    {
+      "sample_name": "speech000823_reverb_0.426_10dB",
+      "true_t60": 0.426,
+      "pred_t60": 0.4673,
+      "snr": 10.0,
+      "error_ms": 41.29
+    },
+    {
+      "sample_name": "speech000824_reverb_0.886_10dB",
+      "true_t60": 0.886,
+      "pred_t60": 0.8213,
+      "snr": 10.0,
+      "error_ms": -64.71
+    },
+    {
+      "sample_name": "speech000825_reverb_0.335_10dB",
+      "true_t60": 0.335,
+      "pred_t60": 0.332,
+      "snr": 10.0,
+      "error_ms": -2.97
+    },
+    {
+      "sample_name": "speech000826_reverb_0.483_-5dB",
+      "true_t60": 0.483,
+      "pred_t60": 0.6973,
+      "snr": -5.0,
+      "error_ms": 214.27
+    },
+    {
+      "sample_name": "speech000827_reverb_1.294_5dB",
+      "true_t60": 1.294,
+      "pred_t60": 1.2666,
+      "snr": 5.0,
+      "error_ms": -27.4
+    },
+    {
+      "sample_name": "speech000828_reverb_1.031_5dB",
+      "true_t60": 1.031,
+      "pred_t60": 0.9082,
+      "snr": 5.0,
+      "error_ms": -122.8
+    },
+    {
+      "sample_name": "speech000829_reverb_0.296_20dB",
+      "true_t60": 0.296,
+      "pred_t60": 0.3179,
+      "snr": 20.0,
+      "error_ms": 21.87
+    },
+    {
+      "sample_name": "speech000830_reverb_0.378_15dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.4868,
+      "snr": 15.0,
+      "error_ms": 108.82
+    },
+    {
+      "sample_name": "speech000831_reverb_0.460_20dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.5835,
+      "snr": 20.0,
+      "error_ms": 123.5
+    },
+    {
+      "sample_name": "speech000832_reverb_0.892_10dB",
+      "true_t60": 0.892,
+      "pred_t60": 0.8579,
+      "snr": 10.0,
+      "error_ms": -34.09
+    },
+    {
+      "sample_name": "speech000833_reverb_0.369_10dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.4819,
+      "snr": 10.0,
+      "error_ms": 112.93
+    },
+    {
+      "sample_name": "speech000834_reverb_0.157_0dB",
+      "true_t60": 0.157,
+      "pred_t60": 0.2986,
+      "snr": 0.0,
+      "error_ms": 141.58
+    },
+    {
+      "sample_name": "speech000835_reverb_0.895_-5dB",
+      "true_t60": 0.895,
+      "pred_t60": 1.125,
+      "snr": -5.0,
+      "error_ms": 230.0
+    },
+    {
+      "sample_name": "speech000836_reverb_0.193_15dB",
+      "true_t60": 0.193,
+      "pred_t60": 0.234,
+      "snr": 15.0,
+      "error_ms": 41.01
+    },
+    {
+      "sample_name": "speech000837_reverb_0.799_-5dB",
+      "true_t60": 0.799,
+      "pred_t60": 0.9927,
+      "snr": -5.0,
+      "error_ms": 193.68
+    },
+    {
+      "sample_name": "speech000838_reverb_1.073_5dB",
+      "true_t60": 1.073,
+      "pred_t60": 0.9673,
+      "snr": 5.0,
+      "error_ms": -105.71
+    },
+    {
+      "sample_name": "speech000839_reverb_0.799_0dB",
+      "true_t60": 0.799,
+      "pred_t60": 0.8208,
+      "snr": 0.0,
+      "error_ms": 21.8
+    },
+    {
+      "sample_name": "speech000840_reverb_0.190_5dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2061,
+      "snr": 5.0,
+      "error_ms": 16.05
+    },
+    {
+      "sample_name": "speech000841_reverb_0.680_-5dB",
+      "true_t60": 0.68,
+      "pred_t60": 0.3186,
+      "snr": -5.0,
+      "error_ms": -361.4
+    },
+    {
+      "sample_name": "speech000842_reverb_0.648_15dB",
+      "true_t60": 0.648,
+      "pred_t60": 0.7178,
+      "snr": 15.0,
+      "error_ms": 69.77
+    },
+    {
+      "sample_name": "speech000843_reverb_0.341_0dB",
+      "true_t60": 0.341,
+      "pred_t60": 0.3535,
+      "snr": 0.0,
+      "error_ms": 12.52
+    },
+    {
+      "sample_name": "speech000844_reverb_0.530_5dB",
+      "true_t60": 0.53,
+      "pred_t60": 0.5337,
+      "snr": 5.0,
+      "error_ms": 3.69
+    },
+    {
+      "sample_name": "speech000845_reverb_0.914_0dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.8521,
+      "snr": 0.0,
+      "error_ms": -61.95
+    },
+    {
+      "sample_name": "speech000846_reverb_0.312_0dB",
+      "true_t60": 0.312,
+      "pred_t60": 0.3643,
+      "snr": 0.0,
+      "error_ms": 52.26
+    },
+    {
+      "sample_name": "speech000847_reverb_0.415_15dB",
+      "true_t60": 0.415,
+      "pred_t60": 0.4639,
+      "snr": 15.0,
+      "error_ms": 48.87
+    },
+    {
+      "sample_name": "speech000848_reverb_0.525_10dB",
+      "true_t60": 0.525,
+      "pred_t60": 0.4585,
+      "snr": 10.0,
+      "error_ms": -66.5
+    },
+    {
+      "sample_name": "speech000849_reverb_0.355_10dB",
+      "true_t60": 0.355,
+      "pred_t60": 0.4224,
+      "snr": 10.0,
+      "error_ms": 67.36
+    },
+    {
+      "sample_name": "speech000850_reverb_0.141_20dB",
+      "true_t60": 0.141,
+      "pred_t60": 0.136,
+      "snr": 20.0,
+      "error_ms": -5.01
+    },
+    {
+      "sample_name": "speech000851_reverb_0.183_0dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.2925,
+      "snr": 0.0,
+      "error_ms": 109.48
+    },
+    {
+      "sample_name": "speech000852_reverb_0.275_20dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.2793,
+      "snr": 20.0,
+      "error_ms": 4.3
+    },
+    {
+      "sample_name": "speech000853_reverb_0.932_20dB",
+      "true_t60": 0.932,
+      "pred_t60": 0.8862,
+      "snr": 20.0,
+      "error_ms": -45.77
+    },
+    {
+      "sample_name": "speech000854_reverb_0.868_0dB",
+      "true_t60": 0.868,
+      "pred_t60": 0.9165,
+      "snr": 0.0,
+      "error_ms": 48.5
+    },
+    {
+      "sample_name": "speech000855_reverb_0.320_0dB",
+      "true_t60": 0.32,
+      "pred_t60": 0.3579,
+      "snr": 0.0,
+      "error_ms": 37.91
+    },
+    {
+      "sample_name": "speech000856_reverb_0.204_-5dB",
+      "true_t60": 0.204,
+      "pred_t60": 0.1812,
+      "snr": -5.0,
+      "error_ms": -22.85
+    },
+    {
+      "sample_name": "speech000857_reverb_0.362_-5dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.459,
+      "snr": -5.0,
+      "error_ms": 96.98
+    },
+    {
+      "sample_name": "speech000858_reverb_1.214_20dB",
+      "true_t60": 1.214,
+      "pred_t60": 1.1475,
+      "snr": 20.0,
+      "error_ms": -66.54
+    },
+    {
+      "sample_name": "speech000859_reverb_0.280_20dB",
+      "true_t60": 0.28,
+      "pred_t60": 0.4717,
+      "snr": 20.0,
+      "error_ms": 191.68
+    },
+    {
+      "sample_name": "speech000860_reverb_0.903_5dB",
+      "true_t60": 0.903,
+      "pred_t60": 0.9697,
+      "snr": 5.0,
+      "error_ms": 66.73
+    },
+    {
+      "sample_name": "speech000861_reverb_0.230_0dB",
+      "true_t60": 0.23,
+      "pred_t60": 0.3049,
+      "snr": 0.0,
+      "error_ms": 74.93
+    },
+    {
+      "sample_name": "speech000862_reverb_1.331_10dB",
+      "true_t60": 1.331,
+      "pred_t60": 1.2773,
+      "snr": 10.0,
+      "error_ms": -53.66
+    },
+    {
+      "sample_name": "speech000863_reverb_1.062_10dB",
+      "true_t60": 1.062,
+      "pred_t60": 0.9849,
+      "snr": 10.0,
+      "error_ms": -77.14
+    },
+    {
+      "sample_name": "speech000864_reverb_0.935_5dB",
+      "true_t60": 0.935,
+      "pred_t60": 0.9111,
+      "snr": 5.0,
+      "error_ms": -23.87
+    },
+    {
+      "sample_name": "speech000865_reverb_0.473_-5dB",
+      "true_t60": 0.473,
+      "pred_t60": 0.5156,
+      "snr": -5.0,
+      "error_ms": 42.63
+    },
+    {
+      "sample_name": "speech000866_reverb_0.722_10dB",
+      "true_t60": 0.722,
+      "pred_t60": 0.7031,
+      "snr": 10.0,
+      "error_ms": -18.88
+    },
+    {
+      "sample_name": "speech000867_reverb_0.756_5dB",
+      "true_t60": 0.756,
+      "pred_t60": 0.752,
+      "snr": 5.0,
+      "error_ms": -4.05
+    },
+    {
+      "sample_name": "speech000868_reverb_0.508_20dB",
+      "true_t60": 0.508,
+      "pred_t60": 0.4722,
+      "snr": 20.0,
+      "error_ms": -35.83
+    },
+    {
+      "sample_name": "speech000869_reverb_0.324_20dB",
+      "true_t60": 0.324,
+      "pred_t60": 0.3511,
+      "snr": 20.0,
+      "error_ms": 27.07
+    },
+    {
+      "sample_name": "speech000870_reverb_0.237_15dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.3555,
+      "snr": 15.0,
+      "error_ms": 118.47
+    },
+    {
+      "sample_name": "speech000871_reverb_0.379_5dB",
+      "true_t60": 0.379,
+      "pred_t60": 0.333,
+      "snr": 5.0,
+      "error_ms": -45.99
+    },
+    {
+      "sample_name": "speech000872_reverb_0.167_20dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2473,
+      "snr": 20.0,
+      "error_ms": 80.31
+    },
+    {
+      "sample_name": "speech000873_reverb_0.901_-5dB",
+      "true_t60": 0.901,
+      "pred_t60": 0.4707,
+      "snr": -5.0,
+      "error_ms": -430.3
+    },
+    {
+      "sample_name": "speech000874_reverb_0.378_15dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.321,
+      "snr": 15.0,
+      "error_ms": -56.96
+    },
+    {
+      "sample_name": "speech000875_reverb_0.737_10dB",
+      "true_t60": 0.737,
+      "pred_t60": 0.5967,
+      "snr": 10.0,
+      "error_ms": -140.32
+    },
+    {
+      "sample_name": "speech000876_reverb_0.969_20dB",
+      "true_t60": 0.969,
+      "pred_t60": 0.9624,
+      "snr": 20.0,
+      "error_ms": -6.6
+    },
+    {
+      "sample_name": "speech000877_reverb_0.187_0dB",
+      "true_t60": 0.187,
+      "pred_t60": 0.1902,
+      "snr": 0.0,
+      "error_ms": 3.19
+    },
+    {
+      "sample_name": "speech000878_reverb_1.055_5dB",
+      "true_t60": 1.055,
+      "pred_t60": 1.0518,
+      "snr": 5.0,
+      "error_ms": -3.24
+    },
+    {
+      "sample_name": "speech000879_reverb_0.876_15dB",
+      "true_t60": 0.876,
+      "pred_t60": 0.8911,
+      "snr": 15.0,
+      "error_ms": 15.11
+    },
+    {
+      "sample_name": "speech000880_reverb_1.222_-5dB",
+      "true_t60": 1.222,
+      "pred_t60": 1.0391,
+      "snr": -5.0,
+      "error_ms": -182.94
+    },
+    {
+      "sample_name": "speech000881_reverb_0.551_15dB",
+      "true_t60": 0.551,
+      "pred_t60": 0.6138,
+      "snr": 15.0,
+      "error_ms": 62.77
+    },
+    {
+      "sample_name": "speech000882_reverb_0.483_15dB",
+      "true_t60": 0.483,
+      "pred_t60": 0.5415,
+      "snr": 15.0,
+      "error_ms": 58.5
+    },
+    {
+      "sample_name": "speech000883_reverb_0.130_20dB",
+      "true_t60": 0.13,
+      "pred_t60": 0.1626,
+      "snr": 20.0,
+      "error_ms": 32.6
+    },
+    {
+      "sample_name": "speech000884_reverb_0.456_5dB",
+      "true_t60": 0.456,
+      "pred_t60": 0.6426,
+      "snr": 5.0,
+      "error_ms": 186.58
+    },
+    {
+      "sample_name": "speech000885_reverb_0.306_5dB",
+      "true_t60": 0.306,
+      "pred_t60": 0.3608,
+      "snr": 5.0,
+      "error_ms": 54.84
+    },
+    {
+      "sample_name": "speech000886_reverb_1.137_10dB",
+      "true_t60": 1.137,
+      "pred_t60": 1.0391,
+      "snr": 10.0,
+      "error_ms": -97.94
+    },
+    {
+      "sample_name": "speech000887_reverb_0.899_-5dB",
+      "true_t60": 0.899,
+      "pred_t60": 0.8579,
+      "snr": -5.0,
+      "error_ms": -41.09
+    },
+    {
+      "sample_name": "speech000888_reverb_0.184_10dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.3076,
+      "snr": 10.0,
+      "error_ms": 123.62
+    },
+    {
+      "sample_name": "speech000889_reverb_0.332_10dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.3135,
+      "snr": 10.0,
+      "error_ms": -18.52
+    },
+    {
+      "sample_name": "speech000890_reverb_1.055_20dB",
+      "true_t60": 1.055,
+      "pred_t60": 1.0449,
+      "snr": 20.0,
+      "error_ms": -10.08
+    },
+    {
+      "sample_name": "speech000891_reverb_0.352_15dB",
+      "true_t60": 0.352,
+      "pred_t60": 0.3701,
+      "snr": 15.0,
+      "error_ms": 18.12
+    },
+    {
+      "sample_name": "speech000892_reverb_0.611_0dB",
+      "true_t60": 0.611,
+      "pred_t60": 0.4492,
+      "snr": 0.0,
+      "error_ms": -161.78
+    },
+    {
+      "sample_name": "speech000893_reverb_0.369_5dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.4604,
+      "snr": 5.0,
+      "error_ms": 91.45
+    },
+    {
+      "sample_name": "speech000894_reverb_1.273_-5dB",
+      "true_t60": 1.273,
+      "pred_t60": 0.7861,
+      "snr": -5.0,
+      "error_ms": -486.87
+    },
+    {
+      "sample_name": "speech000895_reverb_0.844_15dB",
+      "true_t60": 0.844,
+      "pred_t60": 0.8364,
+      "snr": 15.0,
+      "error_ms": -7.57
+    },
+    {
+      "sample_name": "speech000896_reverb_0.551_15dB",
+      "true_t60": 0.551,
+      "pred_t60": 0.5474,
+      "snr": 15.0,
+      "error_ms": -3.64
+    },
+    {
+      "sample_name": "speech000897_reverb_0.658_10dB",
+      "true_t60": 0.658,
+      "pred_t60": 0.7144,
+      "snr": 10.0,
+      "error_ms": 56.36
+    },
+    {
+      "sample_name": "speech000898_reverb_0.269_0dB",
+      "true_t60": 0.269,
+      "pred_t60": 0.2788,
+      "snr": 0.0,
+      "error_ms": 9.81
+    },
+    {
+      "sample_name": "speech000899_reverb_1.041_10dB",
+      "true_t60": 1.041,
+      "pred_t60": 1.0869,
+      "snr": 10.0,
+      "error_ms": 45.91
+    },
+    {
+      "sample_name": "speech000900_reverb_0.196_0dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.2554,
+      "snr": 0.0,
+      "error_ms": 59.37
+    },
+    {
+      "sample_name": "speech000901_reverb_0.156_10dB",
+      "true_t60": 0.156,
+      "pred_t60": 0.1865,
+      "snr": 10.0,
+      "error_ms": 30.52
+    },
+    {
+      "sample_name": "speech000902_reverb_0.123_15dB",
+      "true_t60": 0.123,
+      "pred_t60": 0.1565,
+      "snr": 15.0,
+      "error_ms": 33.49
+    },
+    {
+      "sample_name": "speech000903_reverb_0.378_0dB",
+      "true_t60": 0.378,
+      "pred_t60": 0.4746,
+      "snr": 0.0,
+      "error_ms": 96.61
+    },
+    {
+      "sample_name": "speech000904_reverb_0.190_15dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.1838,
+      "snr": 15.0,
+      "error_ms": -6.16
+    },
+    {
+      "sample_name": "speech000905_reverb_0.973_0dB",
+      "true_t60": 0.973,
+      "pred_t60": 0.9424,
+      "snr": 0.0,
+      "error_ms": -30.62
+    },
+    {
+      "sample_name": "speech000906_reverb_0.233_10dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2322,
+      "snr": 10.0,
+      "error_ms": -0.82
+    },
+    {
+      "sample_name": "speech000907_reverb_0.773_15dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7319,
+      "snr": 15.0,
+      "error_ms": -41.07
+    },
+    {
+      "sample_name": "speech000908_reverb_0.354_5dB",
+      "true_t60": 0.354,
+      "pred_t60": 0.3613,
+      "snr": 5.0,
+      "error_ms": 7.33
+    },
+    {
+      "sample_name": "speech000909_reverb_0.369_20dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.4385,
+      "snr": 20.0,
+      "error_ms": 69.48
+    },
+    {
+      "sample_name": "speech000910_reverb_0.193_10dB",
+      "true_t60": 0.193,
+      "pred_t60": 0.2373,
+      "snr": 10.0,
+      "error_ms": 44.3
+    },
+    {
+      "sample_name": "speech000911_reverb_0.332_10dB",
+      "true_t60": 0.332,
+      "pred_t60": 0.3765,
+      "snr": 10.0,
+      "error_ms": 44.46
+    },
+    {
+      "sample_name": "speech000912_reverb_0.756_20dB",
+      "true_t60": 0.756,
+      "pred_t60": 0.7856,
+      "snr": 20.0,
+      "error_ms": 29.64
+    },
+    {
+      "sample_name": "speech000913_reverb_0.512_20dB",
+      "true_t60": 0.512,
+      "pred_t60": 0.4863,
+      "snr": 20.0,
+      "error_ms": -25.67
+    },
+    {
+      "sample_name": "speech000914_reverb_0.366_-5dB",
+      "true_t60": 0.366,
+      "pred_t60": 0.5547,
+      "snr": -5.0,
+      "error_ms": 188.69
+    },
+    {
+      "sample_name": "speech000915_reverb_1.107_20dB",
+      "true_t60": 1.107,
+      "pred_t60": 1.041,
+      "snr": 20.0,
+      "error_ms": -65.98
+    },
+    {
+      "sample_name": "speech000916_reverb_1.144_0dB",
+      "true_t60": 1.144,
+      "pred_t60": 0.9614,
+      "snr": 0.0,
+      "error_ms": -182.57
+    },
+    {
+      "sample_name": "speech000917_reverb_0.841_5dB",
+      "true_t60": 0.841,
+      "pred_t60": 0.834,
+      "snr": 5.0,
+      "error_ms": -7.02
+    },
+    {
+      "sample_name": "speech000918_reverb_0.599_5dB",
+      "true_t60": 0.599,
+      "pred_t60": 0.5254,
+      "snr": 5.0,
+      "error_ms": -73.61
+    },
+    {
+      "sample_name": "speech000919_reverb_0.641_15dB",
+      "true_t60": 0.641,
+      "pred_t60": 0.7095,
+      "snr": 15.0,
+      "error_ms": 68.47
+    },
+    {
+      "sample_name": "speech000920_reverb_0.393_20dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.375,
+      "snr": 20.0,
+      "error_ms": -18.0
+    },
+    {
+      "sample_name": "speech000921_reverb_0.393_5dB",
+      "true_t60": 0.393,
+      "pred_t60": 0.3994,
+      "snr": 5.0,
+      "error_ms": 6.41
+    },
+    {
+      "sample_name": "speech000922_reverb_0.243_20dB",
+      "true_t60": 0.243,
+      "pred_t60": 0.2876,
+      "snr": 20.0,
+      "error_ms": 44.6
+    },
+    {
+      "sample_name": "speech000923_reverb_0.764_10dB",
+      "true_t60": 0.764,
+      "pred_t60": 0.728,
+      "snr": 10.0,
+      "error_ms": -35.97
+    },
+    {
+      "sample_name": "speech000924_reverb_1.219_5dB",
+      "true_t60": 1.219,
+      "pred_t60": 1.1426,
+      "snr": 5.0,
+      "error_ms": -76.42
+    },
+    {
+      "sample_name": "speech000925_reverb_0.607_5dB",
+      "true_t60": 0.607,
+      "pred_t60": 0.6069,
+      "snr": 5.0,
+      "error_ms": -0.07
+    },
+    {
+      "sample_name": "speech000926_reverb_0.321_15dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3313,
+      "snr": 15.0,
+      "error_ms": 10.3
+    },
+    {
+      "sample_name": "speech000927_reverb_1.272_-5dB",
+      "true_t60": 1.272,
+      "pred_t60": 1.1387,
+      "snr": -5.0,
+      "error_ms": -133.33
+    },
+    {
+      "sample_name": "speech000928_reverb_0.973_-5dB",
+      "true_t60": 0.973,
+      "pred_t60": 0.876,
+      "snr": -5.0,
+      "error_ms": -97.02
+    },
+    {
+      "sample_name": "speech000929_reverb_0.722_5dB",
+      "true_t60": 0.722,
+      "pred_t60": 0.7256,
+      "snr": 5.0,
+      "error_ms": 3.59
+    },
+    {
+      "sample_name": "speech000930_reverb_1.041_10dB",
+      "true_t60": 1.041,
+      "pred_t60": 1.1777,
+      "snr": 10.0,
+      "error_ms": 136.73
+    },
+    {
+      "sample_name": "speech000931_reverb_0.196_-5dB",
+      "true_t60": 0.196,
+      "pred_t60": 0.375,
+      "snr": -5.0,
+      "error_ms": 179.0
+    },
+    {
+      "sample_name": "speech000932_reverb_0.184_20dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.147,
+      "snr": 20.0,
+      "error_ms": -37.03
+    },
+    {
+      "sample_name": "speech000933_reverb_0.759_10dB",
+      "true_t60": 0.759,
+      "pred_t60": 0.7632,
+      "snr": 10.0,
+      "error_ms": 4.18
+    },
+    {
+      "sample_name": "speech000934_reverb_0.350_15dB",
+      "true_t60": 0.35,
+      "pred_t60": 0.4009,
+      "snr": 15.0,
+      "error_ms": 50.88
+    },
+    {
+      "sample_name": "speech000935_reverb_0.385_10dB",
+      "true_t60": 0.385,
+      "pred_t60": 0.3657,
+      "snr": 10.0,
+      "error_ms": -19.28
+    },
+    {
+      "sample_name": "speech000936_reverb_0.774_5dB",
+      "true_t60": 0.774,
+      "pred_t60": 0.7944,
+      "snr": 5.0,
+      "error_ms": 20.43
+    },
+    {
+      "sample_name": "speech000937_reverb_0.676_-5dB",
+      "true_t60": 0.676,
+      "pred_t60": 0.77,
+      "snr": -5.0,
+      "error_ms": 94.02
+    },
+    {
+      "sample_name": "speech000938_reverb_0.366_5dB",
+      "true_t60": 0.366,
+      "pred_t60": 0.3701,
+      "snr": 5.0,
+      "error_ms": 4.12
+    },
+    {
+      "sample_name": "speech000939_reverb_0.478_15dB",
+      "true_t60": 0.478,
+      "pred_t60": 0.4941,
+      "snr": 15.0,
+      "error_ms": 16.14
+    },
+    {
+      "sample_name": "speech000940_reverb_0.204_0dB",
+      "true_t60": 0.204,
+      "pred_t60": 0.5117,
+      "snr": 0.0,
+      "error_ms": 307.72
+    },
+    {
+      "sample_name": "speech000941_reverb_0.876_10dB",
+      "true_t60": 0.876,
+      "pred_t60": 0.918,
+      "snr": 10.0,
+      "error_ms": 41.97
+    },
+    {
+      "sample_name": "speech000942_reverb_1.010_0dB",
+      "true_t60": 1.01,
+      "pred_t60": 0.9092,
+      "snr": 0.0,
+      "error_ms": -100.82
+    },
+    {
+      "sample_name": "speech000943_reverb_0.503_0dB",
+      "true_t60": 0.503,
+      "pred_t60": 0.4346,
+      "snr": 0.0,
+      "error_ms": -68.43
+    },
+    {
+      "sample_name": "speech000944_reverb_0.914_-5dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.9707,
+      "snr": -5.0,
+      "error_ms": 56.7
+    },
+    {
+      "sample_name": "speech000945_reverb_0.305_-5dB",
+      "true_t60": 0.305,
+      "pred_t60": 0.4043,
+      "snr": -5.0,
+      "error_ms": 99.3
+    },
+    {
+      "sample_name": "speech000946_reverb_0.218_0dB",
+      "true_t60": 0.218,
+      "pred_t60": 0.2163,
+      "snr": 0.0,
+      "error_ms": -1.69
+    },
+    {
+      "sample_name": "speech000947_reverb_1.184_10dB",
+      "true_t60": 1.184,
+      "pred_t60": 1.0527,
+      "snr": 10.0,
+      "error_ms": -131.27
+    },
+    {
+      "sample_name": "speech000948_reverb_0.164_0dB",
+      "true_t60": 0.164,
+      "pred_t60": 0.2915,
+      "snr": 0.0,
+      "error_ms": 127.5
+    },
+    {
+      "sample_name": "speech000949_reverb_0.218_-5dB",
+      "true_t60": 0.218,
+      "pred_t60": 0.1909,
+      "snr": -5.0,
+      "error_ms": -27.08
+    },
+    {
+      "sample_name": "speech000950_reverb_0.876_15dB",
+      "true_t60": 0.876,
+      "pred_t60": 0.8926,
+      "snr": 15.0,
+      "error_ms": 16.58
+    },
+    {
+      "sample_name": "speech000951_reverb_0.167_0dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2073,
+      "snr": 0.0,
+      "error_ms": 40.28
+    },
+    {
+      "sample_name": "speech000952_reverb_0.870_5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8691,
+      "snr": 5.0,
+      "error_ms": -0.86
+    },
+    {
+      "sample_name": "speech000953_reverb_0.651_-5dB",
+      "true_t60": 0.651,
+      "pred_t60": 0.6709,
+      "snr": -5.0,
+      "error_ms": 19.9
+    },
+    {
+      "sample_name": "speech000954_reverb_0.275_0dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.2959,
+      "snr": 0.0,
+      "error_ms": 20.9
+    },
+    {
+      "sample_name": "speech000955_reverb_0.863_5dB",
+      "true_t60": 0.863,
+      "pred_t60": 0.8521,
+      "snr": 5.0,
+      "error_ms": -10.95
+    },
+    {
+      "sample_name": "speech000956_reverb_0.471_10dB",
+      "true_t60": 0.471,
+      "pred_t60": 0.3403,
+      "snr": 10.0,
+      "error_ms": -130.67
+    },
+    {
+      "sample_name": "speech000957_reverb_0.870_5dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8638,
+      "snr": 5.0,
+      "error_ms": -6.23
+    },
+    {
+      "sample_name": "speech000958_reverb_0.770_5dB",
+      "true_t60": 0.77,
+      "pred_t60": 0.793,
+      "snr": 5.0,
+      "error_ms": 22.97
+    },
+    {
+      "sample_name": "speech000959_reverb_0.868_-5dB",
+      "true_t60": 0.868,
+      "pred_t60": 0.8906,
+      "snr": -5.0,
+      "error_ms": 22.63
+    },
+    {
+      "sample_name": "speech000960_reverb_0.434_10dB",
+      "true_t60": 0.434,
+      "pred_t60": 0.457,
+      "snr": 10.0,
+      "error_ms": 23.03
+    },
+    {
+      "sample_name": "speech000961_reverb_0.361_0dB",
+      "true_t60": 0.361,
+      "pred_t60": 0.3496,
+      "snr": 0.0,
+      "error_ms": -11.39
+    },
+    {
+      "sample_name": "speech000962_reverb_0.711_10dB",
+      "true_t60": 0.711,
+      "pred_t60": 0.7275,
+      "snr": 10.0,
+      "error_ms": 16.54
+    },
+    {
+      "sample_name": "speech000963_reverb_0.914_20dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.9321,
+      "snr": 20.0,
+      "error_ms": 18.13
+    },
+    {
+      "sample_name": "speech000964_reverb_0.470_0dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.4697,
+      "snr": 0.0,
+      "error_ms": -0.27
+    },
+    {
+      "sample_name": "speech000965_reverb_0.938_0dB",
+      "true_t60": 0.938,
+      "pred_t60": 1.0215,
+      "snr": 0.0,
+      "error_ms": 83.48
+    },
+    {
+      "sample_name": "speech000966_reverb_0.240_15dB",
+      "true_t60": 0.24,
+      "pred_t60": 0.2747,
+      "snr": 15.0,
+      "error_ms": 34.66
+    },
+    {
+      "sample_name": "speech000967_reverb_0.167_20dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2305,
+      "snr": 20.0,
+      "error_ms": 63.47
+    },
+    {
+      "sample_name": "speech000968_reverb_0.511_10dB",
+      "true_t60": 0.511,
+      "pred_t60": 0.5347,
+      "snr": 10.0,
+      "error_ms": 23.67
+    },
+    {
+      "sample_name": "speech000969_reverb_0.353_15dB",
+      "true_t60": 0.353,
+      "pred_t60": 0.376,
+      "snr": 15.0,
+      "error_ms": 22.98
+    },
+    {
+      "sample_name": "speech000970_reverb_0.771_15dB",
+      "true_t60": 0.771,
+      "pred_t60": 0.7739,
+      "snr": 15.0,
+      "error_ms": 2.93
+    },
+    {
+      "sample_name": "speech000971_reverb_0.208_5dB",
+      "true_t60": 0.208,
+      "pred_t60": 0.2476,
+      "snr": 5.0,
+      "error_ms": 39.56
+    },
+    {
+      "sample_name": "speech000972_reverb_0.628_5dB",
+      "true_t60": 0.628,
+      "pred_t60": 0.71,
+      "snr": 5.0,
+      "error_ms": 81.96
+    },
+    {
+      "sample_name": "speech000973_reverb_0.277_5dB",
+      "true_t60": 0.277,
+      "pred_t60": 0.3335,
+      "snr": 5.0,
+      "error_ms": 56.5
+    },
+    {
+      "sample_name": "speech000974_reverb_0.504_15dB",
+      "true_t60": 0.504,
+      "pred_t60": 0.7632,
+      "snr": 15.0,
+      "error_ms": 259.18
+    },
+    {
+      "sample_name": "speech000975_reverb_0.896_10dB",
+      "true_t60": 0.896,
+      "pred_t60": 0.9092,
+      "snr": 10.0,
+      "error_ms": 13.18
+    },
+    {
+      "sample_name": "speech000976_reverb_0.298_5dB",
+      "true_t60": 0.298,
+      "pred_t60": 0.3511,
+      "snr": 5.0,
+      "error_ms": 53.07
+    },
+    {
+      "sample_name": "speech000977_reverb_0.742_20dB",
+      "true_t60": 0.742,
+      "pred_t60": 0.6992,
+      "snr": 20.0,
+      "error_ms": -42.78
+    },
+    {
+      "sample_name": "speech000978_reverb_1.168_15dB",
+      "true_t60": 1.168,
+      "pred_t60": 1.1201,
+      "snr": 15.0,
+      "error_ms": -47.88
+    },
+    {
+      "sample_name": "speech000979_reverb_0.327_20dB",
+      "true_t60": 0.327,
+      "pred_t60": 0.3354,
+      "snr": 20.0,
+      "error_ms": 8.45
+    },
+    {
+      "sample_name": "speech000980_reverb_0.312_10dB",
+      "true_t60": 0.312,
+      "pred_t60": 0.3169,
+      "snr": 10.0,
+      "error_ms": 4.89
+    },
+    {
+      "sample_name": "speech000981_reverb_1.214_10dB",
+      "true_t60": 1.214,
+      "pred_t60": 1.1406,
+      "snr": 10.0,
+      "error_ms": -73.37
+    },
+    {
+      "sample_name": "speech000982_reverb_0.324_-5dB",
+      "true_t60": 0.324,
+      "pred_t60": 0.3848,
+      "snr": -5.0,
+      "error_ms": 60.77
+    },
+    {
+      "sample_name": "speech000983_reverb_0.520_15dB",
+      "true_t60": 0.52,
+      "pred_t60": 0.6401,
+      "snr": 15.0,
+      "error_ms": 120.14
+    },
+    {
+      "sample_name": "speech000984_reverb_0.520_5dB",
+      "true_t60": 0.52,
+      "pred_t60": 0.3994,
+      "snr": 5.0,
+      "error_ms": -120.59
+    },
+    {
+      "sample_name": "speech000985_reverb_0.267_0dB",
+      "true_t60": 0.267,
+      "pred_t60": 0.2776,
+      "snr": 0.0,
+      "error_ms": 10.59
+    },
+    {
+      "sample_name": "speech000986_reverb_0.270_15dB",
+      "true_t60": 0.27,
+      "pred_t60": 0.2878,
+      "snr": 15.0,
+      "error_ms": 17.84
+    },
+    {
+      "sample_name": "speech000987_reverb_0.914_5dB",
+      "true_t60": 0.914,
+      "pred_t60": 0.9683,
+      "snr": 5.0,
+      "error_ms": 54.26
+    },
+    {
+      "sample_name": "speech000988_reverb_0.885_0dB",
+      "true_t60": 0.885,
+      "pred_t60": 0.8853,
+      "snr": 0.0,
+      "error_ms": 0.25
+    },
+    {
+      "sample_name": "speech000989_reverb_0.808_-5dB",
+      "true_t60": 0.808,
+      "pred_t60": 0.7393,
+      "snr": -5.0,
+      "error_ms": -68.74
+    },
+    {
+      "sample_name": "speech000990_reverb_0.973_10dB",
+      "true_t60": 0.973,
+      "pred_t60": 1.0459,
+      "snr": 10.0,
+      "error_ms": 72.9
+    },
+    {
+      "sample_name": "speech000991_reverb_0.190_-5dB",
+      "true_t60": 0.19,
+      "pred_t60": 0.2368,
+      "snr": -5.0,
+      "error_ms": 46.82
+    },
+    {
+      "sample_name": "speech000992_reverb_0.738_0dB",
+      "true_t60": 0.738,
+      "pred_t60": 0.8755,
+      "snr": 0.0,
+      "error_ms": 137.49
+    },
+    {
+      "sample_name": "speech000993_reverb_0.975_10dB",
+      "true_t60": 0.975,
+      "pred_t60": 0.958,
+      "snr": 10.0,
+      "error_ms": -16.99
+    },
+    {
+      "sample_name": "speech000994_reverb_0.457_-5dB",
+      "true_t60": 0.457,
+      "pred_t60": 0.4048,
+      "snr": -5.0,
+      "error_ms": -52.21
+    },
+    {
+      "sample_name": "speech000995_reverb_1.372_20dB",
+      "true_t60": 1.372,
+      "pred_t60": 1.2607,
+      "snr": 20.0,
+      "error_ms": -111.26
+    },
+    {
+      "sample_name": "speech000996_reverb_0.808_0dB",
+      "true_t60": 0.808,
+      "pred_t60": 0.7632,
+      "snr": 0.0,
+      "error_ms": -44.82
+    },
+    {
+      "sample_name": "speech000997_reverb_0.349_5dB",
+      "true_t60": 0.349,
+      "pred_t60": 0.4238,
+      "snr": 5.0,
+      "error_ms": 74.83
+    },
+    {
+      "sample_name": "speech000998_reverb_0.272_0dB",
+      "true_t60": 0.272,
+      "pred_t60": 0.3047,
+      "snr": 0.0,
+      "error_ms": 32.69
+    },
+    {
+      "sample_name": "speech000999_reverb_0.973_15dB",
+      "true_t60": 0.973,
+      "pred_t60": 1.0977,
+      "snr": 15.0,
+      "error_ms": 124.66
+    },
+    {
+      "sample_name": "speech001000_reverb_0.698_5dB",
+      "true_t60": 0.698,
+      "pred_t60": 0.814,
+      "snr": 5.0,
+      "error_ms": 115.96
+    },
+    {
+      "sample_name": "speech001001_reverb_1.014_5dB",
+      "true_t60": 1.014,
+      "pred_t60": 1.251,
+      "snr": 5.0,
+      "error_ms": 236.98
+    },
+    {
+      "sample_name": "speech001002_reverb_0.173_5dB",
+      "true_t60": 0.173,
+      "pred_t60": 0.2546,
+      "snr": 5.0,
+      "error_ms": 81.64
+    },
+    {
+      "sample_name": "speech001003_reverb_0.237_5dB",
+      "true_t60": 0.237,
+      "pred_t60": 0.2764,
+      "snr": 5.0,
+      "error_ms": 39.37
+    },
+    {
+      "sample_name": "speech001004_reverb_0.382_5dB",
+      "true_t60": 0.382,
+      "pred_t60": 0.4487,
+      "snr": 5.0,
+      "error_ms": 66.73
+    },
+    {
+      "sample_name": "speech001005_reverb_0.304_-5dB",
+      "true_t60": 0.304,
+      "pred_t60": 0.4033,
+      "snr": -5.0,
+      "error_ms": 99.32
+    },
+    {
+      "sample_name": "speech001006_reverb_0.762_10dB",
+      "true_t60": 0.762,
+      "pred_t60": 0.8145,
+      "snr": 10.0,
+      "error_ms": 52.45
+    },
+    {
+      "sample_name": "speech001007_reverb_0.890_15dB",
+      "true_t60": 0.89,
+      "pred_t60": 0.9507,
+      "snr": 15.0,
+      "error_ms": 60.68
+    },
+    {
+      "sample_name": "speech001008_reverb_0.330_15dB",
+      "true_t60": 0.33,
+      "pred_t60": 0.3643,
+      "snr": 15.0,
+      "error_ms": 34.26
+    },
+    {
+      "sample_name": "speech001009_reverb_0.896_-5dB",
+      "true_t60": 0.896,
+      "pred_t60": 0.8638,
+      "snr": -5.0,
+      "error_ms": -32.23
+    },
+    {
+      "sample_name": "speech001010_reverb_0.460_-5dB",
+      "true_t60": 0.46,
+      "pred_t60": 0.6436,
+      "snr": -5.0,
+      "error_ms": 183.55
+    },
+    {
+      "sample_name": "speech001011_reverb_0.895_5dB",
+      "true_t60": 0.895,
+      "pred_t60": 0.8228,
+      "snr": 5.0,
+      "error_ms": -72.25
+    },
+    {
+      "sample_name": "speech001012_reverb_1.309_15dB",
+      "true_t60": 1.309,
+      "pred_t60": 1.3047,
+      "snr": 15.0,
+      "error_ms": -4.31
+    },
+    {
+      "sample_name": "speech001013_reverb_0.305_-5dB",
+      "true_t60": 0.305,
+      "pred_t60": 0.54,
+      "snr": -5.0,
+      "error_ms": 235.04
+    },
+    {
+      "sample_name": "speech001014_reverb_0.222_15dB",
+      "true_t60": 0.222,
+      "pred_t60": 0.2544,
+      "snr": 15.0,
+      "error_ms": 32.39
+    },
+    {
+      "sample_name": "speech001015_reverb_0.760_-5dB",
+      "true_t60": 0.76,
+      "pred_t60": 0.6948,
+      "snr": -5.0,
+      "error_ms": -65.18
+    },
+    {
+      "sample_name": "speech001016_reverb_0.174_15dB",
+      "true_t60": 0.174,
+      "pred_t60": 0.231,
+      "snr": 15.0,
+      "error_ms": 56.96
+    },
+    {
+      "sample_name": "speech001017_reverb_0.167_0dB",
+      "true_t60": 0.167,
+      "pred_t60": 0.2173,
+      "snr": 0.0,
+      "error_ms": 50.29
+    },
+    {
+      "sample_name": "speech001018_reverb_1.072_0dB",
+      "true_t60": 1.072,
+      "pred_t60": 0.9912,
+      "snr": 0.0,
+      "error_ms": -80.79
+    },
+    {
+      "sample_name": "speech001019_reverb_0.225_20dB",
+      "true_t60": 0.225,
+      "pred_t60": 0.2463,
+      "snr": 20.0,
+      "error_ms": 21.34
+    },
+    {
+      "sample_name": "speech001020_reverb_0.369_20dB",
+      "true_t60": 0.369,
+      "pred_t60": 0.3979,
+      "snr": 20.0,
+      "error_ms": 28.95
+    },
+    {
+      "sample_name": "speech001021_reverb_0.184_15dB",
+      "true_t60": 0.184,
+      "pred_t60": 0.2642,
+      "snr": 15.0,
+      "error_ms": 80.16
+    },
+    {
+      "sample_name": "speech001022_reverb_1.309_20dB",
+      "true_t60": 1.309,
+      "pred_t60": 1.2529,
+      "snr": 20.0,
+      "error_ms": -56.07
+    },
+    {
+      "sample_name": "speech001023_reverb_0.354_20dB",
+      "true_t60": 0.354,
+      "pred_t60": 0.3521,
+      "snr": 20.0,
+      "error_ms": -1.95
+    },
+    {
+      "sample_name": "speech001024_reverb_0.870_0dB",
+      "true_t60": 0.87,
+      "pred_t60": 0.8672,
+      "snr": 0.0,
+      "error_ms": -2.81
+    },
+    {
+      "sample_name": "speech001025_reverb_1.184_0dB",
+      "true_t60": 1.184,
+      "pred_t60": 1.1689,
+      "snr": 0.0,
+      "error_ms": -15.05
+    },
+    {
+      "sample_name": "speech001026_reverb_0.325_-5dB",
+      "true_t60": 0.325,
+      "pred_t60": 0.4058,
+      "snr": -5.0,
+      "error_ms": 80.76
+    },
+    {
+      "sample_name": "speech001027_reverb_0.363_10dB",
+      "true_t60": 0.363,
+      "pred_t60": 0.3447,
+      "snr": 10.0,
+      "error_ms": -18.27
+    },
+    {
+      "sample_name": "speech001028_reverb_0.436_0dB",
+      "true_t60": 0.436,
+      "pred_t60": 0.4189,
+      "snr": 0.0,
+      "error_ms": -17.05
+    },
+    {
+      "sample_name": "speech001029_reverb_0.218_0dB",
+      "true_t60": 0.218,
+      "pred_t60": 0.2896,
+      "snr": 0.0,
+      "error_ms": 71.55
+    },
+    {
+      "sample_name": "speech001030_reverb_0.651_20dB",
+      "true_t60": 0.651,
+      "pred_t60": 0.6914,
+      "snr": 20.0,
+      "error_ms": 40.41
+    },
+    {
+      "sample_name": "speech001031_reverb_1.104_15dB",
+      "true_t60": 1.104,
+      "pred_t60": 1.0547,
+      "snr": 15.0,
+      "error_ms": -49.31
+    },
+    {
+      "sample_name": "speech001032_reverb_0.593_0dB",
+      "true_t60": 0.593,
+      "pred_t60": 0.5532,
+      "snr": 0.0,
+      "error_ms": -39.78
+    },
+    {
+      "sample_name": "speech001033_reverb_0.330_-5dB",
+      "true_t60": 0.33,
+      "pred_t60": 0.436,
+      "snr": -5.0,
+      "error_ms": 106.04
+    },
+    {
+      "sample_name": "speech001034_reverb_0.933_20dB",
+      "true_t60": 0.933,
+      "pred_t60": 0.8315,
+      "snr": 20.0,
+      "error_ms": -101.46
+    },
+    {
+      "sample_name": "speech001035_reverb_0.173_5dB",
+      "true_t60": 0.173,
+      "pred_t60": 0.245,
+      "snr": 5.0,
+      "error_ms": 72.0
+    },
+    {
+      "sample_name": "speech001036_reverb_1.331_-5dB",
+      "true_t60": 1.331,
+      "pred_t60": 1.3623,
+      "snr": -5.0,
+      "error_ms": 31.3
+    },
+    {
+      "sample_name": "speech001037_reverb_1.441_-5dB",
+      "true_t60": 1.441,
+      "pred_t60": 1.3125,
+      "snr": -5.0,
+      "error_ms": -128.5
+    },
+    {
+      "sample_name": "speech001038_reverb_0.545_0dB",
+      "true_t60": 0.545,
+      "pred_t60": 0.6216,
+      "snr": 0.0,
+      "error_ms": 76.58
+    },
+    {
+      "sample_name": "speech001039_reverb_0.329_10dB",
+      "true_t60": 0.329,
+      "pred_t60": 0.3638,
+      "snr": 10.0,
+      "error_ms": 34.77
+    },
+    {
+      "sample_name": "speech001040_reverb_0.680_-5dB",
+      "true_t60": 0.68,
+      "pred_t60": 0.7017,
+      "snr": -5.0,
+      "error_ms": 21.66
+    },
+    {
+      "sample_name": "speech001041_reverb_1.219_20dB",
+      "true_t60": 1.219,
+      "pred_t60": 1.209,
+      "snr": 20.0,
+      "error_ms": -10.02
+    },
+    {
+      "sample_name": "speech001042_reverb_0.889_15dB",
+      "true_t60": 0.889,
+      "pred_t60": 0.855,
+      "snr": 15.0,
+      "error_ms": -34.02
+    },
+    {
+      "sample_name": "speech001043_reverb_0.141_15dB",
+      "true_t60": 0.141,
+      "pred_t60": 0.1398,
+      "snr": 15.0,
+      "error_ms": -1.23
+    },
+    {
+      "sample_name": "speech001044_reverb_0.470_-5dB",
+      "true_t60": 0.47,
+      "pred_t60": 0.5176,
+      "snr": -5.0,
+      "error_ms": 47.58
+    },
+    {
+      "sample_name": "speech001045_reverb_0.782_10dB",
+      "true_t60": 0.782,
+      "pred_t60": 0.7305,
+      "snr": 10.0,
+      "error_ms": -51.53
+    },
+    {
+      "sample_name": "speech001046_reverb_0.366_10dB",
+      "true_t60": 0.366,
+      "pred_t60": 0.3384,
+      "snr": 10.0,
+      "error_ms": -27.62
+    },
+    {
+      "sample_name": "speech001047_reverb_0.275_20dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.3115,
+      "snr": 20.0,
+      "error_ms": 36.52
+    },
+    {
+      "sample_name": "speech001048_reverb_0.934_-5dB",
+      "true_t60": 0.934,
+      "pred_t60": 0.9082,
+      "snr": -5.0,
+      "error_ms": -25.8
+    },
+    {
+      "sample_name": "speech001049_reverb_0.758_20dB",
+      "true_t60": 0.758,
+      "pred_t60": 0.6831,
+      "snr": 20.0,
+      "error_ms": -74.89
+    },
+    {
+      "sample_name": "speech001050_reverb_1.491_20dB",
+      "true_t60": 1.491,
+      "pred_t60": 1.29,
+      "snr": 20.0,
+      "error_ms": -200.96
+    },
+    {
+      "sample_name": "speech001051_reverb_0.312_0dB",
+      "true_t60": 0.312,
+      "pred_t60": 0.3696,
+      "snr": 0.0,
+      "error_ms": 57.63
+    },
+    {
+      "sample_name": "speech001052_reverb_0.423_10dB",
+      "true_t60": 0.423,
+      "pred_t60": 0.4766,
+      "snr": 10.0,
+      "error_ms": 53.56
+    },
+    {
+      "sample_name": "speech001053_reverb_0.423_-5dB",
+      "true_t60": 0.423,
+      "pred_t60": 0.5249,
+      "snr": -5.0,
+      "error_ms": 101.9
+    },
+    {
+      "sample_name": "speech001054_reverb_1.176_20dB",
+      "true_t60": 1.176,
+      "pred_t60": 1.1709,
+      "snr": 20.0,
+      "error_ms": -5.1
+    },
+    {
+      "sample_name": "speech001055_reverb_0.357_5dB",
+      "true_t60": 0.357,
+      "pred_t60": 0.4272,
+      "snr": 5.0,
+      "error_ms": 70.25
+    },
+    {
+      "sample_name": "speech001056_reverb_0.705_10dB",
+      "true_t60": 0.705,
+      "pred_t60": 0.7124,
+      "snr": 10.0,
+      "error_ms": 7.4
+    },
+    {
+      "sample_name": "speech001057_reverb_0.228_-5dB",
+      "true_t60": 0.228,
+      "pred_t60": 0.3157,
+      "snr": -5.0,
+      "error_ms": 87.67
+    },
+    {
+      "sample_name": "speech001058_reverb_0.935_-5dB",
+      "true_t60": 0.935,
+      "pred_t60": 0.8516,
+      "snr": -5.0,
+      "error_ms": -83.44
+    },
+    {
+      "sample_name": "speech001059_reverb_0.273_15dB",
+      "true_t60": 0.273,
+      "pred_t60": 0.3162,
+      "snr": 15.0,
+      "error_ms": 43.16
+    },
+    {
+      "sample_name": "speech001060_reverb_0.183_5dB",
+      "true_t60": 0.183,
+      "pred_t60": 0.2979,
+      "snr": 5.0,
+      "error_ms": 114.85
+    },
+    {
+      "sample_name": "speech001061_reverb_0.268_-5dB",
+      "true_t60": 0.268,
+      "pred_t60": 0.2969,
+      "snr": -5.0,
+      "error_ms": 28.87
+    },
+    {
+      "sample_name": "speech001062_reverb_0.554_-5dB",
+      "true_t60": 0.554,
+      "pred_t60": 0.4214,
+      "snr": -5.0,
+      "error_ms": -132.61
+    },
+    {
+      "sample_name": "speech001063_reverb_0.773_0dB",
+      "true_t60": 0.773,
+      "pred_t60": 0.7725,
+      "snr": 0.0,
+      "error_ms": -0.54
+    },
+    {
+      "sample_name": "speech001064_reverb_0.684_15dB",
+      "true_t60": 0.684,
+      "pred_t60": 0.6631,
+      "snr": 15.0,
+      "error_ms": -20.91
+    },
+    {
+      "sample_name": "speech001065_reverb_0.641_15dB",
+      "true_t60": 0.641,
+      "pred_t60": 0.7114,
+      "snr": 15.0,
+      "error_ms": 70.43
+    },
+    {
+      "sample_name": "speech001066_reverb_0.233_20dB",
+      "true_t60": 0.233,
+      "pred_t60": 0.2832,
+      "snr": 20.0,
+      "error_ms": 50.2
+    },
+    {
+      "sample_name": "speech001067_reverb_0.759_10dB",
+      "true_t60": 0.759,
+      "pred_t60": 0.7925,
+      "snr": 10.0,
+      "error_ms": 33.48
+    },
+    {
+      "sample_name": "speech001068_reverb_0.559_10dB",
+      "true_t60": 0.559,
+      "pred_t60": 0.5747,
+      "snr": 10.0,
+      "error_ms": 15.71
+    },
+    {
+      "sample_name": "speech001069_reverb_0.787_20dB",
+      "true_t60": 0.787,
+      "pred_t60": 0.8071,
+      "snr": 20.0,
+      "error_ms": 20.13
+    },
+    {
+      "sample_name": "speech001070_reverb_0.384_15dB",
+      "true_t60": 0.384,
+      "pred_t60": 0.3989,
+      "snr": 15.0,
+      "error_ms": 14.93
+    },
+    {
+      "sample_name": "speech001071_reverb_0.499_0dB",
+      "true_t60": 0.499,
+      "pred_t60": 0.4893,
+      "snr": 0.0,
+      "error_ms": -9.74
+    },
+    {
+      "sample_name": "speech001072_reverb_0.321_15dB",
+      "true_t60": 0.321,
+      "pred_t60": 0.3293,
+      "snr": 15.0,
+      "error_ms": 8.35
+    },
+    {
+      "sample_name": "speech001073_reverb_0.825_20dB",
+      "true_t60": 0.825,
+      "pred_t60": 0.7915,
+      "snr": 20.0,
+      "error_ms": -33.5
+    },
+    {
+      "sample_name": "speech001074_reverb_0.362_5dB",
+      "true_t60": 0.362,
+      "pred_t60": 0.3882,
+      "snr": 5.0,
+      "error_ms": 26.18
+    },
+    {
+      "sample_name": "speech001075_reverb_0.351_20dB",
+      "true_t60": 0.351,
+      "pred_t60": 0.4053,
+      "snr": 20.0,
+      "error_ms": 54.27
+    },
+    {
+      "sample_name": "speech001076_reverb_0.813_0dB",
+      "true_t60": 0.813,
+      "pred_t60": 1.0186,
+      "snr": 0.0,
+      "error_ms": 205.55
+    },
+    {
+      "sample_name": "speech001077_reverb_0.342_20dB",
+      "true_t60": 0.342,
+      "pred_t60": 0.3569,
+      "snr": 20.0,
+      "error_ms": 14.93
+    },
+    {
+      "sample_name": "speech001078_reverb_0.292_5dB",
+      "true_t60": 0.292,
+      "pred_t60": 0.342,
+      "snr": 5.0,
+      "error_ms": 50.04
+    },
+    {
+      "sample_name": "speech001079_reverb_0.275_15dB",
+      "true_t60": 0.275,
+      "pred_t60": 0.2871,
+      "snr": 15.0,
+      "error_ms": 12.11
+    },
+    {
+      "sample_name": "speech001080_reverb_0.973_0dB",
+      "true_t60": 0.973,
+      "pred_t60": 0.9932,
+      "snr": 0.0,
+      "error_ms": 20.16
+    }
+  ]
+}

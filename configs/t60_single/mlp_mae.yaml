@@ -1,0 +1,35 @@
+experiment:
+  name: single_t60_mlp_mae          # 实验名；输出目录默认是 output_root/name
+  output_root: runs                 # 训练权重、日志和测试结果的根目录
+
+model:
+  n_tscb: 2                         # TSCB层数；2更快，4更接近原始CMGAN
+
+data:
+  dataset_root: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s  # 当前机器上的T60_Dataset_v7路径
+  n_fft: 400                        # STFT窗口长度；沿用CMGAN默认设置
+  hop_length: 100                   # STFT hop；4s音频对应约641帧
+  audio_length: 4.0                 # 固定音频长度，单位秒；数据集应预处理为该长度
+  target_sr: 16000                  # 目标采样率
+  t60_min: 0.1                      # T60归一化下界，单位秒
+  t60_max: 1.5                      # T60归一化上界，单位秒
+
+train:
+  batch_size: 32                    # 单步batch；H800 79GB 显存，单卡可跑 batch=32
+  accum_steps: 1                    # H800 显存充足，无需梯度累积
+  max_epochs: 100                   # 最大训练轮数
+  lr: 0.0005                        # AdamW学习率
+  weight_decay: 0.00001             # AdamW权重衰减
+  early_stop_patience: 15           # 验证集loss连续多少轮不提升后早停
+  num_workers: 16                   # H800 机器 IO 强，16 workers 充分喂数据
+
+test:
+  batch_size: 8                     # 测试batch；只前向推理，通常可大于训练batch
+  num_workers: 4                    # 测试DataLoader进程数
+  gpu_id: 0                         # 测试时使用的可见GPU编号；配合CUDA_VISIBLE_DEVICES后通常保持0
+
+loss:
+  name: mae                         # T60归一化标签上的MAE损失
+
+logging:
+  swanlab_project: T60_Estimation   # SwanLab项目名
