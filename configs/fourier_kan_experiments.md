@@ -9,13 +9,23 @@
 
 CMGAN backbone（DenseEncoder + 2×TSCB）输出 `(B, 64, F, T)` 的特征，经过 `mean(F)` 和 `MultiStatsPool(T)` 池化后得到 192 维向量，再送入回归 head 预测归一化 T60。
 
-原始 MLP head 结构：`FC(192→128→64→1) + Sigmoid`
-
-Fourier-KAN head 替换了 MLP 部分，在投影层之后使用 FourierKAN 层：
+原始 MLP head 结构（3 层线性）：
 
 ```
-MultiStatsPool(192) → Linear(192→proj_dim) + LayerNorm
-    → FourierKANBlock(hidden_dims) → Linear(→1) → Sigmoid
+MultiStatsPool: 64×3 = 192 维
+Linear(192 → 128) + ReLU + Dropout(0.3)
+Linear(128 → 64)  + ReLU + Dropout(0.3)
+Linear(64  → 1)   + Sigmoid
+```
+
+Fourier-KAN head 结构（投影层 + 2 层 KAN + 输出线性层）：
+
+```
+MultiStatsPool: 64×3 = 192 维
+Linear(192 → 64) + LayerNorm          ← 投影层（普通线性，非 KAN）
+FourierKAN(64 → 32) + LayerNorm + Dropout   ← 第 1 层 KAN
+FourierKAN(32 → 16) + LayerNorm + Dropout   ← 第 2 层 KAN
+Linear(16 → 1) + Sigmoid                    ← 输出层（普通线性，非 KAN）
 ```
 
 每个 FourierKAN 层对每个输入维度 i、输出维度 j 计算：
@@ -35,7 +45,9 @@ y_j = Σ_i Σ_w [ a_{j,i,w}·cos(w·x_i) + b_{j,i,w}·sin(w·x_i) ]
 ```yaml
 model:
   t60_head_type: mlp
-  # FC(192→128→64→1) + Sigmoid，Dropout=0.3
+  t60_hidden_dim: 128   # 第一隐层宽度，第二隐层自动取 hidden_dim//2=64
+  t60_dropout: 0.3
+  # 结构：Linear(192→128)+ReLU+Dropout → Linear(128→64)+ReLU+Dropout → Linear(64→1)+Sigmoid
 ```
 
 | 测试集 | MSE — RMSE/MAE/Bias | MAE — RMSE/MAE/Bias |
@@ -166,9 +178,136 @@ model:
 
 ---
 
-## 结论
+## Fourier-KAN v2 + Gradient Clip
 
-1. **Fourier-KAN v1/v2 在当前配置下均未超过 MLP 基准**（MAE loss 下）
-2. **MSE + kan_v2 出现严重 bias**：分层大 Omega 增强了非线性，与 MSE 的二次梯度组合，导致模型系统性高估；v1 和 MLP 的 MSE bias 均正常（±9ms 以内）
-3. **MAE loss 是更稳定的选择**：所有实验中 MAE loss 的 bias 均小于 ±14ms，MSE 在 kan_v2 下失控
-4. **后续改进方向**：在 kan_v2_mae 基础上加梯度裁剪（clip_grad_norm=1.0）以稳定训练，同时探索 log-scale T60 归一化以改善高 T60 区间的系统性低估
+### 设计动机
+
+kan_v2_mae 仅 14 epoch 就早停，疑似梯度不稳定导致欠拟合。加入 `clip_grad_norm=1.0` 以延长有效训练期。同时对比 MSE+clip 是否能解决 bias 问题。
+
+### 配置（`kan_v2_mae_clip1.yaml` / `kan_v2_mse_clip1.yaml`）
+
+```yaml
+train:
+  clip_grad_norm: 1.0   # 新增梯度裁剪
+# 其余与 kan_v2_mae / kan_v2_mse 相同
+```
+
+### 结果
+
+| 测试集 | MSE+clip — RMSE/MAE/Bias | MAE+clip — RMSE/MAE/Bias |
+|--------|--------------------------|--------------------------|
+| test1  | 110.3 / 69.0 / +19.0 | 108.3 / 62.5 / -4.3 |
+| test2  | 121.5 / 76.3 / +24.7 | 118.1 / 68.7 / -7.8 |
+| test3  | 122.3 / 76.7 / +23.6 | 111.8 / 64.3 / -3.0 |
+| test4  | 119.5 / 73.5 / +20.5 | 113.5 / 65.8 / -2.5 |
+| **平均** | **RMSE=118.4 MAE=73.9** | **RMSE=112.9 MAE=65.3** |
+
+### 分析
+
+- **MAE+clip**：MAE=65.3ms 微赢 MLP（MLP=65.5ms），RMSE=112.9ms 略差（MLP=111.5ms）；梯度裁剪延长了训练期，效果有所提升
+- **MSE+clip**：bias 未改善（+19~+25ms），clip 对 MSE 下的 kan_v2 bias 问题无效；RMSE=118.4ms 反而更差（无 clip 时 111.2ms）；clip 让 MSE 梯度更保守，收敛速度变慢，但 bias 根因（非线性+均值偏移）未解决
+
+---
+
+## Fourier-KAN v2 + Huber Loss (delta=0.05)
+
+### 设计动机
+
+Huber loss 在小误差区间（|e| < delta）用 MSE（鼓励精确），大误差区间用 MAE（避免离群点主导）。delta=0.05 对应 T60 归一化空间 5ms 量级。
+
+### 配置（`kan_v2_huber_delta0.05.yaml`）
+
+```yaml
+loss:
+  name: huber
+  huber_delta: 0.05
+```
+
+### 结果
+
+| 测试集 | RMSE | MAE | Bias |
+|--------|------|-----|------|
+| test1  | 111.0 ms | 65.6 ms | -2.2 ms |
+| test2  | 120.5 ms | 70.5 ms | -9.3 ms |
+| test3  | 110.5 ms | 66.2 ms | +6.0 ms |
+| test4  | 116.9 ms | 67.5 ms | +2.9 ms |
+| **平均** | **114.7 ms** | **67.5 ms** | — |
+
+### 分析
+
+- bias 正常（-9~+6ms），Huber 有效抑制了 MSE 的系统性偏移
+- 但整体精度介于 MLP_MAE 和 MLP_MSE 之间，未超越最佳基准
+- delta=0.05 时大部分样本（|e|>0.05）已退化为 MAE 梯度，接近 MAE 的行为
+
+---
+
+## 横向对比汇总（全部实验）
+
+### MAE loss
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| mlp_mae（**基准**）| 111.5 ms | 65.5 ms | -5.5 ms | — |
+| kan_v1_mae | 114.8 ms | 67.6 ms | -4.8 ms | Omega=4 |
+| kan_v2_mae | 118.2 ms | 70.6 ms | -5.9 ms | 14 epoch 早停 |
+| kan_v2_mae_clip1 | 112.9 ms | **65.3 ms** | -4.4 ms | MAE 微赢，RMSE 略差 |
+
+### MSE loss
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| mlp_mse（基准）| 113.1 ms | 70.0 ms | +2.5 ms | — |
+| kan_v1_mse | 116.8 ms | 71.5 ms | +2.6 ms | Omega=4 |
+| kan_v2_mse | 111.2 ms | 72.4 ms | **+26.4 ms** | bias 失控 |
+| kan_v2_mse_clip1 | 118.4 ms | 73.9 ms | **+21.9 ms** | clip 未解决 bias |
+
+### Huber loss
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| kan_v2_huber_delta0.05 | 114.7 ms | 67.5 ms | -0.7 ms | bias 正常，精度中等 |
+
+---
+
+## 当前实验：Log-Scale T60 归一化
+
+### 设计动机
+
+线性归一化 `norm = (T60 - 0.1) / 1.4` 下，T60 高值区间（1.3-1.5s）仅对应 label 空间 0.857~1.0（范围 0.143），而 T60 低值区间（0.1-0.3s）也是相同的 0.143。但由于绝对 ms 值更大，高 T60 区间的绝对误差天然更大，模型倾向于低估高 T60。
+
+Log-scale 归一化：`norm = (log(T60) - log(0.1)) / (log(1.5) - log(0.1))`，使各 T60 bin 在 label 空间中均匀分布，改善高 T60 区间训练信号。
+
+### 配置（`kan_v2_mae_clip1_log.yaml` / `mlp_mae_log.yaml`）
+
+```yaml
+data:
+  log_scale: true   # 唯一新增
+
+train:
+  clip_grad_norm: 1.0
+```
+
+### 实验状态
+
+| 实验 | 状态 | 说明 |
+|------|------|------|
+| kan_v2_mae_clip1_log | **训练中**（Epoch 32/100） | KAN head + log-scale |
+| mlp_mae_log | 待启动（KAN 训练完后） | MLP head + log-scale 对照组 |
+
+### 预期分析框架
+
+训练完成后比较：
+- 若 kan_v2_mae_clip1_log 优于 kan_v2_mae_clip1 → log-scale 归一化有效
+- 若 mlp_mae_log 优于 mlp_mae → log-scale 对 MLP 也有效（结论更通用）
+- 若 kan_v2_mae_clip1_log > mlp_mae_log → KAN 在 log-scale 下有额外增益
+- 重点关注 T60 1.3-1.5s bin 的 RMSE/bias 变化（这是所有模型的共同弱点）
+
+---
+
+## 结论（截至当前）
+
+1. **Fourier-KAN v1/v2 在线性 label 空间下均未超过 MLP 基准**（MAE loss）
+2. **MSE + kan_v2 出现严重 bias**：分层大 Omega 增强了非线性，与 MSE 的二次梯度组合，导致系统性高估；梯度裁剪无法解决根因
+3. **MAE loss 是更稳定的选择**：所有实验中 MAE loss 的 bias 均小于 ±14ms
+4. **kan_v2_mae_clip1 是迄今最接近基准的 KAN 实验**：MAE 65.3ms 微赢 MLP（65.5ms），RMSE 略差
+5. **下一步**：log-scale 归一化实验进行中，预计改善高 T60 区间系统性低估
