@@ -5,6 +5,7 @@ CMGAN T60 单任务数据集
 """
 
 import os
+import math
 import torch
 import torchaudio
 from torch.utils.data import Dataset, DataLoader
@@ -30,16 +31,41 @@ def parse_sample_name(dirname: str):
 
 
 class T60Normalizer:
-    """T60 min-max 归一化 [0.1, 1.5] → [0, 1]"""
+    """T60 归一化 [t60_min, t60_max] → [0, 1]
 
-    def __init__(self, t60_min=0.1, t60_max=1.5):
+    log_scale=False (默认): 线性 min-max 归一化，兼容旧实验
+    log_scale=True        : log 空间 min-max 归一化
+        norm  = (log(T60) - log(t60_min)) / (log(t60_max) - log(t60_min))
+        denorm = exp(norm * (log(t60_max) - log(t60_min)) + log(t60_min))
+    """
+
+    def __init__(self, t60_min=0.1, t60_max=1.5, log_scale=False):
         self.t60_min = t60_min
         self.t60_max = t60_max
+        self.log_scale = log_scale
+        if log_scale:
+            self._log_min = math.log(t60_min)
+            self._log_range = math.log(t60_max) - math.log(t60_min)
 
     def normalize(self, t60):
+        if self.log_scale:
+            import math as _math
+            # t60 可能是 float 或 tensor
+            try:
+                return (_math.log(t60) - self._log_min) / self._log_range
+            except TypeError:
+                # tensor 路径
+                return (t60.log() - self._log_min) / self._log_range
         return (t60 - self.t60_min) / (self.t60_max - self.t60_min)
 
     def denormalize(self, norm_t60):
+        if self.log_scale:
+            import math as _math
+            try:
+                return _math.exp(norm_t60 * self._log_range + self._log_min)
+            except TypeError:
+                import torch as _torch
+                return _torch.exp(norm_t60 * self._log_range + self._log_min)
         return norm_t60 * (self.t60_max - self.t60_min) + self.t60_min
 
     def __call__(self, t60):
@@ -70,6 +96,7 @@ class CMGANT60Dataset(Dataset):
         audio_length=4.0,
         target_sr=16000,
         t60_range=(0.1, 1.5),
+        log_scale=False,
     ):
         self.dataset_root = resolve_dataset_root(dataset_root)
         self.split = self.SPLIT_MAP.get(split, split)
@@ -77,7 +104,7 @@ class CMGANT60Dataset(Dataset):
         self.hop_length = hop_length
         self.target_sr = target_sr
         self.target_samples = int(audio_length * target_sr)
-        self.t60_normalizer = T60Normalizer(*t60_range)
+        self.t60_normalizer = T60Normalizer(*t60_range, log_scale=log_scale)
         self.split_dir = os.path.join(self.dataset_root, self.split)
         self.register_buffer = None  # 延迟创建
         self.samples = self._scan_samples()
@@ -193,6 +220,7 @@ def create_dataloaders(
     audio_length=4.0,
     target_sr=16000,
     t60_range=(0.1, 1.5),
+    log_scale=False,
     pin_memory=True,
 ):
     common = dict(
@@ -202,6 +230,7 @@ def create_dataloaders(
         audio_length=audio_length,
         target_sr=target_sr,
         t60_range=t60_range,
+        log_scale=log_scale,
     )
 
     train_ds = CMGANT60Dataset(split='train', **common)
@@ -231,12 +260,13 @@ def create_test_loader(
     audio_length=4.0,
     target_sr=16000,
     t60_range=(0.1, 1.5),
+    log_scale=False,
 ):
     ds = CMGANT60Dataset(
         dataset_root=dataset_root, split=test_split,
         n_fft=n_fft, hop_length=hop_length,
         audio_length=audio_length, target_sr=target_sr,
-        t60_range=t60_range,
+        t60_range=t60_range, log_scale=log_scale,
     )
     return DataLoader(
         ds, batch_size=batch_size, shuffle=False,

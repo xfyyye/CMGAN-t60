@@ -128,7 +128,8 @@ def run_tests(args):
     print(f'T60 head 类型: {args.t60_head_type}')
     print(f'已加载模型: {args.model_path}')
 
-    t60_normalizer = T60Normalizer(args.t60_min, args.t60_max)
+    log_scale = getattr(args, 'log_scale', False)
+    t60_normalizer = T60Normalizer(args.t60_min, args.t60_max, log_scale=log_scale)
     os.makedirs(args.save_dir, exist_ok=True)
 
     summary = {}
@@ -148,6 +149,7 @@ def run_tests(args):
             audio_length=args.audio_length,
             target_sr=args.target_sr,
             t60_range=(args.t60_min, args.t60_max),
+            log_scale=log_scale,
         )
 
         all_true, all_pred, all_names, all_snrs = [], [], [], []
@@ -235,7 +237,7 @@ def load_config_defaults(config_path):
         return value if isinstance(value, dict) else {}
 
     data_cfg = section('data')
-    for key in ['dataset_root', 'n_fft', 'hop_length', 'audio_length', 'target_sr', 't60_min', 't60_max']:
+    for key in ['dataset_root', 'n_fft', 'hop_length', 'audio_length', 'target_sr', 't60_min', 't60_max', 'log_scale']:
         if key in data_cfg:
             defaults[key] = data_cfg[key]
 
@@ -288,6 +290,9 @@ def parse_args():
     parser.add_argument('--target_sr', type=int, default=config_defaults.get('target_sr', 16000))
     parser.add_argument('--t60_min', type=float, default=config_defaults.get('t60_min', 0.1))
     parser.add_argument('--t60_max', type=float, default=config_defaults.get('t60_max', 1.5))
+    parser.add_argument('--log_scale', action='store_true',
+                        default=config_defaults.get('log_scale', False),
+                        help='T60 归一化使用 log 空间')
     parser.add_argument('--batch_size', type=int, default=config_defaults.get('batch_size', 8))
     parser.add_argument('--n_tscb', type=int, default=config_defaults.get('n_tscb', 4), choices=[2, 4])
 
