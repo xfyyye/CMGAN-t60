@@ -60,12 +60,16 @@ class T60Normalizer:
 
     def denormalize(self, norm_t60):
         if self.log_scale:
-            import math as _math
-            try:
-                return _math.exp(norm_t60 * self._log_range + self._log_min)
-            except TypeError:
-                import torch as _torch
-                return _torch.exp(norm_t60 * self._log_range + self._log_min)
+            import torch as _torch
+            import numpy as _np
+            val = norm_t60 * self._log_range + self._log_min
+            if isinstance(norm_t60, _torch.Tensor):
+                return _torch.exp(val)
+            elif isinstance(norm_t60, _np.ndarray):
+                return _np.exp(val)
+            else:
+                import math as _math
+                return _math.exp(val)
         return norm_t60 * (self.t60_max - self.t60_min) + self.t60_min
 
     def __call__(self, t60):

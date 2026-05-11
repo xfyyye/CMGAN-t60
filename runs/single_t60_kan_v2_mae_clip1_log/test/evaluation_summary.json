@@ -1,0 +1,42 @@
+{
+  "summary": {
+    "test1": {
+      "rmse_ms": 101.63,
+      "mae_ms": 60.08,
+      "bias_ms": -5.47,
+      "pearson_r": 0.9545,
+      "r2_score": 0.9109,
+      "mean_rel_error_pct": 11.35
+    },
+    "test2": {
+      "rmse_ms": 110.55,
+      "mae_ms": 64.64,
+      "bias_ms": -12.96,
+      "pearson_r": 0.9468,
+      "r2_score": 0.8946,
+      "mean_rel_error_pct": 13.32
+    },
+    "test3": {
+      "rmse_ms": 107.53,
+      "mae_ms": 61.13,
+      "bias_ms": -4.56,
+      "pearson_r": 0.9492,
+      "r2_score": 0.9006,
+      "mean_rel_error_pct": 12.2
+    },
+    "test4": {
+      "rmse_ms": 111.1,
+      "mae_ms": 62.71,
+      "bias_ms": -7.69,
+      "pearson_r": 0.9448,
+      "r2_score": 0.8921,
+      "mean_rel_error_pct": 13.39
+    }
+  },
+  "average": {
+    "rmse_ms": 107.70250000000001,
+    "mae_ms": 62.14,
+    "pearson_r": 0.948825,
+    "r2_score": 0.89955
+  }
+}

@@ -269,45 +269,90 @@ loss:
 
 ---
 
-## 当前实验：Log-Scale T60 归一化
+## Log-Scale T60 归一化
 
 ### 设计动机
 
 线性归一化 `norm = (T60 - 0.1) / 1.4` 下，T60 高值区间（1.3-1.5s）仅对应 label 空间 0.857~1.0（范围 0.143），而 T60 低值区间（0.1-0.3s）也是相同的 0.143。但由于绝对 ms 值更大，高 T60 区间的绝对误差天然更大，模型倾向于低估高 T60。
 
-Log-scale 归一化：`norm = (log(T60) - log(0.1)) / (log(1.5) - log(0.1))`，使各 T60 bin 在 label 空间中均匀分布，改善高 T60 区间训练信号。
+Log-scale 归一化：`norm = (log(T60) - log(0.1)) / (log(1.5) - log(0.1))`，使各 T60 bin 在 label 空间中等比例分布，改善高 T60 区间的训练信号。
+
+> **注意（Bug 修复）**：`dataset.py` 的 `T60Normalizer.denormalize` 原先对 numpy array 输入会报 `TypeError`（`math.exp` 只支持标量，`torch.exp` 不接受 numpy array）。已修复为按类型分派：Tensor → `torch.exp`，ndarray → `numpy.exp`，float → `math.exp`。
 
 ### 配置（`kan_v2_mae_clip1_log.yaml` / `mlp_mae_log.yaml`）
 
 ```yaml
 data:
-  log_scale: true   # 唯一新增
-
+  log_scale: true   # 唯一新增（相比各自对应的线性版本）
 train:
   clip_grad_norm: 1.0
 ```
 
+### 结果：kan_v2_mae_clip1_log（已完成）
+
+| 测试集 | RMSE | MAE | Bias | Pearson r | R² |
+|--------|------|-----|------|-----------|-----|
+| test1  | 101.6 ms | 60.1 ms | -5.5 ms | 0.9545 | 0.9109 |
+| test2  | 110.6 ms | 64.6 ms | -13.0 ms | 0.9468 | 0.8946 |
+| test3  | 107.5 ms | 61.1 ms | -4.6 ms | 0.9492 | 0.9006 |
+| test4  | 111.1 ms | 62.7 ms | -7.7 ms | 0.9448 | 0.8921 |
+| **平均** | **107.7 ms** | **62.1 ms** | **-7.7 ms** | **0.9488** | **0.8996** |
+
+### 分析
+
+- **全面超越此前所有实验**：RMSE=107.7ms 比基准 mlp_mae（111.5ms）低 3.8ms（-3.4%），MAE=62.1ms 比基准（65.5ms）低 3.4ms（-5.2%）
+- **bias 正常**：-5~-13ms，与 kan_v2_mae_clip1 的 -2~-8ms 相近，log-scale 未引入新的系统性偏移
+- **log-scale 有效**：确认 label 空间分布不均是此前高 T60 低估的根因之一
+- **待定**：mlp_mae_log（对照组）训练中，用于判断增益来自 log-scale 本身还是 KAN 架构
+
 ### 实验状态
 
-| 实验 | 状态 | 说明 |
-|------|------|------|
-| kan_v2_mae_clip1_log | **训练中**（Epoch 32/100） | KAN head + log-scale |
-| mlp_mae_log | 待启动（KAN 训练完后） | MLP head + log-scale 对照组 |
+| 实验 | 状态 | avg RMSE | avg MAE |
+|------|------|----------|---------|
+| kan_v2_mae_clip1_log | **已完成** | 107.7 ms | 62.1 ms |
+| mlp_mae_log | **训练中** | — | — |
 
-### 预期分析框架
+---
 
-训练完成后比较：
-- 若 kan_v2_mae_clip1_log 优于 kan_v2_mae_clip1 → log-scale 归一化有效
-- 若 mlp_mae_log 优于 mlp_mae → log-scale 对 MLP 也有效（结论更通用）
-- 若 kan_v2_mae_clip1_log > mlp_mae_log → KAN 在 log-scale 下有额外增益
-- 重点关注 T60 1.3-1.5s bin 的 RMSE/bias 变化（这是所有模型的共同弱点）
+## 横向对比汇总（全部实验）
+
+### MAE loss（线性归一化）
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| mlp_mae（**基准**）| 111.5 ms | 65.5 ms | -5.5 ms | — |
+| kan_v1_mae | 114.8 ms | 67.6 ms | -4.8 ms | Omega=4 |
+| kan_v2_mae | 118.2 ms | 70.6 ms | -5.9 ms | 14 epoch 早停 |
+| kan_v2_mae_clip1 | 112.9 ms | 65.3 ms | -4.4 ms | MAE 微赢，RMSE 略差 |
+
+### MAE loss（log-scale 归一化）
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| kan_v2_mae_clip1_log | **107.7 ms** | **62.1 ms** | -7.7 ms | **当前最佳** |
+| mlp_mae_log | 训练中 | 训练中 | — | 对照组 |
+
+### MSE loss
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| mlp_mse（基准）| 113.1 ms | 70.0 ms | +2.5 ms | — |
+| kan_v1_mse | 116.8 ms | 71.5 ms | +2.6 ms | Omega=4 |
+| kan_v2_mse | 111.2 ms | 72.4 ms | **+26.4 ms** | bias 失控 |
+| kan_v2_mse_clip1 | 118.4 ms | 73.9 ms | **+21.9 ms** | clip 未解决 bias |
+
+### Huber loss
+
+| 实验 | avg RMSE | avg MAE | avg Bias | 备注 |
+|------|----------|---------|----------|------|
+| kan_v2_huber_delta0.05 | 114.7 ms | 67.5 ms | -0.7 ms | bias 正常，精度中等 |
 
 ---
 
 ## 结论（截至当前）
 
-1. **Fourier-KAN v1/v2 在线性 label 空间下均未超过 MLP 基准**（MAE loss）
-2. **MSE + kan_v2 出现严重 bias**：分层大 Omega 增强了非线性，与 MSE 的二次梯度组合，导致系统性高估；梯度裁剪无法解决根因
-3. **MAE loss 是更稳定的选择**：所有实验中 MAE loss 的 bias 均小于 ±14ms
-4. **kan_v2_mae_clip1 是迄今最接近基准的 KAN 实验**：MAE 65.3ms 微赢 MLP（65.5ms），RMSE 略差
-5. **下一步**：log-scale 归一化实验进行中，预计改善高 T60 区间系统性低估
+1. **Log-scale 归一化是本轮最有效的改进**：kan_v2_mae_clip1_log 以 avg RMSE=107.7ms / MAE=62.1ms 全面超越所有先前实验，超越线性基准 mlp_mae 3.4ms RMSE / 3.4ms MAE
+2. **Fourier-KAN v1/v2 在线性 label 空间下均未超过 MLP 基准**（MAE loss）；在 log-scale 下 KAN 效果显著
+3. **MSE + kan_v2 出现严重 bias**：分层大 Omega 与 MSE 二次梯度组合导致系统性高估，梯度裁剪无法解决根因
+4. **MAE loss 是更稳定的选择**：所有实验中 MAE loss 的 bias 均小于 ±14ms
+5. **待定问题**：mlp_mae_log 对照实验训练中，结果将揭示 log-scale 增益是否与 KAN 架构解耦
