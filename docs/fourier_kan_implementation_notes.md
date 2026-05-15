@@ -4,6 +4,72 @@
 
 ---
 
+## MultiStatsPool —— T60 head 的输入聚合算子
+
+`MultiStatsPool` 是 MLP head 和 Fourier-KAN head 共用的"时间维统计聚合"模块，负责把 TSCB 输出的时频特征压缩成定长向量送给后续回归头。它是整条 head 流水线的第一步，理解它才能理解后面 proj/KAN 的输入维度从哪儿来。
+
+### 操作做了什么
+
+输入是 TSCB 输出的 4D 特征 `out_5: (B, C=64, F=101, T=641)`。`MultiStatsPool` 本身只接受 3D，所以**外层先做频率维平均**再调用它：
+
+```
+(B, 64, 101, 641)              ← TSCB 输出
+   │  x.mean(dim=2)             ← 频率维等权平均（T60 与频率无关）
+   ▼
+(B, 64, 641)                   ← MultiStatsPool 的输入
+   │  MultiStatsPool(dim=-1)
+   ▼
+(B, 192)                       ← 64 × 3 的拼接向量，送给 proj/FC
+```
+
+`MultiStatsPool` 在 `dim=-1`（时间维 T=641）上同时算 3 个统计量，再沿特征维 concat：
+
+| 步骤 | 算子 | 输入形状 | 输出形状 |
+|------|------|---------|---------|
+| ① 平均 | `x.mean(dim=-1)` | (B, 64, 641) | (B, 64) |
+| ② 取最大 | `x.amax(dim=-1)` | (B, 64, 641) | (B, 64) |
+| ③ 标准差 | `x.std(dim=-1)` | (B, 64, 641) | (B, 64) |
+| ④ 拼接 | `torch.cat([avg, max, std], dim=-1)` | 三个 (B, 64) | (B, 192) |
+
+最终把变长的时间序列压成 `(B, 192)` 的固定长度向量——这正是后续 head 的 `fc_input = bottleneck_dim * 3 = 64 × 3` 写死成 192 的原因。
+
+### 代码（`models/generator_t60.py:22-29`）
+
+```python
+class MultiStatsPool(nn.Module):
+    """聚合 avg + max + std 三种统计量"""
+
+    def forward(self, x, dim=-1):
+        avg     = x.mean(dim=dim)   # (B, C, T) → (B, C)
+        max_val = x.amax(dim=dim)   # (B, C, T) → (B, C)
+        std     = x.std(dim=dim)    # (B, C, T) → (B, C)
+        return torch.cat([avg, max_val, std], dim=-1)  # (B, 3C)
+```
+
+整段没有任何 `nn.Parameter`，是**零参数**的纯 reduce 算子；同样不带 BN/LN，前向不会改变 batch 内样本之间的相对幅度。
+
+### 实现细节
+
+1. **`dim=-1` 默认值**：上游已经把 4D 压成 3D，调用时不用再传 dim。如果未来想换聚合维度，只需改这一处参数即可。
+2. **`x.amax` 而非 `x.max`**：`amax` 直接返回最大值张量；`max` 会返回 `(values, indices)` namedtuple，下游 `torch.cat` 会因为类型不一致报错。
+3. **拼接维 `dim=-1`**：reduce 后形状是 `(B, 64)`，三个一拼是 `(B, 192)`，刚好对齐 head 第一个 Linear 层的 `in_features`。`T60HeadWithPool.__init__` 里写死了 `fc_input = bottleneck_dim * 3`，与这里强耦合——改 pool 数必须同步改 head 输入维。
+4. **`std` 的无偏估计**：默认 `unbiased=True`，分母用 `N-1`；T=641 时和 `1/N` 几乎无差，无需特殊处理。
+5. **训练 / 推理一致**：纯统计算子没有 train/eval 分支，也没有 dropout，所以 `model.eval()` 不影响它的行为。
+
+### 三个统计量对 T60 的物理意义
+
+T60 反映的是 RIR 能量衰减 60 dB 所需的时间，本质是"时间维上的衰减形态"。这三个统计量正好从不同角度刻画形态：
+
+| 统计量 | 反映的特征 | 对 T60 的指示 |
+|--------|-----------|---------------|
+| `mean` | 时间平均能量水平 | 长 T60 → 拖尾长 → 平均能量整体抬升 |
+| `max` | 时间维峰值响应 | 反映直达声 / 强早期反射强度，与 max/avg 比值结合可推断衰减斜率 |
+| `std` | 帧间能量起伏幅度 | 短 T60 → 帧间起伏大、std 大；长 T60 → 起伏被混响"抹平"、std 小 |
+
+只用 `mean`（即 GAP）会丢掉所有形态信息；加上 `max` 和 `std` 后，瞬态峰值和整段波动同时进入 head，是 T60 head 上**参数为零、信息密度高、训练稳定**的 sweet spot。整个项目（MLP head 和 KAN head）都没有动它，迭代只发生在 pool 之后的回归子网络里。
+
+---
+
 ## Fourier-KAN 是什么
 
 普通 MLP 的每一层是：
@@ -68,7 +134,7 @@ FourierKAN(
     hidden_features=64,      # 隐层宽度
     hidden_layers=3,         # 隐层数量
     out_features=1,          # 输出：1 维振幅
-    input_grid_size=1024,    # 第一层 Omega：极大，捕捉音频全频谱
+    input_grid_size=1024,    # 第一层 Omega：极大，捕捉音频全频谱，“大的omega配合1-64的维度变化，充当attention中的position encoding”
     hidden_grid_size=5,      # 后续隐层 Omega：小，精炼压缩
     output_grid_size=3,      # 输出层 Omega（若不用 outermost_linear）
     outermost_linear=False,  # False=输出也用 KAN；True=输出改 Linear
@@ -333,9 +399,9 @@ KAN(32→16, Ω=8)：`16 × 32 × 8 × 2 + 16 = 8,208`
 
 ---
 
-### v2.1：训练稳定性修正（`kan_v2_mae_clip1.yaml`）
+### v2.1：clip_grad_norm 收紧实验（`kan_v2_*_clip1.yaml`）
 
-**问题：** KAN v2 + MAE 训练振荡，早停过早，潜力未充分发挥。
+**问题：** KAN v2 + MAE 训练振荡，最优 ep14 早停 ep29，潜力未充分发挥；KAN v2 + MSE 虽然 RMSE 最低但 bias 高达 +26.4 ms。怀疑 Fourier 权重更新幅度太大、跳过了较优极小值。
 
 **改动（仅 `train.py` 一处 + 新增 YAML）：**
 
@@ -349,17 +415,97 @@ torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
 
 同时在 `parse_args()` 和 YAML 读取中增加了 `clip_grad_norm` 参数，默认值仍为 5.0 以保持向后兼容。
 
-**新配置：** `configs/t60_single/kan_v2_mae_clip1.yaml`
+**新配置（loss 唯一变量；其余字段与对应 v2 完全一致）：**
 
-关键字段：`loss: mae` + `clip_grad_norm: 1.0`（从 5.0 收紧到 1.0）。
+| 文件 | loss | clip_grad_norm |
+|------|------|----------------|
+| `kan_v2_mae_clip1.yaml` | mae | 1.0 |
+| `kan_v2_mse_clip1.yaml` | mse | 1.0 |
 
 **运行命令：**
 
 ```bash
 ./train-and-test.sh -c configs/t60_single/kan_v2_mae_clip1.yaml -g 0,1
+./train-and-test.sh -c configs/t60_single/kan_v2_mse_clip1.yaml -g 2,3
 ```
 
-**预期：** 收紧梯度裁剪后，每步 Fourier 权重更新幅度受限，振荡减小，val loss 能持续下降到更低值；若成功，RMSE 和 bias 应同时优于 KAN v2 MSE。
+**实验结果（4 测试集平均，对照原 v2 与 MLP 基准）：**
+
+| 实验 | RMSE (ms) | MAE (ms) | Pearson r | R² | 平均 bias | 训练长度 |
+|------|----------:|----------:|----------:|----:|----------:|---------:|
+| MLP MAE（基准） | 111.5 | 65.5 | 0.9452 | 0.8923 | -5.5 ms | ep59，best=ep44 |
+| KAN v2 MSE | 111.2 | 72.4 | 0.9484 | 0.8931 | **+26.4 ms** ⚠️ | ep48，best=ep38 |
+| KAN v2 MAE | 118.2 | 70.6 | 0.9379 | 0.8790 | -5.8 ms | ep29，best=**ep14** ⚠️ |
+| **KAN v2 MAE clip1** | **112.91** | **65.33** | **0.9433** | **0.8895** | **+1.5 ms** ✅ | **ep70，best=ep55** ✅ |
+| KAN v2 MSE clip1 | 118.42 | 73.94 | 0.9383 | 0.8785 | +13.3 ms | ep49，best=ep34 |
+
+**关键发现：**
+
+1. **MAE × clip1 是大幅成功**：RMSE 从 118.2 → 112.91（追平 MLP MAE 基准），MAE 从 70.6 → 65.33，bias 从 -5.8 → +1.5 ms（接近无偏）。最优 epoch 从 14 推迟到 55、训练长度从 29 ep 延长到 70 ep，val loss 能持续下降而非早早进入振荡平台。**收紧梯度裁剪解决了 MAE 在 Fourier loss landscape 上的振荡问题**。
+2. **MSE × clip1 反而退化**：RMSE 从 111.2 → 118.42，bias 从 +26.4 → +13.3 ms（虽然 bias 改善但仍系统偏高）。MSE 梯度本身随误差自缩放，已经具备"软着陆"特性，再叠加紧裁剪反而限制了向更优区域的步长。**clip1 不是普适改进，仅与 MAE 互补**。
+3. **MAE × clip1 同时拿下 RMSE/MAE/bias 三项均衡最佳**，是首个能与 MLP MAE 全面竞争的 KAN 配置。
+
+---
+
+### v2.2：log-scale T60 归一化（`*_log.yaml`）
+
+**动机：** T60 标签范围 [0.1, 1.5] s，分布在感知和声学上更接近对数空间——RT60 加倍（0.2→0.4 vs 1.0→1.2）的感知差异并不线性。线性 min-max 归一化让模型在 [0.5, 1.5] 区间内分配过多分辨率，而对短混响（0.1~0.3 s）压缩过度。改成 log-scale 可让损失在所有 T60 量级上对相对误差更均匀，理论上对 KAN 这种基于周期函数的回归头尤其友好（输入 embedding 与目标更易匹配 Fourier 基的尺度）。
+
+**改动（`dataset.py` + train/test argparse + 两个新 YAML）：**
+
+`T60Normalizer` 增加 `log_scale` 标志（默认 `False`，向后兼容）：
+
+```python
+# log_scale=True 时
+norm   = (log(T60) - log(t60_min)) / (log(t60_max) - log(t60_min))
+denorm = exp(norm * (log(t60_max) - log(t60_min)) + log(t60_min))
+```
+
+`train.py` / `test.py` 增加 `--log_scale` flag，从 YAML 的 `data.log_scale` 读取。归一化空间内的 loss 计算不变（仍是 `mae(norm_pred, norm_target)`），只是"归一化"本身换成对数尺度。
+
+**新配置（log_scale 是唯一新增变量）：**
+
+| 文件 | head | loss | clip_grad_norm | log_scale |
+|------|------|------|----------------|-----------|
+| `mlp_mae_log.yaml` | MLP | mae | 1.0 | true |
+| `kan_v2_mae_clip1_log.yaml` | KAN v2 | mae | 1.0 | true |
+
+**运行命令：**
+
+```bash
+./train-and-test.sh -c configs/t60_single/mlp_mae_log.yaml          -g 0,1
+./train-and-test.sh -c configs/t60_single/kan_v2_mae_clip1_log.yaml -g 2,3
+```
+
+**实验结果（4 测试集平均）：**
+
+| 实验 | RMSE (ms) | MAE (ms) | Pearson r | R² | 平均 bias | 训练长度 |
+|------|----------:|----------:|----------:|----:|----------:|---------:|
+| MLP MAE（线性基准） | 111.5 | 65.5 | 0.9452 | 0.8923 | -5.5 ms | ep59 / best=ep44 |
+| MLP MAE log | 121.88 | 73.99 | 0.9355 | 0.8711 | +8.7 ms | ep32 / best=ep27 ⚠️ |
+| KAN v2 MAE clip1（线性） | 112.91 | 65.33 | 0.9433 | 0.8895 | +1.5 ms | ep70 / best=ep55 |
+| **KAN v2 MAE clip1 log** | **107.70** | **62.14** | **0.9488** | **0.8996** | -7.7 ms | ep50 / best=ep35 ✅ |
+
+各 test 集 RMSE / bias 拆分（KAN v2 MAE clip1 log）：
+
+| 测试集 | RMSE (ms) | MAE (ms) | bias (ms) | r |
+|-------|----------:|---------:|----------:|----:|
+| test1 | 101.63 | 60.08 | -5.47 | 0.9545 |
+| test2 | 110.55 | 64.64 | -12.96 | 0.9468 |
+| test3 | 107.53 | 61.13 | -4.56 | 0.9492 |
+| test4 | 111.10 | 62.71 | -7.69 | 0.9448 |
+
+**关键发现：**
+
+1. **log × KAN v2 MAE clip1 是当前所有实验的最优**：RMSE 107.70 ms，MAE 62.14 ms，r 0.9488，R² 0.8996，全部 4 个测试集都低于 112 ms。比 MLP MAE 基准 RMSE 降低 3.4%、MAE 降低 5.1%。bias -7.7 ms 略偏低但完全在可接受范围。
+2. **log × MLP 反而退化**：RMSE 从 111.5 → 121.88（+10.4 ms），MAE 从 65.5 → 74.0，r 从 0.9452 跌到 0.9355，且只训练到 ep32 就早停。**说明 log-scale 不是普适增益**——对结构已经足够的 MLP 来说，引入对数变换扭曲了原本均匀的 [0.1, 1.5] s 标签分布、放大了短 T60 的相对损失权重，反而让训练难以收敛。
+3. **log 与 KAN 存在协同效应**：
+   - KAN 头基于 cos/sin 基函数，输出沿目标空间是周期性、非单调局部敏感的。线性归一化把短混响（0.1~0.3 s 占输入空间 14%）压在很窄的范围内，KAN 的 Fourier 系数难以在该区域形成有效拟合；
+   - log-scale 把短混响在归一化空间中占的区间扩大到 ~40%，让 Fourier 基有足够的"周期"覆盖小 T60 的非线性区；
+   - 同时长混响（1.0~1.5 s）被压缩到 ~22%，对应 RIR 已经趋同的物理事实——这种重新分配恰好与 KAN 的归纳偏置匹配。
+4. **clip1 + log 是叠加增益**：单独 clip1 让 RMSE 从 118.2 → 112.91；再叠加 log 进一步降到 107.70。两个改动互不冲突，说明它们针对的是不同问题（前者是优化稳定性，后者是标签空间重排）。
+
+**结论：当前 KAN T60 head 的最佳配方是 `kan_v2 + MAE loss + clip_grad_norm=1.0 + log-scale 归一化`。** 此配置首次稳定超过 MLP 基准，是 v1 → v2 → v2.1 → v2.2 全链路改造的终点。
 
 ---
 
@@ -370,7 +516,7 @@ torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
 | `mlp_mse.yaml` | MLP | MSE | — | 已完成 |
 | `mlp_mae.yaml` | MLP | MAE | — | 已完成（**当前基准**） |
 | `mlp_huber.yaml` | MLP | Huber | — | 已完成 |
-| `mlp_mae_log.yaml` | MLP | MAE | — | 待运行（log-scale 对照组） |
+| `mlp_mae_log.yaml` | MLP | MAE | — | 已完成（log-scale 反而退化，见 v2.2） |
 | `kan_mse.yaml` | KAN v1 | MSE | 全层 Ω=4 + Tanh | 已完成，存档 |
 | `kan_mae.yaml` | KAN v1 | MAE | 全层 Ω=4 + Tanh | 已完成，存档 |
 | `kan_huber.yaml` | KAN v1 | Huber | 全层 Ω=4 + Tanh | 已完成，存档 |
@@ -379,7 +525,7 @@ torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
 | `kan_v2_huber_delta0.05.yaml` | KAN v2 | Huber δ=0.05 | 同上 | 已完成 |
 | `kan_v2_mse_clip1.yaml` | KAN v2 | MSE | 同上 + clip_norm=1.0 | 已完成 |
 | `kan_v2_mae_clip1.yaml` | KAN v2 | MAE | 同上 + clip_norm=1.0 | 已完成 |
-| `kan_v2_mae_clip1_log.yaml` | KAN v2 | MAE | 同上 + log-scale 归一化 | **训练中** |
+| `kan_v2_mae_clip1_log.yaml` | KAN v2 | MAE | 同上 + log-scale 归一化 | 已完成（**当前最优**，见 v2.2） |
 
 ---
 
@@ -388,3 +534,20 @@ torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
 - 不要删除 `T60HeadWithPool`（MLP 保留用于对照）
 - 不要删除旧的 `kan_*.yaml`（存档，用于历史对比）
 - 不要在同一轮实验里同时改 loss、Omega、pooling 方式等多个变量
+
+
+>你觉得目前的代码还有可改进的地方吗，为了提升t60估计的能力。
+按“边际收益/改动成本“排序，我觉得最值得试的几个方向
+1. 频率维聚合换掉 x.mean(dim=2）（首选，成本极低）
+pool，新增参数≤ 1k，物理依据强。这是我最推荐的下一步。
+2.用 CCC loss 替代 MAE，针对当前 bias 偏低的问题
+H_y)2）同时惩罚相关性差和均值偏移，对消除系统偏置直接有效；只改 loss一行，改动成本极低。
+3. SpecAugment 收窄 unseen noise 的鲁棒性 gap
+~10）
+dataset.py 加 ~20 行就能跑, 对 KAN+log 这种已经在拟合得不错的配置最适合用增强榨潜力。
+4.多任务:主头 T60+辅头预测每倍频程 T60或EDC斜率
+和长 T60段的精度都有帮助，但代码量较大（dataset 需要算per-band 标签）。
+主要权衡: 1 和2是“小改动/快验证”3是中等改动，预期对鲁棒性最直接；4是大改动但天花板最高。建议先按1+2~3顺序救单变量消融，4
+留作论文级别再上。要不要先从频率维聚合那个开始？
+Herded for 46s
+换成可学习权重做消融。（disable recaps in /config）
