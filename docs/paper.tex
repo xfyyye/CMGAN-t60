@@ -318,7 +318,7 @@ families:
 % =====================================================================
 
 This section describes the proposed single-task $T_{60}$ estimation
-network. As illustrated in Fig.~\ref{fig:overall} (placeholder), the
+network. As illustrated in Fig.~\ref{fig:overall}, the
 network is composed of three sub-blocks: (i) a complex-spectrum
 \emph{feature encoder} that turns the noisy reverberant waveform into a
 high-dimensional time--frequency representation; (ii) a dual-path
@@ -331,8 +331,7 @@ this design choice is discussed in Section~\ref{sec:method:loss}.
 
 \begin{figure*}[t]
   \centering
-  % TODO: replace with the actual block diagram exported from the codebase.
-  \includegraphics[width=0.95\textwidth]{figs/overall_architecture.pdf}
+  \includegraphics[width=0.95\textwidth]{figs/overall_architecture.png}
   \caption{Overview of the proposed Conformer-based $T_{60}$ estimation
   network with a Fourier-KAN regression head. Complex STFT features of
   the noisy reverberant utterance are processed by a dense convolutional
@@ -527,7 +526,7 @@ shape of the mapping from pooled bottleneck statistics to $T_{60}$.
 
 The pooled embedding $\mathbf{e}\in\mathbb{R}^{192}$ is mapped to the
 final estimate $\hat{T}_{60}$ by the Fourier-KAN head, depicted
-in Fig.~\ref{fig:head} (placeholder). The head is composed of a linear
+in Fig.~\ref{fig:head}. The head is composed of a linear
 projection, a stack of two Fourier-KAN layers and a final linear output.
 Each step is described below.
 
