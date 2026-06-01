@@ -11,7 +11,7 @@ T60 head is configurable via `t60_head_type`:
 
 import torch
 import torch.nn as nn
-from models.generator import DenseEncoder, TSCB
+from models.generator import DenseEncoder, TSCB, MaskDecoder, ComplexDecoder
 from models.fourier_kan import FourierKANBlock
 
 
@@ -367,3 +367,158 @@ class TSCNet_T60Estimator_2TSCB(nn.Module):
         out_3 = self.TSCB_2(out_2)
 
         return self.t60_head(out_3)
+
+
+# ─────────────────────────────────────────────────────────────────
+# Multi-task models: KAN T60 head + enhancement decoders
+# ─────────────────────────────────────────────────────────────────
+
+class TSCNet_KAN_MultiTask(nn.Module):
+    """KAN-head multi-task model: denoise + T60 estimation (4 TSCB).
+
+    Field names match TSCNet_MultiTask so GradAngleProbe works unchanged:
+        dense_encoder / TSCB_1 / TSCB_2 / TSCB_3 / TSCB_4 / mask_decoder
+        / complex_decoder / t60_head
+
+    forward returns (final_real, final_imag, t60_pred).
+    """
+
+    def __init__(
+        self,
+        num_channel=64,
+        num_features=201,
+        t60_head_type="fourier_kan",
+        t60_hidden_dim=128,
+        t60_dropout=0.3,
+        t60_fourier_proj_dim=64,
+        t60_fourier_hidden_dims=(32, 16),
+        t60_fourier_first_num_frequencies=16,
+        t60_fourier_hidden_num_frequencies=8,
+        t60_fourier_dropout=0.1,
+        t60_out_activation="sigmoid",
+    ):
+        super().__init__()
+        self.dense_encoder = DenseEncoder(in_channel=3, channels=num_channel)
+
+        self.TSCB_1 = TSCB(num_channel=num_channel)
+        self.TSCB_2 = TSCB(num_channel=num_channel)
+        self.TSCB_3 = TSCB(num_channel=num_channel)
+        self.TSCB_4 = TSCB(num_channel=num_channel)
+
+        self.mask_decoder = MaskDecoder(
+            num_features, num_channel=num_channel, out_channel=1
+        )
+        self.complex_decoder = ComplexDecoder(num_channel=num_channel)
+
+        self.t60_head = build_t60_head(
+            head_type=t60_head_type,
+            num_channel=num_channel,
+            hidden_dim=t60_hidden_dim,
+            dropout=t60_dropout,
+            fourier_proj_dim=t60_fourier_proj_dim,
+            fourier_hidden_dims=t60_fourier_hidden_dims,
+            fourier_first_num_frequencies=t60_fourier_first_num_frequencies,
+            fourier_hidden_num_frequencies=t60_fourier_hidden_num_frequencies,
+            fourier_dropout=t60_fourier_dropout,
+            out_activation=t60_out_activation,
+        )
+
+    def forward(self, x):
+        """
+        参数:
+            x: (B, 2, T, F) 复数STFT [real, imag]，已 permute
+        返回:
+            final_real: (B, 1, F, T) 增强后的实部
+            final_imag: (B, 1, F, T) 增强后的虚部
+            t60_pred:   (B,) 归一化T60预测 [0, 1]
+        """
+        mag = torch.sqrt(x[:, 0, :, :] ** 2 + x[:, 1, :, :] ** 2).unsqueeze(1)
+        noisy_phase = torch.angle(
+            torch.complex(x[:, 0, :, :], x[:, 1, :, :])
+        ).unsqueeze(1)
+        x_in = torch.cat([mag, x], dim=1)
+
+        out_1 = self.dense_encoder(x_in)
+        out_2 = self.TSCB_1(out_1)
+        out_3 = self.TSCB_2(out_2)
+        out_4 = self.TSCB_3(out_3)
+        out_5 = self.TSCB_4(out_4)
+
+        t60_pred = self.t60_head(out_5)
+
+        mask = self.mask_decoder(out_5)
+        out_mag = mask * mag
+
+        complex_out = self.complex_decoder(out_5)
+        mag_real = out_mag * torch.cos(noisy_phase)
+        mag_imag = out_mag * torch.sin(noisy_phase)
+        final_real = mag_real + complex_out[:, 0, :, :].unsqueeze(1)
+        final_imag = mag_imag + complex_out[:, 1, :, :].unsqueeze(1)
+
+        return final_real, final_imag, t60_pred
+
+
+class TSCNet_KAN_MultiTask_2TSCB(nn.Module):
+    """KAN-head multi-task model (2 TSCB)."""
+
+    def __init__(
+        self,
+        num_channel=64,
+        num_features=201,
+        t60_head_type="fourier_kan",
+        t60_hidden_dim=128,
+        t60_dropout=0.3,
+        t60_fourier_proj_dim=64,
+        t60_fourier_hidden_dims=(32, 16),
+        t60_fourier_first_num_frequencies=16,
+        t60_fourier_hidden_num_frequencies=8,
+        t60_fourier_dropout=0.1,
+        t60_out_activation="sigmoid",
+    ):
+        super().__init__()
+        self.dense_encoder = DenseEncoder(in_channel=3, channels=num_channel)
+
+        self.TSCB_1 = TSCB(num_channel=num_channel)
+        self.TSCB_2 = TSCB(num_channel=num_channel)
+
+        self.mask_decoder = MaskDecoder(
+            num_features, num_channel=num_channel, out_channel=1
+        )
+        self.complex_decoder = ComplexDecoder(num_channel=num_channel)
+
+        self.t60_head = build_t60_head(
+            head_type=t60_head_type,
+            num_channel=num_channel,
+            hidden_dim=t60_hidden_dim,
+            dropout=t60_dropout,
+            fourier_proj_dim=t60_fourier_proj_dim,
+            fourier_hidden_dims=t60_fourier_hidden_dims,
+            fourier_first_num_frequencies=t60_fourier_first_num_frequencies,
+            fourier_hidden_num_frequencies=t60_fourier_hidden_num_frequencies,
+            fourier_dropout=t60_fourier_dropout,
+            out_activation=t60_out_activation,
+        )
+
+    def forward(self, x):
+        mag = torch.sqrt(x[:, 0, :, :] ** 2 + x[:, 1, :, :] ** 2).unsqueeze(1)
+        noisy_phase = torch.angle(
+            torch.complex(x[:, 0, :, :], x[:, 1, :, :])
+        ).unsqueeze(1)
+        x_in = torch.cat([mag, x], dim=1)
+
+        out_1 = self.dense_encoder(x_in)
+        out_2 = self.TSCB_1(out_1)
+        out_3 = self.TSCB_2(out_2)
+
+        t60_pred = self.t60_head(out_3)
+
+        mask = self.mask_decoder(out_3)
+        out_mag = mask * mag
+
+        complex_out = self.complex_decoder(out_3)
+        mag_real = out_mag * torch.cos(noisy_phase)
+        mag_imag = out_mag * torch.sin(noisy_phase)
+        final_real = mag_real + complex_out[:, 0, :, :].unsqueeze(1)
+        final_imag = mag_imag + complex_out[:, 1, :, :].unsqueeze(1)
+
+        return final_real, final_imag, t60_pred

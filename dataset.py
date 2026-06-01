@@ -277,3 +277,128 @@ def create_test_loader(
         num_workers=num_workers, collate_fn=collate_fn,
         pin_memory=True,
     )
+
+
+# ─── 多任务数据集 (denoise + T60) ─────────────────────────────────
+
+class CMGANT60MultiTaskDataset(CMGANT60Dataset):
+    """多任务版本: 同时返回含噪混响 (输入) 和纯混响 (去噪 target)。
+
+    返回:
+        noisy_spec:  (2, T, F) 含噪混响 STFT
+        clean_spec:  (2, T, F) 纯混响 STFT (即 {name}_denoised.wav)
+        noisy_wav:   (T_wav,) 能量归一化后的含噪混响波形
+        clean_wav:   (T_wav,) 同系数归一化后的纯混响波形 (供时域 loss 使用)
+        t60 / t60_raw / snr / sample_name 同单任务
+    """
+
+    def __getitem__(self, idx):
+        dirname = self.samples[idx]
+        dirpath = os.path.join(self.split_dir, dirname)
+        t60, snr = parse_sample_name(dirname)
+
+        # 含噪混响 (模型输入)
+        noisy_path = os.path.join(dirpath, f'{dirname}.wav')
+        noisy_wav = self._load_audio(noisy_path)
+        noisy_wav = self._ensure_audio_length(noisy_wav, noisy_path)
+
+        # 纯混响 (去噪 target). 训练集要求该文件必须存在；缺失时显式报错以避免静默零样本。
+        clean_path = os.path.join(dirpath, f'{dirname}_denoised.wav')
+        if not os.path.exists(clean_path):
+            raise FileNotFoundError(
+                f'多任务训练需要纯混响 target，但缺失: {clean_path}'
+            )
+        clean_wav = self._load_audio(clean_path)
+        clean_wav = self._ensure_audio_length(clean_wav, clean_path)
+
+        # 能量归一化 (noisy 和 clean 共用同一系数，保持相对幅度关系)
+        c = torch.sqrt(noisy_wav.size(-1) / (torch.sum(noisy_wav ** 2.0, dim=-1) + 1e-8))
+        noisy_wav = noisy_wav * c
+        clean_wav = clean_wav * c
+
+        noisy_spec = self._wav_to_complex_stft(noisy_wav)  # (2, T, F)
+        clean_spec = self._wav_to_complex_stft(clean_wav)
+
+        return {
+            'noisy_spec': noisy_spec,
+            'clean_spec': clean_spec,
+            'noisy_wav': noisy_wav,
+            'clean_wav': clean_wav,
+            't60': torch.tensor(self.t60_normalizer(t60), dtype=torch.float32),
+            't60_raw': torch.tensor(t60, dtype=torch.float32),
+            'snr': torch.tensor(snr, dtype=torch.float32),
+            'sample_name': dirname,
+        }
+
+
+def collate_fn_multitask(batch):
+    """多任务 collate：在单任务基础上多打包 clean_spec / noisy_wav / clean_wav。"""
+    max_t = max(item['noisy_spec'].shape[1] for item in batch)
+    max_f = max(item['noisy_spec'].shape[2] for item in batch)
+
+    result = {}
+    for key in ('noisy_spec', 'clean_spec'):
+        tensors = []
+        for item in batch:
+            t = item[key]
+            pad_t = max_t - t.shape[1]
+            pad_f = max_f - t.shape[2]
+            if pad_t > 0 or pad_f > 0:
+                t = torch.nn.functional.pad(t, (0, pad_f, 0, pad_t))
+            tensors.append(t)
+        result[key] = torch.stack(tensors)
+
+    for key in ('noisy_wav', 'clean_wav'):
+        max_len = max(item[key].shape[0] for item in batch)
+        tensors = []
+        for item in batch:
+            t = item[key]
+            if t.shape[0] < max_len:
+                t = torch.nn.functional.pad(t, (0, max_len - t.shape[0]))
+            tensors.append(t)
+        result[key] = torch.stack(tensors)
+
+    for key in ('t60', 't60_raw', 'snr'):
+        result[key] = torch.stack([item[key] for item in batch])
+
+    result['sample_name'] = [item['sample_name'] for item in batch]
+    return result
+
+
+def create_multitask_dataloaders(
+    dataset_root=DEFAULT_DATASET_ROOT,
+    n_fft=400,
+    hop_length=100,
+    batch_size=8,
+    num_workers=4,
+    audio_length=4.0,
+    target_sr=16000,
+    t60_range=(0.1, 1.5),
+    log_scale=False,
+    pin_memory=True,
+):
+    common = dict(
+        dataset_root=dataset_root,
+        n_fft=n_fft,
+        hop_length=hop_length,
+        audio_length=audio_length,
+        target_sr=target_sr,
+        t60_range=t60_range,
+        log_scale=log_scale,
+    )
+
+    train_ds = CMGANT60MultiTaskDataset(split='train', **common)
+    eval_ds = CMGANT60MultiTaskDataset(split='eval', **common)
+
+    train_loader = DataLoader(
+        train_ds, batch_size=batch_size, shuffle=True,
+        num_workers=num_workers, collate_fn=collate_fn_multitask,
+        pin_memory=pin_memory, drop_last=True,
+    )
+    eval_loader = DataLoader(
+        eval_ds, batch_size=batch_size, shuffle=False,
+        num_workers=num_workers, collate_fn=collate_fn_multitask,
+        pin_memory=pin_memory,
+    )
+
+    return train_loader, eval_loader
