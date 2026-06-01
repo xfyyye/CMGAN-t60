@@ -285,6 +285,13 @@ def train(args):
                 probe_metrics = probe.measure(denoise_loss, t60_loss, scaler=scaler)
                 if use_swanlab:
                     swanlab_run.log(probe_metrics, step=global_step)
+                # 同时打印到 stdout，方便 tail -f nohup.log 直接看冲突情况
+                probe_parts = [
+                    f'{g}:cos={probe_metrics[f"grad/{g}/cos"]:+.3f},r={probe_metrics[f"grad/{g}/ratio_d_over_t"]:.2f}'
+                    for g in probe.groups.keys()
+                ]
+                sys.stdout.write(f'\n[probe step={global_step}] ' + ' '.join(probe_parts) + '\n')
+                sys.stdout.flush()
 
             scaler.scale(scaled_loss).backward()
 
