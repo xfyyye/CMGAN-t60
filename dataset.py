@@ -394,11 +394,13 @@ def create_multitask_dataloaders(
         train_ds, batch_size=batch_size, shuffle=True,
         num_workers=num_workers, collate_fn=collate_fn_multitask,
         pin_memory=pin_memory, drop_last=True,
+        timeout=120, persistent_workers=(num_workers > 0),
     )
     eval_loader = DataLoader(
         eval_ds, batch_size=batch_size, shuffle=False,
         num_workers=num_workers, collate_fn=collate_fn_multitask,
         pin_memory=pin_memory,
+        timeout=120, persistent_workers=(num_workers > 0),
     )
 
     return train_loader, eval_loader

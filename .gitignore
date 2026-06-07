@@ -8,3 +8,6 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+
+# experiment outputs: keep everything except swanlab internal logs
+swanlog/

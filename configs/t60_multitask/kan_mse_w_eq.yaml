@@ -22,13 +22,13 @@ data:
   t60_max: 1.5
 
 train:
-  batch_size: 32
+  batch_size: 16
   accum_steps: 1
   max_epochs: 100
   lr: 0.0005
   weight_decay: 0.00001
   early_stop_patience: 15
-  num_workers: 16
+  num_workers: 8
   clip_grad_norm: 5.0
 
 test:

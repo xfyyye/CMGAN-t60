@@ -610,6 +610,15 @@ def parse_args():
 
 
 if __name__ == '__main__':
+    import signal
+    def _sig_handler(signum, frame):
+        print(f'\n[SIGNAL] 收到信号: {signum} ({signal.Signals(signum).name})', flush=True)
+        import traceback
+        traceback.print_stack(frame)
+        raise SystemExit(f'killed by signal {signum}')
+    for _s in (signal.SIGTERM, signal.SIGHUP, signal.SIGINT):
+        signal.signal(_s, _sig_handler)
+
     args = parse_args()
 
     if not args.test_only:
