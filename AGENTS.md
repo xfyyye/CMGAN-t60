@@ -1,161 +1,175 @@
-# AGENTS.md — CMGAN T60 混响时间估计
+# AGENTS.md — CMGAN 多任务 T60 估计 + 去噪联合训练
 
-> **分支提示**: 当前代码位于 `exp/single-t60` 分支，已经聚焦为单任务 T60 估计。不要按多任务去噪版本理解本分支；增强 decoder、去噪 loss 和 `test_denoise.py` 已移除。
+> **分支**: `exp/kan-multitask` — 主任务为**多任务联合训练**（T60 估计 + 去噪重建）。
+> 单任务 T60 实验（`configs/t60_single/` + `train.py`）作为**消融对照基线**保留在本分支，不是主线。
 
 ## 项目目标
 
-当前分支 `exp/single-t60` 将开源语音增强框架 CMGAN (Conformer-Based Metric GAN) 适配为 **单任务 T60 混响时间估计** 框架。任务目标是从含噪混响语音中估计 T60 值（0.1~1.5 秒）。
+本分支在 CMGAN（Conformer-Based Metric GAN）backbone 基础上，实验**去噪辅助任务对 T60 估计的影响**：
 
-本分支已移除增强 decoder 和去噪训练路径，不再进行 noisy_reverb → clean_reverb 的辅助任务。
+- **主任务**：从含噪混响语音中估计 T60 混响时间（0.1–1.5 秒）
+- **辅助任务**：去噪重建（noisy_reverb → clean_reverb），作为共享 backbone 的额外监督信号
+- **研究问题**：去噪梯度如何影响共享层特征表征，进而改善 T60 估计精度
 
 ## 架构概览
 
 ```
-原始 CMGAN (TSCNet)          单任务版本 (TSCNet_T60Estimator)
-┌────────────────┐           ┌────────────────┐
-│ DenseEncoder   │           │ DenseEncoder   │ ← 原始代码，未改
-│ (260K params)  │           │ (260K params)  │
-├────────────────┤           ├────────────────┤
-│ TSCB × 4       │           │ TSCB × N       │ ← 原始代码，未改；默认 N=2，可选 N=4
-│ (1.03M params) │           │ (1.03M params) │    双分支 Conformer (time+freq)
-│                │           │       │         │
-│                │           │       ├─────────┤
-│                │           │       │ T60Head │ ← 唯一新增: 33K params
-│                │           │       │ (Sigmoid)│    MultiStatsPool(avg+max+std) → FC
-├────────────────┤           └────────────────┘
-│ MaskDecoder    │           ❌ 已移除
-│ ComplexDecoder │           ❌ 已移除
-└────────────────┘
-Discriminator (GAN)          ❌ 去掉，不需要
+原始 CMGAN (TSCNet)              多任务版本 (TSCNet_KAN_MultiTask_2TSCB)
+┌────────────────┐               ┌────────────────┐
+│ DenseEncoder   │               │ DenseEncoder   │ ← 共享，未改
+│ (260K params)  │               │ (260K params)  │
+├────────────────┤               ├────────────────┤
+│ TSCB × 4       │               │ TSCB × 2       │ ← 共享，双分支 Conformer
+│ (1.03M params) │               │ (516K params)  │
+├────────────────┤               │       │         │
+│ MaskDecoder    │               │  ┌────┴──────┐  │
+│ ComplexDecoder │  →  保留      │  │  T60Head  │  │ ← 新增，FourierKAN，~86K
+└────────────────┘               │  │ (Sigmoid) │  │
+Discriminator (GAN)  ❌ 已移除   │  MaskDecoder   │ ← 保留，去噪辅助任务
+                                 │  ComplexDecoder│
+                                 └────────────────┘
+总参数量：~1,406K（+6.6% vs 单任务 ~1,319K）
 ```
 
-**4 层 TSCB 单任务模型约 1.32M 参数**，默认训练脚本使用 2 层 TSCB 以降低显存和训练时间。
-
-### 维度流 (4 秒音频, 16kHz)
+### 维度流（4 秒音频，16kHz）
 
 ```
 wav (B, 64000)
- → STFT(n_fft=400, hop=100) → (B, 2, 641, 201)  [real, imag]
- → DenseEncoder              → (B, 64, 641, 101)  [频率轴 stride=2 下采样]
- → TSCB × N                  → (B, 64, 641, 101)  [不变，默认 N=2]
- → T60Head: mean(F) → MultiStatsPool(T) → FC(192→128→64→1) → Sigmoid → (B,)
+ → STFT(n_fft=400, hop=100)    → (B, 2, T=641, F=201)
+ → power_compress               → (B, 2, T, F)
+ → [mag, real, imag] cat        → (B, 3, T, F)
+ → DenseEncoder                 → (B, 64, T, F/2=101)   [共享]
+ → TSCB_1, TSCB_2               → (B, 64, T, F/2)       [共享]
+      ├─► T60Head (FourierKAN)  → t60_pred (B,)
+      ├─► MaskDecoder           → mask (B, 1, T, F)
+      └─► ComplexDecoder        → complex_out (B, 2, T, F)
+                                → iSTFT → enhanced wav
 ```
 
-## 关键设计决策
+## 实验配置
 
-| 决策 | 选择 | 原因 |
-|------|------|------|
-| 功率压缩 | **不做** mag^0.3 | 对 T60 回归无意义，Conv2d 第一层可自适应数值范围 |
-| 输入格式 | 原始复数 STFT | 简化数据流，与其他实验保持一致 |
-| 能量归一化 | `c = sqrt(T / Σwav²)` | 沿用 CMGAN 原始设计，保证训练/推理一致 |
-| T60 归一化 | min-max [0.1, 1.5] → [0, 1] | Sigmoid 输出范围匹配 |
-| GAN | **去掉 Discriminator** | T60 回归不需要对抗训练 |
-| Enhancement decoder | **去掉 MaskDecoder/ComplexDecoder** | 单任务分支不保留去噪梯度路径 |
-| 损失函数 | T60 only | 支持 `mse` / `mae` / `huber`，默认 `mse` |
-| AMP | 开启 | Conformer attention O(T²)，4 秒音频需要混合精度 |
-| 梯度累积 | 默认 8 步 | 等效 batch = batch_size × accum_steps，按显存调整 |
+四组多任务实验，通过 α/β 控制去噪/T60 的梯度主导权：
 
-### 显存分析
+| 实验名 | α (denoise) | β (T60) | 设计意图 |
+|---|---|---|---|
+| `w_denoise` | 1.0 | 0.1 | 去噪强监督主导共享层（**最优配置**） |
+| `w_balanced` | 0.5 | 0.5 | 均衡权重 |
+| `w_eq` | 1.0 | 1.0 | 等权基线 |
+| `w_t60` | 0.1 | 1.0 | T60 梯度主导，验证退化情况 |
 
-Conformer 的 self-attention 是 O(T²)：T=641, F=101 时，每个 TSCB 对 (B×101, 641, 64) 做 attention，batch=1 时单层 attention 约 330MB。4 层 × 2(time+freq) = 8 层 attention。
+单任务最优（`single_t60_kan_v2_mae_clip1_log`，RMSE=107.70ms）作为消融基线对照。
 
-**对比其他模型:**
-- Two-stage (GLU-TCM): O(T) 显存，batch=8 无压力
-- CMGAN (Conformer): O(T²) 显存，batch=1 已用 ~15GB
+## 关键实验结论
+
+**T60 估计（四测试集均值）：**
+
+| 模型 | RMSE (ms) ↓ | MAE (ms) ↓ | Pearson r ↑ | R² ↑ |
+|---|---|---|---|---|
+| 单任务（消融基线） | 107.70 | 62.14 | 0.9488 | 0.8996 |
+| w_t60 | 107.84 | 62.79 | 0.9489 | 0.8993 |
+| w_eq | 105.64 | 62.04 | 0.9520 | 0.9032 |
+| w_balanced | 100.28 | 62.12 | 0.9569 | 0.9128 |
+| **w_denoise** | **96.41** | **58.69** | **0.9594** | **0.9195** |
+
+**核心机制**：梯度幅度比 r = ‖g_T60‖/‖g_denoise‖ 是决定因素（r 越小性能越好），梯度方向近似正交（cos≈0，无系统性冲突）。详见 `EXPERIMENT_REPORT.md` 和 `ANALYSIS_GUIDE.md`。
 
 ## 文件说明
 
-| 文件 | 来源 | 说明 |
-|------|------|------|
-| `models/conformer.py` | 原始 CMGAN | Conformer block (attention + FFN + conv module) |
-| `models/generator.py` | 原始 CMGAN | DenseEncoder, TSCB, MaskDecoder, ComplexDecoder |
-| `models/generator_t60.py` | **新增** | TSCNet_T60Estimator = DenseEncoder + TSCB + T60HeadWithPool |
-| `dataset.py` | **新增** | T60_Dataset_v7 数据加载器 (复数 STFT + T60 label) |
-| `train.py` | **新增** | 单任务 T60 训练 (AMP + 梯度累积 + SwanLab) |
-| `test.py` | **新增** | test1-4 评估 (标准T60指标, JSON 与 /compare 兼容) |
-| `utils.py` | 原始 CMGAN | power_compress/uncompress, kaiming_init, LearnableSigmoid |
-| `configs/t60_single/*.yaml` | **新增** | 单任务 T60 实验配置 |
-| `train.sh` | **新增** | 一键训练脚本 |
-| `train-and-test.sh` | **新增** | 一键训练并测试脚本 |
-| `test.sh` | **新增** | 一键测试脚本 |
-| `requirements.txt` | **新增** | Python 依赖 |
+### 多任务主线
+
+| 文件 | 说明 |
+|---|---|
+| `train_multitask.py` | 多任务训练脚本（含 swanlab 日志、梯度探针） |
+| `test_multitask.py` | T60 评估（test1–4，标准指标 + 分 bin） |
+| `test_multitask_denoise.py` | 去噪评估（PESQ / STOI / SI-SDR） |
+| `infer_demo.py` | 推理 demo（生成 noisy/clean/enhanced 三路音频） |
+| `train_multitask.sh` | 多任务训练启动器 |
+| `analyze_gradients.py` | 梯度探针可视化（cos/r 时间序列、分布、分层对比） |
+| `analyze_representations.py` | 表征分析（线性探针、t-SNE、CKA） |
+| `models/generator_t60.py` | `TSCNet_KAN_MultiTask_2TSCB`（多任务）+ `TSCNet_T60Estimator_2TSCB`（单任务） |
+| `dataset.py` | `CMGANT60Dataset`（单任务）/ `CMGANT60MultiTaskDataset`（多任务） |
+| `configs/t60_multitask/*.yaml` | 四组多任务实验配置 |
+| `scripts/` | 各实验训练/测试启动脚本 |
+| `runs/kan_multitask_*/` | 训练权重、日志、测试结果 |
+| `figures/` | 梯度分析和表征分析图表 |
+| `demo_audio/` | 推理 demo 音频样本 |
+| `EXPERIMENT_REPORT.md` | 完整实验报告（含所有指标、梯度分析摘要） |
+| `ANALYSIS_GUIDE.md` | 分析结果解读指南（含图表说明） |
+
+### 消融对照（单任务）
+
+| 文件 | 说明 |
+|---|---|
+| `train.py` / `test.py` | 单任务训练/评估脚本 |
+| `train.sh` / `test.sh` / `train-and-test.sh` | 单任务启动脚本 |
+| `configs/t60_single/*.yaml` | 单任务实验配置 |
+| `runs/single_t60_*/` | 单任务权重和结果（消融基线） |
 
 ## 数据集
 
-**数据集路径配置**: `configs/t60_single/*.yaml` 中的 `data.dataset_root` (23GB)
-
-迁移到新机器时，优先修改 YAML 里的 `data.dataset_root`。运行时也可以用 `-d/--dataset-root` 临时覆盖该路径；`T60_DATASET_ROOT` 只作为兼容环境变量保留。
+数据集路径在 `configs/t60_multitask/*.yaml` 的 `data.dataset_root` 中配置。
 
 ```
-T60_Dataset_v7/
+T60_Dataset_v7_4s/
   train/      40,000 samples
   eval/        5,136 samples
-  test1/       1,080 samples (simulated RIR + seen noise)
-  test2/       1,080 samples (real RIR + seen noise)
-  test3/       1,080 samples (simulated RIR + unseen noise)
-  test4/       1,080 samples (real RIR + unseen noise)
+  test1/       1,080 samples  (仿真 RIR + 已见噪声)
+  test2/       1,080 samples  (真实 RIR + 已见噪声)
+  test3/       1,080 samples  (仿真 RIR + 未见噪声)
+  test4/       1,080 samples  (真实 RIR + 未见噪声)
 ```
 
-每个样本: `speech{id}_reverb_{T60:.3f}_{SNR}dB/` 下有三个 wav (16kHz mono, ~4s)
-- `{name}.wav` — 含噪混响 (模型输入，本分支唯一使用的音频)
-- `{name}_denoised.wav` — 纯混响 (本分支忽略)
-- `{name}_noise.wav` — 噪声分量 (本分支忽略)
+每个样本目录（`speech{id}_reverb_{T60:.3f}_{SNR}dB/`）下：
+- `{name}.wav` — 含噪混响（模型输入）
+- `{name}_denoised.wav` — 纯混响无噪声（去噪任务 target）
+- `{name}_noise.wav` — 噪声分量（不使用）
 
 ## 运行命令
 
-### 训练
+### 多任务训练
+
 ```bash
-conda activate demucs_xxn
-# 推荐用 config 切换实验变量
-./train.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
-./train.sh -c configs/t60_single/mlp_mae.yaml -g 2,3
-./train.sh -c configs/t60_single/mlp_huber.yaml -g 4,5
+# Python 环境（继承 conda base 所有包）
+PYTHON=/mnt/tidal-sh01/usr/chuan/youling/demucs_xxn/bin/python
 
-# 训练后自动测试 test1-test4
-./train-and-test.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
-
-# 临时覆盖 config 中的少量参数
-./train.sh -c configs/t60_single/mlp_mse.yaml -d /path/to/T60_Dataset_v7 -- --batch_size 2
+# 后台启动训练（setsid nohup 完全脱离父进程）
+setsid nohup bash scripts/multitask_kan_w_denoise.sh \
+  > runs/kan_multitask_w_denoise/nohup.log 2>&1 &
 ```
 
-### 测试
+### 多任务测试
+
 ```bash
-./test.sh -c configs/t60_single/mlp_mse.yaml -m runs/single_t60_mlp_mse/best_model.pth -g 0
+# T60 估计评估
+bash scripts/test_multitask_kan_w_denoise.sh -g 0
+
+# 去噪质量评估
+bash scripts/test_multitask_denoise_kan_w_denoise.sh -g 0
 ```
 
-### 训练超参数 (默认)
+### 消融对照（单任务）
 
-默认配置文件位于 `configs/t60_single/`，训练超参数优先在 YAML 中维护。
+```bash
+bash train.sh -c configs/t60_single/kan_v2_mae_clip1_log.yaml -g 0,1
+bash test.sh  -c configs/t60_single/kan_v2_mae_clip1_log.yaml \
+              -m runs/single_t60_kan_v2_mae_clip1_log/best_model.pth -g 0
+```
 
-| 参数 | 值 | 说明 |
-|------|-----|------|
-| batch_size | 4 | 受 Conformer 显存限制，按机器显存调整 |
-| accum_steps | 8 | 默认等效 batch=32 |
-| lr | 5e-4 | AdamW |
-| max_epochs | 100 | 配合早停 patience=15 |
-| loss | mse | 可选 mse / mae / huber |
-| audio_length | 4.0 秒 | |
-| n_fft / hop | 400 / 100 | CMGAN 原始参数 |
+### 分析脚本
 
-## 评估指标
+```bash
+# 梯度探针可视化（无需 GPU）
+python analyze_gradients.py --out_dir figures/gradient
 
-对 test1-test4 各跑一次，输出:
-- 总体: RMSE(ms), MAE(ms), Bias(ms), Pearson r, R², Mean Rel Error(%)
-- T60 分组: bins [0.1-0.3, 0.3-0.5, ..., 1.3-1.5] 每组的 RMSE/MAE/r
-- SNR 分组: [-5, 0, 5, 10, 15, 20] dB 每组的 RMSE/MAE/r
+# 表征分析（需要 GPU）
+python analyze_representations.py --gpu 2 --n_samples 500 \
+  --out_dir figures/representation
+```
 
-结果 JSON 保存到 `runs/{experiment}/test/`，格式与 `/compare` skill 的 Format B 兼容。
+## 注意事项
 
-## 与其他实验的关系
-
-本项目是 `/adapt-t60` skill 的一次执行实例。该 skill 定义了将任意语音增强框架适配为 T60 估计的标准化流程。
-
-已有实验对比文档在原实验环境中维护；迁移时按实际位置同步或另行指定。
-
-## 已知问题
-
-1. **显存**: 4 秒音频 + Conformer attention 导致 batch_size 受限。如需更大 batch，可：
-   - 缩短音频 `--audio_length 2.0` (原始 CMGAN 用 2 秒)
-   - 减少 TSCB 层数 (4→2)
-   - 使用更大显存的 GPU
-2. **STFT 参数差异**: CMGAN 用 n_fft=400, hop=100；其他实验多用 n_fft=320, hop=160。频率分辨率不同，结果不直接横向对比。
+- **GPU 限制**：GPU 0/1 NVLink 异常（传输耗时 ~636ms），多任务实验用 GPU 2/3
+- **Python 环境**：`/mnt/tidal-sh01/usr/chuan/youling/demucs_xxn/bin/python`
+- **SwanLab 项目**：`T60_KAN_MultiTask`，账号 `xfyyye`
+- **长时训练**：务必用 `setsid nohup` 启动，避免进程被工具超时 kill
+- **显存**：Conformer attention O(T²)，batch=16 需要约 40GB；OOM 时减小 batch_size 或缩短 audio_length

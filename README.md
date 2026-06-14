@@ -1,20 +1,32 @@
-# CMGAN-T60 — Blind T60 Reverberation Time Estimation
+# CMGAN-T60 Multi-task — Blind T60 Estimation with Denoising Auxiliary Task
 
-Adapts the [CMGAN](https://github.com/ruizhecao96/CMGAN) (Conformer-Based Metric-GAN) speech-enhancement backbone into a **single-task T60 regression framework**. The enhancement decoder and discriminator are removed; only the DenseEncoder + TSCB acoustic backbone is kept, with a lightweight `T60HeadWithPool` regression head added on top.
+Adapts the [CMGAN](https://github.com/ruizhecao96/CMGAN) (Conformer-Based Metric-GAN) backbone into a **multi-task framework** for joint T60 reverberation time estimation and speech denoising. The GAN discriminator is removed; the DenseEncoder + TSCB backbone is shared between a FourierKAN T60 regression head and the original mask/complex decoders for denoising.
 
-> **Branch**: `exp/single-t60` — focused exclusively on T60 estimation from noisy reverberant speech. See [`AGENTS.md`](AGENTS.md) for full design decisions.
+> **Branch**: `exp/kan-multitask` — multi-task joint training is the main line; single-task T60 experiments (`configs/t60_single/`) serve as ablation baselines.
 
 ---
 
-## Results (CMGAN\_t60\_2tscb\_v2, 2-TSCB model)
+## Key Results
 
-| Test Set | RMSE (ms) | MAE (ms) | Pearson *r* | R² |
+### T60 Estimation (average over test1–test4)
+
+| Model | RMSE (ms) ↓ | MAE (ms) ↓ | Pearson *r* ↑ | R² ↑ |
 |---|---|---|---|---|
-| test1 — simulated RIR + seen noise | 109.73 | 67.99 | 0.9483 | 0.8961 |
-| test2 — real RIR + seen noise | 118.82 | 75.19 | 0.9383 | 0.8783 |
-| test3 — simulated RIR + unseen noise | 110.50 | 73.92 | 0.9505 | 0.8951 |
-| test4 — real RIR + unseen noise | 113.33 | 73.83 | 0.9448 | 0.8877 |
-| **Average** | **113.10** | **72.73** | **0.9455** | **0.8893** |
+| Single-task (ablation baseline) | 107.70 | 62.14 | 0.9488 | 0.8996 |
+| Multi-task w_t60 (α=0.1, β=1.0) | 107.84 | 62.79 | 0.9489 | 0.8993 |
+| Multi-task w_eq (α=1.0, β=1.0) | 105.64 | 62.04 | 0.9520 | 0.9032 |
+| Multi-task w_balanced (α=0.5, β=0.5) | 100.28 | 62.12 | 0.9569 | 0.9128 |
+| **Multi-task w_denoise (α=1.0, β=0.1)** | **96.41** | **58.69** | **0.9594** | **0.9195** |
+
+w_denoise achieves **−10.5% RMSE** over the single-task baseline with only +6.6% parameter overhead.
+
+### Denoising Quality — w_denoise (average over test1–test4)
+
+| Metric | Noisy Input | Enhanced | Δ |
+|---|---|---|---|
+| PESQ (wb) ↑ | 2.721 | **3.583** | +0.862 |
+| STOI ↑ | 0.847 | **0.937** | +0.090 |
+| SI-SDR (dB) ↑ | 15.91 | **21.83** | +5.92 |
 
 ---
 
@@ -22,40 +34,62 @@ Adapts the [CMGAN](https://github.com/ruizhecao96/CMGAN) (Conformer-Based Metric
 
 ```
 wav (B, 64000)
- → STFT(n_fft=400, hop=100) → (B, 2, 641, 201)  [real, imag]
- → DenseEncoder              → (B, 64, 641, 101)  [F stride=2]
- → TSCB × N                  → (B, 64, 641, 101)  [N=2 or 4]
- → T60HeadWithPool
-     mean(F) → MultiStatsPool(avg+max+std, T) → FC(192→128→64→1) → Sigmoid
- → t60_pred (B,)  [normalized to 0–1]
+ → STFT(n_fft=400, hop=100)  → (B, 2, T=641, F=201)
+ → power_compress             → (B, 2, T, F)
+ → [mag, real, imag] concat   → (B, 3, T, F)
+ → DenseEncoder               → (B, 64, T, F/2=101)  ┐
+ → TSCB_1, TSCB_2             → (B, 64, T, F/2)      ┤ shared backbone
+      ├─► T60Head (FourierKAN) → t60_pred (B,)         ┘ main task
+      ├─► MaskDecoder          → mask (B, 1, T, F)     ┐
+      └─► ComplexDecoder       → complex (B, 2, T, F)  ┘ auxiliary denoising
+                               → iSTFT → enhanced wav
 ```
 
-| Variant | TSCB Layers | Parameters |
-|---|---|---|
-| `TSCNet_T60Estimator` | 4 | ~1.87 M |
-| `TSCNet_T60Estimator_2TSCB` | 2 | ~1.35 M |
+| Component | Parameters |
+|---|---|
+| DenseEncoder | ~260K (shared) |
+| TSCB × 2 | ~516K (shared) |
+| T60Head (FourierKAN) | ~86K |
+| MaskDecoder + ComplexDecoder | ~27K |
+| **Total** | **~1,406K** |
+
+---
+
+## Gradient Probe Analysis
+
+To understand *why* the denoising task improves T60 estimation, we instrument the shared backbone with gradient probes (recorded every 20 steps):
+
+| Experiment | cos mean | neg% | r = ‖g_T60‖/‖g_denoise‖ |
+|---|---|---|---|
+| w_denoise | +0.030 | ~37% | **0.33** |
+| w_balanced | +0.028 | ~41% | 0.89 |
+| w_eq | +0.031 | ~40% | 0.93 |
+| w_t60 | +0.024 | ~42% | 1.83 |
+
+**Finding**: the gradient direction (cos ≈ 0, orthogonal, no conflict) is nearly identical across all runs. What differs is the gradient *magnitude* ratio r. T60 RMSE and r are highly correlated (Pearson r = 0.885): the lower r, the better T60 estimation. When denoising dominates the backbone (r=0.33), its rich supervision drives the encoder to learn fine-grained time-frequency representations that also benefit T60 regression.
+
+See `EXPERIMENT_REPORT.md` and `ANALYSIS_GUIDE.md` for full analysis including linear probing, t-SNE, and CKA.
 
 ---
 
 ## Requirements
 
-- Python ≥ 3.9
-- CUDA 11.8 / 12.x (GPU training)
+- Python ≥ 3.9, CUDA 11.8 / 12.x
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Key dependencies: `torch>=2.0`, `torchaudio>=2.0`, `einops>=0.6`, `scipy>=1.10`, `soundfile>=0.12`, `PyYAML>=6.0`, `swanlab>=0.3` (optional experiment tracking).
+Key dependencies: `torch>=2.0`, `torchaudio>=2.0`, `einops>=0.6`, `scipy>=1.10`, `soundfile>=0.12`, `PyYAML>=6.0`, `swanlab>=0.3` (optional).
 
 ---
 
 ## Dataset
 
-`T60_Dataset_v7` — 23 GB, 16 kHz mono, ~4 s clips:
+`T60_Dataset_v7_4s` — 23 GB, 16 kHz mono, ~4 s clips:
 
 ```
-T60_Dataset_v7/
+T60_Dataset_v7_4s/
   train/      40,000 samples
   eval/        5,136 samples
   test1/       1,080 samples  (simulated RIR + seen noise)
@@ -64,171 +98,136 @@ T60_Dataset_v7/
   test4/       1,080 samples  (real RIR + unseen noise)
 ```
 
-Each sample directory name encodes its label:
-```
-speech000001_reverb_0.214_0dB/   →  T60 = 0.214 s,  SNR = 0 dB
-```
+Each sample directory (`speech{id}_reverb_{T60:.3f}_{SNR}dB/`) contains:
+- `{name}.wav` — noisy reverberant speech (model input)
+- `{name}_denoised.wav` — clean reverberant speech (denoising target)
+- `{name}_noise.wav` — noise component (unused)
 
-Set the path in `configs/t60_single/*.yaml` under `data.dataset_root`, or pass `-d /path/to/T60_Dataset_v7` at runtime.
+Set `data.dataset_root` in `configs/t60_multitask/*.yaml`.
 
 ---
 
 ## Quick Start
 
-### Training
+### Multi-task Training
 
 ```bash
-conda activate demucs_xxn
+PYTHON=/path/to/venv/bin/python
 
-# Single config (GPU 0,1)
-./train.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
-
-# Train + auto-evaluate test1-test4 immediately after
-./train-and-test.sh -c configs/t60_single/mlp_mse.yaml -g 0,1
-
-# Override dataset path without editing YAML
-./train.sh -c configs/t60_single/mlp_mse.yaml -d /path/to/T60_Dataset_v7 -g 0,1
-
-# Pass extra train.py args after --
-./train.sh -c configs/t60_single/mlp_mse.yaml -- --batch_size 2 --accum_steps 16
+# Launch in background (detached from terminal)
+setsid nohup bash scripts/multitask_kan_w_denoise.sh \
+  > runs/kan_multitask_w_denoise/nohup.log 2>&1 &
 ```
 
-Run multiple loss experiments in parallel:
+### Multi-task Evaluation
 
 ```bash
-./train.sh -c configs/t60_single/mlp_mse.yaml   -g 0,1 &
-./train.sh -c configs/t60_single/mlp_mae.yaml   -g 2,3 &
-./train.sh -c configs/t60_single/mlp_huber.yaml -g 4,5 &
+# T60 estimation (test1–4)
+bash scripts/test_multitask_kan_w_denoise.sh -g 0
+
+# Denoising quality (PESQ / STOI / SI-SDR)
+bash scripts/test_multitask_denoise_kan_w_denoise.sh -g 0
 ```
 
-### Evaluation only
+### Ablation — Single-task Baseline
 
 ```bash
-./test.sh -c configs/t60_single/mlp_mse.yaml \
-          -m runs/single_t60_mlp_mse/best_model.pth \
-          -g 0
+bash train.sh -c configs/t60_single/kan_v2_mae_clip1_log.yaml -g 0,1
+bash test.sh  -c configs/t60_single/kan_v2_mae_clip1_log.yaml \
+              -m runs/single_t60_kan_v2_mae_clip1_log/best_model.pth -g 0
+```
+
+### Analysis Scripts
+
+```bash
+# Gradient probe visualisation (no GPU needed)
+python analyze_gradients.py --out_dir figures/gradient
+
+# Representation analysis (GPU required)
+python analyze_representations.py --gpu 0 --n_samples 500 \
+  --out_dir figures/representation
 ```
 
 ---
 
 ## Configuration
 
-All hyperparameters live in `configs/t60_single/*.yaml`. Key fields:
+Multi-task configs live in `configs/t60_multitask/*.yaml`. Key fields:
 
 ```yaml
 experiment:
-  name: single_t60_mlp_mse
-  output_root: runs
+  name: kan_multitask_w_denoise
 
 model:
-  n_tscb: 2           # 2 (faster) or 4 (full CMGAN depth)
+  n_tscb: 2
+  t60_head_type: fourier_kan
 
 data:
-  dataset_root: /path/to/T60_Dataset_v7
-  n_fft: 400
-  hop_length: 100
-  audio_length: 4.0
-  target_sr: 16000
-  t60_min: 0.1
-  t60_max: 1.5
+  dataset_root: /path/to/T60_Dataset_v7_4s
 
 train:
-  batch_size: 4       # adjust for available VRAM
-  accum_steps: 8      # effective batch = batch_size × accum_steps = 32
+  batch_size: 16
+  accum_steps: 1
   max_epochs: 100
   lr: 0.0005
-  weight_decay: 0.00001
   early_stop_patience: 15
-  num_workers: 4
 
 loss:
-  name: mse           # mse | mae | huber
-
-logging:
-  swanlab_project: T60_Estimation
+  alpha: 1.0   # denoise weight
+  beta:  0.1   # T60 weight
 ```
-
----
-
-## Default Hyperparameters
-
-| Parameter | Default | Notes |
-|---|---|---|
-| `batch_size` | 4 | Conformer O(T²) memory limit |
-| `accum_steps` | 8 | Effective batch = 32 |
-| `lr` | 5e-4 | AdamW |
-| `weight_decay` | 1e-5 | AdamW |
-| `max_epochs` | 100 | With early stopping |
-| `early_stop_patience` | 15 | Monitored on val loss |
-| `n_fft` / `hop` | 400 / 100 | ~641 frames @ 4 s / 16 kHz |
-| `audio_length` | 4.0 s | Fixed-length input |
-| T60 range | 0.1 – 1.5 s | Min-max normalized to [0, 1] |
-| Loss | MSE | `mse` / `mae` / `huber` |
 
 ---
 
 ## Output Structure
 
 ```
-runs/{experiment_name}/
-  best_model.pth          # checkpoint with best val loss
-  training_history.json   # per-epoch train/val metrics
-  test/
-    evaluation_results_test{1-4}.json   # per-sample + grouped metrics
-    evaluation_summary.json             # cross-test average
+runs/kan_multitask_{name}/
+  best_model.pth
+  training_history.json
+  nohup_train.log
+  test/                         ← T60 evaluation results
+    evaluation_results_test{1-4}.json
+    evaluation_summary.json
+  test_denoise/                 ← Denoising evaluation results
+    denoise_evaluation.json
+
+figures/
+  gradient/                     ← Gradient probe plots (5 figures)
+  representation/               ← Linear probe, t-SNE, CKA (4 figures)
+
+demo_audio/                     ← Sample noisy / clean / enhanced audio
 ```
-
-Evaluation JSONs are compatible with the `/compare` skill's **Format B**.
-
----
-
-## Evaluation Metrics
-
-For each of test1–test4:
-
-- **Overall**: RMSE (ms), MAE (ms), Bias (ms), Pearson *r*, R², Mean Relative Error (%)
-- **T60 bins**: `[0.1–0.3, 0.3–0.5, …, 1.3–1.5]` s — RMSE / MAE / *r* per bin
-- **SNR groups**: `[-5, 0, 5, 10, 15, 20]` dB — RMSE / MAE / *r* per group
 
 ---
 
 ## File Overview
 
+### Multi-task (main)
+
 | File | Description |
 |---|---|
-| `models/conformer.py` | Conformer block (upstream CMGAN, unmodified) |
-| `models/generator.py` | DenseEncoder + TSCB (upstream CMGAN, unmodified) |
-| `models/generator_t60.py` | `TSCNet_T60Estimator` + `T60HeadWithPool` (new) |
-| `dataset.py` | `T60_Dataset_v7` loader — complex STFT + T60 label |
-| `train.py` | Single-task training loop — AMP + gradient accumulation + SwanLab |
-| `test.py` | test1–test4 evaluation with grouped metrics |
-| `utils.py` | `power_compress`, `kaiming_init`, `LearnableSigmoid` |
-| `configs/t60_single/` | YAML configs for MSE / MAE / Huber experiments |
-| `train.sh` | Training launcher |
-| `train-and-test.sh` | Train then auto-evaluate |
-| `test.sh` | Evaluation-only launcher |
+| `train_multitask.py` | Multi-task training loop with gradient probes and SwanLab logging |
+| `test_multitask.py` | T60 evaluation — test1–4, standard metrics + T60/SNR bins |
+| `test_multitask_denoise.py` | Denoising evaluation — PESQ / STOI / SI-SDR |
+| `infer_demo.py` | Inference demo — generates noisy / clean / enhanced audio |
+| `analyze_gradients.py` | Gradient probe visualisation (cos/r time-series, histograms, bar charts) |
+| `analyze_representations.py` | Representation analysis (linear probe, t-SNE, CKA) |
+| `models/generator_t60.py` | `TSCNet_KAN_MultiTask_2TSCB` (multi-task) + `TSCNet_T60Estimator_2TSCB` (ablation) |
+| `dataset.py` | `CMGANT60MultiTaskDataset` (multi-task) / `CMGANT60Dataset` (ablation) |
+| `configs/t60_multitask/` | Four multi-task experiment configs |
+| `scripts/` | Per-experiment train / test launch scripts |
+| `EXPERIMENT_REPORT.md` | Full experiment report with all metrics and gradient analysis |
+| `ANALYSIS_GUIDE.md` | How to read every analysis figure |
 
----
+### Ablation (single-task)
 
-## Design Notes
-
-| Decision | Choice | Reason |
-|---|---|---|
-| Input | Raw complex STFT (real + imag + mag → 3ch) | Preserves phase information |
-| Energy normalization | `c = sqrt(T / Σwav²)` | Consistent with upstream CMGAN |
-| T60 normalization | Min-max [0.1, 1.5] → [0, 1] | Matches Sigmoid output range |
-| GAN discriminator | **Removed** | Not needed for regression |
-| Enhancement decoder | **Removed** | Single-task branch |
-| AMP | Enabled | Conformer attention is O(T²); 4 s audio needs FP16 |
-| Gradient accumulation | 8 steps (default) | Effective batch = 32 with batch_size=4 |
-
-### Memory Note
-
-Conformer self-attention is O(T²). With T=641 and 4-layer TSCB:
-
-- Each TSCB has 2 attention passes (time + frequency)
-- 4 layers × 2 = 8 attention operations per forward pass
-- GPU memory can be tight; reduce `batch_size` or `--audio_length` if OOM
+| File | Description |
+|---|---|
+| `train.py` / `test.py` | Single-task training / evaluation |
+| `train.sh` / `test.sh` / `train-and-test.sh` | Single-task launchers |
+| `configs/t60_single/` | Single-task experiment configs |
+| `runs/single_t60_*/` | Single-task checkpoints and results |
 
 ---
 
