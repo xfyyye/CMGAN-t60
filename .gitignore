@@ -11,3 +11,5 @@ __pycache__/
 
 # experiment outputs: keep everything except swanlab internal logs
 swanlog/
+
+.claude/

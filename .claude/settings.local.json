@@ -2,7 +2,29 @@
   "permissions": {
     "allow": [
       "Bash(python3 -c \"import json,sys; h=json.load\\(sys.stdin\\); print\\('best val loss:', min\\(e['val_loss'] for e in h['epochs']\\)\\)\")",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(/opt/homebrew/Caskroom/miniconda/base/envs/py310/bin/python *)",
+      "Bash(pip3 install *)",
+      "Bash(git ls-tree *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(git worktree *)",
+      "Bash(cp /Users/xiexinni/CMGAN-t60-grad-probe/train_utils/__init__.py /Users/xiexinni/CMGAN-t60-grad-probe/train_utils/grad_probe.py /tmp/grad_probe_files/)",
+      "Bash(cp /Users/xiexinni/CMGAN-t60-grad-probe/train_utils/__init__.py train_utils/)",
+      "Bash(cp /Users/xiexinni/CMGAN-t60-grad-probe/train_utils/grad_probe.py train_utils/)",
+      "Bash(chmod +x train_multitask.sh scripts/multitask_kan_w_*.sh)",
+      "Bash(python -m py_compile train_multitask.py test_multitask.py models/generator_t60.py dataset.py train_utils/grad_probe.py)",
+      "Bash(python *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git *)",
+      "Bash(grep -nE \"0.54M|0.54\\\\\\\\,M|alpha|\\\\\\\\beta|w_{ri}|\\\\\\\\mathcal\\\\{L\\\\}_\\\\{T|去噪解码分支|多任务相对|1,405,554|目标归一化\" docs/main_zh.md)",
+      "Bash(python3 -c \" *)",
+      "Read(//tmp/**)",
+      "Bash(grep -nE \"^[0-9]+:\\\\s*[A-Z][A-Za-z].{0,60}$\" /tmp/damtl.txt)",
+      "Bash(awk '/\\\\\\\\section\\\\{Proposed method\\\\}/{f=1} f{print NR\": \"$0} /\\\\\\\\bibliographystyle/{if\\(f\\)exit}' docs/main.tex)",
+      "Bash(grep -noE \"\\(Fig\\\\.|Figure|Table\\)[^.]{5,90}\\\\.\" /tmp/noiseaware.txt)",
+      "Bash(grep -noE \"\\(Fig\\\\.|Figure|Table\\)[^.]{5,90}\\\\.\" /tmp/damtl.txt)"
     ]
   }
 }

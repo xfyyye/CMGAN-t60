@@ -35,7 +35,14 @@ from train_utils.grad_probe import GradAngleProbe
 # ─── 多任务损失 (暴露分项 tensor 给梯度探针) ────────────────────────
 
 class MultiTaskLossWithGrads(nn.Module):
-    """alpha * denoise + beta * t60 ，forward 额外返回带 grad 的分项 tensor。"""
+    """alpha * denoise + beta * t60 ，forward 额外返回带 grad 的分项 tensor。
+
+    normalize_loss=True 时，两子损失先各自除以自身的指数移动平均
+    (ema_den / ema_t60)，再按 (alpha, beta) 加权。这样无论原始量级
+    差多少（去噪 ~0.04-0.5，T60 ~5e-4-9e-2），归一化后的两项都 ~O(1)，
+    名义权重 (alpha, beta) 才能干净地控制「哪个任务主导总损失/共享层梯度」。
+    首步 EMA 未初始化时退化为当前值（归一化结果 = 1.0），避免除零/爆炸。
+    """
 
     def __init__(
         self,
@@ -43,6 +50,7 @@ class MultiTaskLossWithGrads(nn.Module):
         w_ri=0.1, w_mag=0.9, w_time=0.2,
         alpha=0.1, beta=1.0,
         t60_loss_type='mse', huber_delta=1.0,
+        normalize_loss=False, ema_decay=0.99,
     ):
         super().__init__()
         if t60_loss_type not in {'mse', 'mae', 'huber'}:
@@ -56,6 +64,12 @@ class MultiTaskLossWithGrads(nn.Module):
         self.beta = beta
         self.t60_loss_type = t60_loss_type
         self.huber_delta = huber_delta
+        self.normalize_loss = normalize_loss
+        self.ema_decay = ema_decay
+        # register_buffer: 随 .to(device) 迁移，且进入 state_dict（可随 ckpt 保存）
+        self.register_buffer('ema_den', torch.tensor(0.0))
+        self.register_buffer('ema_t60', torch.tensor(0.0))
+        self.register_buffer('ema_init', torch.tensor(0.0))   # 0=未初始化, 1=已初始化
 
     def _t60_loss(self, t60_pred, t60_target):
         if self.t60_loss_type == 'mse':
@@ -96,7 +110,32 @@ class MultiTaskLossWithGrads(nn.Module):
 
         denoise_loss = self.w_ri * loss_ri + self.w_mag * loss_mag + self.w_time * loss_time
         t60_loss = self._t60_loss(t60_pred, t60_target)
-        total = self.alpha * denoise_loss + self.beta * t60_loss
+
+        # ── 归一化分支 ──
+        # 用 .detach() 标量更新 EMA（不参与反向图）。
+        # 返回的 denoise_for_probe/t60_for_probe：归一化开启时为归一化张量（供梯度探针测
+        # 归一化损失对参数的梯度）；关闭时即原始 loss，与历史行为一致。
+        if self.normalize_loss:
+            cur_den = denoise_loss.detach()
+            cur_t60 = t60_loss.detach()
+            if self.ema_init.item() == 0.0:
+                self.ema_den.copy_(cur_den)
+                self.ema_t60.copy_(cur_t60)
+                self.ema_init.fill_(1.0)
+            else:
+                d = self.ema_decay
+                self.ema_den.mul_(d).add_((1.0 - d) * cur_den)
+                self.ema_t60.mul_(d).add_((1.0 - d) * cur_t60)
+
+            denoise_n = denoise_loss / (self.ema_den + 1e-8)
+            t60_n = t60_loss / (self.ema_t60 + 1e-8)
+            total = self.alpha * denoise_n + self.beta * t60_n
+            denoise_for_probe = denoise_n
+            t60_for_probe = t60_n
+        else:
+            total = self.alpha * denoise_loss + self.beta * t60_loss
+            denoise_for_probe = denoise_loss
+            t60_for_probe = t60_loss
 
         metrics = {
             'denoise_loss': denoise_loss.item(),
@@ -105,8 +144,13 @@ class MultiTaskLossWithGrads(nn.Module):
             'loss_time': loss_time.item(),
             't60_loss': t60_loss.item(),
             'total_loss': total.item(),
+            'ema_den': self.ema_den.item(),
+            'ema_t60': self.ema_t60.item(),
         }
-        return total, denoise_loss, t60_loss, metrics
+        if self.normalize_loss:
+            metrics['denoise_n'] = denoise_n.item()
+            metrics['t60_n'] = t60_n.item()
+        return total, denoise_for_probe, t60_for_probe, metrics
 
 
 # ─── 早停 ────────────────────────────────────────────────────────
@@ -155,6 +199,10 @@ def train(args):
     print(f'数据集路径: {args.dataset_root}')
     print(f'固定音频长度: {args.audio_length:.2f}s ({int(args.audio_length * args.target_sr)} samples)')
     print(f'多任务权重: alpha(denoise)={args.alpha} beta(t60)={args.beta}')
+    if args.normalize_loss:
+        print(f'损失 EMA 归一化: 开启 (ema_decay={args.ema_decay})；denoise/t60 先除各自 EMA 再加权')
+    else:
+        print('损失 EMA 归一化: 关闭（原始加权 total = alpha*denoise + beta*t60）')
     print(f'梯度探针: 每 {args.probe_log_every} 个 train step 触发一次')
 
     n_gpu = torch.cuda.device_count()
@@ -221,7 +269,8 @@ def train(args):
         w_ri=args.w_ri, w_mag=args.w_mag, w_time=args.w_time,
         alpha=args.alpha, beta=args.beta,
         t60_loss_type=args.loss, huber_delta=args.huber_delta,
-    )
+        normalize_loss=args.normalize_loss, ema_decay=args.ema_decay,
+    ).to(device)
     print(f'T60 loss: {args.loss} | denoise (w_ri, w_mag, w_time)=({args.w_ri}, {args.w_mag}, {args.w_time})')
 
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
@@ -281,6 +330,9 @@ def train(args):
                 scaled_loss = loss / accum_steps
 
             # 梯度探针: 必须在主 backward 之前，借助 retain_graph 不破坏主计算图
+            # criterion 返回的 denoise_loss/t60_loss 已是「归一化后的」张量
+            # （normalize_loss=True 时），因此测得的 cos / norm / ratio 反映
+            # 归一化损失对共享参数的梯度——这正是被 (alpha, beta) 加权进 total 的那部分。
             if probe.should_log(global_step):
                 probe_metrics = probe.measure(denoise_loss, t60_loss, scaler=scaler)
                 if use_swanlab:
@@ -310,9 +362,14 @@ def train(args):
                 optimizer.zero_grad()
 
             pct = train_samples / train_total * 100
+            norm_tag = ''
+            if args.normalize_loss:
+                norm_tag = (f' denoise_n={metrics.get("denoise_n", 0):.3f}'
+                            f' t60_n={metrics.get("t60_n", 0):.3f}')
             sys.stdout.write(
                 f'\r  Epoch {epoch} 训练: {train_samples}/{train_total} ({pct:.1f}%) '
                 f'total={metrics["total_loss"]:.4f} denoise={metrics["denoise_loss"]:.4f} t60={metrics["t60_loss"]:.4f}'
+                f'{norm_tag}'
             )
             sys.stdout.flush()
 
@@ -479,6 +536,10 @@ def load_config_defaults(config_path):
     for key in ['alpha', 'beta', 'w_ri', 'w_mag', 'w_time']:
         if key in loss_cfg:
             defaults[key] = loss_cfg[key]
+    if 'normalize_loss' in loss_cfg:
+        defaults['normalize_loss'] = bool(loss_cfg['normalize_loss'])
+    if 'ema_decay' in loss_cfg:
+        defaults['ema_decay'] = loss_cfg['ema_decay']
 
     probe_cfg = section('probe')
     if 'log_every' in probe_cfg:
@@ -575,6 +636,12 @@ def parse_args():
     parser.add_argument('--w_ri', type=float, default=config_defaults.get('w_ri', 0.1))
     parser.add_argument('--w_mag', type=float, default=config_defaults.get('w_mag', 0.9))
     parser.add_argument('--w_time', type=float, default=config_defaults.get('w_time', 0.2))
+    parser.add_argument('--normalize_loss', action='store_true',
+                        default=config_defaults.get('normalize_loss', False),
+                        help='开启 EMA 归一化：denoise/t60 先除各自 EMA 再加权')
+    parser.add_argument('--ema_decay', type=float,
+                        default=config_defaults.get('ema_decay', 0.99),
+                        help='EMA 衰减率（normalize_loss=True 时生效）')
 
     # 梯度探针
     parser.add_argument('--probe_log_every', type=int,

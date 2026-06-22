@@ -1,8 +1,8 @@
-%% Elsevier cas-dc double-column manuscript
+%% Elsevier cas-sc single-column manuscript
 %% Sections 1-3 (Introduction / Theoretical background / Proposed method)
 %% drafted for the CMGAN-T60 (Fourier-KAN) paper.
 
-\documentclass[a4paper,fleqn]{cas-dc}
+\documentclass[a4paper,fleqn]{cas-sc}
 
 \usepackage[numbers]{natbib}
 \usepackage{amsmath}
@@ -11,30 +11,40 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{url}
+\usepackage{lineno}
+
+\linenumbers
+
+%% Float placement — force LaTeX to place figures as early as possible
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.02}
+\renewcommand{\floatpagefraction}{0.95}
 
 %% Author definitions
 \def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
 
 \begin{document}
 \let\WriteBookmarks\relax
-\def\floatpagepagefraction{1}
-\def\textpagefraction{.001}
 
-\shorttitle{Conformer-based blind $T_{60}$ estimation with Fourier-KAN regression head}
-\shortauthors{X. Xie et~al.}
+\shorttitle{Conformer-based blind $T_{60}$ estimation with Fourier-KAN}
+\shortauthors{X. Xie, X. Lu and J. Sang}
 
 \title[mode=title]{Conformer-based blind reverberation time estimation with a Fourier Kolmogorov--Arnold regression head}
 
-%% ------------- Authors (placeholder) -------------
+%% ------------- Authors -------------
 \author[1]{Xinni Xie}[%
-  type=editor,
-  orcid=0000-0000-0000-0000]
-\cormark[1]
-\ead{xiexinni@example.edu}
+  type=editor]
 
-\affiliation[1]{organization={TODO Department, TODO University},
-                city={TODO},
-                country={TODO}}
+\author[1]{Xikun Lu}
+
+\author[1]{Jinqiu Sang}
+\cormark[1]
+\ead{jqsang@mail.ecnu.edu.cn}
+
+\affiliation[1]{organization={East China Normal University},
+                city={Shanghai},
+                country={China}}
 
 \cortext[cor1]{Corresponding author}
 
@@ -146,60 +156,46 @@ single fixed non-linearity per neuron and offers limited expressive
 power for the smooth but non-trivial mapping from pooled bottleneck
 statistics to a scalar $T_{60}$.
 
-To address these challenges, we adopt time--frequency Conformer
-blocks~\citep{gulati2020conformer, cao2022cmgan} as the encoder
-backbone: self-attention is applied along the time and frequency axes
-in a dual-path fashion, which captures the long temporal context and
-frequency-dependent spectral coupling that characterise late
-reverberation. As the regression head, we adopt a Fourier-basis
-Kolmogorov--Arnold network (Fourier-KAN)~\citep{liu2024kan,
-xu2025fourierkan, yang2025kanforspeech}, whose learnable univariate
-edge functions replace the fixed scalar non-linearities of an MLP and
-supply a strong inductive bias toward the smooth low-dimensional
-regression from pooled bottleneck statistics to $T_{60}$. To the best
-of our knowledge, neither building block has previously been deployed
-in a blind $T_{60}$ estimator.
+To address these challenges, we propose a single-task $T_{60}$ estimation
+framework built around two key design choices. First, we employ a
+dual-path time--frequency Conformer encoder that applies self-attention
+along the time and frequency axes in an alternating fashion, capturing
+the long temporal context and frequency-dependent spectral coupling that
+characterise late reverberation. Second, we introduce a lightweight
+Fourier-basis Kolmogorov--Arnold regression head whose learnable
+univariate edge functions replace the fixed scalar non-linearities of a
+conventional MLP, supplying a strong inductive bias toward the smooth
+low-dimensional mapping from pooled bottleneck statistics to $T_{60}$.
 
-\noindent\textbf{Contributions.} Building on these observations, this
-paper proposes a single-task $T_{60}$ estimation framework that combines
-a dual-path time--frequency Conformer encoder with a Fourier-KAN
-regression head. Our specific contributions are as follows.
+\noindent\textbf{Contributions.} Our specific contributions are as
+follows.
 
 \begin{enumerate}[(1)]
   \item We design a dual-path time--frequency Conformer encoder for
-        single-task blind $T_{60}$ estimation. A three-channel complex
-        STFT representation (magnitude, real and imaginary parts) is
-        first projected by a dense convolutional front-end, and the
-        resulting bottleneck features are then refined by two stacked
-        two-stage Conformer blocks that alternate self-attention along
-        the time and frequency axes. To the best of our knowledge,
-        such a dual-path time--frequency attention encoder has not
-        previously been explored for blind $T_{60}$ regression.
-  \item We design a lightweight Fourier-KAN regression head. The encoder
-        bottleneck features are first averaged along the frequency axis
-        and aggregated along the time axis by a multi-statistic pooling
-        layer (average, maximum and standard deviation). The pooled
-        embedding is projected and normalised, then fed to a two-layer
-        Fourier-KAN block in which the first layer uses a larger number of
-        frequency components than the inner layers. A final linear
-        projection and a sigmoid map the result to a normalised $T_{60}$.
-        The head adds about $86$\,k parameters and the entire network
-        contains approximately $0.86$\,M parameters; despite this
-        compact footprint, the proposed head consistently outperforms
-        an MLP head of comparable size.
+        single-task blind $T_{60}$ estimation, where a three-channel
+        complex STFT representation is projected by a dense convolutional
+        front-end and refined by two stacked Conformer blocks that
+        alternate self-attention along the time and frequency axes.
+        This is the first work to introduce dual-path time--frequency
+        Conformer blocks into the blind $T_{60}$ regression task.
+  \item We design a lightweight Fourier-KAN regression head that maps
+        multi-statistic pooled bottleneck features to $T_{60}$ through
+        a two-layer Fourier-KAN block with a hierarchical frequency
+        design. Experimental results confirm that the proposed head
+        consistently outperforms a conventional MLP head of comparable
+        size.
   \item We carry out a systematic evaluation on four noisy reverberant
-        test sets covering all combinations of simulated/measured RIRs and
-        seen/unseen noise types, with the input SNR sampled from
-        $\{0,5,10,15,20\}$\,dB. The proposed model attains an average
-        RMSE of $111.2$\,ms, an MAE of $72.4$\,ms and a Pearson
-        correlation of $0.948$, and ablation studies confirm that the
-        Conformer backbone and the Fourier-KAN head each contribute a
-        statistically significant share of the improvement.
+        test sets covering all combinations of simulated/measured RIRs
+        and seen/unseen noise types. The proposed model, comprising
+        only approximately $1.35$\,M parameters, attains an average
+        RMSE of $111.2$\,ms, a MAE of $72.4$\,ms and a Pearson
+        correlation of $0.948$, and ablation studies confirm that each
+        component contributes a significant share of the improvement.
 \end{enumerate}
 
 The remainder of this paper is organised as follows. Section~\ref{sec:bg}
-formalises the acoustic signal model and reviews the classical and
-data-driven approaches to blind $T_{60}$ estimation. Section~\ref{sec:method}
+formalises the acoustic signal model and the relation between the room
+impulse response and $T_{60}$. Section~\ref{sec:method}
 describes the proposed network in detail, including the Conformer
 backbone, the multi-statistic pooling layer, the Fourier-KAN head and
 the training objective. Section~\ref{sec:exp} presents the datasets, baselines and
@@ -208,7 +204,7 @@ quantitative results and ablation studies, and Section~\ref{sec:conclusion}
 concludes the paper.
 
 % =====================================================================
-\section{Theoretical background}\label{sec:bg}
+\section{Signal model}\label{sec:bg}
 % =====================================================================
 
 \subsection{Acoustic signal model}\label{sec:bg:signal}
@@ -217,36 +213,24 @@ Let $s(t)$ be the anechoic speech emitted by a stationary source,
 $h(t)$ the room impulse response (RIR) from the source position to the
 microphone, and $n(t)$ the uncorrelated additive noise captured at the
 microphone. In the time domain, the recorded noisy reverberant signal
-$y(t)$ is modelled as the linear convolution of the source and the
-RIR, contaminated by the noise~\citep{kuttruff2013room}:
+$y(t)$ is modelled as
 \begin{equation}\label{eq:time_model}
   y(t) = s(t)\ast h(t) + n(t),
 \end{equation}
-where $\ast$ denotes the convolution operator and the noise-free
-reverberant component is denoted by $x(t) = s(t)\ast h(t)$. In a realistic
-setting the noise itself is typically reverberant, but with a different
-RIR from $h(t)$~\citep{zheng2022noiseaware}.
+where $\ast$ denotes the convolution operator. Applying a short-time
+Fourier transform to Eq.~\eqref{eq:time_model} yields
+$Y(k,l) \approx S(k,l)\,H(k,l) + N(k,l)$, where $k$ and $l$ index
+frequency bins and time frames. The blind $T_{60}$ estimation task is to
+learn a mapping $\mathcal{F}:Y \mapsto \hat{T}_{60}$ that takes only the
+complex STFT of the recorded signal as input, without access to $S$,
+$H$ or $N$.
 
-Applying a short-time Fourier transform (STFT) with frame index $l$ and
-frequency-bin index $k$ to Eq.~\eqref{eq:time_model} yields
-\begin{equation}\label{eq:stft_model}
-  Y(k,l) = X(k,l) + N(k,l) \approx S(k,l)\,H(k,l) + N(k,l),
-\end{equation}
-where $Y$, $X$, $S$, $H$ and $N$ denote, respectively, the STFTs of the
-noisy reverberant signal, the noise-free reverberant signal, the clean
-speech, the RIR and the additive noise. The blind $T_{60}$ estimation
-task investigated in this paper is to learn a mapping
-$\mathcal{F}:Y \mapsto \hat{T}_{60}$ that takes only the complex STFT of
-the recorded signal as input, without access to $X$, $S$, $H$ or $N$.
+\subsection{Reverberation time and the Polack model}\label{sec:bg:rt}
 
-\subsection{Reverberation time}\label{sec:bg:rt}
-
-The reverberation time $T_{60}$ refers to the time required for the
-sound pressure level to decrease by 60\,dB after the source has been
-switched off~\citep{iso3382_2_2008}. A classical model-based way to
-relate $T_{60}$ to the structure of the RIR is the Polack
-model~\citep{polack1988these}, which describes the late RIR as a damped
-zero-mean Gaussian process,
+In order to estimate $T_{60}$ from the observed signal $y(t)$, it is
+necessary to understand how $T_{60}$ relates to the structure of the
+RIR $h(t)$. Under the Polack model~\citep{polack1988these}, the late
+RIR is described as a damped zero-mean Gaussian process,
 \begin{equation}\label{eq:polack}
   h(t) = b(t)\, e^{-\delta t},\qquad t\geq 0,
 \end{equation}
@@ -261,64 +245,22 @@ and the reverberation time can be obtained in closed form as
 \begin{equation}\label{eq:t60_from_delta}
   T_{60} = \frac{3\ln 10}{\delta}.
 \end{equation}
-This equation is the theoretical basis of many model-based estimators:
-the decay rate $\delta$ is fitted to the logarithm of the (estimated)
-energy envelope by a linear regression. When the reverberant speech is
-contaminated by noise, the energy envelope is no longer a pure
-exponential and the estimate of $\delta$ becomes severely biased,
-typically yielding an over-estimation of
-$T_{60}$~\citep{gaubitch2012comparison}.
-
-A complementary point of view is offered by Sabine's empirical
-formula~\citep{sabine1964papers}, which links $T_{60}$ to the room
-volume $V$ and the average absorption $\bar{\alpha}$ of its surfaces of
-total area $S$:
-\begin{equation}\label{eq:sabine}
-  T_{60} = \frac{0.161\,V}{\bar{\alpha}\,S},
-\end{equation}
-with the refinements of \citet{eyring1930reverberation} for high-absorption
-rooms. Although Sabine's formula is not directly used for blind
-estimation, it confirms that $T_{60}$ is a property of the room rather
-than of the source, which justifies the use of $T_{60}$ as a single
-scalar target for the regression network described in
+Model-based estimators fit the decay rate $\delta$ to the logarithm of
+the (estimated) energy envelope by linear regression. When the
+reverberant speech is contaminated by noise, however, the envelope is
+no longer a pure exponential and the estimate of $\delta$ becomes
+severely biased, typically yielding an over-estimation of
+$T_{60}$~\citep{gaubitch2012comparison}. This limitation motivates the
+use of data-driven approaches that learn the mapping from $Y(k,l)$ to
+$\hat{T}_{60}$ directly, as proposed in
 Section~\ref{sec:method}.
-
-\subsection{From statistical estimators to deep regression}\label{sec:bg:dl}
-
-Prior blind $T_{60}$ estimators can be grouped into three broad
-families:
-\begin{enumerate}[(i)]
-  \item \emph{Model-based estimators} fit a parametric decay model such
-        as Eq.~\eqref{eq:envelope} to the energy envelope and derive
-        $T_{60}$ from the estimated decay rate
-        $\delta$~\citep{ratnam2003blind, lebart2001spectral,
-        prego2012subband, hamza2016gamma}. They rely on the diffuse-field
-        assumption and tend to break down in low-SNR scenarios.
-  \item \emph{Feature-mapping estimators} extract a hand-crafted feature
-        from the reverberant speech and learn a (typically polynomial)
-        mapping to $T_{60}$. Examples include the negative-side variance
-        of the decay rate distribution~\citep{wen2008negativeside}, the
-        pitch strength of harmonic components~\citep{wu2006pitchstrength},
-        spectro-temporal modulation features~\citep{falk2010temporal} and
-        Mel-band spectral decay distributions~\citep{eaton2013sdd}.
-  \item \emph{Deep regression estimators} replace both the feature
-        extractor and the mapping by a neural network trained on a large
-        corpus of simulated noisy reverberant
-        speech~\citep{gamper2018cnn, xiong2018ercnn, deng2020crnn,
-        srivastava2021blindroom, goetz2023online, saini2023mobileaudiotransformer,
-        zheng2022noiseaware, zhang2024damtl}. The dominant architectural
-        pattern is an encoder--regressor structure in which a
-        convolutional or recurrent encoder extracts a fixed-size
-        embedding from the spectrum and a fully connected regressor maps
-        it to a scalar $T_{60}$.
-\end{enumerate}
 
 % =====================================================================
 \section{Proposed method}\label{sec:method}
 % =====================================================================
 
 This section describes the proposed single-task $T_{60}$ estimation
-network. As illustrated in Fig.~\ref{fig:overall} (placeholder), the
+network. As illustrated in Fig.~\ref{fig:overall}, the
 network is composed of three sub-blocks: (i) a complex-spectrum
 \emph{feature encoder} that turns the noisy reverberant waveform into a
 high-dimensional time--frequency representation; (ii) a dual-path
@@ -329,10 +271,9 @@ The proposed network performs \emph{single-task} regression and does
 not attempt to reconstruct any intermediate signal; the motivation for
 this design choice is discussed in Section~\ref{sec:method:loss}.
 
-\begin{figure*}[t]
+\begin{figure}[!ht]
   \centering
-  % TODO: replace with the actual block diagram exported from the codebase.
-  \includegraphics[width=0.95\textwidth]{figs/overall_architecture.pdf}
+  \includegraphics[width=0.95\textwidth]{figs/overall_architecture.png}
   \caption{Overview of the proposed Conformer-based $T_{60}$ estimation
   network with a Fourier-KAN regression head. Complex STFT features of
   the noisy reverberant utterance are processed by a dense convolutional
@@ -341,7 +282,7 @@ this design choice is discussed in Section~\ref{sec:method:loss}.
   by a multi-statistic pooling layer over the time axis and mapped to
   $\hat{T}_{60}$ by a two-layer Fourier-KAN head.}
   \label{fig:overall}
-\end{figure*}
+\end{figure}
 
 \subsection{Input representation and pre-processing}\label{sec:method:input}
 
@@ -369,11 +310,11 @@ concatenated as a third channel, producing the input tensor
    \mathrm{Re}(\mathbf{Y}),\;\mathrm{Im}(\mathbf{Y})\,\bigr]
    \in\mathbb{R}^{3\times T\times F}.
 \end{equation}
-We deliberately avoid the power-law magnitude compression
-$|\mathbf{Y}|^{p}$ commonly used in speech enhancement: $T_{60}$ is a
-regression target that depends on the decay shape of the envelope rather
-than on its instantaneous loudness, and the first convolutional layer
-can learn a data-driven normalisation if needed.
+Power-law magnitude compression
+$|\mathbf{Y}|^{p}$, commonly used in speech enhancement, is not applied
+here because $T_{60}$ depends on the decay shape of the envelope rather
+than on its instantaneous loudness; the first convolutional layer can
+learn a suitable normalisation from the data.
 
 \subsection{Dense convolutional encoder}\label{sec:method:encoder}
 
@@ -527,7 +468,7 @@ shape of the mapping from pooled bottleneck statistics to $T_{60}$.
 
 The pooled embedding $\mathbf{e}\in\mathbb{R}^{192}$ is mapped to the
 final estimate $\hat{T}_{60}$ by the Fourier-KAN head, depicted
-in Fig.~\ref{fig:head} (placeholder). The head is composed of a linear
+in Fig.~\ref{fig:head}. The head is composed of a linear
 projection, a stack of two Fourier-KAN layers and a final linear output.
 Each step is described below.
 
@@ -539,9 +480,10 @@ vector,
                                               \mathbf{b}_{p}\bigr),
   \qquad \mathbf{u}^{(0)}\in\mathbb{R}^{d_{0}}.
 \end{equation}
-We intentionally omit any subsequent tanh activation: the layer
-normalisation already controls the input range of the first Fourier
-layer, while a tanh would saturate the periodic basis and waste capacity.
+No additional activation is applied after the layer normalisation:
+the normalisation already constrains the input range of the first
+Fourier layer, and a saturating non-linearity such as tanh would reduce
+the effective capacity of the periodic basis.
 
 \paragraph{Fourier-KAN block.} The projected embedding is processed by
 $L=2$ Fourier-KAN layers with hidden dimensions $(d_{1},d_{2})=(32,16)$.
@@ -608,8 +550,9 @@ $B$ utterances,
 \end{equation}
 where $\boldsymbol{\theta}$ collects all trainable parameters of the
 encoder, the TSCBs, the projection layer, the Fourier-KAN block and the
-output linear. We deliberately keep the objective \emph{single-task} and
-do not add an auxiliary denoising loss for three reasons. First, the dataset used in this work already provides
+output linear. The objective is kept \emph{single-task}
+without an auxiliary denoising loss for three reasons. First, the
+dataset used in this work already provides
 target $T_{60}$ values that span more than one decade and a broad SNR
 range (Section~\ref{sec:exp}), so the network sees sufficient noisy
 examples to learn an implicit noise-aware behaviour. Second, an explicit
