@@ -1,0 +1,106 @@
+nohup: ignoring input
+Train (multitask + grad-probe): config=/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/scripts/../configs/t60_multitask/kan_mse_norm_balanced.yaml gpus=3,4
+Dataset: read from YAML data.dataset_root
+配置文件: /mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/scripts/../configs/t60_multitask/kan_mse_norm_balanced.yaml
+数据集路径: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+固定音频长度: 4.00s (64000 samples)
+多任务权重: alpha(denoise)=1.0 beta(t60)=1.0
+损失 EMA 归一化: 开启 (ema_decay=0.99)；denoise/t60 先除各自 EMA 再加权
+梯度探针: 每 20 个 train step 触发一次
+可用 GPU: 2 张 (['NVIDIA H800', 'NVIDIA H800'])
+swanlab: Currently logged in as: xfyyye to https://api.swanlab.cn. Use `swanlab 
+login --relogin` to force relogin
+swanlab: Tracking run with swanlab version 0.8.0
+swanlab: 💾 Run data saved at 
+/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask
+/swanlog/run-20260623_191104-bblbyr60
+swanlab: 📁 View project at https://swanlab.cn/@xfyyye/T60_KAN_MultiTask
+swanlab: 🚀 View run kan_multitask_norm_balanced at 
+https://swanlab.cn/@xfyyye/T60_KAN_MultiTask/runs/bblbyr60
+/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/train_multitask.py:277: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = torch.cuda.amp.GradScaler()
+训练集: 40000 样本, 验证集: 5136 样本
+使用 DataParallel × 2 GPU
+T60 head 类型: fourier_kan
+T60 head 参数: 86,369
+模型总参数: 1,405,554 (1.41M)
+T60 loss: mse | denoise (w_ri, w_mag, w_time)=(0.1, 0.9, 0.2)
+探针监控模块: ['encoder', 'tscb_1', 'tscb_2']
+
+ Epoch      Train        Val    Denoise        T60           LR
+──────────────────────────────────────────────────────────────────
+实际 batch=16, 累积 1 步, 等效 batch=16
+qs-67866-1503618-ai-1008762-default0-0:47066:47066 [0] NCCL INFO cudaDriverVersion 12090
+qs-67866-1503618-ai-1008762-default0-0:47066:47066 [0] NCCL INFO Bootstrap: Using eth0:10.32.86.223<0>
+qs-67866-1503618-ai-1008762-default0-0:47066:47066 [0] NCCL INFO NCCL version 2.26.2+cuda12.2
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/Plugin: Loaded net plugin NCCL RDMA Plugin v10 (v10)
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/Plugin: Loaded collnet plugin NCCL RDMA Plugin v10 (v10)
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Plugin Path : /opt/hpcx/nccl_rdma_sharp_plugin/lib/libnccl-net.so
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO P2P plugin v10 IBext_v10
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/IB : No device found.
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/IB : Using [RO]; OOB eth0:10.32.86.223<0>
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/IB : No device found.
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/IB : Using [RO]; OOB eth0:10.32.86.223<0>
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO NET/Socket : Using [0]eth0:10.32.86.223<0>
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Using network Socket
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO PROFILER/Plugin: Could not find: libnccl-profiler.so. 
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO Using network Socket
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO ncclCommInitAll comm 0xfcb5880 rank 1 nranks 2 cudaDev 1 nvmlDev 4 busId 83000 commId 0xd2c9684806d9f16b - Init START
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO ncclCommInitAll comm 0xfc38060 rank 0 nranks 2 cudaDev 0 nvmlDev 3 busId 63000 commId 0xd2c9684806d9f16b - Init START
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO RAS client listening socket at 127.0.0.1<28028>
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Bootstrap timings total 0.000474 (create 0.000019, send 0.000069, recv 0.000081, ring 0.000018, delay 0.000000)
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO Bootstrap timings total 0.004740 (create 0.000024, send 0.000060, recv 0.004325, ring 0.000011, delay 0.000001)
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO MNNVL busId 0x63000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO MNNVL busId 0x83000 fabric UUID 0.0 cliqueId 0x0 state 3 healthMask 0x0
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO Setting affinity for GPU 4 to 0fff,ffffffff,ffffffff,ffc00000,00000000,00000000
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Setting affinity for GPU 3 to 3fffff,ffffffff,ffffffff
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO comm 0xfc38060 rank 0 nRanks 2 nNodes 1 localRanks 2 localRank 0 MNNVL 0
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO comm 0xfcb5880 rank 1 nRanks 2 nNodes 1 localRanks 2 localRank 1 MNNVL 0
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 00/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 01/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 02/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 03/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 04/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 05/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 06/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 07/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 08/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 09/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 10/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 11/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 12/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 13/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 14/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Channel 15/16 : 0 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] -1/-1/-1->1->0 [2] -1/-1/-1->1->0 [3] -1/-1/-1->1->0 [4] 0/-1/-1->1->-1 [5] 0/-1/-1->1->-1 [6] 0/-1/-1->1->-1 [7] 0/-1/-1->1->-1 [8] -1/-1/-1->1->0 [9] -1/-1/-1->1->0 [10] -1/-1/-1->1->0 [11] -1/-1/-1->1->0 [12] 0/-1/-1->1->-1 [13] 0/-1/-1->1->-1 [14] 0/-1/-1->1->-1 [15] 0/-1/-1->1->-1
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO P2P Chunksize set to 524288
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1 [4] -1/-1/-1->0->1 [5] -1/-1/-1->0->1 [6] -1/-1/-1->0->1 [7] -1/-1/-1->0->1 [8] 1/-1/-1->0->-1 [9] 1/-1/-1->0->-1 [10] 1/-1/-1->0->-1 [11] 1/-1/-1->0->-1 [12] -1/-1/-1->0->1 [13] -1/-1/-1->0->1 [14] -1/-1/-1->0->1 [15] -1/-1/-1->0->1
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO P2P Chunksize set to 524288
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Check P2P Type intraNodeP2pSupport 1 directMode 1
+qs-67866-1503618-ai-1008762-default0-0:47066:53974 [1] NCCL INFO [Proxy Service] Device 1 CPU core 88
+qs-67866-1503618-ai-1008762-default0-0:47066:53976 [1] NCCL INFO [Proxy Service UDS] Device 1 CPU core 94
+qs-67866-1503618-ai-1008762-default0-0:47066:53975 [0] NCCL INFO [Proxy Service] Device 0 CPU core 4
+qs-67866-1503618-ai-1008762-default0-0:47066:53977 [0] NCCL INFO [Proxy Service UDS] Device 0 CPU core 7
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO 16 coll channels, 16 collnet channels, 0 nvls channels, 16 p2p channels, 16 p2p channels per peer
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO 16 coll channels, 16 collnet channels, 0 nvls channels, 16 p2p channels, 16 p2p channels per peer
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO CC Off, workFifoBytes 1048576
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO TUNER/Plugin: Could not find: libnccl-tuner.so. Using internal tuner plugin.
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO TUNER/Plugin: Failed to find ncclTunerPlugin_v4 symbol.
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO TUNER/Plugin: Failed to find ncclTunerPlugin_v3 symbol.
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO TUNER/Plugin: Failed to find ncclTunerPlugin_v2 symbol, using internal tuner instead.
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO ncclCommInitAll comm 0xfcb5880 rank 1 nranks 2 cudaDev 1 nvmlDev 4 busId 83000 commId 0xd2c9684806d9f16b - Init COMPLETE
+qs-67866-1503618-ai-1008762-default0-0:47066:53907 [1] NCCL INFO Init timings - ncclCommInitAll: rank 1 nranks 2 total 1.05 (kernels 0.60, alloc 0.24, bootstrap 0.00, allgathers 0.00, topo 0.17, graphs 0.00, connections 0.03, rest 0.00)
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO ncclCommInitAll comm 0xfc38060 rank 0 nranks 2 cudaDev 0 nvmlDev 3 busId 63000 commId 0xd2c9684806d9f16b - Init COMPLETE
+qs-67866-1503618-ai-1008762-default0-0:47066:53906 [0] NCCL INFO Init timings - ncclCommInitAll: rank 0 nranks 2 total 1.05 (kernels 0.60, alloc 0.25, bootstrap 0.00, allgathers 0.00, topo 0.17, graphs 0.00, connections 0.03, rest 0.00)
+qs-6
+[probe step=0] encoder:cos=+nan,r=nan tscb_1:cos=+nan,r=nan tscb_2:cos=+nan,r=nan
+  Epoch 1 训练: 16/40000 (0.0%) total=2.0000 denoise=0.3922 t60=0.0795 denoise_n=1.000 t60_n=1.000  Epoch 1 训练: 32/40000 (0.1%) total=2.0918 denoise=0.3489 t60=0.0957 denoise_n=0.891 t60_n=1.201  Epoch 1 训练: 48/40000 (0.1%) total=1.7145 denoise=0.3747 t60=0.0602 denoise_n=0.957 t60_n=0.758  Epoch 1 训练: 64/40000 (0.2%) total=2.3816 denoise=0.4647 t60=0.0954 denoise_n=1.184 t60_n=1.197  Epoch 1 训练: 80/40000 (0.2%) total=2.0334 denoise=0.3878 t60=0.0833 denoise_n=0.988 t60_n=1.045  Epoch 1 训练: 96/40000 (0.2%) total=2.1309 denoise=0.4634 t60=0.0758 denoise_n=1.179 t60_n=0.952  Epoch 1 训练: 112/40000 (0.3%) total=2.3435 denoise=0.4057 t60=0.1048 denoise_n=1.032 t60_n=1.312  Epoch 1 训练: 128/40000 (0.3%) total=1.9503 denoise=0.2637 t60=0.1023 denoise_n=0.673 t60_n=1.277  Epoch 1 训练: 144/40000 (0.4%) total=1.3960 denoise=0.2918 t60=0.0519 denoise_n=0.746 t60_n=0.650  Epoch 1 训练: 160/40000 (0.4%) total=1.6961 denoise=0.2982 t60=0.0743 denoise_n=0.765 t60_n=0.931  Epoch 1 训练: 176/40000 (0.4%) total=1.2074 denoise=0.1606 t60=0.0631 denoise_n=0.414 t60_n=0.793  Epoch 1 训练: 192/40000 (0.5%) total=1.4968 denoise=0.2434 t60=0.0689 denoise_n=0.630 t60_n=0.867  Epoch 1 训练: 208/40000 (0.5%) total=1.5905 denoise=0.1488 t60=0.0958 denoise_n=0.388 t60_n=1.203  Epoch 1 训练: 224/40000 (0.6%) total=1.2401 denoise=0.1449 t60=0.0684 denoise_n=0.380 t60_n=0.860  Epoch 1 训练: 240/40000 (0.6%) total=1.2747 denoise=0.1525 t60=0.0693 denoise_n=0.402 t60_n=0.873  Epoch 1 训练: 256/40000 (0.6%) total=1.4138 denoise=0.1743 t60=0.0756 denoise_n=0.462 t60_n=0.952  Epoch 1 训练: 272/40000 (0.7%) total=1.5844 denoise=0.2719 t60=0.0683 denoise_n=0.723 t60_n=0.861  Epoch 1 训练: 288/40000 (0.7%) total=1.3830 denoise=0.2823 t60=0.0498 denoise_n=0.753 t60_n=0.630  Epoch 1 训练: 304/40000 (0.8%) total=2.2500 denoise=0.2690 t60=0.1216 denoise_n=0.719 t60_n=1.531  Epoch 1 训练: 320/40000 (0.8%) total=0.7566 denoise=0.1474 t60=0.0284 denoise_n=0.397 t60_n=0.360
+[probe step=20] encoder:cos=-0.056,r=0.01 tscb_1:cos=-0.114,r=0.00 tscb_2:cos=-0.013,r=0.00
+  Epoch 1 训练: 336/40000 (0.8%) total=1.1223 denoise=0.1523 t60=0.0559 denoise_n=0.412 t60_n=0.710  Epoch 1 训练: 352/40000 (0.9%) total=1.5187 denoise=0.2691 t60=0.0619 denoise_n=0.730 t60_n=0.789  Epoch 1 训练: 368/40000 (0.9%) total=1.7350 denoise=0.2453 t60=0.0839 denoise_n=0.668 t60_n=1.067  Epoch 1 训练: 384/40000 (1.0%) total=1.8314 denoise=0.1838 t60=0.1047 denoise_n=0.503 t60_n=1.329  Epoch 1 训练: 400/40000 (1.0%) total=1.1086 denoise=0.1974 t60=0.0444 denoise_n=0.543 t60_n=0.566  Epoch 1 训练: 416/40000 (1.0%) total=1.4178 denoise=0.2353 t60=0.0602 denoise_n=0.649 t60_n=0.769  Epoch 1 训练: 432/40000 (1.1%) total=1.1878 denoise=0.0882 t60=0.0738 denoise_n=0.245 t60_n=0.943  Epoch 1 训练: 448/40000 (1.1%) total=2.0734 denoise=0.1881 t60=0.1218 denoise_n=0.525 t60_n=1.548  Epoch 1 训练: 464/40000 (1.2%) total=1.6805 denoise=0.1833 t60=0.0919 denoise_n=0.514 t60_n=1.166  Epoch 1 训练: 480/40000 (1.2%) total=1.1002 denoise=0.1655 t60=0.0497 denoise_n=0.467 t60_n=0.633  Epoch 1 训练: 496/40000 (1.2%) total=1.3568 denoise=0.1887 t60=0.0644 denoise_n=0.535 t60_n=0.822  Epoch 1 训练: 512/40000 (1.3%) total=1.2054 denoise=0.1867 t60=0.0526 denoise_n=0.532 t60_n=0.673  Epoch 1 训练: 528/40000 (1.3%) total=1.1803 denoise=0.1910 t60=0.0494 denoise_n=0.546 t60_n=0.634  Epoch 1 训练: 544/40000 (1.4%) total=1.2438 denoise=0.1727 t60=0.0580 denoise_n=0.497 t60_n=0.747  Epoch 1 训练: 560/40000 (1.4%) total=1.3871 denoise=0.1951 t60=0.0638 denoise_n=0.564 t60_n=0.824  Epoch 1 训练: 576/40000 (1.4%) total=1.2210 denoise=0.1663 t60=0.0571 denoise_n=0.483 t60_n=0.738  Epoch 1 训练: 592/40000 (1.5%) total=1.5169 denoise=0.1549 t60=0.0824 denoise_n=0.452 t60_n=1.065  Epoch 1 训练: 608/40000 (1.5%) total=1.4709 denoise=0.1872 t60=0.0713 denoise_n=0.549 t60_n=0.922  Epoch 1 训练: 624/40000 (1.6%) total=1.3890 denoise=0.2244 t60=0.0562 denoise_n=0.660 t60_n=0.729  Epoch 1 训练: 640/40000 (1.6%) total=1.3113 denoise=0.1843 t60=0.0590 denoise_n=0.545 t60_n=0.766
+[probe step=40] encoder:cos=+0.059,r=0.00 tscb_1:cos=+0.014,r=0.00 tscb_2:cos=+0.034,r=0.00
+  Epoch 1 训练: 656/40000 (1.6%) total=1.7218 denoise=0.1263 t60=0.1039 denoise_n=0.376 t60_n=1.346  Epoch 1 训练: 672/40000 (1.7%) total=1.3978 denoise=0.1121 t60=0.0820 denoise_n=0.336 t60_n=1.062  Epoch 1 训练: 688/40000 (1.7%) total=1.0642 denoise=0.1390 t60=0.0497 denoise_n=0.419 t60_n=0.645  Epoch 1 训练: 704/40000 (1.8%) total=1.0372 denoise=0.1852 t60=0.0365 denoise_n=0.560 t60_n=0.477  Epoch 1 训练: 720/40000 (1.8%) total=1.4308 denoise=0.1938 t60=0.0644 denoise_n=0.589 t60_n=0.842  Epoch 1 训练: 736/40000 (1.8%) total=1.7238 denoise=0.1292 t60=0.1019 denoise_n=0.395 t60_n=1.329  Epoch 1 训练: 752/40000 (1.9%) total=1.8263 denoise=0.2068 t60=0.0916 denoise_n=0.635 t60_n=1.192  Epoch 1 训练: 768/40000 (1.9%) total=1.2288 denoise=0.1772 t60=0.0523 denoise_n=0.546 t60_n=0.682  Epoch 1 训练: 784/40000 (2.0%) total=1.4998 denoise=0.2812 t60=0.0482 denoise_n=0.868 t60_n=0.632  Epoch 1 训练: 800/40000 (2.0%) total=1.2028 denoise=0.1559 t60=0.0547 denoise_n=0.484 t60_n=0.719  Epoch 1 训练: 816/40000 (2.0%) total=1.4330 denoise=0.2233 t60=0.0560 denoise_n=0.695 t60_n=0.738  Epoch 1 训练: 832/40000 (2.1%) total=0.8938 denoise=0.1159 t60=0.0401 denoise_n=0.363 t60_n=0.531  Epoch 1 训练: 848/40000 (2.1%) total=1.8777 denoise=0.1499 t60=0.1066 denoise_n=0.472 t60_n=1.406  Epoch 1 训练: 864/40000 (2.2%) total=2.0899 denoise=0.1557 t60=0.1219 denoise_n=0.493 t60_n=1.597  Epoch 1 训练: 880/40000 (2.2%) total=1.8821 denoise=0.1764 t60=0.1012 denoise_n=0.561 t60_n=1.321  Epoch 1 训练: 896/40000 (2.2%) total=1.3150 denoise=0.1725 t60=0.0583 denoise_n=0.551 t60_n=0.764  Epoch 1 训练: 912/40000 (2.3%) total=0.8142 denoise=0.1331 t60=0.0293 denoise_n=0.428 t60_n=0.387  Epoch 1 训练: 928/40000 (2.3%) total=1.4429 denoise=0.1677 t60=0.0684 denoise_n=0.541 t60_n=0.902  Epoch 1 训练: 944/40000 (2.4%) total=1.3530 denoise=0.2087 t60=0.0512 denoise_n=0.676 t60_n=0.677  Epoch 1 训练: 960/40000 (2.4%) total=1.8258 denoise=0.2109 t60=0.0863 denoise_n=0.685 t60_n=1.141
+[probe step=60] encoder:cos=-0.024,r=0.02 tscb_1:cos=-0.059,r=0.02 tscb_2:cos=+0.023,r=0.02
+  Epoch 1 训练: 976/40000 (2.4%) total=1.0025 denoise=0.0718 t60=0.0579 denoise_n=0.235 t60_n=0.767  Epoch 1 训练: 992/40000 (2.5%) total=1.5183 denoise=0.1519 t60=0.0769 denoise_n=0.500 t60_n=1.019  Epoch 1 训练: 1008/40000 (2.5%) total=1.1491 denoise=0.1500 t60=0.0492 denoise_n=0.496 t60_n=0.653  Epoch 1 训练: 1024/40000 (2.6%) total=1.1622 denoise=0.1987 t60=0.0377 denoise_n=0.659 t60_n=0.503  Epoch 1 训练: 1040/40000 (2.6%) total=1.2640 denoise=0.1505 t60=0.0569 denoise_n=0.502 t60_n=0.762  Epoch 1 训练: 1056/40000 (2.6%) total=1.2382 denoise=0.1991 t60=0.0425 denoise_n=0.666 t60_n=0.572  Epoch 1 训练: 1072/40000 (2.7%) total=0.9766 denoise=0.0699 t60=0.0550 denoise_n=0.236 t60_n=0.741  Epoch 1 训练: 1088/40000 (2.7%) total=1.6491 denoise=0.2167 t60=0.0679 denoise_n=0.733 t60_n=0.916
