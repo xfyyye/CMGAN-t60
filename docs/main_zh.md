@@ -253,7 +253,11 @@ $$
 | test3 | 仿真（image-source 法） | 未见 |
 | test4 | 真实（实测脉冲响应） | 未见 |
 
-其中“已见/未见”指噪声类型是否在训练集中出现。该设计用于评估模型在不同 RIR 真实度与噪声泛化条件下的稳健性。
+其中“已见/未见”指噪声类型是否在训练集中出现。该设计用于评估模型在不同 RIR 真实度与噪声泛化条件下的稳健性。下图为训练池与测试集（按 RIR 类型）的 $T_{60}$ 分布。
+
+![训练池 $T_{60}$ 分布（train + eval，共 45,136 条）](figs/dataset_distribution_train.png)
+
+![测试集 $T_{60}$ 分布：仿真 RIR（test1 + test3）vs 真实 RIR（test2 + test4），各 2,160 条](figs/dataset_distribution_test.png)
 
 ### 4.2 实现细节
 

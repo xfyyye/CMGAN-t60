@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{url}
@@ -19,7 +20,7 @@
 \renewcommand{\topfraction}{0.95}
 \renewcommand{\bottomfraction}{0.95}
 \renewcommand{\textfraction}{0.02}
-\renewcommand{\floatpagefraction}{0.95}
+\renewcommand{\floatpagefraction}{0.75}
 
 %% Author definitions
 \def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
@@ -334,7 +335,7 @@ Section~\ref{sec:method:loss}.
 
 % [TODO-multitask] Redraw overall_architecture.png as a three-branch
 % diagram (T60 head + mask decoder + complex decoder off the bottleneck).
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/overall_architecture.png}
   \caption{Overview of the proposed multi-task Conformer-based $T_{60}$
@@ -693,9 +694,27 @@ set of $5\,136$ clips, and four test sets of $1\,080$ clips each, forming
 a $2\times 2$ design over simulated/real RIRs and seen/unseen noise
 (Table~\ref{tab:testsets}). ``Seen/unseen'' refers to whether the noise
 type appears in the training set; this design evaluates robustness to
-RIR realism and to noise generalisation.
+RIR realism and to noise generalisation. Figure~\ref{fig:dataset} shows
+the $T_{60}$ distribution of the training pool and of the test sets
+(grouped by RIR type).
 
-\begin{table}[!ht]
+\begin{figure}[H]
+  \centering
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/dataset_distribution_train.png}\\[2pt]
+    {\small (a) Training pool.}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figs/dataset_distribution_test.png}\\[2pt]
+    {\small (b) Test sets: simulated RIRs vs.\ real RIRs.}
+  \end{minipage}
+  \caption{$T_{60}$ distribution of dataset.}
+  \label{fig:dataset}
+\end{figure}
+
+\begin{table}[!htbp]
   \centering
   \caption{Test-set design: simulated vs.\ real RIR $\times$ seen vs.\
   unseen noise.}
@@ -836,7 +855,7 @@ $\alpha=1.0,\beta=0.1$) with three blind $T_{60}$ estimators (BERP,
 noiseaware, DAMTL) and the single-task ablation baseline on the four
 test sets; the averaged metrics are reported in Table~\ref{tab:main}.
 
-\begin{table}[!ht]
+\begin{table}[!htbp]
   \centering
   \caption{Main comparison on T60\_Dataset\_v7 (average over
   test1--test4; RMSE/MAE in ms).}
@@ -872,7 +891,7 @@ gradient magnitude ratio $r =
 directly. Table~\ref{tab:weight} reports $r$ and $T_{60}$ RMSE for the
 three regimes.
 
-\begin{table}[!ht]
+\begin{table}[!htbp]
   \centering
   \caption{Task-weight ablation (normalised losses).}
   \label{tab:weight}
@@ -887,7 +906,7 @@ three regimes.
   \end{tabular}
 \end{table}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   % \includegraphics[width=0.9\textwidth]{figs/gradient_cos_r.png}
   \caption{Gradient mechanism. (a) mean $\cos$ across regimes (all
@@ -915,7 +934,7 @@ linearly-separable $T_{60}$ information as $R^{2}$) and CKA (feature
 similarity between the proposed model and the single-task model per
 layer).
 
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   % \includegraphics[width=0.8\textwidth]{figs/linear_probe.png}
   \caption{Linear probing $R^{2}$ per shared layer (Encoder / TSCB$_1$ /
@@ -923,7 +942,7 @@ layer).
   \label{fig:linearprobe}
 \end{figure}
 
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   % \includegraphics[width=0.7\textwidth]{figs/cka_heatmap.png}
   \caption{CKA similarity between each multi-task configuration and the
@@ -942,7 +961,7 @@ the source of the $T_{60}$ improvement.
 Replacing the Fourier-KAN head with an MLP head (single-task, all else
 equal) gives Table~\ref{tab:head}.
 
-\begin{table}[!ht]
+\begin{table}[!htbp]
   \centering
   \caption{Regression-head ablation (single-task, average over
   test1--test4).}
@@ -969,7 +988,7 @@ $T_{60}$.
 We report RMSE per $T_{60}$ bin ($0.1$\,s steps) and per SNR bin for the
 proposed model and the single-task baseline.
 
-\begin{figure}[!ht]
+\begin{figure}[H]
   \centering
   % \includegraphics[width=0.9\textwidth]{figs/per_bin.png}
   \caption{Per-bin RMSE. (a) RMSE vs.\ $T_{60}$ bin ($0.1$--$1.5$\,s,
@@ -983,7 +1002,7 @@ proposed model and the single-task baseline.
 The denoising quality of the proposed model on the four test sets is
 reported in Table~\ref{tab:denoise}.
 
-\begin{table}[!ht]
+\begin{table}[!htbp]
   \centering
   \caption{Denoising metrics (normalised main model, average over
   test1--test4).}

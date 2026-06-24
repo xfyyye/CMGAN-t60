@@ -24,7 +24,8 @@
       "Bash(grep -nE \"^[0-9]+:\\\\s*[A-Z][A-Za-z].{0,60}$\" /tmp/damtl.txt)",
       "Bash(awk '/\\\\\\\\section\\\\{Proposed method\\\\}/{f=1} f{print NR\": \"$0} /\\\\\\\\bibliographystyle/{if\\(f\\)exit}' docs/main.tex)",
       "Bash(grep -noE \"\\(Fig\\\\.|Figure|Table\\)[^.]{5,90}\\\\.\" /tmp/noiseaware.txt)",
-      "Bash(grep -noE \"\\(Fig\\\\.|Figure|Table\\)[^.]{5,90}\\\\.\" /tmp/damtl.txt)"
+      "Bash(grep -noE \"\\(Fig\\\\.|Figure|Table\\)[^.]{5,90}\\\\.\" /tmp/damtl.txt)",
+      "Bash(grep -noE \"Fig\\\\. [0-9]+[^.]{5,120}\\\\.\" /tmp/noiseaware.txt)"
     ]
   }
 }
