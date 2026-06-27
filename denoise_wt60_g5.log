@@ -57,3 +57,26 @@ Denoise Test: kan_multitask_norm_w_t60 on GPU 5
 ============================================================
 评估去噪 test4
 ============================================================
+  100/1080 样本已处理
+  200/1080 样本已处理
+  300/1080 样本已处理
+  400/1080 样本已处理
+  500/1080 样本已处理
+  600/1080 样本已处理
+  700/1080 样本已处理
+  800/1080 样本已处理
+  900/1080 样本已处理
+  1000/1080 样本已处理
+  增强:  PESQ=3.049 | STOI=0.896 | SI-SDR=18.62 dB
+  输入:  PESQ=2.724 | STOI=0.850 | SI-SDR=15.90 dB
+  提升:  PESQ=+0.326 | STOI=+0.047 | SI-SDR=+2.72 dB
+
+============================================================
+四测试集平均
+============================================================
+  增强:  PESQ=3.077 | STOI=0.891 | SI-SDR=18.81 dB
+  输入:  PESQ=2.721 | STOI=0.847 | SI-SDR=15.91 dB
+  提升:  PESQ=+0.356 | STOI=+0.044 | SI-SDR=+2.89 dB
+
+结果已保存: /mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/scripts/../runs/kan_multitask_norm_w_t60/test_denoise/denoise_evaluation.json
+去噪测试完成: kan_multitask_norm_w_t60
