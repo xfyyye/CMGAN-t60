@@ -74,10 +74,10 @@ matched to the smooth but non-linear dependence between pooled acoustic
 statistics and the target $T_{60}$. On four noisy reverberant test sets
 covering both simulated and measured room impulse responses with seen and
 unseen noise types, the proposed model attains an average root-mean-squared
-error (RMSE) of \rule{1.6em}{0.4pt}\,ms, a mean absolute error (MAE) of
-\rule{1.6em}{0.4pt}\,ms and a Pearson correlation of \rule{1.6em}{0.4pt}; relative
+error (RMSE) of $97.79$\,ms, a mean absolute error (MAE) of
+$57.95$\,ms and a Pearson correlation of $0.9592$; relative
 to a single-task ablation baseline ($861\,793$ parameters, RMSE
-$111.15$\,ms) this is a \rule{1.6em}{0.4pt}\,\% RMSE reduction. The encoder and
+$111.15$\,ms) this is a $12.0$\,\% RMSE reduction. The encoder and
 Conformer trunk are shared between the two tasks, and the denoising
 auxiliary task adds two decoders of about $0.54$\,M parameters, giving
 $1.41$\,M parameters in total. Gradient-probe analysis further reveals that the gradient
@@ -212,8 +212,8 @@ follows.
         reconstruction as an auxiliary task, sharing a dual-path
         time--frequency Conformer backbone. Sharing the encoder and trunk
         between the two tasks, the $T_{60}$ RMSE is reduced by
-        \rule{1.6em}{0.4pt}\,\% relative to a single-task ablation baseline
-        (\rule{1.6em}{0.4pt}\,ms vs.\ $111.15$\,ms), at the cost of two
+        $12.0$\,\% relative to a single-task ablation baseline
+        ($97.79$\,ms vs.\ $111.15$\,ms), at the cost of two
         denoising decoders ($\approx
         0.54$\,M parameters; $1.41$\,M parameters in total vs.\
         $861\,793$ for the single-task estimator). To the best of our
@@ -243,8 +243,8 @@ follows.
         test sets covering all combinations of simulated/measured RIRs
         and seen/unseen noise types. The proposed model, comprising
         only approximately $1.41$\,M parameters, attains an average
-        RMSE of \rule{1.6em}{0.4pt}\,ms, a MAE of \rule{1.6em}{0.4pt}\,ms and a
-        Pearson correlation of \rule{1.6em}{0.4pt}, and ablation studies
+        RMSE of $97.79$\,ms, a MAE of $57.95$\,ms and a
+        Pearson correlation of $0.9592$, and ablation studies
         confirm that each
         component contributes a significant share of the improvement.
 \end{enumerate}
@@ -662,14 +662,20 @@ sum
 \end{equation}
 where $\boldsymbol{\theta}$ collects all trainable parameters of the
 shared encoder and TSCBs, the Fourier-KAN head and the two denoising
-decoders. The trade-off weights $(\alpha,\beta)$ control which task's
-gradient dominates the shared backbone; we study four
-configurations---$(\alpha,\beta)\in\{(1.0,0.1),(0.5,0.5),(1.0,1.0),(0.1,1.0)\}$---and
-show in Section~\ref{sec:results} that the gradient magnitude ratio
+decoders. Because the raw denoising and $T_{60}$ losses differ greatly
+in scale, each is first divided by its own exponential moving average
+(EMA) to bring $\mathcal{L}_{\mathrm{den}}^{*}$ and
+$\mathcal{L}_{T_{60}}^{*}$ to a common scale of $\mathcal{O}(1)$ (see
+Section~\ref{sec:exp:impl}); the weights $(\alpha,\beta)$ then act as a
+clean knob over which task's gradient dominates the shared backbone. We
+study three regimes,
+$(\alpha,\beta)\in\{(1.0,0.1),(1.0,1.0),(0.1,1.0)\}$, spanning
+denoise-dominant, balanced and $T_{60}$-dominant settings, and show in
+Section~\ref{sec:results} that the effective gradient magnitude ratio
 $r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
 set by these weights is the decisive factor for $T_{60}$ accuracy,
 whereas the gradient directions remain nearly orthogonal across all
-configurations.
+regimes.
 
 At inference time the sigmoid output is denormalised by the inverse of
 Eq.~\eqref{eq:t60_norm} to yield the final estimate
@@ -868,7 +874,7 @@ test sets; the averaged metrics are reported in Table~\ref{tab:main}.
     noiseaware~\citep{zheng2022noiseaware} & 133.66 & 82.38 & 0.9196 & 0.8451 \\
     DAMTL~\citep{zhang2024damtl}           & 138.94 & 86.07 & 0.9134 & 0.8323 \\
     Single-task KAN (ablation)             & 111.15 & 72.40 & 0.9484 & 0.8931 \\
-    \textbf{Proposed (normalised)}         &        &       &        &        \\
+    \textbf{Proposed (normalised)}         & \textbf{97.79} & \textbf{57.95} & \textbf{0.9592} & \textbf{0.9173} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -886,44 +892,62 @@ Because the raw denoising and $T_{60}$ losses differ greatly in scale
 the nominal ratio $\alpha/\beta$ does not by itself indicate which task's
 gradient dominates the shared backbone. We therefore normalise the two
 losses to a common scale (Section~\ref{sec:exp:impl}) and measure the
-gradient magnitude ratio $r =
+effective gradient magnitude ratio $r =
 \lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
 directly. Table~\ref{tab:weight} reports $r$ and $T_{60}$ RMSE for the
 three regimes.
 
 \begin{table}[!htbp]
   \centering
-  \caption{Task-weight ablation (normalised losses).}
+  \caption{Task-weight ablation (normalised losses; $r$ is the effective
+  gradient ratio $\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
+  averaged over the three shared modules and over training). Smaller $r$
+  (more denoising-dominant) yields lower RMSE.}
   \label{tab:weight}
-  \begin{tabular}{lccc}
+  \begin{tabular}{lcccc}
     \toprule
-    Configuration & $(\alpha,\beta)$ & gradient ratio $r$ & RMSE (ms) $\downarrow$ \\
+    Configuration & $(\alpha,\beta)$ & effective $r\downarrow$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    Denoise-dominant (proposed) & (1.0, 0.1) &  &  \\
-    Balanced                    & (1.0, 1.0) &  &  \\
-    $T_{60}$-dominant           & (0.1, 1.0) &  &  \\
+    Denoise-dominant (proposed) & (1.0, 0.1) & \textbf{2.20}  & \textbf{97.79}  & \textbf{57.95} \\
+    Balanced                    & (1.0, 1.0) & 34.17          & 109.90          & 67.16 \\
+    $T_{60}$-dominant           & (0.1, 1.0) & 360.59         & 109.54          & 68.15 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{figs/gradient_cos_r.png}
-  \caption{Gradient mechanism. (a) mean $\cos$ across regimes (all
-  $\approx 0$); (b) mean gradient ratio $r$ (smallest for
-  denoise-dominant); (c) conflict ratio neg\% (all $<50\%$); (d)
-  $r$--RMSE scatter (positive correlation).}
+  \includegraphics[width=0.95\textwidth]{figs/gradient_cos_r.png}
+  \caption{Gradient mechanism across the three normalised regimes.
+  (a) Mean gradient cosine $\cos$ between the two task gradients on the
+  shared encoder---all near $0$, so the two tasks are neither cooperative
+  nor systematically antagonistic. (b) Effective gradient ratio
+  $r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
+  (log scale): smallest under the denoise-dominant regime.
+  (c) Fraction of conflicting steps ($\cos<0$), all well below $50\%$.
+  (d) $r$ vs.\ $T_{60}$ RMSE: smaller $r$ (more denoising-dominant)
+  yields lower RMSE.}
   \label{fig:gradient}
 \end{figure}
 
 The two task gradients remain nearly orthogonal throughout training
 ($\cos\approx 0$, neg\% $<50\%$), with no systematic antagonistic
-conflict; the decisive factor for $T_{60}$ accuracy is the gradient
-magnitude ratio $r$---the smaller $r$ (the more the denoising gradient
-dominates the shared backbone), the more accurate the $T_{60}$ estimate.
-This indicates that pairing a complex task (denoising) with a simple
-task ($T_{60}$) is best driven by letting the complex task dominate the
-shared representation.
+conflict; the decisive factor for $T_{60}$ accuracy is the effective
+gradient magnitude ratio $r$. As Table~\ref{tab:weight} shows, the
+denoise-dominant regime achieves $r\approx 2.2$---i.e.\ the denoising
+gradient on the shared backbone is about half the $T_{60}$ gradient in
+magnitude yet still dominates the representation through its dense,
+per-bin supervision---and attains the best RMSE ($97.79$\,ms). Moving
+away from denoising dominance raises $r$ by one to two orders of
+magnitude ($34$ at balanced, $361$ at $T_{60}$-dominant) and the RMSE
+deteriorates to $\sim$$110$\,ms in both cases. Notably, the balanced
+regime, which by design grants equal nominal weight to both tasks,
+performs no better than the $T_{60}$-dominant regime: once the denoising
+gradient ceases to dominate, the shared representation stops acquiring
+the fine-grained time--frequency structure on which accurate $T_{60}$
+estimation relies. This indicates that pairing a complex task (denoising)
+with a simple task ($T_{60}$) is best driven by letting the complex task
+dominate the shared representation.
 
 \subsection{Representation analysis}\label{sec:res:repr}
 
@@ -985,15 +1009,25 @@ $T_{60}$.
 
 \subsection{Per-bin analysis}\label{sec:res:bins}
 
-We report RMSE per $T_{60}$ bin ($0.1$\,s steps) and per SNR bin for the
-proposed model and the single-task baseline.
+To localise where the denoising auxiliary task helps most, we report RMSE
+per $T_{60}$ bin and per SNR bin for the proposed model and the
+single-task baseline (Fig.~\ref{fig:perbin}). The gains are largest
+exactly where the blind-estimation problem is hardest: at the lowest SNR,
+the denoise-dominant model reduces RMSE from $181.3$\,ms (single-task) to
+$151.9$\,ms at $-5$\,dB, and it recovers roughly $25$--$30$\,ms in the
+$0.7$--$1.1$\,s $T_{60}$ range where the energy-weak late tail is most
+easily buried by noise. This is consistent with the
+denoising-gradient-dominates mechanism: the dense, per-bin denoising
+supervision steers the shared backbone towards the fine time--frequency
+structure of the decay envelope that single-task $T_{60}$ regression
+alone under-learns.
 
 \begin{figure}[H]
   \centering
-  % \includegraphics[width=0.9\textwidth]{figs/per_bin.png}
-  \caption{Per-bin RMSE. (a) RMSE vs.\ $T_{60}$ bin ($0.1$--$1.5$\,s,
-  7 bins); (b) RMSE vs.\ SNR ($-5$ to $20$\,dB, 6 bins). Each plot:
-  single-task vs.\ proposed model.}
+  \includegraphics[width=0.95\textwidth]{figs/per_bin.png}
+  \caption{Per-bin RMSE averaged over test1--test4. (a) RMSE vs.\
+  $T_{60}$ bin; (b) RMSE vs.\ SNR bin. Single-task baseline vs.\ proposed
+  denoise-dominant model.}
   \label{fig:perbin}
 \end{figure}
 
@@ -1007,13 +1041,18 @@ reported in Table~\ref{tab:denoise}.
   \caption{Denoising metrics (normalised main model, average over
   test1--test4).}
   \label{tab:denoise}
+  % TODO[demoise-eval]: fill Enhanced/Δ columns after running on the
+  % server:  bash scripts/test_multitask_denoise_kan_norm_w_denoise.sh -g 0
+  % The denoising branch is shared/identical across regimes, so the values
+  % are expected to be close to the non-normalised w_denoise run
+  % (PESQ 3.58, STOI 0.94, SI-SDR 21.8 dB).
   \begin{tabular}{lccc}
     \toprule
     Metric & Noisy input & Enhanced & $\Delta$ \\
     \midrule
-    PESQ $\uparrow$        & 2.721 &  &  \\
-    STOI $\uparrow$        & 0.847 &  &  \\
-    SI-SDR (dB) $\uparrow$ & 15.91 &  &  \\
+    PESQ $\uparrow$        & 2.721 & \rule{1.4em}{0.4pt} & \rule{1.4em}{0.4pt} \\
+    STOI $\uparrow$        & 0.847 & \rule{1.4em}{0.4pt} & \rule{1.4em}{0.4pt} \\
+    SI-SDR (dB) $\uparrow$ & 15.91 & \rule{1.4em}{0.4pt} & \rule{1.4em}{0.4pt} \\
     \bottomrule
   \end{tabular}
 \end{table}

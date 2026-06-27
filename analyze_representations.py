@@ -54,21 +54,21 @@ MODELS = {
         "color": "#9E9E9E",
         "cls": "single",
     },
-    "w_denoise": {
-        "ckpt": ROOT / "runs/kan_multitask_w_denoise/best_model.pth",
-        "label": r"Multi-task w_denoise ($\alpha$=1.0, $\beta$=0.1)",
+    "norm_w_denoise": {
+        "ckpt": ROOT / "runs/kan_multitask_norm_w_denoise/best_model.pth",
+        "label": r"Multi-task denoise-dom. ($\alpha$=1.0, $\beta$=0.1)",
         "color": "#2196F3",
         "cls": "multi",
     },
-    "w_balanced": {
-        "ckpt": ROOT / "runs/kan_multitask_w_balanced/best_model.pth",
-        "label": r"Multi-task w_balanced ($\alpha$=0.5, $\beta$=0.5)",
+    "norm_balanced": {
+        "ckpt": ROOT / "runs/kan_multitask_norm_balanced/best_model.pth",
+        "label": r"Multi-task balanced ($\alpha$=1.0, $\beta$=1.0)",
         "color": "#4CAF50",
         "cls": "multi",
     },
-    "w_t60": {
-        "ckpt": ROOT / "runs/kan_multitask_w_t60/best_model.pth",
-        "label": r"Multi-task w_t60 ($\alpha$=0.1, $\beta$=1.0)",
+    "norm_w_t60": {
+        "ckpt": ROOT / "runs/kan_multitask_norm_w_t60/best_model.pth",
+        "label": r"Multi-task $T_{60}$-dom. ($\alpha$=0.1, $\beta$=1.0)",
         "color": "#F44336",
         "cls": "multi",
     },
@@ -76,11 +76,10 @@ MODELS = {
 
 LAYER_NAMES = ["encoder", "tscb_1", "tscb_2"]
 T60_RMSE = {
-    "single_task": 107.70,
-    "w_denoise": 96.41,
-    "w_balanced": 100.28,
-    "w_eq": 105.64,
-    "w_t60": 107.84,
+    "single_task": 111.15,
+    "norm_w_denoise": 97.79,
+    "norm_balanced": 109.90,
+    "norm_w_t60": 109.54,
 }
 
 
@@ -195,7 +194,7 @@ def linear_probe(all_feats):
 
 
 def plot_linear_probe(probe_results, out_dir: Path):
-    models_ordered = [m for m in ["single_task", "w_denoise", "w_balanced", "w_t60"]
+    models_ordered = [m for m in ["single_task", "norm_w_denoise", "norm_balanced", "norm_w_t60"]
                       if m in probe_results]
     x = np.arange(len(LAYER_NAMES))
     width = 0.8 / len(models_ordered)
@@ -229,7 +228,7 @@ def plot_linear_probe(probe_results, out_dir: Path):
 # ── t-SNE ────────────────────────────────────────────────────────────────────
 
 def plot_tsne(all_feats, out_dir: Path, layer="tscb_2", n_tsne=500):
-    models_ordered = [m for m in ["single_task", "w_denoise", "w_balanced", "w_t60"]
+    models_ordered = [m for m in ["single_task", "norm_w_denoise", "norm_balanced", "norm_w_t60"]
                       if m in all_feats]
     n = len(models_ordered)
     fig, axes = plt.subplots(1, n, figsize=(5 * n, 4.5))
@@ -285,7 +284,7 @@ def linear_cka(X, Y):
 
 
 def plot_cka(all_feats, out_dir: Path):
-    models_ordered = [m for m in ["single_task", "w_denoise", "w_balanced", "w_t60"]
+    models_ordered = [m for m in ["single_task", "norm_w_denoise", "norm_balanced", "norm_w_t60"]
                       if m in all_feats]
     if "single_task" not in models_ordered:
         print("  CKA skipped: single_task features not available")
@@ -340,7 +339,7 @@ def main():
                         help="Number of test1 samples to use")
     parser.add_argument("--out_dir", default="figures/representation")
     parser.add_argument("--models", nargs="+",
-                        default=["single_task", "w_denoise", "w_balanced", "w_t60"],
+                        default=["single_task", "norm_w_denoise", "norm_balanced", "norm_w_t60"],
                         help="Which models to analyze")
     args = parser.parse_args()
 
