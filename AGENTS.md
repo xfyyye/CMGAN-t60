@@ -57,7 +57,7 @@ wav (B, 64000)
 | `w_eq` | 1.0 | 1.0 | 等权基线 |
 | `w_t60` | 0.1 | 1.0 | T60 梯度主导，验证退化情况 |
 
-单任务最优（`single_t60_kan_v2_mae_clip1_log`，RMSE=107.70ms）作为消融基线对照。
+单任务消融基线（`single_t60_kan_v2_mse`，RMSE=111.15ms）作为对照。（注：`single_t60_kan_v2_mae_clip1_log` 的 RMSE=107.70ms 性能更好，但论文统一采用 `kan_v2_mse` 作为单任务基线。）
 
 ## 关键实验结论
 
