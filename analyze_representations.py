@@ -49,7 +49,7 @@ T60_MIN, T60_MAX = 0.1, 1.5
 
 MODELS = {
     "single_task": {
-        "ckpt": ROOT / "runs/single_t60_kan_v2_mae_clip1_log/best_model.pth",
+        "ckpt": ROOT / "runs/single_t60_kan_v2_mse/best_model.pth",
         "label": "Single-task",
         "color": "#9E9E9E",
         "cls": "single",
