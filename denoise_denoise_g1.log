@@ -80,3 +80,4 @@ Denoise Test: kan_multitask_norm_w_denoise on GPU 1
 
 结果已保存: /mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/scripts/../runs/kan_multitask_norm_w_denoise/test_denoise/denoise_evaluation.json
 去噪测试完成: kan_multitask_norm_w_denoise
+unzip /mnt/tidal-sh01/usr/chuan/youling/project/dataset/archive.zip -d /mnt/tidal-sh01/usr/chuan/youling/project/dataset
