@@ -10,18 +10,18 @@ Extracting features: norm_balanced...
 Extracting features: norm_w_t60...
 
 [Linear Probe]
-    [single_task] encoder: R²=0.4971
-    [single_task] tscb_1: R²=0.6345
-    [single_task] tscb_2: R²=0.6503
-    [norm_w_denoise] encoder: R²=0.1029
-    [norm_w_denoise] tscb_1: R²=0.3794
-    [norm_w_denoise] tscb_2: R²=0.5941
-    [norm_balanced] encoder: R²=0.4324
-    [norm_balanced] tscb_1: R²=0.5733
-    [norm_balanced] tscb_2: R²=0.6224
-    [norm_w_t60] encoder: R²=0.4003
-    [norm_w_t60] tscb_1: R²=0.5253
-    [norm_w_t60] tscb_2: R²=0.6180
+    [single_task] encoder: R²=0.3006
+    [single_task] tscb_1: R²=0.5207
+    [single_task] tscb_2: R²=0.6097
+    [norm_w_denoise] encoder: R²=0.3541
+    [norm_w_denoise] tscb_1: R²=0.5025
+    [norm_w_denoise] tscb_2: R²=0.6170
+    [norm_balanced] encoder: R²=0.3996
+    [norm_balanced] tscb_1: R²=0.5049
+    [norm_balanced] tscb_2: R²=0.5680
+    [norm_w_t60] encoder: R²=0.3659
+    [norm_w_t60] tscb_1: R²=0.5440
+    [norm_w_t60] tscb_2: R²=0.6228
   Saved: figures/representation/linear_probe.png
 
 [t-SNE]
