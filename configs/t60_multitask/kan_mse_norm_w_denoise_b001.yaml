@@ -1,0 +1,53 @@
+experiment:
+  name: kan_multitask_norm_w_denoise_b001   # EMA归一化 + alpha=1.0, beta=0.01 —— 极端去噪主导（β 扫描，找触底）
+  output_root: runs
+
+model:
+  n_tscb: 2
+  t60_head_type: fourier_kan
+  t60_fourier_proj_dim: 64
+  t60_fourier_hidden_dims: [32, 16]
+  t60_fourier_first_num_frequencies: 16
+  t60_fourier_hidden_num_frequencies: 8
+  t60_fourier_dropout: 0.1
+  t60_out_activation: sigmoid
+
+data:
+  dataset_root: /mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s
+  n_fft: 400
+  hop_length: 100
+  audio_length: 4.0
+  target_sr: 16000
+  t60_min: 0.1
+  t60_max: 1.5
+
+train:
+  batch_size: 16
+  accum_steps: 1
+  max_epochs: 100
+  lr: 0.0005
+  weight_decay: 0.00001
+  early_stop_patience: 15
+  num_workers: 8
+  clip_grad_norm: 5.0
+
+test:
+  batch_size: 8
+  num_workers: 4
+  gpu_id: 0
+
+loss:
+  name: mse
+  alpha: 1.0                          # 主任务去噪
+  beta: 0.01                          # 极端弱化 T60（α/β=100:1）
+  w_ri: 0.1
+  w_mag: 0.9
+  w_time: 0.2
+  normalize_loss: true                # 先除各自 EMA 再加权，两项 ~O(1)
+
+probe:
+  log_every: 20
+  include_shared_all: false
+
+logging:
+  swanlab_project: T60_KAN_MultiTask

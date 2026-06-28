@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# 去噪性能测试: kan_multitask_norm_w_denoise_b03 (alpha=1.0, beta=0.1)
-# Usage: ./scripts/test_multitask_denoise_kan_norm_w_denoise.sh -g 0
+# 去噪性能测试: kan_multitask_norm_w_denoise_b03 (alpha=1.0, beta=0.3) —— β 扫描点
+# Usage: ./scripts/test_multitask_denoise_kan_norm_w_denoise_b03.sh -g 0
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -21,7 +21,7 @@ done
 
 echo "Denoise Test: kan_multitask_norm_w_denoise_b03 on GPU $GPU_ID"
 CUDA_VISIBLE_DEVICES="$GPU_ID" "$PYTHON" "$ROOT/test_multitask_denoise.py" \
-    --config           "$ROOT/configs/t60_multitask/kan_mse_norm_w_denoise.yaml" \
+    --config           "$ROOT/configs/t60_multitask/kan_mse_norm_w_denoise_b03.yaml" \
     --model_path       "$ROOT/runs/kan_multitask_norm_w_denoise_b03/best_model.pth" \
     --save_dir         "$ROOT/runs/kan_multitask_norm_w_denoise_b03/test_denoise" \
     --experiment_name  kan_multitask_norm_w_denoise_b03 \
