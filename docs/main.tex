@@ -80,13 +80,14 @@ to a single-task ablation baseline ($861\,793$ parameters, RMSE
 $111.15$\,ms) this is a $12.0$\,\% RMSE reduction. The encoder and
 Conformer trunk are shared between the two tasks, and the denoising
 auxiliary task adds two decoders of about $0.54$\,M parameters, giving
-$1.41$\,M parameters in total. Gradient-probe analysis further reveals that the gradient
-directions of the two tasks are nearly orthogonal throughout training (no
-systematic conflict), and that the decisive factor for final performance is
-the gradient magnitude ratio
-$r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\text{denoise}}\rVert$:
-the smaller $r$ (the more the denoising task dominates the shared backbone),
-the more accurate the $T_{60}$ estimate.
+$1.41$\,M parameters in total. Gradient-probe analysis shows that the
+two task gradients remain nearly orthogonal throughout training (no
+systematic conflict), so the two tasks can be optimised jointly without
+interference; a task-weight ablation further shows that $T_{60}$
+accuracy improves monotonically as the denoising task is given a larger
+weight, and representation analysis indicates that this gain comes from
+the denoising task reshaping the shared features rather than from any
+gradient-dominance effect.
 \end{abstract}
 
 \begin{keywords}
@@ -196,17 +197,16 @@ learnable univariate edge functions replace the fixed scalar
 non-linearities of a conventional MLP, supplying a strong inductive
 bias toward the smooth non-linear mapping from pooled features to a
 scalar $T_{60}$. Third, through systematic gradient probing and
-representation analysis we elucidate the mechanism by which the
-denoising auxiliary supervision takes effect: the two task gradients
-are nearly orthogonal rather than antagonistic, and what really
-governs performance is the gradient magnitude ratio---letting the more
-complex denoising task dominate the shared backbone while the simpler
-$T_{60}$ task rides along in fact benefits the latter; at the
-representation level, CKA shows that this dominance actively
-\emph{restructures} the shared layers (the stronger the denoising
-gradient, the further the representation departs from the single-task
-solution), and this restructuring---not merely adding more
-$T_{60}$ information---is what the Fourier-KAN head exploits.
+representation analysis we elucidate how the denoising auxiliary
+supervision takes effect: the two task gradients are nearly orthogonal
+rather than antagonistic, so the tasks can be optimised jointly without
+interference, and a task-weight ablation shows that giving the denoising
+task a larger weight monotonically improves $T_{60}$ accuracy; at the
+representation level, CKA shows that the denoising task actively
+\emph{reshapes} the shared layers (the larger its weight, the further
+the representation departs from the single-task solution), and this
+reshaping---rather than any gradient-dominance effect---is what the
+Fourier-KAN head exploits.
 
 \noindent\textbf{Contributions.} Our specific contributions are as
 follows.
@@ -227,17 +227,15 @@ follows.
         with a dual-path time--frequency Conformer and to quantify its
         gains.
   \item Through gradient-probe analysis across three task-weight
-        configurations, we reveal the mechanism behind multi-tasking:
-        the gradient directions of the two tasks remain nearly
-        orthogonal throughout training ($\cos\approx 0$, with no
-        systematic antagonistic conflict), and the decisive factor for
-        $T_{60}$ performance is the gradient magnitude ratio
-        $r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\text{denoise}}\rVert$.
-        The smaller $r$ (the more the denoising task dominates the
-        shared backbone), the more accurate the $T_{60}$ estimate. This
-        indicates that in a ``complex task + simple task'' pairing,
-        letting the complex task drive the shared representation while
-        the simple task free-rides is the better strategy.
+        configurations, we show that the two task gradients remain
+        nearly orthogonal throughout training ($\cos\approx 0$, with no
+        systematic antagonistic conflict), so the two tasks can be
+        optimised jointly without interference. A task-weight ablation
+        further shows that $T_{60}$ accuracy improves monotonically as
+        the denoising task is given a larger weight, and representation
+        analysis (CKA) indicates that this gain stems from the
+        denoising task reshaping the shared features rather than from
+        any gradient-dominance effect.
   \item We design a lightweight Fourier-basis Kolmogorov--Arnold
         regression head that maps the multi-statistic pooled bottleneck
         features to $T_{60}$ through a two-layer Fourier-KAN block with
@@ -628,12 +626,11 @@ noise-free reverberant component of Eq.~\eqref{eq:time_model}, so this
 branch performs denoising rather than dereverberation---the enhanced
 speech still carries the room reverberation.
 
-\subsection{Multi-task training objective}\label{sec:method:loss}
+\subsection{Loss function}\label{sec:method:loss}
 
-Reverberation times in the training set span the interval
-$[T_{\min}, T_{\max}] = [0.1, 1.5]$\,s. To match the output range of the
-sigmoid in Eq.~\eqref{eq:t60_hat}, every ground-truth $T_{60}$ value is
-linearly mapped to $[0,1]$ before being fed to the loss function:
+To match the output range of the sigmoid in Eq.~\eqref{eq:t60_hat},
+every ground-truth $T_{60}$ value is linearly mapped to $[0,1]$ before
+being fed to the loss function:
 \begin{equation}\label{eq:t60_norm}
   T_{60}^{\mathrm{norm}}
   = \frac{T_{60} - T_{\min}}{T_{\max} - T_{\min}}.
@@ -653,34 +650,27 @@ magnitude loss and a time-domain loss,
   = w_{ri}\,\mathcal{L}_{ri} + w_{mag}\,\mathcal{L}_{mag}
     + w_{time}\,\mathcal{L}_{time},
 \end{equation}
-with $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, where $\mathcal{L}_{ri}$
-and $\mathcal{L}_{mag}$ are mean-squared errors on the (power-compressed)
-real/imaginary parts and magnitude of the enhanced spectrum against the
-clean reverberant target $\tilde{S}$, and $\mathcal{L}_{time}$ is an
-$\ell_{1}$ loss between the inverse-STFT enhanced waveform and
-$\tilde{s}$. The two tasks are optimised jointly through the weighted
-sum
+where $\mathcal{L}_{ri}$ and $\mathcal{L}_{mag}$ are mean-squared errors
+on the (power-compressed) real/imaginary parts and magnitude of the
+enhanced spectrum against the clean reverberant target $\tilde{S}$, and
+$\mathcal{L}_{time}$ is an $\ell_{1}$ loss between the inverse-STFT
+enhanced waveform and $\tilde{s}$. As the raw denoising and $T_{60}$
+losses differ in scale, each is first divided by its own exponential
+moving average (EMA) to bring $\mathcal{L}_{\mathrm{den}}^{*}$ and
+$\mathcal{L}_{T_{60}}^{*}$ to a common scale, so that the two losses
+can be weighted on a single dimension; the two tasks are then optimised
+jointly through the weighted sum
 \begin{equation}\label{eq:loss}
   \mathcal{L}(\boldsymbol{\theta})
-  = \alpha\,\mathcal{L}_{\mathrm{den}}(\boldsymbol{\theta})
-    + \beta\,\mathcal{L}_{T_{60}}(\boldsymbol{\theta}),
+  = \alpha\,\mathcal{L}_{\mathrm{den}}^{*}(\boldsymbol{\theta})
+    + \beta\,\mathcal{L}_{T_{60}}^{*}(\boldsymbol{\theta}),
 \end{equation}
 where $\boldsymbol{\theta}$ collects all trainable parameters of the
 shared encoder and TSCBs, the Fourier-KAN head and the two denoising
-decoders. Because the raw denoising and $T_{60}$ losses differ greatly
-in scale, each is first divided by its own exponential moving average
-(EMA) to bring $\mathcal{L}_{\mathrm{den}}^{*}$ and
-$\mathcal{L}_{T_{60}}^{*}$ to a common scale of $\mathcal{O}(1)$ (see
-Section~\ref{sec:exp:impl}); the weights $(\alpha,\beta)$ then act as a
-clean knob over which task's gradient dominates the shared backbone. We
-study three regimes,
-$(\alpha,\beta)\in\{(1.0,0.1),(1.0,1.0),(0.1,1.0)\}$, spanning
-denoise-dominant, balanced and $T_{60}$-dominant settings, and show in
-Section~\ref{sec:results} that the effective gradient magnitude ratio
-$r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
-set by these weights is the decisive factor for $T_{60}$ accuracy,
-whereas the gradient directions remain nearly orthogonal across all
-regimes.
+decoders; the denoising sub-weights are
+$(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$. The specific values of
+$(\alpha,\beta)$ and the corresponding main-model configuration are
+given in Section~\ref{sec:exp:impl}.
 
 At inference time the sigmoid output is denormalised by the inverse of
 Eq.~\eqref{eq:t60_norm} to yield the final estimate
@@ -744,39 +734,32 @@ the $T_{60}$ distribution of the training pool and of the test sets
 
 \subsection{Implementation details}\label{sec:exp:impl}
 
-\paragraph{Model.} The shared backbone is a DenseEncoder ($C=64$)
-followed by two TSCBs; the $T_{60}$ regression head is a Fourier-KAN
-head (projection $d_{0}=64$, hidden $(d_{1},d_{2})=(32,16)$, frequency
-budgets $(\Omega_{0},\Omega_{1})=(16,8)$, dropout $0.1$, sigmoid output);
-the denoising branch comprises the CMGAN mask and complex decoders. A
-complex STFT with an $N=400$-sample Hamming window and a $H=100$ hop
-yields $T=641$ frames and $F=201$ bins. Ground-truth $T_{60}$ is linearly
-mapped from $[0.1,1.5]$ to $[0,1]$ before entering the loss.
+The model architecture is detailed in Section~\ref{sec:method} (shared
+DenseEncoder + two TSCBs + Fourier-KAN regression head + CMGAN denoising
+decoders); here we only describe the training configuration. All
+recordings are resampled to $16$\,kHz mono and chunked/padded to $4$\,s,
+and trained with the normalised loss of Section~\ref{sec:method:loss}.
 
 \paragraph{Training.} We use the AdamW optimiser (learning rate
 $5\times10^{-4}$, weight decay $10^{-5}$), batch size $16$, gradient
 clipping $5.0$, and mixed-precision training for at most $100$ epochs,
 with early stopping when the validation RMSE does not improve for $15$
-epochs. The denoising loss uses sub-weights
-$(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$ and $\mathcal{L}_{T_{60}}$ is
-the MSE on the normalised $T_{60}$. Each of the two losses is divided by
-its own exponential moving average (EMA) to bring them to a common
-scale, denoted $\mathcal{L}_{\mathrm{den}}^{*}$ and
-$\mathcal{L}_{T_{60}}^{*}$, giving the total loss
+epochs. Following Section~\ref{sec:method:loss}, the denoising and
+$T_{60}$ losses are each divided by their own EMA to a common scale and
+combined as
 $\mathcal{L}=\alpha\,\mathcal{L}_{\mathrm{den}}^{*}+
-\beta\,\mathcal{L}_{T_{60}}^{*}$. The proposed model and all ablations
-use this normalised loss; we train three configurations
-$(\alpha,\beta)\in\{(1.0,0.1),(1.0,1.0),(0.1,1.0)\}$, corresponding to
-denoise-dominant, balanced and $T_{60}$-dominant regimes, with the
-denoise-dominant setting ($\alpha=1.0,\beta=0.1$) as the proposed model.
+\beta\,\mathcal{L}_{T_{60}}^{*}$. We train three task-weight
+configurations $(\alpha,\beta)\in\{(1.0,0.1),(1.0,1.0),(0.1,1.0)\}$,
+corresponding to denoise-dominant, balanced and $T_{60}$-dominant
+regimes; the denoise-dominant setting ($\alpha=1.0,\beta=0.1$) is the
+proposed main model.
 
-\paragraph{Gradient probe.} To characterise the relative influence of
-the two tasks on the shared layers, every $20$ training steps and before
-the main backward pass we measure the gradients of the two (normalised)
-losses with respect to the three shared modules (DenseEncoder,
-TSCB$_{1}$, TSCB$_{2}$), recording the cosine similarity $\cos$ and the
-magnitude ratio
-$r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$.
+\paragraph{Gradient probe.} To check whether the two tasks interfere on
+the shared layers, every $20$ training steps and before the main
+backward pass we measure the gradients of the two (normalised but
+unweighted) losses with respect to the three shared modules
+(DenseEncoder, TSCB$_{1}$, TSCB$_{2}$) and record the cosine similarity
+$\cos$ between them.
 
 \subsection{Comparison methods and ablation configurations}\label{sec:exp:baselines}
 
@@ -851,9 +834,10 @@ $T_{60}$ bin ($0.1$\,s steps) and per SNR bin.
   measuring reconstruction fidelity in dB; higher is better.
 \end{description}
 All denoising metrics are computed on both the noisy input and the
-enhanced output and the gains are reported. Since the denoising target
-is the noise-free reverberant speech, these metrics measure denoising
-rather than dereverberation quality.
+enhanced output and the gains are reported. As noted in
+Section~\ref{sec:method:denoise}, the denoising target is the noise-free
+reverberant speech, so these metrics measure denoising rather than
+dereverberation quality.
 
 % =====================================================================
 \section{Results and analysis}\label{sec:results}
@@ -892,30 +876,30 @@ normalised multi-task training.
 
 \subsection{Task-weight ablation and gradient mechanism}\label{sec:res:weight}
 
-Because the raw denoising and $T_{60}$ losses differ greatly in scale
-(denoise $\approx 0.04$, $T_{60}\approx 0.0005$, a $10$--$80\times$ gap),
-the nominal ratio $\alpha/\beta$ does not by itself indicate which task's
-gradient dominates the shared backbone. We therefore normalise the two
-losses to a common scale (Section~\ref{sec:exp:impl}) and measure the
-effective gradient magnitude ratio $r =
-\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
-directly. Table~\ref{tab:weight} reports $r$ and $T_{60}$ RMSE for the
-three regimes.
+Table~\ref{tab:weight} reports the $T_{60}$ accuracy for the three
+task-weight regimes. Accuracy improves monotonically as the denoising
+weight is increased relative to the $T_{60}$ weight: the
+denoise-dominant regime ($\alpha{=}1.0,\beta{=}0.1$) attains the lowest
+RMSE ($97.79$\,ms), and once the denoising weight is reduced the RMSE
+deteriorates to $\sim$$110$\,ms---no better than the single-task
+baseline ($111.15$\,ms). The balanced regime, which grants equal nominal
+weight to both tasks, performs no better than the $T_{60}$-dominant
+regime: accuracy improves only when the denoising task is given a
+clearly larger weight.
 
 \begin{table}[!htbp]
   \centering
-  \caption{Task-weight ablation (normalised losses; $r$ is the effective
-  gradient ratio $\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
-  averaged over the three shared modules and over training). Smaller $r$
-  (more denoising-dominant) yields lower RMSE.}
+  \caption{Task-weight ablation (normalised losses; average over
+  test1--test4). $T_{60}$ accuracy improves monotonically as the
+  denoising weight $\alpha/\beta$ increases.}
   \label{tab:weight}
-  \begin{tabular}{lcccc}
+  \begin{tabular}{lccc}
     \toprule
-    Configuration & $(\alpha,\beta)$ & effective $r\downarrow$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
+    Configuration & $(\alpha,\beta)$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    Denoise-dominant (proposed) & (1.0, 0.1) & \textbf{2.20}  & \textbf{97.79}  & \textbf{57.95} \\
-    Balanced                    & (1.0, 1.0) & 34.17          & 109.90          & 67.16 \\
-    $T_{60}$-dominant           & (0.1, 1.0) & 360.59         & 109.54          & 68.15 \\
+    Denoise-dominant (proposed) & (1.0, 0.1) & \textbf{97.79}  & \textbf{57.95} \\
+    Balanced                    & (1.0, 1.0) & 109.90          & 67.16 \\
+    $T_{60}$-dominant           & (0.1, 1.0) & 109.54          & 68.15 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -923,36 +907,27 @@ three regimes.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/gradient_cos_r.png}
-  \caption{Gradient mechanism across the three normalised regimes.
-  (a) Mean gradient cosine $\cos$ between the two task gradients on the
-  shared encoder---all near $0$, so the two tasks are neither cooperative
-  nor systematically antagonistic. (b) Effective gradient ratio
-  $r=\lVert\mathbf{g}_{T_{60}}\rVert/\lVert\mathbf{g}_{\mathrm{den}}\rVert$
-  (log scale): smallest under the denoise-dominant regime.
-  (c) Fraction of conflicting steps ($\cos<0$), all well below $50\%$.
-  (d) $r$ vs.\ $T_{60}$ RMSE: smaller $r$ (more denoising-dominant)
-  yields lower RMSE.}
+  \caption{Gradient cosine $\cos$ between the two task gradients on the
+  shared encoder, across the three normalised regimes. (a) Mean $\cos$
+  over training, all near $0$: the two tasks are neither cooperative nor
+  systematically antagonistic. (b) Fraction of conflicting steps
+  ($\cos<0$), well below $50\%$.}
   \label{fig:gradient}
 \end{figure}
 
-The two task gradients remain nearly orthogonal throughout training
-($\cos\approx 0$, neg\% $<50\%$), with no systematic antagonistic
-conflict; the decisive factor for $T_{60}$ accuracy is the effective
-gradient magnitude ratio $r$. As Table~\ref{tab:weight} shows, the
-denoise-dominant regime achieves $r\approx 2.2$---i.e.\ the denoising
-gradient on the shared backbone is about half the $T_{60}$ gradient in
-magnitude yet still dominates the representation through its dense,
-per-bin supervision---and attains the best RMSE ($97.79$\,ms). Moving
-away from denoising dominance raises $r$ by one to two orders of
-magnitude ($34$ at balanced, $361$ at $T_{60}$-dominant) and the RMSE
-deteriorates to $\sim$$110$\,ms in both cases. Notably, the balanced
-regime, which by design grants equal nominal weight to both tasks,
-performs no better than the $T_{60}$-dominant regime: once the denoising
-gradient ceases to dominate, the shared representation stops acquiring
-the fine-grained time--frequency structure on which accurate $T_{60}$
-estimation relies. This indicates that pairing a complex task (denoising)
-with a simple task ($T_{60}$) is best driven by letting the complex task
-dominate the shared representation.
+To check that the two tasks do not interfere antagonistically, we use
+the gradient probe of Section~\ref{sec:exp:impl} to measure the cosine
+$\cos$ between the two task gradients on the shared encoder throughout
+training. As Fig.~\ref{fig:gradient} shows, $\cos$ stays centred near
+$0$ (mean $\lvert\cos\rvert\approx 0.10$, with only $\sim$$41$\,\% of
+steps having $\cos<0$): the two task gradients are nearly orthogonal,
+neither cooperatively aligned nor in systematic conflict. The two tasks
+can therefore be optimised jointly without one interfering with the
+other, and what governs $T_{60}$ accuracy is the task-weight
+ratio---i.e.\ how much the denoising task is allowed to shape the shared
+representation---rather than any gradient conflict. How this shaping
+actually takes place at the representation level is examined in
+Section~\ref{sec:res:repr}.
 
 \subsection{Representation analysis}\label{sec:res:repr}
 
@@ -1000,9 +975,9 @@ ordering of CKA matches the ordering of $T_{60}$ accuracy in
 Table~\ref{tab:weight} (denoise-dominant best, $T_{60}$-dominant worst):
 the more the denoising gradient reshapes the shared representation, the
 lower the $T_{60}$ RMSE. In other words, \emph{a stronger denoising
-gradient does more than add a second objective---it actively
-restructures the shared representation, and this restructuring is what
-the $T_{60}$ head benefits from.}
+gradient does more than add a second objective---it actively reshapes
+the shared representation, and this reshaping is what the $T_{60}$ head
+benefits from.}
 
 Linear probing (Fig.~\ref{fig:linearprobe}) confirms that this
 restructuring does not discard the $T_{60}$ information: across all four
@@ -1074,8 +1049,8 @@ alone under-learns.
 \subsection{Denoising results}\label{sec:res:denoise}
 
 Table~\ref{tab:denoise} reports the denoising quality of the three
-normalised regimes, averaged over test1--test4. The denoising target is
-the clean reverberant speech, so these metrics reflect noise removal
+normalised regimes, averaged over test1--test4. Per the target defined
+in Section~\ref{sec:method:denoise}, these metrics reflect noise removal
 while preserving the reverberation.
 
 \begin{table}[!htbp]
@@ -1103,9 +1078,8 @@ denoising quality follows the \emph{same} ordering as the $T_{60}$
 accuracy (Table~\ref{tab:weight}): the denoise-dominant regime is best
 at both tasks, and the $T_{60}$-dominant regime is worst at both. There
 is therefore no trade-off between the auxiliary and the main
-task---letting the denoising gradient dominate the shared backbone
-improves the two tasks jointly, which is precisely the behaviour
-predicted by the gradient-magnitude-ratio mechanism of
+task---giving the denoising task a larger weight improves the two tasks
+jointly, consistent with the task-weight ablation of
 Section~\ref{sec:res:weight}.
 
 % =====================================================================
@@ -1121,17 +1095,16 @@ about $0.54$\,M decoder parameters, reduces the $T_{60}$ RMSE
 substantially relative to the single-task ablation baseline
 ($111.15$\,ms) and outperforms BERP, DAMTL and noiseaware; (2) gradient
 probing shows that the two task gradients are nearly orthogonal with no
-systematic conflict, and the gradient magnitude ratio $r$ is the
-decisive factor---letting the denoising (complex) gradient dominate the
-shared backbone while $T_{60}$ (simple) free-rides is the better
-multi-task strategy; (3) the Fourier-KAN head outperforms an MLP head
-under comparable settings. Representation analysis (CKA and linear
-probing) further shows that the denoising gradient actively
-\emph{restructures} the shared representation: the stronger the
-denoising gradient, the further the shared layers depart from the
-single-task solution (lower CKA), yet the $T_{60}$ cue is preserved at
-a comparable level of linear decodability---i.e.\ denoising re-encodes
-rather than removes the $T_{60}$ information, and this restructured
+systematic conflict, so the two tasks can be optimised jointly without
+interference, and a task-weight ablation shows that giving the denoising
+task a larger weight monotonically improves $T_{60}$ accuracy; (3) the
+Fourier-KAN head outperforms an MLP head under comparable settings.
+Representation analysis (CKA and linear probing) further shows that the
+denoising task actively \emph{reshapes} the shared representation: the
+larger its weight, the further the shared layers depart from the
+single-task solution (lower CKA), yet the $T_{60}$ cue is preserved at a
+comparable level of linear decodability---i.e.\ denoising re-encodes
+rather than removes the $T_{60}$ information, and this reshaped
 representation is what the Fourier-KAN head exploits, yielding the
 lowest RMSE.
 

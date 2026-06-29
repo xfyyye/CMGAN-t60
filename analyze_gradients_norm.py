@@ -1,23 +1,19 @@
 """
 Gradient probe visualization for the THREE normalised-loss experiments.
 
-This is the paper version of analyze_gradients.py, adapted to:
-  - parse the three `kan_multitask_norm_*` runs,
-  - tolerate `cos=+nan,r=nan` probe lines,
-  - report the EFFECTIVE gradient ratio r = ||g_T60||/||g_den||, i.e. the
-    ratio that actually acts on the shared backbone after the (alpha,beta)
-    weighting. The probe measures the gradient of the NORMALISED but
-    UNWEIGHTED losses, whose ratio we denote d/t; the effective r that
-    appears in the paper is (beta/alpha) / (d/t) = (beta/alpha) * (t/d).
+Reports only the cosine between the two task gradients on the shared
+encoder: the two-panel cos_r_bar.png (mean cosine + conflict fraction)
+is the figure used in the paper (Fig. 3). The gradient magnitude-ratio
+analysis was found to be confounded by the loss-normalisation and is
+therefore not reported.
 
 Usage:
     python analyze_gradients_norm.py [--out_dir figures/gradient_norm]
 
 Figures:
-    1. cos_r_bar.png     — 4-panel: mean cos, mean effective r, neg%, r-RMSE scatter
+    1. cos_r_bar.png     — 2-panel: mean cos, conflict fraction (paper Fig. 3)
     2. cos_hist.png      — cos distribution per regime
     3. cos_timeseries.png — encoder cos over training (smoothed)
-    4. r_timeseries.png  — encoder effective r over training (smoothed)
 """
 
 import re
@@ -151,69 +147,46 @@ def nanmean(a):
 # ── figures ──────────────────────────────────────────────────────────────────
 
 def plot_bar_summary(all_data, out_dir):
+    """Two-panel summary: (a) mean gradient cosine, (b) conflict fraction.
+
+    Only cosine-based statistics are reported, since the magnitude-ratio
+    analysis was found to be confounded by the loss-normalisation and is
+    therefore not used in the paper.
+    """
     exps = list(all_data.keys())
     cfgs = [EXPERIMENTS[e] for e in exps]
     labels = [c["short"] for c in cfgs]
     colors = [c["color"] for c in cfgs]
-    rmses = [c["t60_rmse"] for c in cfgs]
 
     cos_means = [nanmean(all_data[e]["encoder"]["cos"]) for e in exps]
-    eff_r = [nanmean(effective_r(all_data[e]["encoder"]["d_over_t"],
-                                 cfg["alpha"], cfg["beta"]))
-             for e, cfg in zip(exps, cfgs)]
     neg_pcts = [np.nanmean(all_data[e]["encoder"]["cos"][~np.isnan(all_data[e]["encoder"]["cos"])] < 0) * 100 for e in exps]
 
     x = np.arange(len(exps))
-    fig = plt.figure(figsize=(12, 7))
-    gs = gridspec.GridSpec(2, 2, figure=fig, hspace=0.42, wspace=0.30)
+    fig, (ax_a, ax_b) = plt.subplots(1, 2, figsize=(10, 4.2))
 
-    # A. mean cos
-    ax = fig.add_subplot(gs[0, 0])
-    bars = ax.bar(x, cos_means, color=colors, edgecolor="white", linewidth=0.6)
-    ax.axhline(0, color="black", linewidth=0.8)
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=9)
-    ax.set_ylabel("Mean cos"); ax.set_title("(a) Mean gradient cosine")
+    # (a) mean cos
+    bars = ax_a.bar(x, cos_means, color=colors, edgecolor="white", linewidth=0.6)
+    ax_a.set_xticks(x); ax_a.set_xticklabels(labels, fontsize=9)
+    ax_a.set_ylabel("Mean gradient cosine")
+    ax_a.set_title("(a) Mean cosine between task gradients")
     for b, v in zip(bars, cos_means):
-        ax.text(b.get_x()+b.get_width()/2, v+0.002, f"{v:+.3f}",
-                ha="center", va="bottom", fontsize=9)
-    ax.set_ylim(-0.02, 0.05)
+        ax_a.text(b.get_x()+b.get_width()/2, v+0.001, f"{v:+.3f}",
+                  ha="center", va="bottom", fontsize=9)
+    ax_a.set_ylim(0, 0.045)
 
-    # B. mean effective r (log scale, spans orders of magnitude)
-    ax = fig.add_subplot(gs[0, 1])
-    bars = ax.bar(x, eff_r, color=colors, edgecolor="white", linewidth=0.6)
-    ax.axhline(1.0, color="black", linewidth=0.8, linestyle="--", alpha=0.5)
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=9)
-    ax.set_ylabel(r"effective $r=\|g_{T_{60}}\|/\|g_{\mathrm{den}}\|$")
-    ax.set_yscale("log")
-    ax.set_title(r"(b) Effective gradient ratio $r$")
-    for b, v in zip(bars, eff_r):
-        ax.text(b.get_x()+b.get_width()/2, v*1.08, f"{v:.2f}",
-                ha="center", va="bottom", fontsize=9, fontweight="bold")
-
-    # C. neg%
-    ax = fig.add_subplot(gs[1, 0])
-    bars = ax.bar(x, neg_pcts, color=colors, edgecolor="white", linewidth=0.6)
-    ax.axhline(50, color="red", linewidth=0.8, linestyle="--", alpha=0.6, label="50% (random)")
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=9)
-    ax.set_ylabel("neg% (cos < 0)"); ax.set_title("(c) Conflict fraction")
-    ax.set_ylim(0, 65); ax.legend(fontsize=8)
+    # (b) neg% (conflict fraction)
+    bars = ax_b.bar(x, neg_pcts, color=colors, edgecolor="white", linewidth=0.6)
+    ax_b.axhline(50, color="red", linewidth=0.8, linestyle="--", alpha=0.6, label="50% (random)")
+    ax_b.set_xticks(x); ax_b.set_xticklabels(labels, fontsize=9)
+    ax_b.set_ylabel(r"Conflict fraction ($\cos<0$)")
+    ax_b.set_title("(b) Fraction of conflicting steps")
+    ax_b.set_ylim(0, 65); ax_b.legend(fontsize=8)
     for b, v in zip(bars, neg_pcts):
-        ax.text(b.get_x()+b.get_width()/2, v+0.6, f"{v:.1f}%",
-                ha="center", va="bottom", fontsize=9)
-
-    # D. r vs RMSE scatter
-    ax = fig.add_subplot(gs[1, 1])
-    for e, c, rr, col in zip(exps, eff_r, rmses, colors):
-        ax.scatter(rr, c, color=col, s=140, zorder=5)
-        ax.annotate(EXPERIMENTS[e]["short"], (rr, c),
-                    xytext=(7, 5), textcoords="offset points", fontsize=8)
-    ax.set_xscale("log")
-    ax.set_xlabel(r"effective $r$ (log scale)")
-    ax.set_ylabel(r"$T_{60}$ RMSE (ms)")
-    ax.set_title(r"(d) $r$ vs. $T_{60}$ RMSE")
+        ax_b.text(b.get_x()+b.get_width()/2, v+0.6, f"{v:.1f}%",
+                  ha="center", va="bottom", fontsize=9)
 
     fig.suptitle("Gradient-probe analysis across the three normalised regimes",
-                 fontsize=13, fontweight="bold", y=1.0)
+                 fontsize=13, fontweight="bold", y=1.02)
     path = out_dir / "cos_r_bar.png"
     fig.savefig(path, bbox_inches="tight", dpi=300)
     plt.close(fig)
@@ -306,7 +279,6 @@ def main():
     plot_bar_summary(all_data, out_dir)
     plot_cos_hist(all_data, out_dir)
     plot_cos_timeseries(all_data, out_dir)
-    plot_r_timeseries(all_data, out_dir)
     print(f"\nDone -> {out_dir}/")
 
 
