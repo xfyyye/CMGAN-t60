@@ -1,0 +1,97 @@
+{
+  "summary": {
+    "test1": {
+      "test_split": "test1",
+      "num_samples": 1080,
+      "enhanced": {
+        "PESQ": 3.4803,
+        "STOI": 0.9258,
+        "SI_SDR_dB": 21.26
+      },
+      "noisy_input": {
+        "PESQ": 2.7206,
+        "STOI": 0.8461,
+        "SI_SDR_dB": 15.94
+      },
+      "improvement": {
+        "PESQ": 0.7598,
+        "STOI": 0.0797,
+        "SI_SDR_dB": 5.31
+      }
+    },
+    "test2": {
+      "test_split": "test2",
+      "num_samples": 1080,
+      "enhanced": {
+        "PESQ": 3.4677,
+        "STOI": 0.9282,
+        "SI_SDR_dB": 21.29
+      },
+      "noisy_input": {
+        "PESQ": 2.7028,
+        "STOI": 0.8496,
+        "SI_SDR_dB": 15.9
+      },
+      "improvement": {
+        "PESQ": 0.7649,
+        "STOI": 0.0785,
+        "SI_SDR_dB": 5.38
+      }
+    },
+    "test3": {
+      "test_split": "test3",
+      "num_samples": 1080,
+      "enhanced": {
+        "PESQ": 3.4702,
+        "STOI": 0.9317,
+        "SI_SDR_dB": 21.15
+      },
+      "noisy_input": {
+        "PESQ": 2.736,
+        "STOI": 0.8439,
+        "SI_SDR_dB": 15.91
+      },
+      "improvement": {
+        "PESQ": 0.7342,
+        "STOI": 0.0878,
+        "SI_SDR_dB": 5.24
+      }
+    },
+    "test4": {
+      "test_split": "test4",
+      "num_samples": 1080,
+      "enhanced": {
+        "PESQ": 3.4784,
+        "STOI": 0.9375,
+        "SI_SDR_dB": 21.25
+      },
+      "noisy_input": {
+        "PESQ": 2.7235,
+        "STOI": 0.8497,
+        "SI_SDR_dB": 15.9
+      },
+      "improvement": {
+        "PESQ": 0.7549,
+        "STOI": 0.0878,
+        "SI_SDR_dB": 5.35
+      }
+    }
+  },
+  "average": {
+    "enhanced": {
+      "PESQ": 3.4742,
+      "STOI": 0.9308,
+      "SI_SDR_dB": 21.24
+    },
+    "noisy_input": {
+      "PESQ": 2.7207,
+      "STOI": 0.8473,
+      "SI_SDR_dB": 15.91
+    },
+    "improvement": {
+      "PESQ": 0.7535,
+      "STOI": 0.0834,
+      "SI_SDR_dB": 5.32
+    }
+  }
+}
