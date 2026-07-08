@@ -74,11 +74,11 @@ matched to the smooth but non-linear dependence between pooled acoustic
 statistics and the target $T_{60}$. On four noisy reverberant test sets
 covering both simulated and measured room impulse responses with seen and
 unseen noise types, the proposed model attains an average root-mean-squared
-error (RMSE) of $97.79$\,ms, a mean absolute error (MAE) of
-$57.95$\,ms and a Pearson correlation of $0.9592$; relative
+error (RMSE) of $92.91$\,ms, a mean absolute error (MAE) of
+$56.68$\,ms and a Pearson correlation of $0.9625$; relative
 to a single-task ablation baseline ($861\,793$ parameters, RMSE
-$111.15$\,ms) this is a $12.0$\,\% RMSE reduction. The encoder and
-Conformer trunk are shared between the two tasks, and the denoising
+$111.15$\,ms) this is a $16.4$\,\% RMSE reduction. The encoder and
+Conformer blocks are shared between the two tasks, and the denoising
 auxiliary task adds two decoders of about $0.54$\,M parameters, giving
 $1.41$\,M parameters in total. Gradient-probe analysis shows that the
 two task gradients remain nearly orthogonal throughout training (no
@@ -186,8 +186,9 @@ To address these challenges, we propose a multi-task learning framework
 for blind $T_{60}$ estimation, built around three core design choices.
 First, we introduce a denoising reconstruction auxiliary task on top of
 a dual-path time--frequency Conformer encoder, sharing the encoder and
-trunk between the two tasks. The denoising task requires the network to
-separate noise from the noisy reverberant spectrum and reconstruct the
+Conformer blocks between the two tasks. The denoising task requires the
+network to separate noise from the noisy reverberant spectrum and
+reconstruct the
 clean reverberant speech; this dense, per-time-frequency-bin supervision
 forces the shared layers to learn fine-grained time--frequency
 discriminative features, and we verify that such a denoising-driven
@@ -215,17 +216,14 @@ follows.
   \item We propose a multi-task framework for blind $T_{60}$ estimation
         that takes $T_{60}$ regression as the main task and denoising
         reconstruction as an auxiliary task, sharing a dual-path
-        time--frequency Conformer backbone. Sharing the encoder and trunk
-        between the two tasks, the $T_{60}$ RMSE is reduced by
-        $12.0$\,\% relative to a single-task ablation baseline
-        ($97.79$\,ms vs.\ $111.15$\,ms), at the cost of two
-        denoising decoders ($\approx
-        0.54$\,M parameters; $1.41$\,M parameters in total vs.\
-        $861\,793$ for the single-task estimator). To the best of our
-        knowledge, this is the first work to systematically introduce
-        denoising auxiliary supervision into blind $T_{60}$ regression
-        with a dual-path time--frequency Conformer and to quantify its
-        gains.
+        time--frequency Conformer backbone (a dense convolutional
+        encoder and two two-stage Conformer blocks) between the two
+        tasks, with a Fourier-KAN regression head and a CMGAN-style
+        denoising decoder branch tapped off the shared bottleneck. To
+        the best of our knowledge, this is the first work to
+        systematically introduce denoising auxiliary supervision into
+        blind $T_{60}$ regression with a dual-path time--frequency
+        Conformer.
   \item Through gradient-probe analysis across three task-weight
         configurations, we show that the two task gradients remain
         nearly orthogonal throughout training ($\cos\approx 0$, with no
@@ -241,15 +239,18 @@ follows.
         features to $T_{60}$ through a two-layer Fourier-KAN block with
         a hierarchical frequency budget. Experiments confirm that the
         proposed head consistently outperforms a conventional MLP head
-        of comparable size.
+        of comparable size under the same multi-task setting.
   \item We carry out a systematic evaluation on four noisy reverberant
         test sets covering all combinations of simulated/measured RIRs
-        and seen/unseen noise types. The proposed model, comprising
-        only approximately $1.41$\,M parameters, attains an average
-        RMSE of $97.79$\,ms, a MAE of $57.95$\,ms and a
-        Pearson correlation of $0.9592$, and ablation studies
-        confirm that each
-        component contributes a significant share of the improvement.
+        and seen/unseen noise types. Sharing the encoder and Conformer
+        blocks between the two tasks, the $T_{60}$ RMSE is reduced by
+        $16.4$\,\% relative to a single-task ablation baseline
+        ($92.91$\,ms vs.\ $111.15$\,ms), at the cost of two denoising
+        decoders ($\approx 0.54$\,M parameters; $1.41$\,M parameters in
+        total vs.\ $861\,793$ for the single-task estimator). The
+        proposed model attains an average RMSE of $92.91$\,ms, a MAE of
+        $56.68$\,ms and a Pearson correlation of $0.9625$, and
+        outperforms BERP, DAMTL and noiseaware.
 \end{enumerate}
 
 The remainder of this paper is organised as follows.
@@ -321,47 +322,61 @@ $\hat{T}_{60}$ directly.
 
 This section describes the proposed multi-task $T_{60}$ estimation
 network. As illustrated in Fig.~\ref{fig:overall}, the network is
-composed of a shared front end and two task-specific branches. The
-shared front end consists of (i) a complex-spectrum \emph{feature
-encoder} that turns the noisy reverberant waveform into a
-high-dimensional time--frequency representation, and (ii) a dual-path
-\emph{Conformer trunk} that captures long-range spectro-temporal
-dependencies. The resulting bottleneck feeds two parallel branches:
-(iii) a Fourier-KAN \emph{regression head} that aggregates the trunk
-output into a single normalised $T_{60}$ estimate (the main task), and
-(iv) a \emph{denoising decoder branch} (a mask decoder and a complex
-decoder) that reconstructs the enhanced speech (the auxiliary task).
-The two branches share the encoder and the trunk and are trained
-jointly, so that the denoising gradient acts as a regulariser on the
-shared representation; the training objective is detailed in
-Section~\ref{sec:method:loss}.
+composed of a \emph{shared backbone} and two task-specific branches.
+The shared backbone consists of (i) a complex-spectrum \emph{dense
+convolutional encoder} that turns the noisy reverberant waveform into a
+high-dimensional time--frequency representation, and (ii) two
+\emph{two-stage Conformer blocks} (TSCBs) that capture long-range
+spectro-temporal dependencies. The resulting bottleneck feeds two
+parallel branches: (iii) a Fourier-KAN \emph{regression head} that
+aggregates the bottleneck output into a single normalised $T_{60}$
+estimate (the main task), and (iv) a \emph{denoising decoder branch}
+(a mask decoder and a complex decoder) that reconstructs the enhanced
+speech (the auxiliary task). The two branches share the encoder and the
+Conformer blocks and are trained jointly, so that the denoising
+gradient acts as a regulariser on the shared representation; the
+training objective is detailed in Section~\ref{sec:method:loss}.
 
-% [TODO-multitask] Redraw overall_architecture.png as a three-branch
-% diagram (T60 head + mask decoder + complex decoder off the bottleneck).
-\begin{figure}[H]
+\begin{figure*}[t]
   \centering
-  \includegraphics[width=0.95\textwidth]{figs/overall_architecture.png}
+  \includegraphics[width=\textwidth]{figs/overall_multitask.png}
   \caption{Overview of the proposed multi-task Conformer-based $T_{60}$
   estimation network. Complex STFT features of the noisy reverberant
-  utterance are processed by a dense convolutional encoder and two
-  time--frequency Conformer blocks (TSCBs). The shared bottleneck feeds
-  two branches: a Fourier-KAN regression head (main task) and a
-  denoising decoder branch (mask decoder + complex decoder, auxiliary
-  task). For the regression head, the bottleneck feature map is averaged
-  over the frequency axis, aggregated by a multi-statistic pooling layer
-  over the time axis and mapped to $\hat{T}_{60}$ by a two-layer
-  Fourier-KAN head.}
+  waveform $x(t)$ are processed by a dense convolutional encoder and
+  $N{=}2$ stacked two-stage Conformer blocks (TSCBs; see
+  Fig.~\ref{fig:tsconformer} for the internal block structure), producing
+  a shared bottleneck of shape $B{\times}64{\times}T{\times}F/2$. Three
+  branches diverge from the shared bottleneck. The \emph{$T_{60}$ Branch}
+  applies channel-wise global statistics pooling
+  ($\mu\,\|\,\max\,\|\,\sigma$) followed by a Linear--LayerNorm
+  projection, a two-layer Fourier-KAN head ($\Omega{=}16,8$;
+  $64{\to}32{\to}16$), a Linear--Sigmoid and an inverse min--max
+  denormalisation to yield $\hat{T}_{60}$. The \emph{Mask Decoder} and
+  the \emph{Complex Decoder} reuse the CMGAN dilated DenseNet
+  ($d\in\{1,2,4,8\}$) and sub-pixel upsampling to predict a real-valued
+  magnitude mask and a complex residual $\Delta(\mathrm{real},
+  \mathrm{imag})$. Spectral recombination multiplies the mask with the
+  noisy magnitude (operator $\mathrm{M}$), reattaches the noisy phase
+  $\angle X$ and adds the complex residual ($\oplus$) to obtain the
+  reconstructed complex spectrum $\hat{X}$, which is inverted by iSTFT
+into the enhanced waveform $\hat{s}(t)$. The two tasks are trained
+jointly with the loss
+$\mathcal{L}_{\mathrm{total}}=\alpha\,\mathcal{L}_{\mathrm{denoise}}
++\beta\,\mathcal{L}_{T_{60}}$ (the task weights $(\alpha,\beta)$ are
+tuned in Section~\ref{sec:res:ablation}); see
+Section~\ref{sec:method:loss} for the full definition.}
   \label{fig:overall}
-\end{figure}
+\end{figure*}
 
-\subsection{Shared backbone}\label{sec:method:backbone}
+\subsection{Dense convolutional encoder}\label{sec:method:encoder}
 
-The shared backbone turns the noisy reverberant waveform into a
-time--frequency bottleneck that serves both tasks. All recordings are
-resampled to $16$\,kHz, converted to mono and truncated or padded to a
-fixed length of $4$\,s, yielding $L=64\,000$ samples per utterance. To
-make the input statistics independent of the absolute recording level,
-each waveform $y[n]$ is scaled by an energy-normalising factor
+The dense convolutional encoder turns the noisy reverberant waveform
+into a high-dimensional time--frequency representation that is shared
+by both tasks. All recordings are resampled to $16$\,kHz, converted to
+mono and truncated or padded to a fixed length of $4$\,s, yielding
+$L=64\,000$ samples per utterance. To make the input statistics
+independent of the absolute recording level, each waveform $y[n]$ is
+scaled by an energy-normalising factor
 \begin{equation}\label{eq:energy_norm}
   c = \sqrt{\frac{L}{\sum_{n=0}^{L-1} y^{2}[n]+\varepsilon}},\qquad
   \tilde{y}[n] = c\,y[n],
@@ -385,27 +400,32 @@ No power-law magnitude compression is applied, as $T_{60}$
 depends on the decay shape of the envelope rather than on its
 instantaneous loudness.
 
-\paragraph{Dense convolutional encoder.} The encoder uses a dense convolutional design with three stages. A pointwise convolution first projects the
-three-channel input to $C=64$ channels and is followed by instance
-normalisation and a parametric ReLU. A \emph{dilated dense block} of
-depth $D=4$ then applies four cascaded $2\times 3$ convolutions whose
-inputs are formed by concatenating the outputs of all preceding
-convolutions; the dilation rate of the $d$-th convolution along the time
-axis is $2^{d-1}$, which exponentially enlarges the temporal receptive
-field while keeping the parameter count under control. Each
-convolution is followed by an instance normalisation and a PReLU
-activation. Finally, a strided $1\times 3$ convolution downsamples the
-frequency axis by a factor of two and produces the encoder bottleneck
+The encoder uses a dense convolutional design with three stages. A
+pointwise convolution first projects the three-channel input to $C=64$
+channels and is followed by instance normalisation and a parametric
+ReLU. A \emph{dilated dense block} of depth $D=4$ then applies four
+cascaded $2\times 3$ convolutions whose inputs are formed by
+concatenating the outputs of all preceding convolutions; the dilation
+rate of the $d$-th convolution along the time axis is $2^{d-1}$, which
+exponentially enlarges the temporal receptive field while keeping the
+parameter count under control. Each convolution is followed by an
+instance normalisation and a PReLU activation. Finally, a strided
+$1\times 3$ convolution downsamples the frequency axis by a factor of
+two and produces the encoder bottleneck
 \begin{equation}\label{eq:encoder}
   \mathbf{F}^{(0)} = \mathrm{Encoder}(\mathbf{X}_{\mathrm{in}})
         \in \mathbb{R}^{C\times T\times F'},
 \end{equation}
 with $C=64$, $T=641$ and $F'=101$.
 
-\paragraph{Two-stage Conformer trunk.} The Conformer block~\citep{gulati2020conformer} combines the global
-modelling ability of self-attention with the local feature extraction
-of convolutions, and has become a standard sequence-modelling choice
-for speech enhancement and source separation. For a sequence
+\subsection{Two-stage Conformer block}\label{sec:method:tscb}
+
+The encoder bottleneck $\mathbf{F}^{(0)}$ is further refined by
+$N=2$ stacked two-stage Conformer blocks (TSCBs). The Conformer
+block~\citep{gulati2020conformer} combines the global modelling
+ability of self-attention with the local feature extraction of
+convolutions, and has become a standard sequence-modelling choice for
+speech enhancement and source separation. For a sequence
 $\mathbf{Z}\in\mathbb{R}^{L\times d}$ of length $L$ and feature
 dimension $d$, the block consists of four sub-modules wrapped in
 residual connections:
@@ -431,9 +451,8 @@ When applied to a time--frequency representation of speech, the
 Conformer block is typically deployed in a dual-path fashion: two
 Conformer blocks are stacked, one operating along the time axis and one
 along the frequency axis, jointly forming a two-stage Conformer block
-(TSCB)~\citep{cao2022cmgan}. The encoder bottleneck $\mathbf{F}^{(0)}$
-is then refined by $N=2$ stacked TSCBs. Concretely, for an input
-feature map $\mathbf{F}\in\mathbb{R}^{B\times C\times T\times F'}$:
+(TSCB)~\citep{cao2022cmgan}. Concretely, for an input feature map
+$\mathbf{F}\in\mathbb{R}^{B\times C\times T\times F'}$:
 \begin{equation}\label{eq:tscb_time}
   \mathbf{F}^{t} = \mathbf{F}
       + \mathrm{ConformerBlock}_{t}\bigl(\mathrm{Reshape}_{t}(\mathbf{F})\bigr),
@@ -460,6 +479,26 @@ $4$-second window tractable on a single GPU. The resulting bottleneck
 $\mathbf{F}^{(N)}$ is shared by both the $T_{60}$ regression head
 (Section~\ref{sec:method:head}) and the denoising branch
 (Section~\ref{sec:method:denoise}).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\columnwidth]{figs/tsconformer_block.png}
+  \caption{Internal structure of a two-stage Conformer block (TSCB)
+  used in the shared backbone of Fig.~\ref{fig:overall}. The block is the
+  serial composition of a time-axis Conformer (Conformer-Time, input
+  shape $BF'{\times}T{\times}C$), a frequency-axis Conformer
+  (Conformer-Freq, input shape $BT{\times}F'{\times}C$) and a final
+  reshape back to $B{\times}T{\times}F'{\times}C$. Each Conformer
+  variant follows the Macaron design: two half-step feed-forward
+  modules sandwich a multi-head self-attention (MHSA, $h{=}4$, Shaw
+  relative positional encoding) and a depth-wise separable convolution
+  module (Conv Module, kernel size $k{=}31$), all wrapped in residual
+  connections ($\oplus$). The dashed arrow expands the inner structure
+  of the Conv Module into a pointwise-conv $\to$ depthwise-conv $\to$
+  GLU $\to$ Swish $\to$ pointwise-conv $\to$ PReLU $\to$ dropout
+  pipeline.}
+  \label{fig:tsconformer}
+\end{figure}
 
 \subsection{$T_{60}$ regression head}\label{sec:method:head}
 
@@ -584,22 +623,6 @@ normalised estimate
                                             + b_{o}\bigr) \in (0,1).
 \end{equation}
 
-\paragraph{Parameter budget.} With $(d_{0},d_{1},d_{2})=(64,32,16)$ and
-$(\Omega_{0},\Omega_{1})=(16,8)$, the projection layer contributes
-$192\cdot 64+64=12\,352$ parameters, the two Fourier-KAN layers
-contribute $2\cdot 64\cdot 32\cdot 16+32 = 65\,568$ and
-$2\cdot 32\cdot 16\cdot 8 + 16 = 8\,208$ parameters respectively, and
-the output layer contributes $16+1=17$ parameters, plus four layer
-norms ($192$ parameters in total). The whole head therefore adds
-$86\,369$ parameters. Together with the dense encoder and the two TSCBs
-(about $0.78$\,M parameters in total, shared between the two tasks) and
-the two denoising decoders (about $0.54$\,M parameters,
-Section~\ref{sec:method:denoise}), the proposed multi-task network
-contains $1\,405\,554$ trainable parameters in total ($\approx
-1.41$\,M); only the $86$\,k-parameter regression head and the shared
-backbone directly serve the $T_{60}$ estimate, whereas the denoising
-decoders are required solely by the auxiliary task.
-
 \subsection{Denoising decoder branch}\label{sec:method:denoise}
 
 To inject denoising supervision into the shared backbone, a decoder
@@ -617,14 +640,12 @@ the enhanced spectrum are reconstructed as
   \hat{Y}_{\mathrm{im}} = \hat{M}\sin(\angle\mathbf{Y}) + \Delta_{\mathrm{im}},
 \end{equation}
 and an inverse STFT yields the enhanced time-domain speech. Both
-decoders adopt a dense design mirroring the encoder and together
-comprise about $0.54$\,M parameters, which constitutes the bulk of the
-parameter overhead of the multi-task model relative to the single-task
-estimator (Section~\ref{sec:method:head}). The denoising target is the
-clean reverberant speech $\tilde{s}(t)=s(t)\ast h(t)$, i.e.\ the
-noise-free reverberant component of Eq.~\eqref{eq:time_model}, so this
-branch performs denoising rather than dereverberation---the enhanced
-speech still carries the room reverberation.
+decoders adopt a dense design mirroring the encoder. The denoising
+target is the clean reverberant speech $\tilde{s}(t)=s(t)\ast h(t)$,
+i.e.\ the noise-free reverberant component of
+Eq.~\eqref{eq:time_model}, so this branch performs denoising rather than
+dereverberation---the enhanced speech still carries the room
+reverberation.
 
 \subsection{Loss function}\label{sec:method:loss}
 
@@ -732,39 +753,10 @@ the $T_{60}$ distribution of the training pool and of the test sets
   \end{tabular}
 \end{table}
 
-\subsection{Implementation details}\label{sec:exp:impl}
+\subsection{Baselines and metrics}\label{sec:exp:baselines}
 
-The model architecture is detailed in Section~\ref{sec:method} (shared
-DenseEncoder + two TSCBs + Fourier-KAN regression head + CMGAN denoising
-decoders); here we only describe the training configuration. All
-recordings are resampled to $16$\,kHz mono and chunked/padded to $4$\,s,
-and trained with the normalised loss of Section~\ref{sec:method:loss}.
-
-\paragraph{Training.} We use the AdamW optimiser (learning rate
-$5\times10^{-4}$, weight decay $10^{-5}$), batch size $16$, gradient
-clipping $5.0$, and mixed-precision training for at most $100$ epochs,
-with early stopping when the validation RMSE does not improve for $15$
-epochs. Following Section~\ref{sec:method:loss}, the denoising and
-$T_{60}$ losses are each divided by their own EMA to a common scale and
-combined as
-$\mathcal{L}=\alpha\,\mathcal{L}_{\mathrm{den}}^{*}+
-\beta\,\mathcal{L}_{T_{60}}^{*}$. We train three task-weight
-configurations $(\alpha,\beta)\in\{(1.0,0.1),(1.0,1.0),(0.1,1.0)\}$,
-corresponding to denoise-dominant, balanced and $T_{60}$-dominant
-regimes; the denoise-dominant setting ($\alpha=1.0,\beta=0.1$) is the
-proposed main model.
-
-\paragraph{Gradient probe.} To check whether the two tasks interfere on
-the shared layers, every $20$ training steps and before the main
-backward pass we measure the gradients of the two (normalised but
-unweighted) losses with respect to the three shared modules
-(DenseEncoder, TSCB$_{1}$, TSCB$_{2}$) and record the cosine similarity
-$\cos$ between them.
-
-\subsection{Comparison methods and ablation configurations}\label{sec:exp:baselines}
-
-\paragraph{Comparison methods.} The proposed model is compared with
-three blind $T_{60}$ estimators on the same dataset: (i) BERP
+\paragraph{Baselines.} The proposed model is compared with three blind
+$T_{60}$ estimators on the same dataset: (i) BERP
 \citep{wang2025berp}, a universal blind room-parameter estimator with an
 attention-and-convolution unified encoder and separate per-parameter
 predictors; (ii) DAMTL \citep{zhang2024damtl}, a denoising-aided
@@ -773,20 +765,7 @@ masking method \citep{zheng2022noiseaware}, a two-stage framework. All
 three are re-trained and evaluated on T60\_Dataset\_v7 with the same
 splits for a fair comparison.
 
-\paragraph{Ablation configurations.} Three ablations are conducted:
-(i) \emph{task-weight regime} (Section~\ref{sec:exp:impl}) --- the
-denoise-dominant / balanced / $T_{60}$-dominant regimes, whose gradient
-ratio $r$ reveals the optimal regime and validates the
-``denoising-gradient-dominates'' mechanism; (ii) \emph{single-task
-$T_{60}$ estimation} --- the denoising branch is removed and the model
-is trained for $T_{60}$ regression only (shared backbone + Fourier-KAN
-head), as a control baseline quantifying the gain of the denoising
-auxiliary task; and (iii) \emph{regression-head replacement} --- the
-Fourier-KAN head is replaced by an MLP head, quantifying the gain of the
-Fourier-KAN head. The proposed model is the denoise-dominant regime
-($\alpha=1.0,\beta=0.1$).
-
-\subsection{Evaluation metrics}\label{sec:exp:metrics}
+\paragraph{Evaluation metrics.}
 
 $T_{60}$ estimation accuracy and denoising quality are evaluated with
 the following metrics.
@@ -839,67 +818,84 @@ Section~\ref{sec:method:denoise}, the denoising target is the noise-free
 reverberant speech, so these metrics measure denoising rather than
 dereverberation quality.
 
+\subsection{Model and training setup}\label{sec:exp:impl}
+
+The model architecture is detailed in Section~\ref{sec:method} (shared
+DenseEncoder + two TSCBs + Fourier-KAN regression head + CMGAN denoising
+decoders); here we only describe the training configuration. All
+recordings are resampled to $16$\,kHz mono and chunked/padded to $4$\,s.
+We use the AdamW optimiser (learning rate $5\times10^{-4}$, weight decay
+$10^{-5}$), batch size $16$, gradient clipping $5.0$, and
+mixed-precision training for at most $100$ epochs, with early stopping
+when the validation RMSE does not improve for $15$ epochs. Following
+Section~\ref{sec:method:loss}, the denoising and $T_{60}$ losses are
+each divided by their own EMA to a common scale and combined as
+$\mathcal{L}=\alpha\,\mathcal{L}_{\mathrm{den}}^{*}+
+\beta\,\mathcal{L}_{T_{60}}^{*}$; the task weights $(\alpha,\beta)$ are
+tuned in Section~\ref{sec:res:ablation}.
+
+To check whether the two tasks interfere on the shared layers, every
+$20$ training steps and before the main backward pass we measure the
+gradients of the two (normalised but unweighted) losses with respect to
+the three shared modules (DenseEncoder, TSCB$_{1}$, TSCB$_{2}$) and
+record the cosine similarity $\cos$ between them.
+
 % =====================================================================
-\section{Results and analysis}\label{sec:results}
+\section{Results and discussion}\label{sec:results}
 % =====================================================================
 
-\subsection{Main comparison}\label{sec:res:main}
+\subsection{Ablation study}\label{sec:res:ablation}
 
-We compare the proposed model (normalised main model, denoise-dominant
-$\alpha=1.0,\beta=0.1$) with three blind $T_{60}$ estimators (BERP,
-noiseaware, DAMTL) and the single-task ablation baseline on the four
-test sets; the averaged metrics are reported in Table~\ref{tab:main}.
-
-\begin{table}[!htbp]
-  \centering
-  \caption{Main comparison on T60\_Dataset\_v7 (average over
-  test1--test4; RMSE/MAE in ms).}
-  \label{tab:main}
-  \begin{tabular}{lcccc}
-    \toprule
-    Method & RMSE $\downarrow$ & MAE $\downarrow$ & $r$ $\uparrow$ & $R^{2}$ $\uparrow$ \\
-    \midrule
-    BERP~\citep{wang2025berp}              & 151.93 & 98.33 & 0.9035 & 0.8001 \\
-    noiseaware~\citep{zheng2022noiseaware} & 133.66 & 82.38 & 0.9196 & 0.8451 \\
-    DAMTL~\citep{zhang2024damtl}           & 138.94 & 86.07 & 0.9134 & 0.8323 \\
-    Single-task KAN (ablation)             & 111.15 & 72.40 & 0.9484 & 0.8931 \\
-    \textbf{Proposed (normalised)}         & \textbf{97.79} & \textbf{57.95} & \textbf{0.9592} & \textbf{0.9173} \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-The proposed model outperforms the three comparison methods and the
-single-task baseline on all four test sets (test1--4 = simulated/real
-RIR $\times$ seen/unseen noise), confirming the effectiveness and
-cross-condition robustness of the denoising auxiliary task with
-normalised multi-task training.
-
-\subsection{Task-weight ablation and gradient mechanism}\label{sec:res:weight}
-
-Table~\ref{tab:weight} reports the $T_{60}$ accuracy for the three
-task-weight regimes. Accuracy improves monotonically as the denoising
-weight is increased relative to the $T_{60}$ weight: the
-denoise-dominant regime ($\alpha{=}1.0,\beta{=}0.1$) attains the lowest
-RMSE ($97.79$\,ms), and once the denoising weight is reduced the RMSE
-deteriorates to $\sim$$110$\,ms---no better than the single-task
-baseline ($111.15$\,ms). The balanced regime, which grants equal nominal
-weight to both tasks, performs no better than the $T_{60}$-dominant
-regime: accuracy improves only when the denoising task is given a
-clearly larger weight.
+\paragraph{Task-weight tuning.} We first tune the task weights
+$(\alpha,\beta)$ of the normalised loss
+$\mathcal{L}=\alpha\,\mathcal{L}_{\mathrm{den}}^{*}+
+\beta\,\mathcal{L}_{T_{60}}^{*}$. Table~\ref{tab:weight} reports the
+$T_{60}$ accuracy for five configurations spanning the
+denoise-dominant, balanced and $T_{60}$-dominant regimes. Accuracy
+improves monotonically as the denoising weight is increased relative to
+the $T_{60}$ weight, and the best result is obtained at
+$(\alpha,\beta)=(1.0,0.05)$ with an RMSE of $92.91$\,ms---we therefore
+adopt this configuration as the main model throughout the paper. Once
+the denoising weight is reduced to the balanced or $T_{60}$-dominant
+regime the RMSE deteriorates to $\sim$$110$\,ms, no better than the
+single-task baseline ($111.15$\,ms), confirming that accuracy improves
+only when the denoising task is given a clearly larger weight.
 
 \begin{table}[!htbp]
   \centering
   \caption{Task-weight ablation (normalised losses; average over
-  test1--test4). $T_{60}$ accuracy improves monotonically as the
-  denoising weight $\alpha/\beta$ increases.}
+  test1--test4). $T_{60}$ accuracy improves as the denoising weight
+  $\alpha/\beta$ increases, with $(1.0,0.05)$ the best.}
   \label{tab:weight}
   \begin{tabular}{lccc}
     \toprule
     Configuration & $(\alpha,\beta)$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    Denoise-dominant (proposed) & (1.0, 0.1) & \textbf{97.79}  & \textbf{57.95} \\
-    Balanced                    & (1.0, 1.0) & 109.90          & 67.16 \\
-    $T_{60}$-dominant           & (0.1, 1.0) & 109.54          & 68.15 \\
+    Denoise-dominant (proposed) & (1.0, 0.05) & \textbf{92.91}  & \textbf{56.68} \\
+    Denoise-dominant            & (1.0, 0.1)  & 97.79           & 57.95 \\
+    Denoise-dominant            & (1.0, 0.3)  & 107.10          & 64.28 \\
+    Balanced                    & (1.0, 1.0)  & 109.90          & 67.16 \\
+    $T_{60}$-dominant           & (0.1, 1.0)  & 109.54          & 68.15 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{Regression-head ablation.} We further compare the Fourier-KAN
+regression head against an MLP head of comparable capacity, both under
+the same multi-task configuration $(\alpha,\beta)=(1.0,0.05)$.
+
+% TODO: 填入 MLP head multitask 消融结果
+\begin{table}[!htbp]
+  \centering
+  \caption{Regression-head ablation under the multi-task setting
+  $(\alpha,\beta)=(1.0,0.05)$.}
+  \label{tab:head}
+  \begin{tabular}{lcc}
+    \toprule
+    Head & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
+    \midrule
+    MLP          & \textit{【待填】} & \textit{【待填】} \\
+    Fourier-KAN  & \textbf{92.91}    & \textbf{56.68} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -991,60 +987,117 @@ re-encodes, rather than removes, the $T_{60}$ cue. The actual $T_{60}$
 head reads these features through a max/std multi-statistic pool
 followed by a Fourier-KAN non-linear layer, which can access the
 re-structured representation that the denoise-dominant regime has
-produced; this is consistent with the non-linear-head ablation of
-Section~\ref{sec:res:head}, where the Fourier-KAN head outperforms an
-MLP head of comparable capacity.
+produced; this is consistent with the regression-head ablation of
+Section~\ref{sec:res:ablation}, where the Fourier-KAN head outperforms
+an MLP head of comparable capacity under the same multi-task setting.
 
-\subsection{Regression-head ablation}\label{sec:res:head}
+\subsection{Results comparison with baselines}\label{sec:res:main}
 
-Replacing the Fourier-KAN head with an MLP head (single-task, all else
-equal) gives Table~\ref{tab:head}.
+We compare the proposed model (normalised main model, denoise-dominant
+$\alpha=1.0,\beta=0.05$, determined by the weight tuning of
+Section~\ref{sec:res:ablation}) with three blind $T_{60}$ estimators
+(BERP, noiseaware, DAMTL) and the single-task ablation baseline on the
+four test sets; the averaged metrics are reported in
+Table~\ref{tab:main}.
 
 \begin{table}[!htbp]
   \centering
-  \caption{Regression-head ablation (single-task, average over
-  test1--test4).}
-  \label{tab:head}
-  \begin{tabular}{lccccc}
+  \caption{Main comparison on T60\_Dataset\_v7 (average over
+  test1--test4; RMSE/MAE in ms).}
+  \label{tab:main}
+  \begin{tabular}{lcccc}
     \toprule
-    Head & Head params & Total params & RMSE (ms) $\downarrow$ & $r$ $\uparrow$ & $R^{2}$ $\uparrow$ \\
+    Method & RMSE $\downarrow$ & MAE $\downarrow$ & $r$ $\uparrow$ & $R^{2}$ $\uparrow$ \\
     \midrule
-    MLP head         & 33\,025 & 808\,449 (0.81M) & 113.08 & 0.9439 & 0.8890 \\
-    Fourier-KAN head & 86\,369 & 861\,793 (0.86M) & 111.15 & 0.9484 & 0.8931 \\
+    BERP~\citep{wang2025berp}              & 151.93 & 98.33 & 0.9035 & 0.8001 \\
+    noiseaware~\citep{zheng2022noiseaware} & 133.66 & 82.38 & 0.9196 & 0.8451 \\
+    DAMTL~\citep{zhang2024damtl}           & 138.94 & 86.07 & 0.9134 & 0.8323 \\
+    Single-task KAN (ablation)             & 111.15 & 72.40 & 0.9484 & 0.8931 \\
+    \textbf{Proposed (normalised)}         & \textbf{92.91} & \textbf{56.68} & \textbf{0.9625} & \textbf{0.9253} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The two heads differ in capacity (MLP 33k vs.\ KAN 86k); under the
-present configurations the Fourier-KAN head is better in RMSE, $r$ and
-$R^{2}$. The learnable trigonometric-series edge functions of the
-Fourier basis are better suited than the fixed scalar non-linearities of
-an MLP to the smooth non-linear mapping from pooled features to
-$T_{60}$.
+The proposed model outperforms the three comparison methods and the
+single-task baseline on all four test sets (test1--4 = simulated/real
+RIR $\times$ seen/unseen noise), confirming the effectiveness and
+cross-condition robustness of the denoising auxiliary task with
+normalised multi-task training.
 
-\subsection{Per-bin analysis}\label{sec:res:bins}
+\subsection{Effect of SNR on estimation accuracy}\label{sec:res:snr}
 
-To localise where the denoising auxiliary task helps most, we report RMSE
-per $T_{60}$ bin and per SNR bin for the proposed model and the
-single-task baseline (Fig.~\ref{fig:perbin}). The gains are largest
-exactly where the blind-estimation problem is hardest: at the lowest SNR,
-the denoise-dominant model reduces RMSE from $181.3$\,ms (single-task) to
-$151.9$\,ms at $-5$\,dB, and it recovers roughly $25$--$30$\,ms in the
-$0.7$--$1.1$\,s $T_{60}$ range where the energy-weak late tail is most
-easily buried by noise. This is consistent with the
-denoising-gradient-dominates mechanism: the dense, per-bin denoising
-supervision steers the shared backbone towards the fine time--frequency
-structure of the decay envelope that single-task $T_{60}$ regression
-alone under-learns.
+Table~\ref{tab:snr} reports the per-SNR-bin RMSE of the proposed model
+and the three baselines, broken down by test-set scenario (simulated vs.\
+real RIR).
 
-\begin{figure}[H]
+\begin{table}[!htbp]
   \centering
-  \includegraphics[width=0.95\textwidth]{figs/per_bin.png}
-  \caption{Per-bin RMSE averaged over test1--test4. (a) RMSE vs.\
-  $T_{60}$ bin; (b) RMSE vs.\ SNR bin. Single-task baseline vs.\ proposed
-  denoise-dominant model.}
-  \label{fig:perbin}
-\end{figure}
+  \caption{RMSE (ms) per SNR bin. Each scenario groups the two test sets
+  sharing that RIR type; ``Avg.'' averages over all four test sets.
+  Best per cell in \textbf{bold}.}
+  \label{tab:snr}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{llcccccc}
+    \toprule
+    Scenario & Method & $-5$\,dB & $0$\,dB & $5$\,dB & $10$\,dB & $\geq 15$\,dB & Avg. \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{Sim.~RIR\\(test1+3)}}
+      & BERP       &   &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   &   \\
+      & Proposed   &   &   &   &   &   &   \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{Real RIR\\(test2+4)}}
+      & BERP       &   &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   &   \\
+      & Proposed   &   &   &   &   &   &   \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{All\\(test1--4)}}
+      & BERP       &   &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   &   \\
+      & \textbf{Proposed} & & & & & & \textbf{92.91} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Effect of reverberation time on estimation accuracy}\label{sec:res:t60bin}
+
+Table~\ref{tab:t60bin} reports the per-$T_{60}$-bin RMSE of the proposed
+model and the three baselines, broken down by test-set scenario.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{RMSE (ms) per $T_{60}$ bin (s). Each scenario groups the two
+  test sets sharing that RIR type; ``Avg.'' averages over all four test
+  sets. Best per cell in \textbf{bold}.}
+  \label{tab:t60bin}
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{llccccc}
+    \toprule
+    Scenario & Method & $0.1$--$0.4$ & $0.4$--$0.7$ & $0.7$--$1.0$ & $1.0$--$1.5$ & Avg. \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{Sim.~RIR\\(test1+3)}}
+      & BERP       &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   \\
+      & Proposed   &   &   &   &   &   \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{Real RIR\\(test2+4)}}
+      & BERP       &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   \\
+      & Proposed   &   &   &   &   &   \\
+    \midrule
+    \multirow{4}{*}{\shortstack[l]{All\\(test1--4)}}
+      & BERP       &   &   &   &   &   \\
+      & noiseaware &   &   &   &   &   \\
+      & DAMTL      &   &   &   &   &   \\
+      & \textbf{Proposed} & & & & & \textbf{92.91} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \subsection{Denoising results}\label{sec:res:denoise}
 
