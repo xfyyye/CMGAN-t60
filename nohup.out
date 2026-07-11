@@ -1,6 +1,0 @@
-未知参数:  
-Usage: ./train-and-test.sh [-c CONFIG] [-d DATASET_PATH] [-g GPUS] [--conda-env ENV] [--no-conda] [-- extra train.py args]
-  -c CONFIG       YAML config path. Default: configs/t60_single/mlp_mse.yaml
-  -d DATASET_PATH Optional override for data.dataset_root in YAML
-  -g GPUS         CUDA_VISIBLE_DEVICES value, e.g. 0 or 0,1
-  -- extra args   Passed to train.py. Do not pass --train_only if you want testing.

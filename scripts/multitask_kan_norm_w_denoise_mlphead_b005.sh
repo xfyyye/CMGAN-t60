@@ -9,10 +9,7 @@
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# GPU 0/1 NVLink 异常，多任务实验默认用 GPU 2/3。
-export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-2,3}"
-export PYTHON="${PYTHON:-/mnt/tidal-sh01/usr/chuan/youling/demucs_xxn/bin/python}"
-export CONDA_ENV="${CONDA_ENV:-demucs_xxn}"
+export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0,1,2,3,4,5,6,7}"
 
 exec "${SCRIPT_DIR}/../train_multitask.sh" \
     -c "${SCRIPT_DIR}/../configs/t60_multitask/kan_mse_norm_w_denoise_mlphead_b005.yaml" \
