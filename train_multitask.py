@@ -30,6 +30,11 @@ from dataset import (
 )
 from utils import power_compress, power_uncompress
 from train_utils.grad_probe import GradAngleProbe
+from train_utils.gradient_remedy import (
+    get_shared_param_names,
+    collect_shared_grads,
+    apply_gradient_remedy,
+)
 
 
 # ─── 多任务损失 (暴露分项 tensor 给梯度探针) ────────────────────────
@@ -292,6 +297,19 @@ def train(args):
     )
     print(f'探针监控模块: {list(probe.groups.keys())}')
 
+    # ── Gradient Remedy 设置 ──
+    use_gr = getattr(args, 'use_gradient_remedy', False)
+    gr_K = getattr(args, 'gr_K', 5.0)
+    shared_param_names = []
+    if use_gr:
+        shared_param_names = get_shared_param_names(raw_model, n_tscb=args.n_tscb)
+        print(f'Gradient Remedy: 开启 (K={gr_K}); 共享参数 {len(shared_param_names)} 个')
+        if args.accum_steps > 1:
+            print(f'⚠️ 警告: Gradient Remedy 与梯度累积(accum_steps={args.accum_steps})配合复杂,'
+                  f'建议设 accum_steps=1。当前配置可能行为异常。')
+    else:
+        print('Gradient Remedy: 关闭')
+
     history = []
     print(f'\n{"Epoch":>6} {"Train":>10} {"Val":>10} {"Denoise":>10} {"T60":>10} {"LR":>12}')
     print('─' * 66)
@@ -345,7 +363,26 @@ def train(args):
                 sys.stdout.write(f'\n[probe step={global_step}] ' + ' '.join(probe_parts) + '\n')
                 sys.stdout.flush()
 
-            scaler.scale(scaled_loss).backward()
+            # ── 反向传播 ──
+            if use_gr:
+                # Gradient Remedy: 双 backward
+                # 加权后的分项(与 total 拆分一致): alpha*den_n/accum, beta*t60_n/accum
+                scaled_den = (criterion.alpha * denoise_loss) / accum_steps
+                scaled_t60 = (criterion.beta * t60_loss) / accum_steps
+
+                optimizer.zero_grad(set_to_none=True)
+                scaler.scale(scaled_den).backward(retain_graph=True)
+                den_grads_snapshot = collect_shared_grads(raw_model, shared_param_names)
+
+                optimizer.zero_grad(set_to_none=True)
+                scaler.scale(scaled_t60).backward()
+                # 在共享参数上做 projection+rescale,.grad 被改写为 remedy 后的合并梯度
+                apply_gradient_remedy(
+                    raw_model, shared_param_names, den_grads_snapshot,
+                    K=gr_K, scaler=scaler, optimizer=optimizer,
+                )
+            else:
+                scaler.scale(scaled_loss).backward()
 
             train_loss_sum += metrics['total_loss']
             for k, v in metrics.items():
@@ -355,7 +392,9 @@ def train(args):
             global_step += 1
 
             if (step_idx + 1) % accum_steps == 0:
-                scaler.unscale_(optimizer)
+                # GR 模式下 apply_gradient_remedy 内部已 unscale_,这里不再重复
+                if not use_gr:
+                    scaler.unscale_(optimizer)
                 torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_grad_norm)
                 scaler.step(optimizer)
                 scaler.update()
@@ -547,6 +586,13 @@ def load_config_defaults(config_path):
     if 'include_shared_all' in probe_cfg:
         defaults['probe_include_shared_all'] = probe_cfg['include_shared_all']
 
+    # Gradient Remedy
+    gr_cfg = section('gradient_remedy')
+    if 'use' in gr_cfg:
+        defaults['use_gradient_remedy'] = bool(gr_cfg['use'])
+    if 'K' in gr_cfg:
+        defaults['gr_K'] = float(gr_cfg['K'])
+
     exp_cfg = section('experiment')
     exp_name = exp_cfg.get('name')
     output_root = exp_cfg.get('output_root')
@@ -648,6 +694,14 @@ def parse_args():
                         default=config_defaults.get('probe_log_every', 20))
     parser.add_argument('--probe_include_shared_all', action='store_true',
                         default=config_defaults.get('probe_include_shared_all', False))
+
+    # Gradient Remedy
+    parser.add_argument('--use_gradient_remedy', action='store_true',
+                        default=config_defaults.get('use_gradient_remedy', False),
+                        help='开启 Gradient Remedy: 共享参数上对去噪/T60梯度做 projection+rescale')
+    parser.add_argument('--gr_K', type=float,
+                        default=config_defaults.get('gr_K', 5.0),
+                        help='GR rescale 阈值: |g_den|/|g_t60| > K 时触发压缩')
 
     # 输出
     parser.add_argument('--save_dir', type=str, default=config_defaults.get('save_dir', 'runs'))
