@@ -78,11 +78,26 @@ def run_denoise_test(args):
     device = torch.device(f'cuda:{args.gpu_id}' if torch.cuda.is_available() else 'cpu')
 
     # 加载 KAN 多任务模型
+    fourier_hidden_dims = getattr(args, 't60_fourier_hidden_dims', (32, 16))
+    model_kwargs = dict(
+        num_channel=64,
+        num_features=args.n_fft // 2 + 1,
+        t60_head_type=args.t60_head_type,
+        t60_hidden_dim=args.t60_hidden_dim,
+        t60_dropout=args.t60_dropout,
+        t60_fourier_proj_dim=args.t60_fourier_proj_dim,
+        t60_fourier_hidden_dims=fourier_hidden_dims,
+        t60_fourier_first_num_frequencies=args.t60_fourier_first_num_frequencies,
+        t60_fourier_hidden_num_frequencies=args.t60_fourier_hidden_num_frequencies,
+        t60_fourier_dropout=args.t60_fourier_dropout,
+        t60_out_activation=args.t60_out_activation,
+    )
     model_cls = TSCNet_KAN_MultiTask_2TSCB if args.n_tscb == 2 else TSCNet_KAN_MultiTask
-    model = model_cls(num_channel=64, num_features=args.n_fft // 2 + 1)
+    model = model_cls(**model_kwargs)
     ckpt = torch.load(args.model_path, map_location=device)
     model.load_state_dict(ckpt['model_state_dict'] if 'model_state_dict' in ckpt else ckpt)
     model = model.to(device).eval()
+    print(f'T60 head 类型: {args.t60_head_type}')
     print(f'已加载模型: {args.model_path}')
 
     os.makedirs(args.save_dir, exist_ok=True)
@@ -265,6 +280,26 @@ def parse_args():
     parser.add_argument('--target_sr',   type=int,   default=config_defaults.get('target_sr', 16000))
     parser.add_argument('--n_tscb',      type=int,   default=config_defaults.get('n_tscb', 2),
                         choices=[2, 4])
+
+    parser.add_argument('--t60_head_type', type=str,
+                        default=config_defaults.get('t60_head_type', 'fourier_kan'),
+                        choices=['mlp', 'fourier_kan'])
+    parser.add_argument('--t60_hidden_dim', type=int,
+                        default=config_defaults.get('t60_hidden_dim', 128))
+    parser.add_argument('--t60_dropout', type=float,
+                        default=config_defaults.get('t60_dropout', 0.3))
+    parser.add_argument('--t60_fourier_proj_dim', type=int,
+                        default=config_defaults.get('t60_fourier_proj_dim', 64))
+    parser.add_argument('--t60_fourier_first_num_frequencies', type=int,
+                        default=config_defaults.get('t60_fourier_first_num_frequencies', 16))
+    parser.add_argument('--t60_fourier_hidden_num_frequencies', type=int,
+                        default=config_defaults.get('t60_fourier_hidden_num_frequencies', 8))
+    parser.add_argument('--t60_fourier_dropout', type=float,
+                        default=config_defaults.get('t60_fourier_dropout', 0.1))
+    parser.add_argument('--t60_out_activation', type=str,
+                        default=config_defaults.get('t60_out_activation', 'sigmoid'),
+                        choices=['sigmoid', 'softplus', 'identity', 'none'])
+
     parser.add_argument('--save_dir',    type=str,   default='test_results_denoise')
     parser.add_argument('--experiment_name', type=str,
                         default=config_defaults.get('experiment_name', 'CMGAN_kan_multitask'))
