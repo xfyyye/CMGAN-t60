@@ -155,7 +155,7 @@ class MultiTaskLossWithGrads(nn.Module):
         if self.normalize_loss:
             metrics['denoise_n'] = denoise_n.item()
             metrics['t60_n'] = t60_n.item()
-        return total, denoise_for_probe, t60_for_probe, metrics
+        return total, denoise_for_probe, t60_for_probe, metrics, denoise_loss, t60_loss
 
 
 # ─── 早停 ────────────────────────────────────────────────────────
@@ -300,10 +300,13 @@ def train(args):
     # ── Gradient Remedy 设置 ──
     use_gr = getattr(args, 'use_gradient_remedy', False)
     gr_K = getattr(args, 'gr_K', 5.0)
+    gr_use_raw_loss = getattr(args, 'gr_use_raw_loss', False)
     shared_param_names = []
     if use_gr:
         shared_param_names = get_shared_param_names(raw_model, n_tscb=args.n_tscb)
-        print(f'Gradient Remedy: 开启 (K={gr_K}); 共享参数 {len(shared_param_names)} 个')
+        loss_src = '原始 loss(未归一化)' if gr_use_raw_loss else '归一化 loss'
+        print(f'Gradient Remedy: 开启 (K={gr_K}, 主=去噪/辅=T60, {loss_src}); '
+              f'共享参数 {len(shared_param_names)} 个')
         if args.accum_steps > 1:
             print(f'⚠️ 警告: Gradient Remedy 与梯度累积(accum_steps={args.accum_steps})配合复杂,'
                   f'建议设 accum_steps=1。当前配置可能行为异常。')
@@ -340,7 +343,7 @@ def train(args):
 
             with torch.amp.autocast('cuda'):
                 est_real, est_imag, t60_pred = model(noisy_input)
-                loss, denoise_loss, t60_loss, metrics = criterion(
+                loss, denoise_loss, t60_loss, metrics, denoise_loss_raw, t60_loss_raw = criterion(
                     est_real, est_imag, clean_spec,
                     t60_pred, t60_target,
                     clean_wav=clean_wav,
@@ -365,21 +368,31 @@ def train(args):
 
             # ── 反向传播 ──
             if use_gr:
-                # Gradient Remedy: 双 backward
-                # 加权后的分项(与 total 拆分一致): alpha*den_n/accum, beta*t60_n/accum
-                scaled_den = (criterion.alpha * denoise_loss) / accum_steps
-                scaled_t60 = (criterion.beta * t60_loss) / accum_steps
+                # Gradient Remedy: 双 backward (主=去噪, 辅=T60)
+                # 选 loss 源: raw=原始 loss, 否则=归一化 loss
+                if gr_use_raw_loss:
+                    L_main = denoise_loss_raw      # 原始去噪 loss
+                    L_aux = t60_loss_raw           # 原始 T60 loss
+                else:
+                    L_main = denoise_loss          # 归一化去噪 loss
+                    L_aux = t60_loss               # 归一化 T60 loss
+                scaled_main = L_main / accum_steps
+                scaled_aux = L_aux / accum_steps
 
+                # 先 backward 主任务(去噪), 采集 main_grads
                 optimizer.zero_grad(set_to_none=True)
-                scaler.scale(scaled_den).backward(retain_graph=True)
-                den_grads_snapshot = collect_shared_grads(raw_model, shared_param_names)
+                scaler.scale(scaled_main).backward(retain_graph=True)
+                main_grads_snapshot = collect_shared_grads(raw_model, shared_param_names)
 
+                # 再 backward 辅任务(T60), .grad 留下 g_aux
                 optimizer.zero_grad(set_to_none=True)
-                scaler.scale(scaled_t60).backward()
-                # 在共享参数上做 projection+rescale,.grad 被改写为 remedy 后的合并梯度
+                scaler.scale(scaled_aux).backward()
+                # GR: 修改 g_aux(辅) 去配合 g_main(主), 合并写回 .grad
+                # w_main/w_aux 用各自的 loss 权重, 使合并梯度与加权 total 等价(无冲突时)
                 apply_gradient_remedy(
-                    raw_model, shared_param_names, den_grads_snapshot,
+                    raw_model, shared_param_names, main_grads_snapshot,
                     K=gr_K, scaler=scaler, optimizer=optimizer,
+                    w_main=criterion.alpha, w_aux=criterion.beta,
                 )
             else:
                 scaler.scale(scaled_loss).backward()
@@ -592,6 +605,8 @@ def load_config_defaults(config_path):
         defaults['use_gradient_remedy'] = bool(gr_cfg['use'])
     if 'K' in gr_cfg:
         defaults['gr_K'] = float(gr_cfg['K'])
+    if 'use_raw_loss' in gr_cfg:
+        defaults['gr_use_raw_loss'] = bool(gr_cfg['use_raw_loss'])
 
     exp_cfg = section('experiment')
     exp_name = exp_cfg.get('name')
@@ -698,10 +713,13 @@ def parse_args():
     # Gradient Remedy
     parser.add_argument('--use_gradient_remedy', action='store_true',
                         default=config_defaults.get('use_gradient_remedy', False),
-                        help='开启 Gradient Remedy: 共享参数上对去噪/T60梯度做 projection+rescale')
+                        help='开启 Gradient Remedy: 共享参数上对主/辅梯度做 projection+rescale')
     parser.add_argument('--gr_K', type=float,
                         default=config_defaults.get('gr_K', 5.0),
-                        help='GR rescale 阈值: |g_den|/|g_t60| > K 时触发压缩')
+                        help='GR rescale 阈值: |g_aux|/|g_main| > K 时触发压缩')
+    parser.add_argument('--gr_use_raw_loss', action='store_true',
+                        default=config_defaults.get('gr_use_raw_loss', False),
+                        help='GR 双 backward 用原始 loss(未归一化); 默认 False 用归一化 loss')
 
     # 输出
     parser.add_argument('--save_dir', type=str, default=config_defaults.get('save_dir', 'runs'))
