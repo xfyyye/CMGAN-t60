@@ -1,0 +1,301 @@
+
+============================================================
+评估去噪 test1
+============================================================
+  共 1080 个样本，分批大小 50
+  子进程 [0, 50)...
+  chunk [0,50) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_0_50.json saved (50 samples)
+  子进程 [50, 100)...
+  chunk [50,100) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_50_100.json saved (50 samples)
+  子进程 [100, 150)...
+  chunk [100,150) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_100_150.json saved (50 samples)
+  子进程 [150, 200)...
+  chunk [150,200) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_150_200.json saved (50 samples)
+  子进程 [200, 250)...
+  chunk [200,250) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_200_250.json saved (50 samples)
+  子进程 [250, 300)...
+  chunk [250,300) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_250_300.json saved (50 samples)
+  子进程 [300, 350)...
+  chunk [300,350) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_300_350.json saved (50 samples)
+  子进程 [350, 400)...
+  chunk [350,400) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_350_400.json saved (50 samples)
+  子进程 [400, 450)...
+  chunk [400,450) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_400_450.json saved (50 samples)
+  子进程 [450, 500)...
+  chunk [450,500) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_450_500.json saved (50 samples)
+  子进程 [500, 550)...
+  chunk [500,550) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_500_550.json saved (50 samples)
+  子进程 [550, 600)...
+  chunk [550,600) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_550_600.json saved (50 samples)
+  子进程 [600, 650)...
+  chunk [600,650) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_600_650.json saved (50 samples)
+  子进程 [650, 700)...
+  chunk [650,700) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_650_700.json saved (50 samples)
+  子进程 [700, 750)...
+  chunk [700,750) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_700_750.json saved (50 samples)
+  子进程 [750, 800)...
+  chunk [750,800) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_750_800.json saved (50 samples)
+  子进程 [800, 850)...
+  chunk [800,850) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_800_850.json saved (50 samples)
+  子进程 [850, 900)...
+  chunk [850,900) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_850_900.json saved (50 samples)
+  子进程 [900, 950)...
+  chunk [900,950) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_900_950.json saved (50 samples)
+  子进程 [950, 1000)...
+  chunk [950,1000) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_950_1000.json saved (50 samples)
+  子进程 [1000, 1050)...
+  chunk [1000,1050) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test1_1000_1050.json saved (50 samples)
+  子进程 [1050, 1080)...
+  [chunk] runs/damtl/test_denoise/chunk_test1_1050_1080.json saved (30 samples)
+  增强:  PESQ=1.225 | STOI=0.621 | SI-SDR=-2.54 dB
+  输入:  PESQ=2.653 | STOI=0.817 | SI-SDR=13.66 dB
+  提升:  PESQ=-1.428 | STOI=-0.197 | SI-SDR=-16.19 dB
+
+============================================================
+评估去噪 test2
+============================================================
+  共 1080 个样本，分批大小 50
+  子进程 [0, 50)...
+  chunk [0,50) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_0_50.json saved (50 samples)
+  子进程 [50, 100)...
+  chunk [50,100) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_50_100.json saved (50 samples)
+  子进程 [100, 150)...
+  chunk [100,150) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_100_150.json saved (50 samples)
+  子进程 [150, 200)...
+  chunk [150,200) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_150_200.json saved (50 samples)
+  子进程 [200, 250)...
+  chunk [200,250) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_200_250.json saved (50 samples)
+  子进程 [250, 300)...
+  chunk [250,300) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_250_300.json saved (50 samples)
+  子进程 [300, 350)...
+  chunk [300,350) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_300_350.json saved (50 samples)
+  子进程 [350, 400)...
+  chunk [350,400) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_350_400.json saved (50 samples)
+  子进程 [400, 450)...
+  chunk [400,450) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_400_450.json saved (50 samples)
+  子进程 [450, 500)...
+  chunk [450,500) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_450_500.json saved (50 samples)
+  子进程 [500, 550)...
+  chunk [500,550) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_500_550.json saved (50 samples)
+  子进程 [550, 600)...
+  chunk [550,600) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_550_600.json saved (50 samples)
+  子进程 [600, 650)...
+  chunk [600,650) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_600_650.json saved (50 samples)
+  子进程 [650, 700)...
+  chunk [650,700) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_650_700.json saved (50 samples)
+  子进程 [700, 750)...
+  chunk [700,750) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_700_750.json saved (50 samples)
+  子进程 [750, 800)...
+  chunk [750,800) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_750_800.json saved (50 samples)
+  子进程 [800, 850)...
+  chunk [800,850) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_800_850.json saved (50 samples)
+  子进程 [850, 900)...
+  chunk [850,900) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_850_900.json saved (50 samples)
+  子进程 [900, 950)...
+  chunk [900,950) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_900_950.json saved (50 samples)
+  子进程 [950, 1000)...
+  chunk [950,1000) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_950_1000.json saved (50 samples)
+  子进程 [1000, 1050)...
+  chunk [1000,1050) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test2_1000_1050.json saved (50 samples)
+  子进程 [1050, 1080)...
+  [chunk] runs/damtl/test_denoise/chunk_test2_1050_1080.json saved (30 samples)
+  增强:  PESQ=1.212 | STOI=0.633 | SI-SDR=-2.61 dB
+  输入:  PESQ=2.634 | STOI=0.820 | SI-SDR=13.52 dB
+  提升:  PESQ=-1.422 | STOI=-0.188 | SI-SDR=-16.13 dB
+
+============================================================
+评估去噪 test3
+============================================================
+  共 1080 个样本，分批大小 50
+  子进程 [0, 50)...
+  chunk [0,50) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_0_50.json saved (50 samples)
+  子进程 [50, 100)...
+  chunk [50,100) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_50_100.json saved (50 samples)
+  子进程 [100, 150)...
+  chunk [100,150) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_100_150.json saved (50 samples)
+  子进程 [150, 200)...
+  chunk [150,200) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_150_200.json saved (50 samples)
+  子进程 [200, 250)...
+  chunk [200,250) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_200_250.json saved (50 samples)
+  子进程 [250, 300)...
+  chunk [250,300) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_250_300.json saved (50 samples)
+  子进程 [300, 350)...
+  chunk [300,350) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_300_350.json saved (50 samples)
+  子进程 [350, 400)...
+  chunk [350,400) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_350_400.json saved (50 samples)
+  子进程 [400, 450)...
+  chunk [400,450) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_400_450.json saved (50 samples)
+  子进程 [450, 500)...
+  chunk [450,500) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_450_500.json saved (50 samples)
+  子进程 [500, 550)...
+  chunk [500,550) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_500_550.json saved (50 samples)
+  子进程 [550, 600)...
+  chunk [550,600) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_550_600.json saved (50 samples)
+  子进程 [600, 650)...
+  chunk [600,650) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_600_650.json saved (50 samples)
+  子进程 [650, 700)...
+  chunk [650,700) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_650_700.json saved (50 samples)
+  子进程 [700, 750)...
+  chunk [700,750) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_700_750.json saved (50 samples)
+  子进程 [750, 800)...
+  chunk [750,800) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_750_800.json saved (50 samples)
+  子进程 [800, 850)...
+  chunk [800,850) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_800_850.json saved (50 samples)
+  子进程 [850, 900)...
+  chunk [850,900) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_850_900.json saved (50 samples)
+  子进程 [900, 950)...
+  chunk [900,950) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_900_950.json saved (50 samples)
+  子进程 [950, 1000)...
+  chunk [950,1000) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_950_1000.json saved (50 samples)
+  子进程 [1000, 1050)...
+  chunk [1000,1050) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test3_1000_1050.json saved (50 samples)
+  子进程 [1050, 1080)...
+  [chunk] runs/damtl/test_denoise/chunk_test3_1050_1080.json saved (30 samples)
+  增强:  PESQ=1.239 | STOI=0.625 | SI-SDR=-2.57 dB
+  输入:  PESQ=2.666 | STOI=0.821 | SI-SDR=13.51 dB
+  提升:  PESQ=-1.427 | STOI=-0.196 | SI-SDR=-16.08 dB
+
+============================================================
+评估去噪 test4
+============================================================
+  共 1080 个样本，分批大小 50
+  子进程 [0, 50)...
+  chunk [0,50) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_0_50.json saved (50 samples)
+  子进程 [50, 100)...
+  chunk [50,100) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_50_100.json saved (50 samples)
+  子进程 [100, 150)...
+  chunk [100,150) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_100_150.json saved (50 samples)
+  子进程 [150, 200)...
+  chunk [150,200) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_150_200.json saved (50 samples)
+  子进程 [200, 250)...
+  chunk [200,250) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_200_250.json saved (50 samples)
+  子进程 [250, 300)...
+  chunk [250,300) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_250_300.json saved (50 samples)
+  子进程 [300, 350)...
+  chunk [300,350) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_300_350.json saved (50 samples)
+  子进程 [350, 400)...
+  chunk [350,400) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_350_400.json saved (50 samples)
+  子进程 [400, 450)...
+  chunk [400,450) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_400_450.json saved (50 samples)
+  子进程 [450, 500)...
+  chunk [450,500) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_450_500.json saved (50 samples)
+  子进程 [500, 550)...
+  chunk [500,550) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_500_550.json saved (50 samples)
+  子进程 [550, 600)...
+  chunk [550,600) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_550_600.json saved (50 samples)
+  子进程 [600, 650)...
+  chunk [600,650) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_600_650.json saved (50 samples)
+  子进程 [650, 700)...
+  chunk [650,700) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_650_700.json saved (50 samples)
+  子进程 [700, 750)...
+  chunk [700,750) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_700_750.json saved (50 samples)
+  子进程 [750, 800)...
+  chunk [750,800) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_750_800.json saved (50 samples)
+  子进程 [800, 850)...
+  chunk [800,850) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_800_850.json saved (50 samples)
+  子进程 [850, 900)...
+  chunk [850,900) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_850_900.json saved (50 samples)
+  子进程 [900, 950)...
+  chunk [900,950) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_900_950.json saved (50 samples)
+  子进程 [950, 1000)...
+  chunk [950,1000) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_950_1000.json saved (50 samples)
+  子进程 [1000, 1050)...
+  chunk [1000,1050) 50/50 done
+  [chunk] runs/damtl/test_denoise/chunk_test4_1000_1050.json saved (50 samples)
+  子进程 [1050, 1080)...
+  [chunk] runs/damtl/test_denoise/chunk_test4_1050_1080.json saved (30 samples)
+  增强:  PESQ=1.234 | STOI=0.634 | SI-SDR=-2.59 dB
+  输入:  PESQ=2.654 | STOI=0.825 | SI-SDR=13.49 dB
+  提升:  PESQ=-1.420 | STOI=-0.191 | SI-SDR=-16.08 dB
+
+============================================================
+四测试集平均
+============================================================
+  增强:  PESQ=1.228 | STOI=0.628 | SI-SDR=-2.58 dB
+  输入:  PESQ=2.652 | STOI=0.821 | SI-SDR=13.54 dB
+  提升:  PESQ=-1.424 | STOI=-0.193 | SI-SDR=-16.12 dB
+
+[保存] runs/damtl/test_denoise/denoise_evaluation.json
