@@ -446,7 +446,7 @@ def train(args):
 
                 with torch.amp.autocast('cuda'):
                     est_real, est_imag, t60_pred = model(noisy_input)
-                    loss, _, _, metrics = criterion(
+                    loss, _, _, metrics, _, _ = criterion(
                         est_real, est_imag, clean_spec,
                         t60_pred, t60_target,
                         clean_wav=clean_wav,
