@@ -55,8 +55,8 @@ MODELS = {
         "cls": "single",
     },
     "norm_w_denoise": {
-        "ckpt": ROOT / "runs/kan_multitask_norm_w_denoise/best_model.pth",
-        "label": r"Multi-task denoise-dom. ($\alpha$=1.0, $\beta$=0.1)",
+        "ckpt": ROOT / "runs/kan_multitask_norm_w_denoise_b005/best_model.pth",
+        "label": r"Multi-task denoise-dom. ($\alpha$=1.0, $\beta$=0.05)",
         "color": "#2196F3",
         "cls": "multi",
     },
@@ -77,7 +77,7 @@ MODELS = {
 LAYER_NAMES = ["encoder", "tscb_1", "tscb_2"]
 T60_RMSE = {
     "single_task": 111.15,
-    "norm_w_denoise": 97.79,
+    "norm_w_denoise": 92.91,
     "norm_balanced": 109.90,
     "norm_w_t60": 109.54,
 }

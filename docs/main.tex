@@ -84,7 +84,7 @@ $1.41$\,M parameters in total. Gradient-probe analysis shows that the
 two task gradients remain nearly orthogonal throughout training (no
 systematic conflict), so the two tasks can be optimised jointly without
 interference; a task-weight ablation further shows that $T_{60}$
-accuracy improves monotonically as the denoising task is given a larger
+accuracy improves as the denoising task is given a larger
 weight, and representation analysis indicates that this gain comes from
 the denoising task reshaping the shared features rather than from any
 gradient-dominance effect.
@@ -146,7 +146,10 @@ spectral-decay-distribution estimator with reduced computational
 cost~\citep{eaton2013sdd} or the subband-decomposition based
 estimator~\citep{prego2015subband} still require a relatively accurate
 prior estimate of the noise level, which is itself a hard problem when
-the noise is non-stationary.
+the noise is non-stationary. The masking of the reverberation tail by
+additive noise is thus a central obstacle for blind $T_{60}$ estimation,
+and robustly recovering the decay structure under noisy conditions has
+become a recurring problem for subsequent methods.
 
 Deep learning (DL) has subsequently emerged as a data-driven alternative.
 \citet{gamper2018cnn} fed log-mel features to a six-layer convolutional
@@ -161,56 +164,56 @@ convolutional recurrent variants; \citet{saini2023mobileaudiotransformer}
 have demonstrated that a MobileViT-style transformer can run on a
 smartphone in real time, while \citet{duangpummet2022stochastic} have
 moved from full-band $T_{60}$ towards a joint estimation of $T_{60}$,
-early-decay time, clarity and speech transmission index. Most relevant
-to this work, \citet{zheng2022noiseaware} and \citet{zhang2024damtl}
-explored multi-task formulations that pair $T_{60}$ regression with an
-auxiliary denoising objective and observed that the denoising task
-improves $T_{60}$ estimation. Although the data-driven
-models above clearly outperform the statistical signal processing
-baselines in clean or high-SNR conditions, two general challenges
-persist across this body of work. First, the late reverberation tail is
-intrinsically energy-weak and is easily masked by real-world noise, so
-estimation accuracy still degrades noticeably in low-SNR or unseen-noise
-scenarios; existing estimators mainly rely on the backbone's own
-capacity for noise robustness, yet it is unclear whether this alone
-drives the lower layers to learn the fine-grained time--frequency
-discriminative features on which an accurate $T_{60}$---itself dependent
-on the detailed shape of the decay envelope---ultimately relies.
-Second, almost all existing estimators place a stack of fully connected
-layers on top of the temporal/spectral backbone as the regressor, which
-applies a single fixed non-linearity per neuron and offers limited
-expressive power for the smooth but non-trivial mapping from pooled
-bottleneck statistics to a scalar $T_{60}$.
+early-decay time, clarity and speech transmission index. Although these
+models differ considerably in network architecture, most of them adopt
+the same regressor design, namely a stack of fully connected layers on
+top of the time--frequency backbone that maps the aggregated features to
+a scalar $T_{60}$. To improve robustness under noisy conditions, one line
+of work further exploits denoising to assist $T_{60}$ estimation:
+\citet{zheng2022noiseaware} used a two-stage framework that first
+separates the clean reverberant speech and then estimates $T_{60}$ from
+it, but the two stages are trained separately, so the denoising gradients
+cannot directly optimise the features on which $T_{60}$ relies;
+\citet{zhang2024damtl} instead treated denoising as an auxiliary task that
+shares a backbone with $T_{60}$ regression and is trained end to end, and
+observed that denoising improves $T_{60}$ estimation, but their backbone
+is relatively simple and they did not analyse how the two tasks interact
+in the shared layers, so the mechanism behind the denoising-induced gain
+remains unclear.
+
+Although the data-driven models above clearly outperform the statistical
+signal processing baselines in clean or high-SNR conditions, two general
+challenges persist across this body of work. First, the late
+reverberation tail is intrinsically energy-weak and is easily masked by
+real-world noise, so estimation accuracy still degrades noticeably in
+low-SNR or unseen-noise scenarios; existing estimators mainly rely on the
+backbone's own capacity to obtain noise robustness implicitly, without
+any explicit modelling or separation of the noise, and it is therefore
+unclear whether this alone drives the lower layers to learn the
+fine-grained time--frequency discriminative features on which an accurate
+$T_{60}$, itself dependent on the detailed shape of the decay envelope,
+ultimately relies. Second, as noted above, almost all existing estimators
+place a stack of fully connected layers on top of the time--frequency
+backbone as the regressor, which applies a single fixed non-linearity per
+neuron and offers limited expressive power for the smooth but non-trivial
+mapping from pooled bottleneck statistics to a scalar $T_{60}$.
 
 To address these challenges, we propose a multi-task learning framework
-for blind $T_{60}$ estimation, built around three core design choices.
-First, we introduce a denoising reconstruction auxiliary task on top of
-a dual-path time--frequency Conformer encoder, sharing the encoder and
-Conformer blocks between the two tasks. The denoising task requires the
-network to separate noise from the noisy reverberant spectrum and
-reconstruct the
-clean reverberant speech; this dense, per-time-frequency-bin supervision
-forces the shared layers to learn fine-grained time--frequency
-discriminative features, and we verify that such a denoising-driven
-representation in turn improves $T_{60}$ estimation. Second, we design
-a lightweight Fourier-basis Kolmogorov--Arnold regression head whose
-learnable univariate edge functions replace the fixed scalar
-non-linearities of a conventional MLP, supplying a strong inductive
-bias toward the smooth non-linear mapping from pooled features to a
-scalar $T_{60}$. Third, through systematic gradient probing and
-representation analysis we elucidate how the denoising auxiliary
-supervision takes effect: the two task gradients are nearly orthogonal
-rather than antagonistic, so the tasks can be optimised jointly without
-interference, and a task-weight ablation shows that giving the denoising
-task a larger weight monotonically improves $T_{60}$ accuracy; at the
-representation level, CKA shows that the denoising task actively
-\emph{reshapes} the shared layers (the larger its weight, the further
-the representation departs from the single-task solution), and this
-reshaping---rather than any gradient-dominance effect---is what the
-Fourier-KAN head exploits.
+for blind $T_{60}$ estimation that pairs $T_{60}$ regression with a
+denoising reconstruction auxiliary task over a shared time--frequency
+Conformer backbone. For the first challenge, the denoising auxiliary task
+provides dense per-time-frequency-bin supervision that forces the shared
+layers to learn to separate noise from the reverberant spectrum, thereby
+exposing the masked decay structure; since sharing parameters across
+tasks can cause negative transfer~\citep{ruder2017overview, yu2020pcgrad},
+we further conduct gradient-probe and representation analyses to verify
+the underlying mechanism. For the second challenge, we replace the
+conventional fully connected regression head with a Fourier-KAN head,
+whose learnable trigonometric-series basis functions provide a stronger
+inductive bias for the smooth but non-linear mapping from pooled acoustic
+statistics to $T_{60}$~\citep{liu2024kan, xu2025fourierkan}.
 
-\noindent\textbf{Contributions.} Our specific contributions are as
-follows.
+The main contributions of this work are summarised as follows.
 
 \begin{enumerate}[(1)]
   \item We propose a multi-task framework for blind $T_{60}$ estimation
@@ -219,38 +222,33 @@ follows.
         time--frequency Conformer backbone (a dense convolutional
         encoder and two two-stage Conformer blocks) between the two
         tasks, with a Fourier-KAN regression head and a CMGAN-style
-        denoising decoder branch tapped off the shared bottleneck. To
-        the best of our knowledge, this is the first work to
-        systematically introduce denoising auxiliary supervision into
-        blind $T_{60}$ regression with a dual-path time--frequency
-        Conformer.
-  \item Through gradient-probe analysis across three task-weight
-        configurations, we show that the two task gradients remain
-        nearly orthogonal throughout training ($\cos\approx 0$, with no
+        denoising decoder branch tapped off the shared bottleneck.
+        Compared with prior work that combines denoising with $T_{60}$
+        estimation, we introduce the denoising auxiliary supervision into
+        a dual-path time--frequency Conformer backbone in an end-to-end
+        jointly trained manner, together with a normalised loss and
+        task-weight control, so that the denoising gradients can directly
+        shape the shared representation.
+  \item Through gradient-probe and representation analysis (CKA), we
+        elucidate the mechanism by which the denoising auxiliary
+        supervision takes effect: the two task gradients remain nearly
+        orthogonal throughout training ($\cos\approx 0$, with no
         systematic antagonistic conflict), so the two tasks can be
-        optimised jointly without interference. A task-weight ablation
-        further shows that $T_{60}$ accuracy improves monotonically as
-        the denoising task is given a larger weight, and representation
-        analysis (CKA) indicates that this gain stems from the
-        denoising task reshaping the shared features rather than from
-        any gradient-dominance effect.
+        optimised jointly without interference; representation analysis
+        shows that the denoising task reshapes the shared features, and
+        this reshaping is the source of the $T_{60}$ improvement,
+        independent of any gradient conflict.
   \item We design a lightweight Fourier-basis Kolmogorov--Arnold
         regression head that maps the multi-statistic pooled bottleneck
-        features to $T_{60}$ through a two-layer Fourier-KAN block with
-        a hierarchical frequency budget. Experiments confirm that the
-        proposed head consistently outperforms a conventional MLP head
+        features to $T_{60}$ through a two-layer Fourier-KAN block, each
+        layer using a different number of trigonometric bases. Experiments
+        confirm that the proposed head outperforms a conventional MLP head
         of comparable size under the same multi-task setting.
   \item We carry out a systematic evaluation on four noisy reverberant
         test sets covering all combinations of simulated/measured RIRs
-        and seen/unseen noise types. Sharing the encoder and Conformer
-        blocks between the two tasks, the $T_{60}$ RMSE is reduced by
-        $16.4$\,\% relative to a single-task ablation baseline
-        ($92.91$\,ms vs.\ $111.15$\,ms), at the cost of two denoising
-        decoders ($\approx 0.54$\,M parameters; $1.41$\,M parameters in
-        total vs.\ $861\,793$ for the single-task estimator). The
-        proposed model attains an average RMSE of $92.91$\,ms, a MAE of
-        $56.68$\,ms and a Pearson correlation of $0.9625$, and
-        outperforms BERP, DAMTL and noiseaware.
+        and seen/unseen noise types, validating the effectiveness and
+        cross-scenario robustness of the proposed model against the
+        single-task baseline and against BERP, DAMTL and noiseaware.
 \end{enumerate}
 
 The remainder of this paper is organised as follows.
@@ -547,8 +545,8 @@ requires bookkeeping such as adaptive grid updates and is comparatively
 slow on small batch sizes typical of regression heads.
 
 A Fourier-KAN replaces the spline basis by a truncated trigonometric
-series~\citep{xu2025fourierkan, yang2025kanforspeech}. For a
-\emph{frequency budget} $\Omega\in\mathbb{N}$, every edge function is
+series~\citep{xu2025fourierkan}. For a
+\emph{frequency count} $\Omega\in\mathbb{N}$, every edge function is
 written as
 \begin{equation}\label{eq:fourier_phi}
   \phi_{j,i}(x_i) = \sum_{\omega=1}^{\Omega}
@@ -592,7 +590,7 @@ the effective capacity of the periodic basis.
 
 \paragraph{Fourier-KAN block.} The projected embedding is processed by
 $L=2$ Fourier-KAN layers with hidden dimensions $(d_{1},d_{2})=(32,16)$.
-The first layer uses a comparatively large frequency budget
+The first layer uses a comparatively large frequency count
 $\Omega_{0}=16$, which allows it to learn fine-grained non-linear
 features directly from the embedding, while the inner layer uses a
 smaller budget $\Omega_{1}=8$ for parameter efficiency. Formally, for
@@ -613,7 +611,7 @@ The Fourier weights $a^{(\ell)}_{j,i,\omega}$ and $b^{(\ell)}_{j,i,\omega}$
 are initialised from a zero-mean Gaussian with standard deviation
 $\sqrt{1/(d_{\ell-1}\,\Omega_{\ell-1})}$, so that the variance of the
 layer output is approximately unity at initialisation regardless of the
-input dimension and the frequency budget.
+input dimension and the frequency count.
 
 \paragraph{Output.} A linear layer maps $\mathbf{u}^{(2)}\in
 \mathbb{R}^{16}$ to a scalar, and a sigmoid activation produces the
@@ -852,7 +850,7 @@ $\mathcal{L}=\alpha\,\mathcal{L}_{\mathrm{den}}^{*}+
 \beta\,\mathcal{L}_{T_{60}}^{*}$. Table~\ref{tab:weight} reports the
 $T_{60}$ accuracy for five configurations spanning the
 denoise-dominant, balanced and $T_{60}$-dominant regimes. Accuracy
-improves monotonically as the denoising weight is increased relative to
+improves as the denoising weight is increased relative to
 the $T_{60}$ weight, and the best result is obtained at
 $(\alpha,\beta)=(1.0,0.05)$ with an RMSE of $92.91$\,ms---we therefore
 adopt this configuration as the main model throughout the paper. Once
@@ -884,7 +882,6 @@ only when the denoising task is given a clearly larger weight.
 regression head against an MLP head of comparable capacity, both under
 the same multi-task configuration $(\alpha,\beta)=(1.0,0.05)$.
 
-% TODO: 填入 MLP head multitask 消融结果
 \begin{table}[!htbp]
   \centering
   \caption{Regression-head ablation under the multi-task setting
@@ -894,7 +891,7 @@ the same multi-task configuration $(\alpha,\beta)=(1.0,0.05)$.
     \toprule
     Head & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    MLP          & \textit{【待填】} & \textit{【待填】} \\
+    MLP          & 102.17 & 64.94 \\
     Fourier-KAN  & \textbf{92.91}    & \textbf{56.68} \\
     \bottomrule
   \end{tabular}
@@ -961,7 +958,7 @@ CKA reveals a clear, depth-graded pattern. At the encoder all three
 multi-task regimes remain nearly identical to the single-task baseline
 (CKA $0.988$--$0.995$): the low-level magnitude/phase encoder is
 largely task-agnostic. Moving deeper, TSCB$_1$ and TSCB$_2$ diverge, and
-the divergence grows monotonically with the strength of the denoising
+the divergence increases with the strength of the denoising
 gradient: at TSCB$_2$, the denoise-dominant regime
 ($\alpha{=}1.0,\beta{=}0.1$) departs furthest from the single-task
 solution (CKA $0.699$), the balanced regime is intermediate ($0.743$),
@@ -1009,7 +1006,7 @@ Table~\ref{tab:main}.
     \toprule
     Method & RMSE $\downarrow$ & MAE $\downarrow$ & $r$ $\uparrow$ & $R^{2}$ $\uparrow$ \\
     \midrule
-    BERP~\citep{wang2025berp}              & 151.93 & 98.33 & 0.9035 & 0.8001 \\
+    BERP~\citep{wang2025berp}              & 147.20 & 90.70 & 0.9035 & 0.8001 \\
     noiseaware~\citep{zheng2022noiseaware} & 133.66 & 82.38 & 0.9196 & 0.8451 \\
     DAMTL~\citep{zhang2024damtl}           & 138.94 & 86.07 & 0.9134 & 0.8323 \\
     Single-task KAN (ablation)             & 111.15 & 72.40 & 0.9484 & 0.8931 \\
@@ -1042,22 +1039,22 @@ real RIR).
     Scenario & Method & $-5$\,dB & $0$\,dB & $5$\,dB & $10$\,dB & $\geq 15$\,dB & Avg. \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{Sim.~RIR\\(test1+3)}}
-      & BERP       &   &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   &   \\
-      & Proposed   &   &   &   &   &   &   \\
+      & BERP       & 225.5 & 150.7 & 108.8 & 111.7 & 111.2 & 143.0 \\
+      & DAMTL      & 203.1 & 158.1 & 115.2 & 102.0 & 110.7 & 138.1 \\
+      & noiseaware & 204.8 & 166.7 & 100.1 & 87.8  & 79.5  & 129.1 \\
+      & Proposed   & \textbf{132.2} & \textbf{93.2} & \textbf{65.5} & \textbf{70.1} & \textbf{81.8} & \textbf{90.1} \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{Real RIR\\(test2+4)}}
-      & BERP       &   &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   &   \\
-      & Proposed   &   &   &   &   &   &   \\
+      & BERP       & 242.2 & 180.0 & 139.3 & 98.9  & 94.3  & 151.7 \\
+      & DAMTL      & 232.6 & 169.4 & 121.9 & 85.3  & 82.3  & 140.5 \\
+      & noiseaware & 238.5 & 159.2 & 115.1 & 78.9  & 81.1  & 138.4 \\
+      & Proposed   & \textbf{144.7} & \textbf{111.0} & \textbf{82.1} & \textbf{68.5} & \textbf{71.6} & \textbf{95.7} \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{All\\(test1--4)}}
-      & BERP       &   &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   &   \\
-      & \textbf{Proposed} & & & & & & \textbf{92.91} \\
+      & BERP       & 234.0 & 166.0 & 125.0 & 105.5 & 103.1 & 147.4 \\
+      & DAMTL      & 218.3 & 163.9 & 118.6 & 94.0  & 97.5  & 139.3 \\
+      & noiseaware & 222.3 & 163.0 & 107.9 & 83.5  & 80.3  & 133.8 \\
+      & \textbf{Proposed} & \textbf{138.6} & \textbf{102.5} & \textbf{74.3} & \textbf{69.3} & \textbf{76.9} & \textbf{93.0} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1079,22 +1076,22 @@ model and the three baselines, broken down by test-set scenario.
     Scenario & Method & $0.1$--$0.4$ & $0.4$--$0.7$ & $0.7$--$1.0$ & $1.0$--$1.5$ & Avg. \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{Sim.~RIR\\(test1+3)}}
-      & BERP       &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   \\
-      & Proposed   &   &   &   &   &   \\
+      & BERP       & 88.5  & 117.9 & 163.0 & 261.1 & 143.0 \\
+      & DAMTL      & 97.1  & 110.4 & 136.6 & 278.4 & 138.1 \\
+      & noiseaware & 94.0  & 107.1 & 155.3 & 205.3 & 129.1 \\
+      & Proposed   & \textbf{64.1} & \textbf{80.6} & \textbf{96.0} & \textbf{155.0} & \textbf{90.1} \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{Real RIR\\(test2+4)}}
-      & BERP       &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   \\
-      & Proposed   &   &   &   &   &   \\
+      & BERP       & 88.1  & 140.0 & 176.0 & 331.9 & 151.7 \\
+      & DAMTL      & 95.9  & 98.1  & 160.5 & 313.2 & 140.5 \\
+      & noiseaware & 92.9  & 111.7 & 156.4 & 301.0 & 138.4 \\
+      & Proposed   & \textbf{65.7} & \textbf{83.3} & \textbf{105.1} & \textbf{203.3} & \textbf{95.7} \\
     \midrule
     \multirow{4}{*}{\shortstack[l]{All\\(test1--4)}}
-      & BERP       &   &   &   &   &   \\
-      & noiseaware &   &   &   &   &   \\
-      & DAMTL      &   &   &   &   &   \\
-      & \textbf{Proposed} & & & & & \textbf{92.91} \\
+      & BERP       & 88.3  & 130.9 & 168.8 & 294.8 & 147.4 \\
+      & DAMTL      & 96.5  & 103.6 & 147.5 & 294.3 & 139.3 \\
+      & noiseaware & 93.4  & 109.7 & 155.8 & 252.6 & 133.8 \\
+      & \textbf{Proposed} & \textbf{65.0} & \textbf{82.2} & \textbf{100.1} & \textbf{178.2} & \textbf{93.0} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1119,14 +1116,14 @@ while preserving the reverberation.
     \midrule
     $T_{60}$-dominant          & 3.077 & 0.891 & 18.80 & +2.89 \\
     Balanced                   & 3.178 & 0.907 & 19.79 & +3.88 \\
-    \textbf{Denoise-dominant (proposed)} & \textbf{3.427} & \textbf{0.927} & \textbf{20.98} & \textbf{+5.07} \\
+    \textbf{Denoise-dominant (proposed)} & \textbf{3.472} & \textbf{0.928} & \textbf{21.13} & \textbf{+5.21} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 The proposed denoise-dominant model removes additive noise while
-preserving the reverberation, yielding gains of $+0.71$ PESQ, $+0.08$
-STOI and $+5.07$\,dB SI-SDR over the noisy input. Crucially, the
+preserving the reverberation, yielding gains of $+0.75$ PESQ, $+0.08$
+STOI and $+5.21$\,dB SI-SDR over the noisy input. Crucially, the
 denoising quality follows the \emph{same} ordering as the $T_{60}$
 accuracy (Table~\ref{tab:weight}): the denoise-dominant regime is best
 at both tasks, and the $T_{60}$-dominant regime is worst at both. There
@@ -1150,7 +1147,7 @@ substantially relative to the single-task ablation baseline
 probing shows that the two task gradients are nearly orthogonal with no
 systematic conflict, so the two tasks can be optimised jointly without
 interference, and a task-weight ablation shows that giving the denoising
-task a larger weight monotonically improves $T_{60}$ accuracy; (3) the
+task a larger weight improves $T_{60}$ accuracy; (3) the
 Fourier-KAN head outperforms an MLP head under comparable settings.
 Representation analysis (CKA and linear probing) further shows that the
 denoising task actively \emph{reshapes} the shared representation: the

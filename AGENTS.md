@@ -195,4 +195,9 @@ python analyze_representations.py --gpu 2 --n_samples 500 \
 
 6. **损失归一化的叙述纪律。** §3.5 讲归一化动机时，只说"为使两个量级不同的损失能在同一尺度上加权"——**不要**列出具体量级数字(如"去噪0.04、T60约0.0005、相差10-80倍")，这是多余的，DAMTL/noiseaware 从不解释量级差异。梯度幅度比 r 的分析留给 §5.2。
 
+7. **不要声称"单调"。** 权重扫描只有 3 个数据点，不能说"单调提升/monotonically improves"——只说"提升/improves"。β→0 方向未触底，声称单调会被 reviewer 攻击。
+
+8. **三份文件同步纪律。** `docs/main.tex`（英文主稿）和 `docs/main_zh.md`（中文 review 版）改一处必须同步另一处。`docs/main_bilingual.md`（中英段落对照审阅文档）是从前两个文件**自动生成**的，每次改完前两个文件后**必须重新生成** bilingual 文档（用 `main_bilingual.py` 生成脚本或等价 Python 代码）。漏改 bilingual 是最常见的错误。
+
+
 
