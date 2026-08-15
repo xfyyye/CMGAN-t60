@@ -1,0 +1,177 @@
+Device: cuda:2; bootstrap=1000; seed=42
+
+[test1] 1080 utterances
+  Extracting single_task
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_denoise
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_balanced
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_t60
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+
+[test2] 1080 utterances
+  Extracting single_task
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_denoise
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_balanced
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_t60
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+
+[test3] 1080 utterances
+  Extracting single_task
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_denoise
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_balanced
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_t60
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+
+[test4] 1080 utterances
+  Extracting single_task
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_denoise
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_balanced
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+  Extracting norm_w_t60
+    batches 10/68
+    batches 20/68
+    batches 30/68
+    batches 40/68
+    batches 50/68
+    batches 60/68
+    batches 68/68
+
+Computing CKA and paired bootstrap intervals
+  test1 norm_w_denoise encoder: 0.9501 [0.9414, 0.9579]
+  test1 norm_w_denoise tscb_1: 0.6791 [0.6547, 0.7063]
+  test1 norm_w_denoise tscb_2: 0.4729 [0.4543, 0.4980]
+  test1 norm_balanced encoder: 0.9877 [0.9855, 0.9899]
+  test1 norm_balanced tscb_1: 0.7115 [0.6850, 0.7409]
+  test1 norm_balanced tscb_2: 0.7211 [0.6971, 0.7438]
+  test1 norm_w_t60 encoder: 0.9952 [0.9944, 0.9960]
+  test1 norm_w_t60 tscb_1: 0.7637 [0.7431, 0.7850]
+  test1 norm_w_t60 tscb_2: 0.8110 [0.7980, 0.8248]
+  test2 norm_w_denoise encoder: 0.9543 [0.9466, 0.9610]
+  test2 norm_w_denoise tscb_1: 0.6723 [0.6400, 0.7063]
+  test2 norm_w_denoise tscb_2: 0.4948 [0.4711, 0.5232]
+  test2 norm_balanced encoder: 0.9887 [0.9863, 0.9906]
+  test2 norm_balanced tscb_1: 0.7357 [0.7096, 0.7638]
+  test2 norm_balanced tscb_2: 0.7165 [0.6943, 0.7402]
+  test2 norm_w_t60 encoder: 0.9958 [0.9951, 0.9965]
+  test2 norm_w_t60 tscb_1: 0.7926 [0.7709, 0.8129]
+  test2 norm_w_t60 tscb_2: 0.8138 [0.8012, 0.8278]
+  test3 norm_w_denoise encoder: 0.9540 [0.9471, 0.9601]
+  test3 norm_w_denoise tscb_1: 0.7217 [0.7005, 0.7434]
+  test3 norm_w_denoise tscb_2: 0.5305 [0.5095, 0.5566]
+  test3 norm_balanced encoder: 0.9874 [0.9852, 0.9893]
+  test3 norm_balanced tscb_1: 0.7407 [0.7174, 0.7637]
+  test3 norm_balanced tscb_2: 0.6915 [0.6680, 0.7169]
+  test3 norm_w_t60 encoder: 0.9970 [0.9964, 0.9974]
+  test3 norm_w_t60 tscb_1: 0.7583 [0.7408, 0.7768]
+  test3 norm_w_t60 tscb_2: 0.8141 [0.8014, 0.8289]
+  test4 norm_w_denoise encoder: 0.9470 [0.9390, 0.9538]
+  test4 norm_w_denoise tscb_1: 0.6921 [0.6688, 0.7163]
+  test4 norm_w_denoise tscb_2: 0.5543 [0.5318, 0.5811]
+  test4 norm_balanced encoder: 0.9857 [0.9835, 0.9877]
+  test4 norm_balanced tscb_1: 0.7410 [0.7186, 0.7628]
+  test4 norm_balanced tscb_2: 0.6802 [0.6568, 0.7035]
+  test4 norm_w_t60 encoder: 0.9963 [0.9957, 0.9969]
+  test4 norm_w_t60 tscb_1: 0.7602 [0.7426, 0.7787]
+  test4 norm_w_t60 tscb_2: 0.8173 [0.8038, 0.8322]
+
+Done: paper_cka_analysis/results

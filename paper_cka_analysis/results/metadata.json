@@ -1,0 +1,50 @@
+{
+  "dataset_root": "/mnt/tidal-sh01/usr/chuan/youling/project/dataset/T60_Dataset_v7_4s",
+  "splits": [
+    "test1",
+    "test2",
+    "test3",
+    "test4"
+  ],
+  "samples_per_split": {
+    "test1": 1080,
+    "test2": 1080,
+    "test3": 1080,
+    "test4": 1080
+  },
+  "models": {
+    "single_task": {
+      "checkpoint": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/single_t60_kan_v2_mse/best_model.pth",
+      "label": "Single-task",
+      "kind": "single"
+    },
+    "norm_w_denoise": {
+      "checkpoint": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_w_denoise_b005/best_model.pth",
+      "label": "Denoise-dominant (alpha=1, beta=0.05)",
+      "kind": "multi"
+    },
+    "norm_balanced": {
+      "checkpoint": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_balanced/best_model.pth",
+      "label": "Balanced (alpha=1, beta=1)",
+      "kind": "multi"
+    },
+    "norm_w_t60": {
+      "checkpoint": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_w_t60/best_model.pth",
+      "label": "T60-dominant (alpha=0.1, beta=1)",
+      "kind": "multi"
+    }
+  },
+  "layers": [
+    "encoder",
+    "tscb_1",
+    "tscb_2"
+  ],
+  "pooling": "global mean over time and frequency",
+  "cka": "centered linear CKA in feature space",
+  "bootstrap": {
+    "repeats": 1000,
+    "method": "paired resampling with replacement",
+    "ci": "percentile 95%",
+    "seed": 42
+  }
+}
