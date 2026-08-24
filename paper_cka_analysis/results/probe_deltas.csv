@@ -1,0 +1,13 @@
+protocol,pooling,layer,delta_mean,delta_sd
+pooled,mean,encoder,-0.011901,0.016116
+pooled,mean,tscb_1,-0.050703,0.018280
+pooled,mean,tscb_2,-0.075350,0.011707
+pooled,multistats,encoder,-0.001513,0.019642
+pooled,multistats,tscb_1,-0.046411,0.017255
+pooled,multistats,tscb_2,-0.056078,0.017576
+l1o,mean,encoder,-0.013639,0.077713
+l1o,mean,tscb_1,-0.060964,0.050232
+l1o,mean,tscb_2,-0.084104,0.023154
+l1o,multistats,encoder,0.013378,0.094058
+l1o,multistats,tscb_1,-0.068507,0.052145
+l1o,multistats,tscb_2,-0.071959,0.033763

@@ -102,8 +102,29 @@ def ridge_r2(x_tr, y_tr, x_te, y_te, alpha):
 
 
 def load_npz(path):
-    with np.load(path) as data:
-        return {key: data[key] for key in data.files}
+    """Load flattened caches and the nested object caches from the first version."""
+    with np.load(path, allow_pickle=True) as data:
+        if all(f"{pooling}__{layer}" in data.files
+               for pooling in POOLINGS for layer in LAYERS):
+            result = {
+                pooling: {layer: data[f"{pooling}__{layer}"] for layer in LAYERS}
+                for pooling in POOLINGS
+            }
+            result["t60_raw"] = data["t60_raw"]
+            return result
+        result = {pooling: data[pooling].item() for pooling in POOLINGS}
+        result["t60_raw"] = data["t60_raw"]
+        return result
+
+
+def save_npz(path, values):
+    """Store numeric arrays only; avoid pickled nested dictionaries."""
+    flat = {
+        f"{pooling}__{layer}": values[pooling][layer]
+        for pooling in POOLINGS for layer in LAYERS
+    }
+    flat["t60_raw"] = values["t60_raw"]
+    np.savez_compressed(path, **flat)
 
 
 def extract_or_load_all(args, cache_dir, device):
@@ -122,7 +143,7 @@ def extract_or_load_all(args, cache_dir, device):
             print(f"  Extracting {model_key}", flush=True)
             model = build_model(MODELS[model_key], device)
             values = extract_probe_features(model, loader, device)
-            np.savez_compressed(cache, **values)
+            save_npz(cache, values)
             all_feats[split][model_key] = values
             del model
             torch.cuda.empty_cache()
@@ -133,7 +154,7 @@ def pooled_probe(all_feats, model_keys, pooling, n_seeds, base_seed, alpha, trai
     rows = []
     for layer in LAYERS:
         for model_key in model_keys:
-            x = np.concatenate([all_feats[s][model_key][layer] for s in SPLITS])
+            x = np.concatenate([all_feats[s][model_key][pooling][layer] for s in SPLITS])
             y = np.concatenate([all_feats[s][model_key]["t60_raw"] for s in SPLITS])
             values = []
             for seed in range(base_seed, base_seed + n_seeds):
@@ -165,9 +186,9 @@ def l1o_probe(all_feats, model_keys, pooling, alpha):
             values = []
             for held in SPLITS:
                 tr_s = [s for s in SPLITS if s != held]
-                x_tr = np.concatenate([all_feats[s][model_key][layer] for s in tr_s])
+                x_tr = np.concatenate([all_feats[s][model_key][pooling][layer] for s in tr_s])
                 y_tr = np.concatenate([all_feats[s][model_key]["t60_raw"] for s in tr_s])
-                x_te = all_feats[held][model_key][layer]
+                x_te = all_feats[held][model_key][pooling][layer]
                 y_te = all_feats[held][model_key]["t60_raw"]
                 values.append(ridge_r2(x_tr, y_tr, x_te, y_te, alpha))
             values = np.asarray(values)

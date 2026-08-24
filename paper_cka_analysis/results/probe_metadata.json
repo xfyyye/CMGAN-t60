@@ -1,0 +1,19 @@
+{
+  "protocol_pooled": {
+    "train_frac": 0.8,
+    "n_seeds": 5,
+    "base_seed": 42
+  },
+  "protocol_l1o": "train on three test sets, evaluate on held-out",
+  "poolings": {
+    "mean": "global mean over (T, F), C dims",
+    "multistats": "mean over F then avg/max/std over T, 3C dims (matches T60 head)"
+  },
+  "regressor": "ridge (alpha=1.0) on standardised features",
+  "models": {
+    "single_task": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/single_t60_kan_v2_mse/best_model.pth",
+    "norm_w_denoise": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_w_denoise_b005/best_model.pth",
+    "norm_balanced": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_balanced/best_model.pth",
+    "norm_w_t60": "/mnt/tidal-sh01/usr/chuan/youling/project/11/multitask-experiments/kan-multitask/runs/kan_multitask_norm_w_t60/best_model.pth"
+  }
+}

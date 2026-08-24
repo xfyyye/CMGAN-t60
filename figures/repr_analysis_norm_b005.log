@@ -1,0 +1,46 @@
+Device: cuda:2
+Dataset: test1, using 500 samples
+
+Extracting features: single_task...
+
+Extracting features: norm_w_denoise...
+
+Extracting features: norm_balanced...
+
+Extracting features: norm_w_t60...
+
+[Linear Probe]
+    [single_task] encoder: R²=0.3941
+    [single_task] tscb_1: R²=0.5638
+    [single_task] tscb_2: R²=0.6360
+    [norm_w_denoise] encoder: R²=0.2151
+    [norm_w_denoise] tscb_1: R²=0.3915
+    [norm_w_denoise] tscb_2: R²=0.4739
+    [norm_balanced] encoder: R²=0.3976
+    [norm_balanced] tscb_1: R²=0.5197
+    [norm_balanced] tscb_2: R²=0.6160
+    [norm_w_t60] encoder: R²=0.4585
+    [norm_w_t60] tscb_1: R²=0.6713
+    [norm_w_t60] tscb_2: R²=0.7674
+  Saved: figures/representation/linear_probe.png
+
+[t-SNE]
+  Running t-SNE on layer=tscb_2 (n_samples=500)...
+  Saved: figures/representation/tsne_tscb_2.png
+  Running t-SNE on layer=encoder (n_samples=500)...
+  Saved: figures/representation/tsne_encoder.png
+
+[CKA]
+  Computing CKA...
+    CKA single_task vs norm_w_denoise @ encoder: 0.9516
+    CKA single_task vs norm_w_denoise @ tscb_1: 0.6915
+    CKA single_task vs norm_w_denoise @ tscb_2: 0.4973
+    CKA single_task vs norm_balanced @ encoder: 0.9887
+    CKA single_task vs norm_balanced @ tscb_1: 0.7283
+    CKA single_task vs norm_balanced @ tscb_2: 0.7433
+    CKA single_task vs norm_w_t60 @ encoder: 0.9954
+    CKA single_task vs norm_w_t60 @ tscb_1: 0.7673
+    CKA single_task vs norm_w_t60 @ tscb_2: 0.8211
+  Saved: figures/representation/cka_heatmap.png
+
+Done. All figures saved to: figures/representation/
