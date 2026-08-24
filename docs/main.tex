@@ -927,66 +927,73 @@ Section~\ref{sec:res:repr}.
 To examine how the denoising auxiliary supervision reshapes the shared
 representation, we apply CKA (feature similarity between each
 multi-task configuration and the single-task baseline, per layer) and
-linear probing (freeze the model, read out $T_{60}$ by linear regression
-per layer, and report the linearly-separable $T_{60}$ information as
-$R^{2}$). CKA is computed deterministically over the full feature Gram
-matrix and is therefore stable; the linear-probe $R^{2}$ uses a random
-train/test split and is reported as a qualitative cross-check rather
-than a point comparison.
+linear probing (freeze the model, read out $T_{60}$ by ridge regression
+on frozen layer features, and report the linearly decodable $T_{60}$
+information as $R^{2}$). CKA is computed deterministically over the
+full feature Gram matrix; the probe is averaged over five random 80/20
+splits (mean $\pm$ SD) and is additionally evaluated in a deterministic
+leave-one-split-out protocol, and the two protocols agree.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.68\textwidth]{figs/cka_heatmap.png}
+  \includegraphics[width=0.72\textwidth]{figs/cka_comparison.png}
   \caption{Linear CKA between each multi-task configuration and the
-  single-task baseline, per shared layer. Lower CKA indicates the
-  denoising supervision has driven the representation further away from
-  the single-task solution.}
+  single-task baseline, per shared layer (macro average over
+  test1--test4; error bars denote the SD across the four test sets).
+  Lower CKA indicates the denoising supervision has driven the
+  representation further away from the single-task solution.}
   \label{fig:cka}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.82\textwidth]{figs/linear_probe.png}
+  \includegraphics[width=0.95\textwidth]{figs/linear_probe.png}
   \caption{Linear probing $R^{2}$ per shared layer (Encoder / TSCB$_1$ /
-  TSCB$_2$): single-task baseline vs.\ the three multi-task regimes.
-  Higher $R^{2}$ means more $T_{60}$ information is linearly decodable
-  from that layer's features.}
+  TSCB$_2$): single-task baseline vs.\ the three multi-task regimes
+  (pooled 80/20 protocol, mean $\pm$ SD over five seeds). Left: global
+  mean pooling; right: multi-statistic pooling (avg/max/std over time),
+  which mirrors how the $T_{60}$ head reads the bottleneck.}
   \label{fig:linearprobe}
 \end{figure}
 
-CKA reveals a clear, depth-graded pattern. At the encoder all three
-multi-task regimes remain nearly identical to the single-task baseline
-(CKA $0.988$--$0.995$): the low-level magnitude/phase encoder is
-largely task-agnostic. Moving deeper, TSCB$_1$ and TSCB$_2$ diverge, and
-the divergence increases with the strength of the denoising
-gradient: at TSCB$_2$, the denoise-dominant regime
-($\alpha{=}1.0,\beta{=}0.1$) departs furthest from the single-task
-solution (CKA $0.699$), the balanced regime is intermediate ($0.743$),
-and the $T_{60}$-dominant regime ($\alpha{=}0.1,\beta{=}1.0$), in which
-the denoising gradient is suppressed, stays closest ($0.821$). This
-ordering of CKA matches the ordering of $T_{60}$ accuracy in
-Table~\ref{tab:weight} (denoise-dominant best, $T_{60}$-dominant worst):
-the more the denoising gradient reshapes the shared representation, the
-lower the $T_{60}$ RMSE. In other words, \emph{a stronger denoising
-gradient does more than add a second objective---it actively reshapes
-the shared representation, and this reshaping is what the $T_{60}$ head
-benefits from.}
+CKA reveals a clear, depth-graded pattern that is consistent across all
+four test sets. The encoder representation remains highly similar to
+the single-task baseline for every regime (macro-averaged CKA $\geq
+0.95$), whereas the divergence grows markedly deeper in the network.
+At TSCB$_2$, the denoise-dominant regime ($\alpha{=}1.0,\beta{=}0.05$)
+departs furthest from the single-task solution (macro CKA $0.51$;
+$0.47$--$0.55$ across the four test sets, with paired-bootstrap $95\%$
+confidence intervals supporting the same layer-wise trend), the balanced
+regime is intermediate ($0.70$), and the $T_{60}$-dominant regime
+($\alpha{=}0.1,\beta{=}1.0$), in which the denoising gradient is
+suppressed, stays closest ($0.81$). This ordering of CKA coincides with
+the ordering of $T_{60}$ accuracy in Table~\ref{tab:weight}
+(denoise-dominant best, $T_{60}$-dominant worst): the more the
+denoising gradient reshapes the shared representation, the lower the
+$T_{60}$ RMSE. In other words, \emph{a stronger denoising gradient does
+more than add a second objective; it actively reshapes the shared
+representation, and this reshaping is what the $T_{60}$ head benefits
+from.}
 
-Linear probing (Fig.~\ref{fig:linearprobe}) confirms that this
-restructuring does not discard the $T_{60}$ information: across all four
-models the deeper layers retain comparable $T_{60}$ decodability
-(TSCB$_2$ $R^{2}$ in the $0.55$--$0.70$ range), so the denoising
-supervision does not simply erase the $T_{60}$ cue. The contrast with
-CKA is informative: the multi-task representations are measurably
-\emph{different} from the single-task one (low CKA at TSCB$_2$) yet
-still carry the $T_{60}$ signal at a comparable level---i.e.\ denoising
-re-encodes, rather than removes, the $T_{60}$ cue. The actual $T_{60}$
-head reads these features through a max/std multi-statistic pool
-followed by a Fourier-KAN non-linear layer, which can access the
-re-structured representation that the denoise-dominant regime has
-produced; this is consistent with the regression-head ablation of
-Section~\ref{sec:res:ablation}, where the Fourier-KAN head outperforms
-an MLP head of comparable capacity under the same multi-task setting.
+Linear probing (Fig.~\ref{fig:linearprobe}) adds the complementary
+question of whether the reshaped representation is easier for a simple
+linear reader to exploit. A ridge probe is fitted on frozen layer
+features under two pooling schemes, of which the multi-statistic one
+mirrors how the $T_{60}$ head reads the bottleneck. Three observations
+follow. First, $T_{60}$ decodability accumulates with depth for every
+model (Encoder $<$ TSCB$_1$ $<$ TSCB$_2$). Second, the denoise-dominant
+model does not increase linear decodability: at TSCB$_2$ its $R^{2}$ is
+$0.68\pm0.01$, slightly below the single-task baseline
+($0.74\pm0.01$), with the balanced and $T_{60}$-dominant regimes in
+between and an ordering that matches the supervision structure.
+Third, this stands in contrast to the end-to-end results, in which the
+same model attains the best RMSE. Read together with the
+regression-head ablation of Section~\ref{sec:res:ablation}, where the
+Fourier-KAN head clearly outperforms an MLP head under the identical
+multi-task setting, this indicates that the multi-task gain does not
+arise from adding linearly separable $T_{60}$ information; it arises
+from a reshaped representation whose benefit is realised through the
+non-linear Fourier-KAN readout.
 
 \subsection{Results comparison with baselines}\label{sec:res:main}
 
@@ -1146,17 +1153,19 @@ substantially relative to the single-task ablation baseline
 ($111.15$\,ms) and outperforms BERP, DAMTL and noiseaware; (2) gradient
 probing shows that the two task gradients are nearly orthogonal with no
 systematic conflict, so the two tasks can be optimised jointly without
-interference, and a task-weight ablation shows that giving the denoising
-task a larger weight improves $T_{60}$ accuracy; (3) the
-Fourier-KAN head outperforms an MLP head under comparable settings.
-Representation analysis (CKA and linear probing) further shows that the
-denoising task actively \emph{reshapes} the shared representation: the
-larger its weight, the further the shared layers depart from the
-single-task solution (lower CKA), yet the $T_{60}$ cue is preserved at a
-comparable level of linear decodability---i.e.\ denoising re-encodes
-rather than removes the $T_{60}$ information, and this reshaped
-representation is what the Fourier-KAN head exploits, yielding the
-lowest RMSE.
+interference, and a task-weight ablation together with representation
+analysis shows that the gain stems from the denoising task reshaping the
+shared representation: among the tested weight configurations, those
+departing further from the single-task solution attain lower RMSE; (3)
+the Fourier-KAN head outperforms an MLP head under comparable settings.
+Representation analysis (CKA and linear probing) further reveals this
+reshaping mechanism: the denoise-dominant regime departs furthest from
+the single-task solution (lowest CKA), yet the $T_{60}$ cue remains
+highly linearly decodable, though not more so than in the single-task
+baseline. Together with the head ablation, this indicates that
+denoising re-encodes rather than removes the $T_{60}$ information, and
+that the benefit of the reshaped representation is realised through the
+non-linear Fourier-KAN readout.
 
 Future work may explore finer-grained weight sweeps and adaptive
 gradient balancing (e.g., GradNorm), replacing or extending denoising

@@ -159,16 +159,20 @@
 | 持平 (1.0,1.0) | 3.178 | 0.907 | 19.79 | +3.88 |
 | **去噪主导 (1.0,0.05)** | **3.427** | **0.927** | **20.98** | **+5.07** |
 
-### 3.7 表征分析（CKA + linear probe）
+### 3.7 表征分析（CKA，β=0.05 重跑版 + bootstrap CI）
 
-- **图文件：** `/Users/xiexinni/CMGAN-t60-kan-multitask/docs/figs/cka_heatmap.png`、`linear_probe.png`
-- **生成脚本：** `/Users/xiexinni/CMGAN-t60-kan-multitask/analyze_representations.py`
-- **checkpoint 路径已修正为 `single_t60_kan_v2_mse`**（曾误指向 `mae_clip1_log`）
-- **CKA 数值（确定性，可信）：**
-  - Encoder: 0.988 / 0.989 / 0.995（denoise-dom / balanced / t60-dom）
-  - TSCB-2: 0.699 / 0.743 / 0.821
-- **Linear probe R²（随机 seed，有抖动，仅作定性参考）：** 只说"深层保持相当的 T60 可解码性"，不强调具体排序
-- **论点：** 去噪梯度重塑共享表征（TSCB-2 CKA 偏离最大），且偏离随去噪权重增大而增大
+- **分析目录：** `/Users/xiexinni/CMGAN-t60-kan-multitask/paper_cka_analysis/`（脚本 `run_paper_cka.py`，结果 `results/`，摘要 `RESULTS_SUMMARY_zh.md`）
+- **严谨性升级：** 全部 4×1080 样本（非抽样 500）、四测试集分别计算、1000 次配对 bootstrap 95% CI、seed=42；checkpoint 为 `kan_multitask_norm_w_denoise_b005`（主模型）+ `norm_balanced` + `norm_w_t60` + 单任务 `single_t60_kan_v2_mse`
+- **图文件（论文用）：** `/Users/xiexinni/CMGAN-t60-kan-multitask/docs/figs/cka_comparison.png`（三档宏平均±SD，替换旧 cka_heatmap）；备选 `cka_primary_b005.png`（主模型分测试集+CI）
+- **CKA 数值（宏平均，确定性）：**
+  - Encoder: 0.951（denoise-dom）/ 0.987（balanced）/ 0.996（t60-dom）
+  - TSCB-2: **0.513** / 0.702 / 0.814；主模型四测试集 TSCB-2 范围 0.47–0.55
+- **排序结论：** 去噪主导偏离最远 < 持平 < T60 主导最贴近，与 T60 精度排序一致
+- **旧版（analyze_representations.py + cka_heatmap.png，β=0.1）已弃用**，论文 §5.2 文字与图已于 2026-08-17 更新为新数据
+- **⚠️ 线性探针（linear_probe）已于 2026-08-24 随 β=0.05 重跑**（脚本 `paper_cka_analysis/run_linear_probe.py`，服务器侧修复过 pooling 索引与 npz 缓存格式两个 bug）：4320 全样本、双池化（mean / multistats 与真实头一致）、pooled 80/20 × 5 seeds + 留一测试集协议
+- **探针结论（关键）：** β=0.05 **不提升**线性可解码性。TSCB-2 multistats：β=0.05 R²=0.68±0.01 vs 单任务 0.74±0.01（Δ=−0.056）；排序 单任务≈T60主导 > 持平 > 去噪主导，与监督结构一致；所有模型 Encoder < TSCB-1 < TSCB-2 逐层累积
+- **论文叙事（已写入 §5.2/结论，中英）：** 多任务增益并非来自增加线性可分的 T60 信息，而是来自被重塑的表征，其收益需经由 Fourier-KAN 非线性读出实现（与 head 消融 KAN 92.91 vs MLP 102.17 闭环）。**禁止写"提升线性可解码性"**
+- **措辞纪律（来自 RESULTS_SUMMARY）：** 只说"表征相对单任务基线发生更明显变化"，不能仅凭较低 CKA 声称"表征质量更高"或建立因果
 
 ### 3.8 梯度探针（cos 分析）
 
