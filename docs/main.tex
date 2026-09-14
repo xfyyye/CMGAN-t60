@@ -83,10 +83,11 @@ auxiliary task adds two decoders of about $0.54$\,M parameters, giving
 $1.41$\,M parameters in total. Gradient-probe analysis shows that the
 two task gradients remain nearly orthogonal throughout training (no
 systematic conflict), so the two tasks can be optimised jointly without
-interference; a task-weight ablation further shows that $T_{60}$
-accuracy improves as the denoising task is given a larger
-weight, and representation analysis indicates that this gain comes from
-the denoising task reshaping the shared features rather than from any
+interference; a task-weight ablation further shows that the best
+$T_{60}$ accuracy is obtained when the denoising task is given a
+clearly dominant weight, and representation analysis indicates that
+this gain comes from the denoising task reshaping the shared features
+together with the non-linear Fourier-KAN readout, rather than from any
 gradient-dominance effect.
 \end{abstract}
 
