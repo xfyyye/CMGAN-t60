@@ -8,13 +8,18 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{float}
+\usepackage{nccmath}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{url}
 \usepackage{lineno}
 
 \linenumbers
+
+%% cas-sc enables fleqn by default. Centre every numbered display while
+%% retaining the class defaults for the rest of the manuscript.
+\BeforeBeginEnvironment{equation}{\begin{ceqn}}
+\AfterEndEnvironment{equation}{\end{ceqn}}
 
 %% Float placement — force LaTeX to place figures as early as possible
 \renewcommand{\topfraction}{0.95}
@@ -336,7 +341,7 @@ Conformer blocks and are trained jointly, so that the denoising
 gradient acts as a regulariser on the shared representation; the
 training objective is detailed in Section~\ref{sec:method:loss}.
 
-\begin{figure*}[t]
+\begin{figure*}[pos=t]
   \centering
   \includegraphics[width=\textwidth]{figs/overall_multitask.png}
   \caption{Overview of the proposed multi-task Conformer-based $T_{60}$
@@ -479,7 +484,7 @@ $\mathbf{F}^{(N)}$ is shared by both the $T_{60}$ regression head
 (Section~\ref{sec:method:head}) and the denoising branch
 (Section~\ref{sec:method:denoise}).
 
-\begin{figure}[H]
+\begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=\columnwidth]{figs/tsconformer_block.png}
   \caption{Internal structure of a two-stage Conformer block (TSCB)
@@ -719,7 +724,7 @@ RIR realism and to noise generalisation. Figure~\ref{fig:dataset} shows
 the $T_{60}$ distribution of the training pool and of the test sets
 (grouped by RIR type).
 
-\begin{figure}[H]
+\begin{figure}[pos=htbp]
   \centering
   \begin{minipage}[t]{0.48\textwidth}
     \centering
@@ -735,7 +740,7 @@ the $T_{60}$ distribution of the training pool and of the test sets
   \label{fig:dataset}
 \end{figure}
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{Test-set design: simulated vs.\ real RIR $\times$ seen vs.\
   unseen noise.}
@@ -859,7 +864,7 @@ is no better than that of the single-task baseline ($111.15$\,ms).
 These results identify clear denoise dominance as the favourable regime
 among the tested configurations.
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{Task-weight ablation (normalised losses; average over
   test1--test4). The denoise-dominant regime gives the best $T_{60}$
@@ -883,7 +888,7 @@ regression head against an MLP head of comparable capacity, both under
 the same multi-task configuration $(\alpha,\beta)=(1.0,0.05)$, as
 reported in Table~\ref{tab:head}.
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{Regression-head ablation under the multi-task setting
   $(\alpha,\beta)=(1.0,0.05)$.}
@@ -898,7 +903,7 @@ reported in Table~\ref{tab:head}.
   \end{tabular}
 \end{table}
 
-\begin{figure}[H]
+\begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/gradient_cos_r.png}
   \caption{Gradient cosine $\cos$ between the two task gradients on the
@@ -935,7 +940,7 @@ full feature Gram matrix; the probe is averaged over five random 80/20
 splits (mean $\pm$ SD) and is additionally evaluated in a deterministic
 leave-one-split-out protocol, and the two protocols agree.
 
-\begin{figure}[H]
+\begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=0.72\textwidth]{figs/cka_comparison.png}
   \caption{Linear CKA between each multi-task configuration and the
@@ -946,7 +951,7 @@ leave-one-split-out protocol, and the two protocols agree.
   \label{fig:cka}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=0.95\textwidth]{figs/linear_probe.png}
   \caption{Linear probing $R^{2}$ per shared layer (Encoder / TSCB$_1$ /
@@ -1004,7 +1009,7 @@ Section~\ref{sec:res:ablation}) with three blind $T_{60}$ estimators
 four test sets; the averaged metrics are reported in
 Table~\ref{tab:main}.
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{Main comparison on T60\_Dataset\_v7 (average over
   test1--test4; RMSE/MAE in ms).}
@@ -1034,7 +1039,7 @@ Table~\ref{tab:snr} reports the per-SNR-bin RMSE of the proposed model
 and the three baselines, broken down by test-set scenario (simulated vs.\
 real RIR).
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{RMSE (ms) per SNR bin. Each scenario groups the two test sets
   sharing that RIR type; ``Avg.'' averages over all four test sets.
@@ -1071,7 +1076,7 @@ real RIR).
 Table~\ref{tab:t60bin} reports the per-$T_{60}$-bin RMSE of the proposed
 model and the three baselines, broken down by test-set scenario.
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{RMSE (ms) per $T_{60}$ bin (s). Each scenario groups the two
   test sets sharing that RIR type; ``Avg.'' averages over all four test
@@ -1110,7 +1115,7 @@ normalised regimes, averaged over test1--test4. Per the target defined
 in Section~\ref{sec:method:denoise}, these metrics reflect noise removal
 while preserving the reverberation.
 
-\begin{table}[!htbp]
+\begin{table}[pos=htbp]
   \centering
   \caption{Denoising metrics for the three normalised regimes (average
   over test1--test4).}
