@@ -75,12 +75,16 @@ See `EXPERIMENT_REPORT.md` and `ANALYSIS_GUIDE.md` for full analysis including l
 ## Requirements
 
 - Python ≥ 3.9, CUDA 11.8 / 12.x
+- FFmpeg (required by TorchCodec for audio loading with recent torchaudio releases)
 
 ```bash
+# Ubuntu / Debian
+sudo apt-get update && sudo apt-get install -y ffmpeg
+
 pip install -r requirements.txt
 ```
 
-Key dependencies: `torch>=2.0`, `torchaudio>=2.0`, `einops>=0.6`, `scipy>=1.10`, `soundfile>=0.12`, `PyYAML>=6.0`, `swanlab>=0.3` (optional).
+Key dependencies: `torch>=2.0`, `torchaudio>=2.0`, `torchcodec>=0.8`, `einops>=0.6`, `scipy>=1.10`, `soundfile>=0.12`, `PyYAML>=6.0`, `swanlab>=0.3` (optional). TorchCodec must be compatible with the installed PyTorch/torchaudio versions.
 
 ---
 

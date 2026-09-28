@@ -4,6 +4,9 @@
 # Core deep learning
 torch>=2.0
 torchaudio>=2.0
+# Required by torchaudio's audio I/O backend in recent releases.
+# Keep its version compatible with the installed torch/torchaudio versions.
+torchcodec>=0.8
 
 # Conformer attention (einops.layers.torch used in conformer.py)
 einops>=0.6
@@ -14,6 +17,10 @@ scipy>=1.10
 
 # Audio I/O backend (required by torchaudio)
 soundfile>=0.12
+
+# Denoising evaluation metrics
+pesq>=0.0.4
+pystoi>=0.4
 
 # Config file parsing
 PyYAML>=6.0

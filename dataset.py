@@ -6,11 +6,19 @@ CMGAN T60 单任务数据集
 
 import os
 import math
+import random
+import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import Dataset, DataLoader
 
 DEFAULT_DATASET_ROOT = os.environ.get('T60_DATASET_ROOT')
+
+
+def _seed_worker(worker_id):
+    worker_seed = torch.initial_seed() % (2 ** 32)
+    random.seed(worker_seed)
+    np.random.seed(worker_seed)
 
 
 def resolve_dataset_root(dataset_root=None):
@@ -376,6 +384,7 @@ def create_multitask_dataloaders(
     t60_range=(0.1, 1.5),
     log_scale=False,
     pin_memory=True,
+    seed=None,
 ):
     common = dict(
         dataset_root=dataset_root,
@@ -390,17 +399,25 @@ def create_multitask_dataloaders(
     train_ds = CMGANT60MultiTaskDataset(split='train', **common)
     eval_ds = CMGANT60MultiTaskDataset(split='eval', **common)
 
+    train_generator = None
+    eval_generator = None
+    if seed is not None:
+        train_generator = torch.Generator().manual_seed(seed)
+        eval_generator = torch.Generator().manual_seed(seed + 1)
+
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
         num_workers=num_workers, collate_fn=collate_fn_multitask,
         pin_memory=pin_memory, drop_last=True,
         timeout=120, persistent_workers=(num_workers > 0),
+        worker_init_fn=_seed_worker, generator=train_generator,
     )
     eval_loader = DataLoader(
         eval_ds, batch_size=batch_size, shuffle=False,
         num_workers=num_workers, collate_fn=collate_fn_multitask,
         pin_memory=pin_memory,
         timeout=120, persistent_workers=(num_workers > 0),
+        worker_init_fn=_seed_worker, generator=eval_generator,
     )
 
     return train_loader, eval_loader

@@ -75,12 +75,16 @@ wav (B, 64000)
 ## 环境要求
 
 - Python ≥ 3.9，CUDA 11.8 / 12.x
+- FFmpeg（新版 torchaudio 通过 TorchCodec 读取音频）
 
 ```bash
+# Ubuntu / Debian
+sudo apt-get update && sudo apt-get install -y ffmpeg
+
 pip install -r requirements.txt
 ```
 
-主要依赖：`torch>=2.0`、`torchaudio>=2.0`、`einops>=0.6`、`scipy>=1.10`、`soundfile>=0.12`、`PyYAML>=6.0`、`swanlab>=0.3`（可选）。
+主要依赖：`torch>=2.0`、`torchaudio>=2.0`、`torchcodec>=0.8`、`einops>=0.6`、`scipy>=1.10`、`soundfile>=0.12`、`PyYAML>=6.0`、`swanlab>=0.3`（可选）。TorchCodec 必须与 PyTorch/torchaudio 版本兼容。
 
 ---
 

@@ -14,7 +14,9 @@ import os
 import sys
 import json
 import argparse
+import random
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -30,6 +32,17 @@ from dataset import (
 )
 from utils import power_compress, power_uncompress
 from train_utils.grad_probe import GradAngleProbe
+
+
+def seed_everything(seed):
+    os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG', ':4096:8')
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.benchmark = False
+    torch.backends.cudnn.deterministic = True
+    torch.use_deterministic_algorithms(True, warn_only=True)
 
 
 # ─── 多任务损失 (暴露分项 tensor 给梯度探针) ────────────────────────
@@ -193,6 +206,7 @@ class EarlyStopping:
 # ─── 主训练逻辑 ──────────────────────────────────────────────────
 
 def train(args):
+    seed_everything(args.seed)
     args.dataset_root = resolve_dataset_root(args.dataset_root)
     if args.config:
         print(f'配置文件: {args.config}')
@@ -204,6 +218,7 @@ def train(args):
     else:
         print('损失 EMA 归一化: 关闭（原始加权 total = alpha*denoise + beta*t60）')
     print(f'梯度探针: 每 {args.probe_log_every} 个 train step 触发一次')
+    print(f'随机种子: {args.seed} (确定性算法开启)')
 
     n_gpu = torch.cuda.device_count()
     device = torch.device('cuda:0')
@@ -231,6 +246,7 @@ def train(args):
         audio_length=args.audio_length,
         target_sr=args.target_sr,
         log_scale=args.log_scale,
+        seed=args.seed,
     )
     print(f'训练集: {len(train_loader.dataset)} 样本, 验证集: {len(eval_loader.dataset)} 样本')
 
@@ -501,7 +517,7 @@ def load_config_defaults(config_path):
     train_cfg = section('train')
     for key in [
         'batch_size', 'max_epochs', 'lr', 'weight_decay',
-        'early_stop_patience', 'num_workers', 'accum_steps', 'clip_grad_norm',
+        'early_stop_patience', 'num_workers', 'accum_steps', 'clip_grad_norm', 'seed',
     ]:
         if key in train_cfg:
             defaults[key] = train_cfg[key]
@@ -602,6 +618,7 @@ def parse_args():
     parser.add_argument('--num_workers', type=int, default=config_defaults.get('num_workers', 4))
     parser.add_argument('--accum_steps', type=int, default=config_defaults.get('accum_steps', 2))
     parser.add_argument('--clip_grad_norm', type=float, default=config_defaults.get('clip_grad_norm', 5.0))
+    parser.add_argument('--seed', type=int, default=config_defaults.get('seed', 42))
     parser.add_argument('--n_tscb', type=int, default=config_defaults.get('n_tscb', 2),
                         choices=[2, 4], help='TSCB层数')
 
