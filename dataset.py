@@ -234,6 +234,7 @@ def create_dataloaders(
     t60_range=(0.1, 1.5),
     log_scale=False,
     pin_memory=True,
+    seed=None,
 ):
     common = dict(
         dataset_root=dataset_root,
@@ -248,15 +249,23 @@ def create_dataloaders(
     train_ds = CMGANT60Dataset(split='train', **common)
     eval_ds = CMGANT60Dataset(split='eval', **common)
 
+    train_generator = None
+    eval_generator = None
+    if seed is not None:
+        train_generator = torch.Generator().manual_seed(seed)
+        eval_generator = torch.Generator().manual_seed(seed + 1)
+
     train_loader = DataLoader(
         train_ds, batch_size=batch_size, shuffle=True,
         num_workers=num_workers, collate_fn=collate_fn,
         pin_memory=pin_memory, drop_last=True,
+        worker_init_fn=_seed_worker, generator=train_generator,
     )
     eval_loader = DataLoader(
         eval_ds, batch_size=batch_size, shuffle=False,
         num_workers=num_workers, collate_fn=collate_fn,
         pin_memory=pin_memory,
+        worker_init_fn=_seed_worker, generator=eval_generator,
     )
 
     return train_loader, eval_loader
