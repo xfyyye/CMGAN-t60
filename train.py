@@ -138,6 +138,7 @@ def train(args):
 
     # fourier_hidden_dims: 可能来自 YAML（tuple）或 argparse（未暴露，使用默认值）
     fourier_hidden_dims = getattr(args, 't60_fourier_hidden_dims', (32, 16))
+    mlp_hidden_dims = getattr(args, 't60_mlp_hidden_dims', None)
 
     # 模型
     model_kwargs = dict(
@@ -145,6 +146,7 @@ def train(args):
         num_features=args.n_fft // 2 + 1,
         t60_head_type=args.t60_head_type,
         t60_hidden_dim=args.t60_hidden_dim,
+        t60_mlp_hidden_dims=mlp_hidden_dims,
         t60_dropout=args.t60_dropout,
         t60_fourier_proj_dim=args.t60_fourier_proj_dim,
         t60_fourier_hidden_dims=fourier_hidden_dims,
@@ -395,6 +397,8 @@ def load_config_defaults(config_path):
     # fourier_hidden_dims 是列表类型，单独处理
     if 't60_fourier_hidden_dims' in model_cfg:
         defaults['t60_fourier_hidden_dims'] = tuple(model_cfg['t60_fourier_hidden_dims'])
+    if 't60_mlp_hidden_dims' in model_cfg:
+        defaults['t60_mlp_hidden_dims'] = tuple(model_cfg['t60_mlp_hidden_dims'])
 
     loss_cfg = section('loss')
     if 'name' in loss_cfg:
@@ -470,6 +474,9 @@ def parse_args():
     parser.add_argument('--t60_hidden_dim', type=int,
                         default=config_defaults.get('t60_hidden_dim', 128),
                         help='MLP head 隐层宽度（仅 t60_head_type=mlp 有效）')
+    parser.add_argument('--t60_mlp_hidden_dims', type=int, nargs='+',
+                        default=config_defaults.get('t60_mlp_hidden_dims'),
+                        help='MLP head 各隐藏层宽度；设置后覆盖 t60_hidden_dim')
     parser.add_argument('--t60_dropout', type=float,
                         default=config_defaults.get('t60_dropout', 0.3),
                         help='MLP head Dropout（仅 t60_head_type=mlp 有效）')

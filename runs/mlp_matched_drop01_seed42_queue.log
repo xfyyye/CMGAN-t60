@@ -1,0 +1,3 @@
+[2026-10-11 14:51:23] Starting single-task matched MLP dropout=0.1
+[2026-10-12 20:17:16] Single-task complete; starting multi-task matched MLP dropout=0.1
+[2026-10-14 04:17:56] All matched MLP dropout=0.1 training complete

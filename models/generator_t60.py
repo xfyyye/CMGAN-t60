@@ -40,20 +40,21 @@ class T60HeadWithPool(nn.Module):
       (B, C, F, T) → mean(F) → MultiStatsPool(T) → FC → Sigmoid → (B,)
     """
 
-    def __init__(self, bottleneck_dim, hidden_dim=128, dropout=0.3):
+    def __init__(self, bottleneck_dim, hidden_dim=128, hidden_dims=None, dropout=0.3):
         super().__init__()
         self.multi_pool = MultiStatsPool()
         fc_input = bottleneck_dim * 3  # avg + max + std
-        self.fc = nn.Sequential(
-            nn.Linear(fc_input, hidden_dim),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim, hidden_dim // 2),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(hidden_dim // 2, 1),
-            nn.Sigmoid(),
-        )
+        hidden_dims = tuple(hidden_dims) if hidden_dims is not None else (hidden_dim, hidden_dim // 2)
+        if not hidden_dims or any(dim <= 0 for dim in hidden_dims):
+            raise ValueError(f"hidden_dims must contain positive integers, got {hidden_dims!r}")
+
+        layers = []
+        in_dim = fc_input
+        for out_dim in hidden_dims:
+            layers.extend((nn.Linear(in_dim, out_dim), nn.ReLU(), nn.Dropout(dropout)))
+            in_dim = out_dim
+        layers.extend((nn.Linear(in_dim, 1), nn.Sigmoid()))
+        self.fc = nn.Sequential(*layers)
 
     def forward(self, x):
         # x: (B, C, F, T)
@@ -165,6 +166,7 @@ def build_t60_head(
     head_type: str,
     num_channel: int,
     hidden_dim: int = 128,
+    mlp_hidden_dims=None,
     dropout: float = 0.3,
     fourier_proj_dim: int = 64,
     fourier_hidden_dims=(32, 16),
@@ -206,6 +208,7 @@ def build_t60_head(
         return T60HeadWithPool(
             bottleneck_dim=num_channel,
             hidden_dim=hidden_dim,
+            hidden_dims=mlp_hidden_dims,
             dropout=dropout,
         )
     elif head_type == "fourier_kan":
@@ -261,6 +264,7 @@ class TSCNet_T60Estimator(nn.Module):
         num_features=201,
         t60_head_type="mlp",
         t60_hidden_dim=128,
+        t60_mlp_hidden_dims=None,
         t60_dropout=0.3,
         t60_fourier_proj_dim=64,
         t60_fourier_hidden_dims=(32, 16),
@@ -282,6 +286,7 @@ class TSCNet_T60Estimator(nn.Module):
             head_type=t60_head_type,
             num_channel=num_channel,
             hidden_dim=t60_hidden_dim,
+            mlp_hidden_dims=t60_mlp_hidden_dims,
             dropout=t60_dropout,
             fourier_proj_dim=t60_fourier_proj_dim,
             fourier_hidden_dims=t60_fourier_hidden_dims,
@@ -330,6 +335,7 @@ class TSCNet_T60Estimator_2TSCB(nn.Module):
         num_features=201,
         t60_head_type="mlp",
         t60_hidden_dim=128,
+        t60_mlp_hidden_dims=None,
         t60_dropout=0.3,
         t60_fourier_proj_dim=64,
         t60_fourier_hidden_dims=(32, 16),
@@ -349,6 +355,7 @@ class TSCNet_T60Estimator_2TSCB(nn.Module):
             head_type=t60_head_type,
             num_channel=num_channel,
             hidden_dim=t60_hidden_dim,
+            mlp_hidden_dims=t60_mlp_hidden_dims,
             dropout=t60_dropout,
             fourier_proj_dim=t60_fourier_proj_dim,
             fourier_hidden_dims=t60_fourier_hidden_dims,
@@ -389,6 +396,7 @@ class TSCNet_KAN_MultiTask(nn.Module):
         num_features=201,
         t60_head_type="fourier_kan",
         t60_hidden_dim=128,
+        t60_mlp_hidden_dims=None,
         t60_dropout=0.3,
         t60_fourier_proj_dim=64,
         t60_fourier_hidden_dims=(32, 16),
@@ -414,6 +422,7 @@ class TSCNet_KAN_MultiTask(nn.Module):
             head_type=t60_head_type,
             num_channel=num_channel,
             hidden_dim=t60_hidden_dim,
+            mlp_hidden_dims=t60_mlp_hidden_dims,
             dropout=t60_dropout,
             fourier_proj_dim=t60_fourier_proj_dim,
             fourier_hidden_dims=t60_fourier_hidden_dims,
@@ -467,6 +476,7 @@ class TSCNet_KAN_MultiTask_2TSCB(nn.Module):
         num_features=201,
         t60_head_type="fourier_kan",
         t60_hidden_dim=128,
+        t60_mlp_hidden_dims=None,
         t60_dropout=0.3,
         t60_fourier_proj_dim=64,
         t60_fourier_hidden_dims=(32, 16),
@@ -490,6 +500,7 @@ class TSCNet_KAN_MultiTask_2TSCB(nn.Module):
             head_type=t60_head_type,
             num_channel=num_channel,
             hidden_dim=t60_hidden_dim,
+            mlp_hidden_dims=t60_mlp_hidden_dims,
             dropout=t60_dropout,
             fourier_proj_dim=t60_fourier_proj_dim,
             fourier_hidden_dims=t60_fourier_hidden_dims,

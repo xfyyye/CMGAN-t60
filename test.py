@@ -104,11 +104,13 @@ def run_tests(args):
 
     # 加载模型
     fourier_hidden_dims = getattr(args, 't60_fourier_hidden_dims', (32, 16))
+    mlp_hidden_dims = getattr(args, 't60_mlp_hidden_dims', None)
     model_kwargs = dict(
         num_channel=64,
         num_features=args.n_fft // 2 + 1,
         t60_head_type=args.t60_head_type,
         t60_hidden_dim=args.t60_hidden_dim,
+        t60_mlp_hidden_dims=mlp_hidden_dims,
         t60_dropout=args.t60_dropout,
         t60_fourier_proj_dim=args.t60_fourier_proj_dim,
         t60_fourier_hidden_dims=fourier_hidden_dims,
@@ -253,6 +255,8 @@ def load_config_defaults(config_path):
             defaults[key] = model_cfg[key]
     if 't60_fourier_hidden_dims' in model_cfg:
         defaults['t60_fourier_hidden_dims'] = tuple(model_cfg['t60_fourier_hidden_dims'])
+    if 't60_mlp_hidden_dims' in model_cfg:
+        defaults['t60_mlp_hidden_dims'] = tuple(model_cfg['t60_mlp_hidden_dims'])
 
     test_cfg = section('test')
     for key in ['batch_size', 'num_workers', 'gpu_id']:
@@ -305,6 +309,8 @@ def parse_args():
     )
     parser.add_argument('--t60_hidden_dim', type=int,
                         default=config_defaults.get('t60_hidden_dim', 128))
+    parser.add_argument('--t60_mlp_hidden_dims', type=int, nargs='+',
+                        default=config_defaults.get('t60_mlp_hidden_dims'))
     parser.add_argument('--t60_dropout', type=float,
                         default=config_defaults.get('t60_dropout', 0.3))
     parser.add_argument('--t60_fourier_proj_dim', type=int,

@@ -38,11 +38,13 @@ def run_tests(args):
     device = torch.device(f'cuda:{args.gpu_id}' if torch.cuda.is_available() else 'cpu')
 
     fourier_hidden_dims = getattr(args, 't60_fourier_hidden_dims', (32, 16))
+    mlp_hidden_dims = getattr(args, 't60_mlp_hidden_dims', None)
     model_kwargs = dict(
         num_channel=64,
         num_features=args.n_fft // 2 + 1,
         t60_head_type=args.t60_head_type,
         t60_hidden_dim=args.t60_hidden_dim,
+        t60_mlp_hidden_dims=mlp_hidden_dims,
         t60_dropout=args.t60_dropout,
         t60_fourier_proj_dim=args.t60_fourier_proj_dim,
         t60_fourier_hidden_dims=fourier_hidden_dims,
@@ -178,6 +180,8 @@ def parse_args():
                         choices=['mlp', 'fourier_kan'])
     parser.add_argument('--t60_hidden_dim', type=int,
                         default=config_defaults.get('t60_hidden_dim', 128))
+    parser.add_argument('--t60_mlp_hidden_dims', type=int, nargs='+',
+                        default=config_defaults.get('t60_mlp_hidden_dims'))
     parser.add_argument('--t60_dropout', type=float,
                         default=config_defaults.get('t60_dropout', 0.3))
     parser.add_argument('--t60_fourier_proj_dim', type=int,
