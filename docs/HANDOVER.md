@@ -1,0 +1,87 @@
+# 论文交接：2026-10-16
+
+## 当前主线与迁移
+
+后续使用 `exp/kan-multitask`。本轮以远端实验提交 `683b223`（MLP 参数量均衡实验）为基础，选择性迁入 `exp/gradient-remedy` 的论文成果，不迁移其梯度修复训练代码、旧表征分析实现或未提交的 RIR GAN 增广代码。
+
+原工作区为 `/Users/xiexinni/CMGAN-t60-kan-multitask`（历史分支）；迁移后的本机工作区为 `/Users/xiexinni/CMGAN-t60-paper`。新电脑以自己的克隆目录为准，文档与图表引用使用仓库相对路径。
+
+## 已确认的工作纪律（优先于历史说明）
+
+- 不启动训练、评估推理或改实验代码，除非用户另行授权。读取现有评估结果、重算指标和画图可以进行。
+- **只修改 `docs/main_zh.md`。用户明确要求全文中文定稿后再统一更新 `docs/main.tex` 与 `docs/main_bilingual.md`。** 后两份按现状保存，不能当作已同步版本。
+- 每次修改给用户展示具体变化，并在 `docs/research/` 留本次 diff；不能只说“已修改”。
+- 图表引用必须带编号；当前图 1–8、表 1–6。SNR 子图(a)/(b)/(c)/(d)分别对应 Test 1/2/3/4。
+- 方法章只写方法定义；实验设置写在 §4。保留用户已认可的第三章及 §4.2，不擅自重写。
+- 已删除表征分析和梯度探针，包括机制性论断；不要恢复“CKA/线性探针证明去噪增益机制”等表述。
+- 不写“权重越大越好”或单调改善；七组权重中 (1,0.05) 最好。不同训练运行的解释句用户明确要求不放正文，不擅自恢复。
+
+## 当前稿件状态
+
+- 飞书依据：[论文修改9.21](https://zcnenydznyl4.feishu.cn/docx/OlTmdkhDpoojsvxn3H7c2NDRn0j)。
+- 第 1–3 点：第三章、概念图和模块图已确认。最终图在 `figures/ch3/`；正文引用具体版本为准。
+- 第 4 点：§4.2 对比方法与指标已确认，保留 RMSE、MAE、PCC、R² 公式；去噪指标文字精简。
+- 第 5–7 点：章节重排、七组权重分析、四组 seed42 交叉消融已写入。
+- 第 9 点：表征分析与梯度探针已删除，去噪结果顺延为 §5.5。
+- 第 10 点：主结果表已扩为 Test 1–4 加均值的 25 行表；SNR/T60 四联图已插入。
+- §5.2 已确认收束：总体趋势、方法差异、未见噪声表现。SNR 必须为 −5/0/5/10/15/20 六点，不能合并 15 与 20 dB。
+- §5.3 仍是未确认的较长初稿，需要参考 noiseaware 的混响时间分析组织重新精简。RMSE 曲线不能证明高估/低估；若要箱线图，可先利用已有逐样本预测。
+
+## 图表及数据
+
+- 当前图 7：`docs/figs/ch5_curves/snr_test1_4_six_points.png`。
+- 当前图 8：`docs/figs/ch5_curves/t60_test1_4.png`。
+- 旧三联图和预览图保留用于比较；正式图以正文链接为准。
+- 绘图脚本和聚合 JSON 在 `docs/figs/ch5_curves/`。注意 `plot_testwise_preview.py` 会重写预览表；不要将其未统一舍入的临时输出直接覆盖正式表。
+- `docs/research/2026-10-09_seed42_result_audit.json` 记录原四组结果来源及聚合规则。
+- 主结果取各 test 指标的算术均值；曲线在每个 test 对应分组内按逐样本误差计算 RMSE。两者不要混淆。
+- 三种对比方法结果位于 `papercompare/`；四组原 seed42 及新增匹配 MLP 结果位于 `runs/`。
+
+## 新实验已核对，但尚未写入论文
+
+新增提交 `683b223` 包含 MLP 隐层 [192,192,64]，回归头 86,529 参数；Fourier-KAN 为 86,369。训练配置为 seed42、4 GPU、全局 batch16，多任务权重 (1,0.05)。
+
+| 新增实验 | dropout | RMSE(ms) | MAE(ms) | PCC | R² |
+|---|---:|---:|---:|---:|---:|
+| single_t60_mlp_matched_mse_seed42 | 0.3 | 130.78 | 99.10 | 0.9387 | 0.8520 |
+| mlp_matched_multitask_norm_w_denoise_b005_seed42 | 0.3 | 119.07 | 83.18 | 0.9470 | 0.8773 |
+| single_t60_mlp_matched_drop01_mse_seed42 | 0.1 | 108.99 | 66.29 | 0.9474 | 0.8972 |
+| mlp_matched_drop01_multitask_norm_w_denoise_b005_seed42 | 0.1 | 97.24 | 59.54 | 0.9590 | 0.9179 |
+
+现稿仍用原小 MLP：单任务118.19、多任务98.50；KAN单任务111.45、多任务92.32。新匹配MLP(dropout0.1)在单任务下优于KAN，多任务下仍不如KAN。**不得继续把“KAN在两种任务下均优于MLP”当成覆盖新实验的结论。** 用户尚未授权据新实验改稿，下一步先讨论采用何种对照及如何报告。
+
+## 未完成事项
+
+1. §5.3 精简与确认。
+2. 第十一点房间级 Case Study：先查样本与房间/RIR的映射；有元数据则可复用预测，不必先安排新推理。
+3. 第八点其他权重下的 MLP/KAN 比较是可选扩展，不自行训练。
+4. RIR 增广实验未完成，协议待定；本次不迁移增广开发文件。
+5. 消化新增匹配 MLP 实验（先讨论，尚未修改论文）。
+6. 中文全稿一致性复核，然后统一英文及 bilingual、排版及编译检查。
+
+## 历史记录
+
+`docs/research/2026-10-16_HANDOVER_historical.md` 和 `docs/PAPER_STATUS.md` 仅供追溯，包含已过时的分支、指标、双语同步和机制分析要求；以本文件及用户最新指令为准。原始实验资料仍在历史分支，论文删除分析不代表删除数据。
+
+## 换电脑继续
+
+```bash
+git clone --branch exp/kan-multitask https://github.com/xfyyye/CMGAN-t60.git
+cd CMGAN-t60
+```
+
+先读本文件，再打开 `docs/main_zh.md`。备份分支为 `codex/paper-backup-2026-10-16`，保存迁移前完整论文工作快照（提交 `2a972eb`），不是后续主线。
+
+论文 PNG 已保存，查看无需 Python。重画第五章曲线需安装 matplotlib；第三章绘图脚本需 Pillow，部分脚本使用 macOS Arial 字体路径，非 macOS 应先调整字体路径。
+
+```bash
+python3 -m venv .venv-paper
+source .venv-paper/bin/activate
+python -m pip install matplotlib Pillow
+python docs/figs/ch5_curves/plot_snr_six_points.py
+python docs/figs/ch5_curves/plot_t60_testwise_preview.py
+```
+
+T60 脚本输出 `t60_test1_4_preview.png`，正文使用的是已确认副本 `t60_test1_4.png`，重画后需审阅再替换。第五章的正式 PNG 与初稿均已随 Git 保存。
+
+迁移核验：三份稿件逐字节一致、图片引用全部有效、两张曲线全部分组 RMSE 与样本数由迁入逐样本结果重新计算后完全一致。当前 Python 缺少 matplotlib，因此迁移时未重新渲染图片；现有 PNG 原样迁入。

@@ -350,23 +350,73 @@
 
 % --- Kolmogorov-Arnold networks ------------------------------------
 
-@article{liu2024kan,
-  author  = {Liu, Ziming and Wang, Yixuan and Vaidya, Sachin and Ruehle, Fabian and Halverson, James and Solja{\v{c}}i{\'c}, Marin and Hou, Thomas Y. and Tegmark, Max},
+@inproceedings{liu2024kan,
+  author    = {Liu, Ziming and Wang, Yixuan and Vaidya, Sachin and Ruehle, Fabian and Halverson, James and Solja{\v{c}}i{\'c}, Marin and Hou, Thomas Y. and Tegmark, Max},
   title   = {{KAN}: Kolmogorov-{A}rnold Networks},
-  journal = {arXiv preprint arXiv:2404.19756},
-  year    = {2024}
+  booktitle = {International Conference on Learning Representations},
+  year      = {2025},
+  note      = {arXiv:2404.19756}
 }
 
 @misc{xu2025fourierkan,
-  author       = {{TODO} -- verify authors},
-  title        = {{Fourier-KAN}: Kolmogorov-{A}rnold Networks with a Fourier basis},
-  howpublished = {TODO -- verify venue / arXiv id (see docs/Fourier-KAN.pdf)},
-  year         = {2024}
+  author       = {Li, Linfei and Zhang, Lin and Wang, Zhong and Zhang, Fengyi and Li, Zelin and Shen, Ying},
+  title        = {Representing Sounds as Neural Amplitude Fields: A Benchmark of Coordinate-{MLPs} and a Fourier Kolmogorov-{A}rnold Framework},
+  howpublished = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume       = {39},
+  number       = {23},
+  pages        = {24458--24466},
+  year         = {2025},
+  doi          = {10.1609/aaai.v39i23.34624},
+  note         = {arXiv:2601.06406}
 }
 
-@misc{yang2025kanforspeech,
-  author       = {{TODO} -- verify authors},
-  title        = {Kolmogorov-{A}rnold networks for audio / speech regression heads},
-  howpublished = {arXiv preprint (venue to be verified)},
-  year         = {2024}
+% --- Multi-task learning and gradient balancing --------------------
+
+@misc{ruder2017overview,
+  author        = {Ruder, Sebastian},
+  title         = {An Overview of Multi-Task Learning in Deep Neural Networks},
+  howpublished  = {arXiv preprint arXiv:1706.05098},
+  year          = {2017},
+  doi           = {10.48550/arXiv.1706.05098}
+}
+
+@misc{crawshaw2020survey,
+  author        = {Crawshaw, Michael},
+  title         = {Multi-Task Learning with Deep Neural Networks: A Survey},
+  howpublished  = {arXiv preprint arXiv:2009.09796},
+  year          = {2020},
+  doi           = {10.48550/arXiv.2009.09796}
+}
+
+@inproceedings{yu2020pcgrad,
+  author    = {Yu, Tianhe and Kumar, Saurabh and Gupta, Abhishek and Levine, Sergey and Hausman, Karol and Finn, Chelsea},
+  title     = {Gradient Surgery for Multi-Task Learning},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {33},
+  year      = {2020},
+  note      = {NeurIPS 2020; arXiv:2001.06782}
+}
+
+@inproceedings{chen2018gradnorm,
+  author    = {Chen, Zhao and Badrinarayanan, Vijay and Lee, Chen-Yu and Rabinovich, Andrew},
+  title     = {{GradNorm}: Gradient Normalization for Adaptive Loss Balancing in Deep Multitask Networks},
+  booktitle = {Proceedings of the 35th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {80},
+  pages     = {794--803},
+  publisher = {PMLR},
+  year      = {2018},
+  note      = {arXiv:1711.02257}
+}
+
+% --- Evaluation metrics --------------------------------------------
+
+@inproceedings{leroux2019sisdr,
+  author    = {Le Roux, Jonathan and Wisdom, Scott and Erdogan, Hakan and Hershey, John R.},
+  title     = {{SDR} -- Half-baked or Well Done?},
+  booktitle = {Proc. IEEE Int.\ Conf.\ on Acoustics, Speech and Signal Processing (ICASSP)},
+  publisher = {IEEE},
+  pages     = {626--630},
+  year      = {2019},
+  doi       = {10.1109/ICASSP.2019.8683855}
 }
