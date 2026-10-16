@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multi-task T60 estimation architecture</title>
+  <style>
+    :root { font-family: Georgia, "Times New Roman", serif; color: #182331; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eef2f6; }
+    .paper { width: min(1800px, 98vw); margin: 24px auto; padding: 26px 28px 22px; background: #fff; border: 1px solid #cbd4df; box-shadow: 0 12px 40px #1b314520; }
+    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; color: #4f5d6b; font: 14px system-ui, sans-serif; }
+    .toolbar button { border: 1px solid #aab6c4; border-radius: 6px; background: #fff; padding: 7px 12px; cursor: pointer; }
+    .figure-wrap { overflow: auto; border: 1px solid #d8dee7; background: #fff; }
+    .figure { display: block; width: 100%; min-width: 1000px; height: auto; }
+    .caption { margin: 16px 0 0; text-align: center; font-size: 17px; color: #354353; }
+    .note { margin: 10px auto 0; max-width: 1100px; text-align: center; color: #697586; font: 13px/1.5 system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <main class="paper">
+    <div class="toolbar">
+      <span>Publication-style architecture preview</span>
+      <button id="zoom">Zoom 100%</button>
+    </div>
+    <div class="figure-wrap">
+      <img id="figure" class="figure" src="overall_multitask_local_inputs.png" alt="Multi-task blind T60 estimation and denoising architecture">
+    </div>
+    <p class="caption">Multi-task blind reverberation-time estimation and denoising architecture.</p>
+    <p class="note">The shared feature extractor feeds the T60 regression head and the two denoising decoders. No forward connection runs from the T60 estimate to the noisy-spectrum reconstruction path.</p>
+  </main>
+  <script>
+    const image = document.querySelector('#figure');
+    const button = document.querySelector('#zoom');
+    let zoom = 1;
+    button.addEventListener('click', () => {
+      zoom = zoom === 1 ? 1.25 : zoom === 1.25 ? 1.6 : 1;
+      image.style.width = `${zoom * 100}%`;
+      button.textContent = `Zoom ${Math.round(zoom * 100)}%`;
+    });
+  </script>
+</body>
+</html>

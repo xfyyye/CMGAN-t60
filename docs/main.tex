@@ -55,45 +55,23 @@
 \cortext[cor1]{Corresponding author}
 
 \begin{abstract}
-Reverberation time $T_{60}$ is one of the most informative room-acoustic
-parameters, yet blind estimation from a single-channel noisy reverberant
-recording remains difficult because the late reverberation tail is
-intrinsically energy-weak and is easily masked by additive noise. We
-propose a multi-task learning framework for blind $T_{60}$ estimation in
-which $T_{60}$ regression is the main task and denoising reconstruction
-(noisy reverberant speech $\to$ clean reverberant speech) is an auxiliary
-task, both sharing a dual-path time--frequency Conformer backbone. The
-complex short-time Fourier spectrum of the noisy reverberant utterance is
-processed by a dense convolutional encoder and two time--frequency
-Conformer blocks (TSCBs); the bottleneck features are aggregated by a
-multi-statistic pooling layer and mapped to $T_{60}$ by a two-layer
-Fourier-KAN head, while the same bottleneck feeds a mask decoder and a
-complex decoder that reconstruct the enhanced speech. The dense,
-per-time-frequency-bin supervision of the denoising auxiliary task forces
-the shared layers to learn fine-grained time--frequency discriminative
-features, and we show that this denoising-driven representation in turn
-substantially improves $T_{60}$ estimation. Compared with a multi-layer
-perceptron (MLP) head of similar capacity, the Fourier basis expresses
-each edge activation as a learnable trigonometric series, which is well
-matched to the smooth but non-linear dependence between pooled acoustic
-statistics and the target $T_{60}$. On four noisy reverberant test sets
+Blind estimation of the reverberation time $T_{60}$ is vulnerable to
+masking of the weak late reverberation tail by additive noise. We
+propose a multi-task framework in which $T_{60}$ regression is the main
+task and denoising reconstruction is an auxiliary task, with both tasks
+sharing a time--frequency Conformer feature extractor. The denoising
+branch provides dense time--frequency supervision, while a Fourier-KAN
+head maps the shared features to $T_{60}$. On four noisy reverberant test sets
 covering both simulated and measured room impulse responses with seen and
 unseen noise types, the proposed model attains an average root-mean-squared
 error (RMSE) of $92.91$\,ms, a mean absolute error (MAE) of
-$56.68$\,ms and a Pearson correlation of $0.9625$; relative
-to a single-task ablation baseline ($861\,793$ parameters, RMSE
-$111.15$\,ms) this is a $16.4$\,\% RMSE reduction. The encoder and
-Conformer blocks are shared between the two tasks, and the denoising
-auxiliary task adds two decoders of about $0.54$\,M parameters, giving
-$1.41$\,M parameters in total. Gradient-probe analysis shows that the
-two task gradients remain nearly orthogonal throughout training (no
-systematic conflict), so the two tasks can be optimised jointly without
-interference; a task-weight ablation further shows that the best
-$T_{60}$ accuracy is obtained when the denoising task is given a
-clearly dominant weight, and representation analysis indicates that
-this gain comes from the denoising task reshaping the shared features
-together with the non-linear Fourier-KAN readout, rather than from any
-gradient-dominance effect.
+$56.68$\,ms and a Pearson correlation of $0.9625$. Compared with the
+single-task baseline, the RMSE is reduced by $16.4$\,\%. The encoder and
+Conformer blocks are shared between the two tasks. Gradient-probe and
+representation analyses indicate that the improvement is associated with
+denoising-induced reshaping of the shared features rather than the
+mitigation of gradient conflict. Under the same multi-task setting, the
+Fourier-KAN head also outperforms an MLP head.
 \end{abstract}
 
 \begin{keywords}
@@ -173,7 +151,7 @@ moved from full-band $T_{60}$ towards a joint estimation of $T_{60}$,
 early-decay time, clarity and speech transmission index. Although these
 models differ considerably in network architecture, most of them adopt
 the same regressor design, namely a stack of fully connected layers on
-top of the time--frequency backbone that maps the aggregated features to
+top of the shared time--frequency feature extractor that maps the aggregated features to
 a scalar $T_{60}$. To improve robustness under noisy conditions, one line
 of work further exploits denoising to assist $T_{60}$ estimation:
 \citet{zheng2022noiseaware} used a two-stage framework that first
@@ -181,43 +159,33 @@ separates the clean reverberant speech and then estimates $T_{60}$ from
 it, but the two stages are trained separately, so the denoising gradients
 cannot directly optimise the features on which $T_{60}$ relies;
 \citet{zhang2024damtl} instead treated denoising as an auxiliary task that
-shares a backbone with $T_{60}$ regression and is trained end to end, and
-observed that denoising improves $T_{60}$ estimation, but their backbone
+shares the feature extractor with $T_{60}$ regression and is trained end to end, and
+observed that denoising improves $T_{60}$ estimation, but their feature extractor
 is relatively simple and they did not analyse how the two tasks interact
 in the shared layers, so the mechanism behind the denoising-induced gain
 remains unclear.
 
 Although the data-driven models above clearly outperform the statistical
-signal processing baselines in clean or high-SNR conditions, two general
-challenges persist across this body of work. First, the late
-reverberation tail is intrinsically energy-weak and is easily masked by
-real-world noise, so estimation accuracy still degrades noticeably in
-low-SNR or unseen-noise scenarios; existing estimators mainly rely on the
-backbone's own capacity to obtain noise robustness implicitly, without
-any explicit modelling or separation of the noise, and it is therefore
-unclear whether this alone drives the lower layers to learn the
-fine-grained time--frequency discriminative features on which an accurate
-$T_{60}$, itself dependent on the detailed shape of the decay envelope,
-ultimately relies. Second, as noted above, almost all existing estimators
-place a stack of fully connected layers on top of the time--frequency
-backbone as the regressor, which applies a single fixed non-linearity per
-neuron and offers limited expressive power for the smooth but non-trivial
-mapping from pooled bottleneck statistics to a scalar $T_{60}$.
+signal processing baselines in clean or high-SNR conditions, two issues
+remain. First, the late reverberation tail is intrinsically energy-weak
+and is easily masked by real-world noise, so estimation accuracy still
+degrades in low-SNR or unseen-noise scenarios. Relying on the feature
+extractor alone to acquire noise robustness does not ensure that its
+shared layers learn the fine-grained time--frequency features needed to
+resolve the decay envelope. Second, existing denoising-aided methods
+report improved $T_{60}$ accuracy, but they do not establish how the
+denoising supervision changes the shared representation or how the two
+tasks interact through the shared layers.
 
-To address these challenges, we propose a multi-task learning framework
-for blind $T_{60}$ estimation that pairs $T_{60}$ regression with a
-denoising reconstruction auxiliary task over a shared time--frequency
-Conformer backbone. For the first challenge, the denoising auxiliary task
-provides dense per-time-frequency-bin supervision that forces the shared
-layers to learn to separate noise from the reverberant spectrum, thereby
-exposing the masked decay structure; since sharing parameters across
-tasks can cause negative transfer~\citep{ruder2017overview, yu2020pcgrad},
-we further conduct gradient-probe and representation analyses to verify
-the underlying mechanism. For the second challenge, we replace the
-conventional fully connected regression head with a Fourier-KAN head,
-whose learnable trigonometric-series basis functions provide a stronger
-inductive bias for the smooth but non-linear mapping from pooled acoustic
-statistics to $T_{60}$~\citep{liu2024kan, xu2025fourierkan}.
+To address these issues, we propose a multi-task framework for blind
+$T_{60}$ estimation that pairs $T_{60}$ regression with a denoising
+reconstruction auxiliary task over a shared time--frequency Conformer
+feature extractor. The denoising task provides dense per-time-frequency-bin
+supervision, while gradient-probe and representation analyses examine how
+this supervision affects the shared features and the interaction between
+the two tasks. We further use a Fourier-KAN regression head to provide a
+nonlinear readout from the shared features to $T_{60}$, and compare it
+with an MLP head under the same multi-task setting.
 
 The main contributions of this work are summarised as follows.
 
@@ -225,13 +193,13 @@ The main contributions of this work are summarised as follows.
   \item We propose a multi-task framework for blind $T_{60}$ estimation
         that takes $T_{60}$ regression as the main task and denoising
         reconstruction as an auxiliary task, sharing a dual-path
-        time--frequency Conformer backbone (a dense convolutional
+        time--frequency Conformer feature extractor (a dense convolutional
         encoder and two two-stage Conformer blocks) between the two
         tasks, with a Fourier-KAN regression head and a CMGAN-style
-        denoising decoder branch tapped off the shared bottleneck.
+        denoising decoder branch tapped off the shared feature map.
         Compared with prior work that combines denoising with $T_{60}$
         estimation, we introduce the denoising auxiliary supervision into
-        a dual-path time--frequency Conformer backbone in an end-to-end
+        a two-stage time--frequency Conformer feature extractor in an end-to-end
         jointly trained manner, together with a normalised loss and
         task-weight control, so that the denoising gradients can directly
         shape the shared representation.
@@ -244,12 +212,12 @@ The main contributions of this work are summarised as follows.
         shows that the denoising task reshapes the shared features, and
         this reshaping is the source of the $T_{60}$ improvement,
         independent of any gradient conflict.
-  \item We design a lightweight Fourier-basis Kolmogorov--Arnold
-        regression head that maps the multi-statistic pooled bottleneck
+  \item We construct a Fourier-basis Kolmogorov--Arnold
+        regression head that maps the multi-statistic pooled
         features to $T_{60}$ through a two-layer Fourier-KAN block, each
         layer using a different number of trigonometric bases. Experiments
         confirm that the proposed head outperforms a conventional MLP head
-        of comparable size under the same multi-task setting.
+        under the same multi-task setting.
   \item We carry out a systematic evaluation on four noisy reverberant
         test sets covering all combinations of simulated/measured RIRs
         and seen/unseen noise types, validating the effectiveness and
@@ -260,7 +228,7 @@ The main contributions of this work are summarised as follows.
 The remainder of this paper is organised as follows.
 Section~\ref{sec:bg} formalises the acoustic signal model and the
 relation between the room impulse response and $T_{60}$. Section~\ref{sec:method} describes the proposed
-network in detail, including the Conformer backbone, the denoising
+network in detail, including the Conformer feature extractor, the denoising
 decoder branch, the multi-statistic pooling layer, the Fourier-KAN head
 and the multi-task training objective. Section~\ref{sec:exp} presents
 the datasets, baselines and implementation details.
@@ -324,51 +292,28 @@ $\hat{T}_{60}$ directly.
 \section{Proposed method}\label{sec:method}
 % =====================================================================
 
-This section describes the proposed multi-task $T_{60}$ estimation
-network. As illustrated in Fig.~\ref{fig:overall}, the network is
-composed of a \emph{shared backbone} and two task-specific branches.
-The shared backbone consists of (i) a complex-spectrum \emph{dense
-convolutional encoder} that turns the noisy reverberant waveform into a
-high-dimensional time--frequency representation, and (ii) two
-\emph{two-stage Conformer blocks} (TSCBs) that capture long-range
-spectro-temporal dependencies. The resulting bottleneck feeds two
-parallel branches: (iii) a Fourier-KAN \emph{regression head} that
-aggregates the bottleneck output into a single normalised $T_{60}$
-estimate (the main task), and (iv) a \emph{denoising decoder branch}
-(a mask decoder and a complex decoder) that reconstructs the enhanced
-speech (the auxiliary task). The two branches share the encoder and the
-Conformer blocks and are trained jointly, so that the denoising
-gradient acts as a regulariser on the shared representation; the
-training objective is detailed in Section~\ref{sec:method:loss}.
+As shown in Fig.~\ref{fig:overall}, the proposed network consists of a
+shared feature extractor, a $T_{60}$ regression head and a denoising
+decoder branch. The shared feature extractor comprises a dense
+convolutional encoder and two stacked two-stage Conformer blocks
+(TSCBs), which map the input spectrum to shared time--frequency
+features. The regression head uses multi-statistic pooling and
+Fourier-KAN layers to estimate normalised $T_{60}$. The denoising
+branch reconstructs noise-free reverberant speech using a magnitude
+mask and a complex residual. The two tasks share the feature extractor
+and are trained with the joint loss defined in
+Section~\ref{sec:method:loss}.
 
 \begin{figure*}[pos=t]
   \centering
   \includegraphics[width=\textwidth]{figs/overall_multitask.png}
-  \caption{Overview of the proposed multi-task Conformer-based $T_{60}$
-  estimation network. Complex STFT features of the noisy reverberant
-  waveform $x(t)$ are processed by a dense convolutional encoder and
-  $N{=}2$ stacked two-stage Conformer blocks (TSCBs; see
-  Fig.~\ref{fig:tsconformer} for the internal block structure), producing
-  a shared bottleneck of shape $B{\times}64{\times}T{\times}F/2$. Three
-  branches diverge from the shared bottleneck. The \emph{$T_{60}$ Branch}
-  applies channel-wise global statistics pooling
-  ($\mu\,\|\,\max\,\|\,\sigma$) followed by a Linear--LayerNorm
-  projection, a two-layer Fourier-KAN head ($\Omega{=}16,8$;
-  $64{\to}32{\to}16$), a Linear--Sigmoid and an inverse min--max
-  denormalisation to yield $\hat{T}_{60}$. The \emph{Mask Decoder} and
-  the \emph{Complex Decoder} reuse the CMGAN dilated DenseNet
-  ($d\in\{1,2,4,8\}$) and sub-pixel upsampling to predict a real-valued
-  magnitude mask and a complex residual $\Delta(\mathrm{real},
-  \mathrm{imag})$. Spectral recombination multiplies the mask with the
-  noisy magnitude (operator $\mathrm{M}$), reattaches the noisy phase
-  $\angle X$ and adds the complex residual ($\oplus$) to obtain the
-  reconstructed complex spectrum $\hat{X}$, which is inverted by iSTFT
-into the enhanced waveform $\hat{s}(t)$. The two tasks are trained
-jointly with the loss
-$\mathcal{L}_{\mathrm{total}}=\alpha\,\mathcal{L}_{\mathrm{denoise}}
-+\beta\,\mathcal{L}_{T_{60}}$ (the task weights $(\alpha,\beta)$ are
-tuned in Section~\ref{sec:res:ablation}); see
-Section~\ref{sec:method:loss} for the full definition.}
+  \caption{Multi-task $T_{60}$ estimation network. The spectrum of noisy
+  reverberant speech is processed by a dense convolutional encoder and
+  two TSCBs. The resulting shared time--frequency features are passed
+  to the $T_{60}$ regression head and the denoising decoder branch.
+  The regression head aggregates the features and applies a nonlinear
+  mapping to estimate $T_{60}$; the denoising branch reconstructs the
+  enhanced speech using a magnitude mask and a complex residual.}
   \label{fig:overall}
 \end{figure*}
 
@@ -415,7 +360,7 @@ exponentially enlarges the temporal receptive field while keeping the
 parameter count under control. Each convolution is followed by an
 instance normalisation and a PReLU activation. Finally, a strided
 $1\times 3$ convolution downsamples the frequency axis by a factor of
-two and produces the encoder bottleneck
+two and produces the encoder output
 \begin{equation}\label{eq:encoder}
   \mathbf{F}^{(0)} = \mathrm{Encoder}(\mathbf{X}_{\mathrm{in}})
         \in \mathbb{R}^{C\times T\times F'},
@@ -424,12 +369,11 @@ with $C=64$, $T=641$ and $F'=101$.
 
 \subsection{Two-stage Conformer block}\label{sec:method:tscb}
 
-The encoder bottleneck $\mathbf{F}^{(0)}$ is further refined by
+The encoder output $\mathbf{F}^{(0)}$ is further refined by
 $N=2$ stacked two-stage Conformer blocks (TSCBs). The Conformer
-block~\citep{gulati2020conformer} combines the global modelling
-ability of self-attention with the local feature extraction of
-convolutions, and has become a standard sequence-modelling choice for
-speech enhancement and source separation. For a sequence
+block~\citep{gulati2020conformer} combines self-attention for modelling
+long-range dependencies with convolution for extracting local patterns.
+For a sequence
 $\mathbf{Z}\in\mathbb{R}^{L\times d}$ of length $L$ and feature
 dimension $d$, the block consists of four sub-modules wrapped in
 residual connections:
@@ -447,70 +391,42 @@ position-wise feed-forward modules with Swish activations,
 $\mathrm{MHSA}$ is a multi-head self-attention module with Shaw-style
 relative positional encoding~\citep{shaw2018relativepos}, and
 $\mathrm{Conv}$ is a depth-wise separable 1-D convolution module with a
-gated linear unit and a batch normalisation. The half-scaling of the two
-feed-forward branches yields the so-called ``Macaron'' structure that
-has been shown to stabilise optimisation~\citep{gulati2020conformer}.
+gated linear unit and a batch normalisation. The two half-scaled
+feed-forward branches form the Macaron-style arrangement.
 
-When applied to a time--frequency representation of speech, the
-Conformer block is typically deployed in a dual-path fashion: two
-Conformer blocks are stacked, one operating along the time axis and one
-along the frequency axis, jointly forming a two-stage Conformer block
-(TSCB)~\citep{cao2022cmgan}. Concretely, for an input feature map
-$\mathbf{F}\in\mathbb{R}^{B\times C\times T\times F'}$:
-\begin{equation}\label{eq:tscb_time}
-  \mathbf{F}^{t} = \mathbf{F}
-      + \mathrm{ConformerBlock}_{t}\bigl(\mathrm{Reshape}_{t}(\mathbf{F})\bigr),
-\end{equation}
-where $\mathrm{Reshape}_{t}$ flattens the frequency axis into the batch
-dimension and treats the time axis as the sequence axis; the Conformer
-block then operates on tensors of shape $(B\,F')\times T\times C$.
-Analogously,
-\begin{equation}\label{eq:tscb_freq}
-  \mathbf{F}^{tf} = \mathbf{F}^{t}
-      + \mathrm{ConformerBlock}_{f}\bigl(\mathrm{Reshape}_{f}(\mathbf{F}^{t})\bigr),
-\end{equation}
-with $\mathrm{Reshape}_{f}$ producing tensors of shape $(B\,T)\times
-F'\times C$. Each Conformer block has $h=4$ attention heads of dimension
-$d_h=C/4=16$, a feed-forward expansion factor of $4$, a depth-wise
-separable 1-D convolution with kernel size $31$, and a dropout rate of
-$0.2$ on both the attention and the feed-forward sub-modules. After
-the second TSCB, the bottleneck feature map is denoted
-$\mathbf{F}^{(N)}\in\mathbb{R}^{C\times T\times F'}$. With $C=64$,
-$T=641$ and $F'=101$, the per-block self-attention has quadratic
-complexity in $T$ or $F'$ but only linear complexity in the product
-$T\,F'$ thanks to the dual-path factorisation; this is what makes a
-$4$-second window tractable on a single GPU. The resulting bottleneck
-$\mathbf{F}^{(N)}$ is shared by both the $T_{60}$ regression head
+As shown in Fig.~\ref{fig:tsconformer}, the Conformer is
+used in a two-stage arrangement: one block operates along the time axis
+and the other along the frequency axis, jointly forming a TSCB
+~\citep{cao2022cmgan}. For an input feature map, the processed axis is
+organised as the sequence dimension and the other axis is folded into
+the batch dimension. Residual connections are used in both stages, and
+the original feature-map shape is restored after each stage.
+After the second TSCB, the shared representation
+$\mathbf{F}^{(N)}\in\mathbb{R}^{C\times T\times F'}$ is passed to both the $T_{60}$ regression head
 (Section~\ref{sec:method:head}) and the denoising branch
-(Section~\ref{sec:method:denoise}).
+(Section~\ref{sec:method:denoise}). The batch dimension is omitted;
+$C$, $T$ and $F'$ denote the number of channels, time frames and
+downsampled frequency bins, respectively. The architectural settings
+are listed in Table~\ref{tab:arch}.
 
 \begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=\columnwidth]{figs/tsconformer_block.png}
-  \caption{Internal structure of a two-stage Conformer block (TSCB)
-  used in the shared backbone of Fig.~\ref{fig:overall}. The block is the
-  serial composition of a time-axis Conformer (Conformer-Time, input
-  shape $BF'{\times}T{\times}C$), a frequency-axis Conformer
-  (Conformer-Freq, input shape $BT{\times}F'{\times}C$) and a final
-  reshape back to $B{\times}T{\times}F'{\times}C$. Each Conformer
-  variant follows the Macaron design: two half-step feed-forward
-  modules sandwich a multi-head self-attention (MHSA, $h{=}4$, Shaw
-  relative positional encoding) and a depth-wise separable convolution
-  module (Conv Module, kernel size $k{=}31$), all wrapped in residual
-  connections ($\oplus$). The dashed arrow expands the inner structure
-  of the Conv Module into a pointwise-conv $\to$ depthwise-conv $\to$
-  GLU $\to$ Swish $\to$ pointwise-conv $\to$ PReLU $\to$ dropout
-  pipeline.}
+  \caption{Internal structure of a two-stage Conformer block (TSCB).
+  The time and frequency stages model dependencies across frames and
+  frequency bins, respectively. Each stage contains two half-step
+  feed-forward modules, multi-head self-attention and a convolution
+  module, with residual connections. The output is reshaped to match
+  the input feature map.}
   \label{fig:tsconformer}
 \end{figure}
 
 \subsection{$T_{60}$ regression head}\label{sec:method:head}
 
-The $T_{60}$ regression head condenses the shared bottleneck
-$\mathbf{F}^{(N)}$ into a single normalised $T_{60}$ estimate through
-two-step pooling followed by a Fourier-KAN block. The frequency axis is
-first averaged, which reflects the assumption that $T_{60}$ summarises a
-broadband property of the room rather than a specific spectral pattern:
+The $T_{60}$ regression head aggregates the shared time--frequency
+features $\mathbf{F}^{(N)}$ and uses Fourier-KAN layers to produce a
+normalised $T_{60}$ estimate. First, the features are averaged along
+the frequency axis:
 \begin{equation}\label{eq:freq_avg}
   \mathbf{Z}_{c,t} = \frac{1}{F'}\sum_{f=1}^{F'}\mathbf{F}^{(N)}_{c,t,f},
 \end{equation}
@@ -522,105 +438,57 @@ dimension~\citep{snyder2018xvector}:
   \mathbf{e} = \bigl[\,\mu(\mathbf{Z}),\;
    \max(\mathbf{Z}),\;\sigma(\mathbf{Z})\,\bigr] \in \mathbb{R}^{3C}.
 \end{equation}
-The three statistics carry complementary information about the energy
-envelope of the utterance: $\mu(\mathbf{Z})$ summarises the long-term
-average level, $\max(\mathbf{Z})$ captures the peak excitation typically
-associated with vowel onsets, and $\sigma(\mathbf{Z})$ captures the
-temporal modulation of the envelope, which is known to be strongly
-correlated with the decay rate of the late reverberation
-tail~\citep{falk2010temporal}. With $C=64$, the resulting embedding has
-$3C=192$ entries.
+The three statistics summarise the mean level, peak value and temporal
+variation of each feature channel. Their concatenation produces a
+fixed-dimensional feature vector with $3C=192$ entries when $C=64$.
 
-\paragraph{Kolmogorov--Arnold basis.} The Kolmogorov--Arnold representation theorem states that any
-continuous multivariate function $f:[0,1]^{n}\to\mathbb{R}$ can be
-written as the finite composition of univariate continuous functions
-and addition. \citet{liu2024kan} build on this observation and propose
-Kolmogorov--Arnold networks (KANs), in which the fixed scalar
-non-linearities of a multi-layer perceptron (MLP) are replaced by
-learnable univariate functions placed on every \emph{edge} of the
-network. A single KAN layer with input dimension $I$ and output
-dimension $O$ implements the mapping
+\paragraph{Fourier-KAN mapping.} The regression head maps the pooled
+features to $T_{60}$ using KAN layers with Fourier basis functions
+~\citep{liu2024kan, xu2025fourierkan}. Each output is a sum of learnable
+univariate functions applied to the input components:
 \begin{equation}\label{eq:kan_layer}
-  y_j = \sum_{i=1}^{I} \phi_{j,i}(x_i) + b_j,
-  \qquad j=1,\ldots,O,
+  y_j = \sum_{i=1}^{d_{\mathrm{in}}} \phi_{j,i}(x_i) + b_j,
+  \qquad j=1,\ldots,d_{\mathrm{out}},
 \end{equation}
-where each $\phi_{j,i}:\mathbb{R}\to\mathbb{R}$ is a learnable univariate
-function and $b_j$ is a per-output bias. The original KAN paper
-parameterises $\phi_{j,i}$ by cubic B-splines, which is expressive but
-requires bookkeeping such as adaptive grid updates and is comparatively
-slow on small batch sizes typical of regression heads.
-
-A Fourier-KAN replaces the spline basis by a truncated trigonometric
-series~\citep{xu2025fourierkan}. For a
-\emph{frequency count} $\Omega\in\mathbb{N}$, every edge function is
-written as
+where $d_{\mathrm{in}}$ and $d_{\mathrm{out}}$ are the input and output
+dimensions, and $b_j$ is an output bias. Each function $\phi_{j,i}$
+is a weighted sum of $K$ pairs of sine and cosine basis functions:
 \begin{equation}\label{eq:fourier_phi}
-  \phi_{j,i}(x_i) = \sum_{\omega=1}^{\Omega}
-    \bigl[a_{j,i,\omega}\,\cos(\omega\,x_i)
-        + b_{j,i,\omega}\,\sin(\omega\,x_i)\bigr],
+  \phi_{j,i}(x_i) = \sum_{k=1}^{K}
+    \bigl[a_{j,i,k}\cos(kx_i)+c_{j,i,k}\sin(kx_i)\bigr].
 \end{equation}
-so that the output of a Fourier-KAN layer becomes
-\begin{equation}\label{eq:fourier_layer}
-  y_j = \sum_{i=1}^{I}\sum_{\omega=1}^{\Omega}
-        \bigl[a_{j,i,\omega}\cos(\omega x_i)
-            + b_{j,i,\omega}\sin(\omega x_i)\bigr] + b_j.
-\end{equation}
-The number of trainable parameters per layer is $2\,O\,I\,\Omega + O$,
-which is a modest multiple of an equivalent linear layer of size
-$O\times I$ but still small in absolute terms when $I$ and $O$ are kept
-small. Two properties make this basis attractive for the proposed
-regression head: (i) gradients with respect to the weights are
-closed-form trigonometric functions of the input and require no grid
-maintenance; (ii) the basis has a strong inductive bias towards smooth
-and approximately periodic dependencies, which matches the empirical
-shape of the mapping from pooled bottleneck statistics to $T_{60}$.
+Here, $a_{j,i,k}$ and $c_{j,i,k}$ are learnable coefficients, and $K$
+is the Fourier expansion order, with one sine term and one cosine term
+per order. The regression head consists of a linear projection, two
+Fourier-KAN layers and a linear output layer. The layer settings are
+listed in Table~\ref{tab:arch}; parameter counts and performance are
+compared in Table~\ref{tab:head}.
 
-The pooled embedding $\mathbf{e}\in\mathbb{R}^{192}$ is mapped to the
-final estimate $\hat{T}_{60}$ by the Fourier-KAN head, depicted
-in Fig.~\ref{fig:overall}. The head is composed of a linear
-projection, a stack of two Fourier-KAN layers and a final linear output.
-Each step is described below.
-
-\paragraph{Projection.} A linear projection followed by a layer
-normalisation reduces the pooled embedding to a $d_{0}=64$-dimensional
+\paragraph{Projection.} A linear projection followed by layer
+normalisation maps the pooled feature vector to a $d_0$-dimensional
 vector,
 \begin{equation}\label{eq:proj}
   \mathbf{u}^{(0)} = \mathrm{LayerNorm}\bigl(\mathbf{W}_{p}\,\mathbf{e}+
                                               \mathbf{b}_{p}\bigr),
   \qquad \mathbf{u}^{(0)}\in\mathbb{R}^{d_{0}}.
 \end{equation}
-No additional activation is applied after the layer normalisation:
-the normalisation already constrains the input range of the first
-Fourier layer, and a saturating non-linearity such as tanh would reduce
-the effective capacity of the periodic basis.
-
-\paragraph{Fourier-KAN block.} The projected embedding is processed by
-$L=2$ Fourier-KAN layers with hidden dimensions $(d_{1},d_{2})=(32,16)$.
-The first layer uses a comparatively large frequency count
-$\Omega_{0}=16$, which allows it to learn fine-grained non-linear
-features directly from the embedding, while the inner layer uses a
-smaller budget $\Omega_{1}=8$ for parameter efficiency. Formally, for
-$\ell=1,2$,
+\paragraph{Fourier-KAN block.} The projected features are processed by
+two Fourier-KAN layers. Layer $\ell$ maps $d_{\ell-1}$ input features
+to $d_\ell$ output features using Fourier expansion order $K_\ell$.
+For $\ell=1,2$,
 \begin{equation}\label{eq:fourier_block}
-  u^{(\ell)}_j = \sum_{i=1}^{d_{\ell-1}}\sum_{\omega=1}^{\Omega_{\ell-1}}
-    \bigl[a^{(\ell)}_{j,i,\omega}\cos(\omega u^{(\ell-1)}_i)
-        + b^{(\ell)}_{j,i,\omega}\sin(\omega u^{(\ell-1)}_i)\bigr]
-    + c^{(\ell)}_j,
+  u^{(\ell)}_j = \sum_{i=1}^{d_{\ell-1}}\sum_{k=1}^{K_\ell}
+    \bigl[a^{(\ell)}_{j,i,k}\cos(k u^{(\ell-1)}_i)
+        + c^{(\ell)}_{j,i,k}\sin(k u^{(\ell-1)}_i)\bigr]
+    + b^{(\ell)}_j,
 \end{equation}
-and the layer output is post-processed by a layer normalisation and a
-dropout with probability $0.1$:
+Each layer output is then passed through layer normalisation and dropout:
 \begin{equation}\label{eq:fourier_post}
   \mathbf{u}^{(\ell)} \leftarrow \mathrm{Dropout}\bigl(
     \mathrm{LayerNorm}(\mathbf{u}^{(\ell)})\bigr).
 \end{equation}
-The Fourier weights $a^{(\ell)}_{j,i,\omega}$ and $b^{(\ell)}_{j,i,\omega}$
-are initialised from a zero-mean Gaussian with standard deviation
-$\sqrt{1/(d_{\ell-1}\,\Omega_{\ell-1})}$, so that the variance of the
-layer output is approximately unity at initialisation regardless of the
-input dimension and the frequency count.
-
 \paragraph{Output.} A linear layer maps $\mathbf{u}^{(2)}\in
-\mathbb{R}^{16}$ to a scalar, and a sigmoid activation produces the
+\mathbb{R}^{d_2}$ to a scalar, and a sigmoid activation produces the
 normalised estimate
 \begin{equation}\label{eq:t60_hat}
   \hat{T}_{60}^{\mathrm{norm}} = \sigma\bigl(\mathbf{w}_{o}^{\top}\mathbf{u}^{(2)}
@@ -629,8 +497,9 @@ normalised estimate
 
 \subsection{Denoising decoder branch}\label{sec:method:denoise}
 
-To inject denoising supervision into the shared backbone, a decoder
-branch is tapped off the bottleneck feature $\mathbf{F}^{(N)}$ using the
+To inject denoising supervision into the shared feature extraction
+network, a decoder branch is tapped off the shared feature map
+$\mathbf{F}^{(N)}$ using the
 mask-plus-complex-residual structure of CMGAN~\citep{cao2022cmgan}. A
 mask decoder outputs a magnitude mask
 $\mathbf{M}\in\mathbb{R}^{1\times T\times F}$, multiplied with the input
@@ -683,7 +552,7 @@ enhanced waveform and $\tilde{s}$. As the raw denoising and $T_{60}$
 losses differ in scale, each is first divided by its own exponential
 moving average (EMA) to bring $\mathcal{L}_{\mathrm{den}}^{*}$ and
 $\mathcal{L}_{T_{60}}^{*}$ to a common scale, so that the two losses
-can be weighted on a single dimension; the two tasks are then optimised
+can be combined on a common scale; the two tasks are then optimised
 jointly through the weighted sum
 \begin{equation}\label{eq:loss}
   \mathcal{L}(\boldsymbol{\theta})
@@ -824,10 +693,41 @@ dereverberation quality.
 
 \subsection{Model and training setup}\label{sec:exp:impl}
 
-The model architecture is detailed in Section~\ref{sec:method} (shared
-DenseEncoder + two TSCBs + Fourier-KAN regression head + CMGAN denoising
-decoders); here we only describe the training configuration. All
-recordings are resampled to $16$\,kHz mono and chunked/padded to $4$\,s.
+The architectural settings are summarised in Table~\ref{tab:arch}. The
+shared feature extractor contains two TSCBs, and the two Fourier-KAN
+layers use expansion orders of 16 and 8, respectively.
+
+\begin{table}[pos=htbp]
+  \centering
+  \caption{Network architecture and regularisation settings.}
+  \label{tab:arch}
+  \small
+  \begin{tabular}{lll}
+    \toprule
+    Component & Setting & Value \\
+    \midrule
+    Shared feature extractor & Channels; number of TSCBs & 64; 2 \\
+    Conformer block & Attention heads; head dimension & 4; 16 \\
+    Conformer block & FFN expansion factor; convolution kernel size & 4; 31 \\
+    Conformer block & Attention and FFN dropout & 0.2 \\
+    Fourier-KAN head & Pooled dimension; projection dimension $d_0$ & 192; 64 \\
+    Fourier-KAN head & Output dimensions $(d_1,d_2)$ & (32,16) \\
+    Fourier-KAN head & Fourier expansion orders $(K_1,K_2)$ & (16,8) \\
+    Fourier-KAN head & Dropout & 0.1 \\
+    MLP head (ablation) & Input dimension; hidden dimensions & 192; (128,64) \\
+    MLP head (ablation) & Hidden activation; dropout & ReLU; 0.3 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The sine and cosine coefficients are initialised from a zero-mean
+Gaussian distribution with standard deviation
+$1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to
+zero. The denoising loss weights are
+$(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$. The main model uses
+$(\alpha,\beta)=(1.0,0.05)$; task-weight sensitivity is examined in
+Section~\ref{sec:res:ablation}.
+
 We use the AdamW optimiser (learning rate $5\times10^{-4}$, weight decay
 $10^{-5}$), batch size $16$, gradient clipping $5.0$, and
 mixed-precision training for at most $100$ epochs, with early stopping
@@ -884,7 +784,7 @@ among the tested configurations.
 \end{table}
 
 \paragraph{Regression-head ablation.} We further compare the Fourier-KAN
-regression head against an MLP head of comparable capacity, both under
+regression head against an MLP head, both under
 the same multi-task configuration $(\alpha,\beta)=(1.0,0.05)$, as
 reported in Table~\ref{tab:head}.
 
@@ -893,15 +793,24 @@ reported in Table~\ref{tab:head}.
   \caption{Regression-head ablation under the multi-task setting
   $(\alpha,\beta)=(1.0,0.05)$.}
   \label{tab:head}
-  \begin{tabular}{lcc}
+  \begin{tabular}{lrrr}
     \toprule
-    Head & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
+    Head & Trainable parameters & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    MLP          & 102.17 & 64.94 \\
-    Fourier-KAN  & \textbf{92.91}    & \textbf{56.68} \\
+    MLP          & 33,025 & 102.17 & 64.94 \\
+    Fourier-KAN  & 86,369 & \textbf{92.91} & \textbf{56.68} \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+The parameter counts of the two heads are 86,369 for Fourier-KAN and
+33,025 for the MLP, including the input projection, normalisation
+parameters and output layer but excluding the shared feature extraction
+network and denoising decoders. The heads use the same feature pooling
+but differ in hidden-layer architecture, parameter count and dropout
+settings (Table~\ref{tab:arch}). Thus, Table~\ref{tab:head} compares the
+complete head configurations used in the experiments; the performance
+difference cannot be attributed solely to the choice of basis function.
 
 \begin{figure}[pos=htbp]
   \centering
@@ -958,7 +867,7 @@ leave-one-split-out protocol, and the two protocols agree.
   TSCB$_2$): single-task baseline vs.\ the three multi-task regimes
   (pooled 80/20 protocol, mean $\pm$ SD over five seeds). Left: global
   mean pooling; right: multi-statistic pooling (avg/max/std over time),
-  which mirrors how the $T_{60}$ head reads the bottleneck.}
+  which mirrors how the $T_{60}$ head reads the shared features.}
   \label{fig:linearprobe}
 \end{figure}
 
@@ -984,7 +893,7 @@ Linear probing (Fig.~\ref{fig:linearprobe}) adds the complementary
 question of whether the reshaped representation is easier for a simple
 linear reader to exploit. A ridge probe is fitted on frozen layer
 features under two pooling schemes, of which the multi-statistic one
-mirrors how the $T_{60}$ head reads the bottleneck. Three observations
+mirrors how the $T_{60}$ head reads the shared features. Three observations
 follow. First, $T_{60}$ decodability accumulates with depth for every
 model (Encoder $<$ TSCB$_1$ $<$ TSCB$_2$). Second, the denoise-dominant
 model does not increase linear decodability: at TSCB$_2$ its $R^{2}$ is
@@ -1151,7 +1060,7 @@ Table~\ref{tab:weight}.
 We proposed a multi-task learning framework for blind $T_{60}$
 estimation that pairs $T_{60}$ regression (main task) with denoising
 reconstruction (auxiliary task) over a shared dual-path time--frequency
-Conformer backbone, with a Fourier-KAN head for $T_{60}$ estimation.
+Conformer feature extractor, with a Fourier-KAN head for $T_{60}$ estimation.
 The main findings are: (1) the denoising auxiliary task, at the cost of
 about $0.54$\,M decoder parameters, reduces the $T_{60}$ RMSE
 substantially relative to the single-task ablation baseline
