@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "experiment_id": "air_three_rooms_ch0_v1",
+  "paths": {
+    "raw_root": "/Users/xiexinni/dataset/rawdataset",
+    "output_root": "case_study/outputs/air_three_rooms_ch0_v1"
+  },
+  "synthesis": {
+    "sample_rate_hz": 16000,
+    "seed": 42,
+    "channel_index": 0,
+    "speech_directory": "Dry/TIMIT_90_test_dry",
+    "speech_count": 90,
+    "speech_input_samples": 128000,
+    "crop_start_sample": 32000,
+    "output_samples": 64000,
+    "noise_files": [
+      {"id": "white", "path": "Noise/noise92_10_test_noise_unseen/white.wav"},
+      {"id": "babble", "path": "Noise/noise92_10_test_noise_unseen/babble.wav"}
+    ],
+    "snr_db": [-5, 0, 5, 10, 15, 20],
+    "peak_limit": 0.99,
+    "min_power": 1e-12,
+    "snr_tolerance_db": 0.01,
+    "additivity_tolerance": 1e-6,
+    "wav_subtype": "FLOAT",
+    "expected_samples": 3240
+  },
+  "cases": [
+    {
+      "id": "office",
+      "room_name": "AIR office",
+      "rir_path": "RIR/OpenSLR28_307_test_realrir/T60_0.454_000.wav",
+      "original_filename": "air_type1_air_binaural_office_0_1.wav",
+      "t60_s": 0.454,
+      "expected_channels": 2,
+      "label_csv": "RIR/OpenSLR28_307_test_realrir/t60_calculation_results.csv",
+      "label_csv_line": 78
+    },
+    {
+      "id": "lecture",
+      "room_name": "AIR lecture",
+      "rir_path": "RIR/OpenSLR28_307_test_realrir/T60_0.773.wav",
+      "original_filename": "air_type1_air_binaural_lecture_1_1.wav",
+      "t60_s": 0.773,
+      "expected_channels": 2,
+      "label_csv": "RIR/OpenSLR28_307_test_realrir/t60_calculation_results.csv",
+      "label_csv_line": 109
+    },
+    {
+      "id": "stairway",
+      "room_name": "AIR stairway",
+      "rir_path": "RIR/OpenSLR28_307_test_realrir/T60_1.138.wav",
+      "original_filename": "air_type1_air_binaural_stairway_1_3_45.wav",
+      "t60_s": 1.138,
+      "expected_channels": 2,
+      "label_csv": "RIR/OpenSLR28_307_test_realrir/t60_calculation_results.csv",
+      "label_csv_line": 123
+    }
+  ],
+  "evaluation": {
+    "batch_size": 8,
+    "num_workers": 0,
+    "device": "auto",
+    "precision": "float32",
+    "verify_audio_hashes": true
+  },
+  "models": [
+    {
+      "id": "dact_kan_multitask",
+      "label": "DACT-KAN multitask",
+      "task": "multitask",
+      "config": "configs/t60_multitask/kan_mse_norm_w_denoise_b005_seed42.yaml",
+      "checkpoint": "runs/kan_multitask_norm_w_denoise_b005_seed42/best_model.pth"
+    },
+    {
+      "id": "matched_mlp_multitask",
+      "label": "Matched MLP dropout0.1 multitask",
+      "task": "multitask",
+      "config": "configs/t60_multitask/mlp_matched_drop01_mse_norm_w_denoise_b005_seed42.yaml",
+      "checkpoint": "runs/mlp_matched_drop01_multitask_norm_w_denoise_b005_seed42/best_model.pth"
+    },
+    {
+      "id": "kan_single",
+      "label": "KAN single task",
+      "task": "single",
+      "config": "configs/t60_single/kan_v2_mse_seed42.yaml",
+      "checkpoint": "runs/single_t60_kan_v2_mse_seed42/best_model.pth"
+    },
+    {
+      "id": "matched_mlp_single",
+      "label": "Matched MLP dropout0.1 single task",
+      "task": "single",
+      "config": "configs/t60_single/mlp_matched_drop01_mse_seed42.yaml",
+      "checkpoint": "runs/single_t60_mlp_matched_drop01_mse_seed42/best_model.pth"
+    }
+  ]
+}

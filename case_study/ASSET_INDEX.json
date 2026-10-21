@@ -1,0 +1,660 @@
+{
+  "schema_version": 1,
+  "recorded_date": "2026-10-21",
+  "repo_reference_commit": "39b7499d72b1ac3bcb096ed91ac1702a8eb3ffe2",
+  "protocol_path": "case_study/config.json",
+  "protocol_sha256": "8c30668c486311157d44a43efc53979e951bf3e14aceba058393997f0dba4817",
+  "local_raw_root_at_recording": "/Users/xiexinni/dataset/rawdataset",
+  "notes": [
+    "File-content baseline only; no checkpoint deserialization, synthesis or inference was performed.",
+    "Resolve raw_root and repo_root on the target server; local_raw_root_at_recording is provenance, not a server setting.",
+    "Historical scalar T60 labels are retained; channel-0-specific ground truth remains unverified."
+  ],
+  "counts": {
+    "raw_files": 96,
+    "model_configs": 4,
+    "checkpoints": 4
+  },
+  "assets": [
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_001.wav",
+      "bytes": 256044,
+      "sha256": "1df1094d4ef7387e0a33f70917b27e6f3f02cfd31dd764d21f9dad4dad39a929"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_002.wav",
+      "bytes": 256044,
+      "sha256": "d29bb09df325cbd102c40330ee52d85d67b25efbdb60c6c78637a8afa8b83db4"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_003.wav",
+      "bytes": 256044,
+      "sha256": "0448099e6fdba2e344d0bd3b30cd36960b6134bbb533a0754c9988ea90c47ad8"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_004.wav",
+      "bytes": 256044,
+      "sha256": "823f42ca9753fdbf78bb561520ce6fa4233173ca4660f4077fb05a4844ff8852"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_005.wav",
+      "bytes": 256044,
+      "sha256": "89aadac05f5cb46298a9cec74af60cec98330dd54454bf09cc47ac3cdaee24ed"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_006.wav",
+      "bytes": 256044,
+      "sha256": "a353e5cbfab7d7d093135af690f5e4f48cff4e0e924ad5fe0f6488adfee61323"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_007.wav",
+      "bytes": 256044,
+      "sha256": "211b64cca026036201850e2245fad7bf372d168dcc8cdea29886792549c4823b"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_008.wav",
+      "bytes": 256044,
+      "sha256": "568f868cf54130c9956a8aef05eb5452493f8df8fd06c96f78d853c8297bc223"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_009.wav",
+      "bytes": 256044,
+      "sha256": "ab022f4ae7395b3b2486c23ce95afd1c1d7c18ba8c73e5e81c53b19dece39dfa"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_010.wav",
+      "bytes": 256044,
+      "sha256": "421685bdef870cc24fdc3eb7744899c7534b36ff31bbe284f5b6a85fb92281a5"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_011.wav",
+      "bytes": 256044,
+      "sha256": "98ad6ab0281a7dce8851afb7cd088a778790555cbaff34101a05b858d1bb893c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_012.wav",
+      "bytes": 256044,
+      "sha256": "eece4c45a7c7cc38a603e93c9d9dbd582408ea5ef1b491380a381d8c637a7e9c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_013.wav",
+      "bytes": 256044,
+      "sha256": "d0cc9b0e61315348ac5512c987db22e9cb1f070437fb31b730b55c9a62c24f4d"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_014.wav",
+      "bytes": 256044,
+      "sha256": "eaaaed042db984f56f3ca50a87ad1776efdd5d17d54e9939ca1434dc736e1055"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_015.wav",
+      "bytes": 256044,
+      "sha256": "29b56cb847b33fe073b80632c3bc648b217778e966a00c9399a30e38eb6b2171"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_016.wav",
+      "bytes": 256044,
+      "sha256": "abbcf808c89df93d865b9dbc458cd75e321837d267cdeb92c8fa4f029ab693ab"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_017.wav",
+      "bytes": 256044,
+      "sha256": "15508fa5b87b30f196bb5b6e473e61785d41a41b3364bd2a254bb5d1c01a7dba"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_018.wav",
+      "bytes": 256044,
+      "sha256": "f6b7e93136b1f586516952b9beb124c46f86e1997e6e0f9c6bf8aaa2eb9d9da1"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_019.wav",
+      "bytes": 256044,
+      "sha256": "9c7df7e631e4741ba9fa321dc26563ac6151b8f8681060932fa0dd505b399967"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_020.wav",
+      "bytes": 256044,
+      "sha256": "4cc37a0c2395ff92e327f0f492be5fed6c2f41e73433ff86d1422105f4782a27"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_021.wav",
+      "bytes": 256044,
+      "sha256": "d342f9aed00d3aa68f29fb55f1c7a7a8d360bcf081c4260386b3ec7e7e8e2564"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_022.wav",
+      "bytes": 256044,
+      "sha256": "38a2c2c07a07cd0505bdfa1352aca07375226609a078ab75910cacf887be96c8"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_023.wav",
+      "bytes": 256044,
+      "sha256": "a86ecb02883eb804eb9fb99fa36ba27fd8bff2976b1d3473504ed65d3c6b5ea4"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_024.wav",
+      "bytes": 256044,
+      "sha256": "5f1a166d3ce4a46126704b5dc2fc37ee94bdd36ac9f33469df5b54cf442c0f36"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_025.wav",
+      "bytes": 256044,
+      "sha256": "65f3a46f0de2094cc1110b6cff0694f23edfc9437f01953be9af2f97d2a1233a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_026.wav",
+      "bytes": 256044,
+      "sha256": "17fb41ed58c73ff35a960eab5f9a2eb3a2a6b679be020811c9729aa7fd2eee10"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_027.wav",
+      "bytes": 256044,
+      "sha256": "0cd54f5da3db6e5942ebbd18f2a75f36d3f8747f71f5a39ec34d2dce5124b0ba"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_028.wav",
+      "bytes": 256044,
+      "sha256": "5f9e760dcfd22fceb0c21ea04dc4e0e525d5d0f8cc3dbc9a763a38409751cb7a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_029.wav",
+      "bytes": 256044,
+      "sha256": "a516dd951c86637ab289f17921d718e459990d8bf397466b3e949b357678e7f1"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_030.wav",
+      "bytes": 256044,
+      "sha256": "5d1c4db665e73d0f236e828417b35a20024dcd27fe020a2a21f52288b9f0ed7f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_031.wav",
+      "bytes": 256044,
+      "sha256": "fcd2dac013382bc748e9b55e031d2d8ced4750f49a5a5d17b36312714587958d"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_032.wav",
+      "bytes": 256044,
+      "sha256": "65ac761d0f24299019de6fa899f7ca82c9fff91a64897c231e0a116127ea7c5b"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_033.wav",
+      "bytes": 256044,
+      "sha256": "6d7f9d85eaf47006bfb6458a92f6d839c660697eb34b227ce65fd44481bf997a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_034.wav",
+      "bytes": 256044,
+      "sha256": "e35ae3e7b4126a2e523d86dce5e33b35895f4161f7811236fe68bcec9348caf1"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_035.wav",
+      "bytes": 256044,
+      "sha256": "0fad9297188e165ab7857862cbe18249be2adcd165b32985209ba6ea6f8b876e"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_036.wav",
+      "bytes": 256044,
+      "sha256": "98305edde2adf61316c8b15715f9522fc1f8b019466d14bcbd2f8af6a15fa2c8"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_037.wav",
+      "bytes": 256044,
+      "sha256": "aab220cd13076743e8c103a726655f7f3accaa949a6b66b165d131eb5104a65e"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_038.wav",
+      "bytes": 256044,
+      "sha256": "cb7f1b6d4cba9508310af29daf81c74da4b99ce4269da55927833dcf5e163de6"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_039.wav",
+      "bytes": 256044,
+      "sha256": "56d21d3db5bfb52dca0043ce2742b29668da0e34dcdff75e482a36d4625f5935"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_040.wav",
+      "bytes": 256044,
+      "sha256": "787d812b4cfdd6c69468a60dae4d8b2c3944ee6f98cc4e3e2ef131e7d8bec5b9"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_041.wav",
+      "bytes": 256044,
+      "sha256": "5b8deba2ed43d63810dc8f66d0ecbf99981eac738cbc6a59687dd185aeeef48f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_042.wav",
+      "bytes": 256044,
+      "sha256": "a1cb68630b5110012f10c13fe405b0979a75c0f2e360bac067ac4825d425933f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_043.wav",
+      "bytes": 256044,
+      "sha256": "d6f8fa05d7ff441bdc67fff795d93d3ba6f4edcc8631e2635df9d41870a8d30d"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_044.wav",
+      "bytes": 256044,
+      "sha256": "668d85278cbaddce188ffdac2c714b4ba437ca6bc1f8d3fe12826e7bea0be96e"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_045.wav",
+      "bytes": 256044,
+      "sha256": "1a8062bec504a51ea77268b7e90ba1a237cb1af1170152584b069e2e8353406c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_046.wav",
+      "bytes": 256044,
+      "sha256": "caac1e43d250572084c09cd92b8986f745006f32792a1829955ed940e13c7a34"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_047.wav",
+      "bytes": 256044,
+      "sha256": "73025c41592adcc41ec2ef57d5365c9b4f07647c6b2806797a4fabc4a48637ba"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_048.wav",
+      "bytes": 256044,
+      "sha256": "f684afda5575862405a63aedec83b1ac5cc5822094b609d212e844e9f56723fd"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_049.wav",
+      "bytes": 256044,
+      "sha256": "367b5b61269f8c47539d9e2aa6a082226fc94766f13deebf83de57f12ce18ab6"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_050.wav",
+      "bytes": 256044,
+      "sha256": "b917e5417c9adaa40b84714d97de63738287ec55c13655a8d76030186a71cfc3"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_051.wav",
+      "bytes": 256044,
+      "sha256": "35b6cb42677ba4935cc84a728f3bc2ae44518778acab638904e62bd6734accf2"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_052.wav",
+      "bytes": 256044,
+      "sha256": "28d6ebe5c1cd30fff71e3de94cfe37e9dd9b314ffaf7063da2c27ad343731eb2"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_053.wav",
+      "bytes": 256044,
+      "sha256": "1f97c27ab1a190281daf105705facb1bf3617475f160ad89f58920069dae4139"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_054.wav",
+      "bytes": 256044,
+      "sha256": "64f727315809c97596e9444789d5eae580cbcbfad2da02ef08f2e14e0c0eb921"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_055.wav",
+      "bytes": 256044,
+      "sha256": "816d24f96de90685cf27910558d32070d667485b1d4624c66abc1f43ae0c36c4"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_056.wav",
+      "bytes": 256044,
+      "sha256": "fbb17f83cf6925f4aa8b6c505bdcdeac0e674ce535c4c0c8c97257142f2fd23a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_057.wav",
+      "bytes": 256044,
+      "sha256": "7699116e575c078b18b91d2d2f4c4ffbccb61bf56d652a68ab4f6292dd4df933"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_058.wav",
+      "bytes": 256044,
+      "sha256": "6c1b74cd37345d7a311e721f2ab79dd40bb0a8094ef52c23e75ac1b209202210"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_059.wav",
+      "bytes": 256044,
+      "sha256": "7f1296b479a4fc5595dadcc2f927db91d88ff5007a9c43f522de760c5670671a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_060.wav",
+      "bytes": 256044,
+      "sha256": "bd2153ba571950608d759e33cd4053a7d568ab30cc89c6fef3cbb4c270f1db30"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_061.wav",
+      "bytes": 256044,
+      "sha256": "8c5c6342220c57c876598f5711f3612390163c57f56665a0bdcb09de6a44444c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_062.wav",
+      "bytes": 256044,
+      "sha256": "dd9eb03f1809e9117a459e9d9f3cc990ad91a1d19a3521d7ee9f6d77fbc766df"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_063.wav",
+      "bytes": 256044,
+      "sha256": "8d2a2fc23fa2a037cbc7f5b45bf5c2fe0561eac433b199397f3c37c138359cf3"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_064.wav",
+      "bytes": 256044,
+      "sha256": "e255923470d5bd2e45b17e1789cef798f60435426e2602363c7a73bed6e8f120"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_065.wav",
+      "bytes": 256044,
+      "sha256": "6e0877f1cbd0e3016ae657de4bcc9f07e1a6d757acebd97ca40d7f7e14d4f871"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_066.wav",
+      "bytes": 256044,
+      "sha256": "d731c88de532bc313c9fdbd1cd3658dd8c8c0080a375b071cbc9467450ae3f00"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_067.wav",
+      "bytes": 256044,
+      "sha256": "2158fe54f7adb90536144974c31aeef371816208028ab9ca16bdee5cf9dde117"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_068.wav",
+      "bytes": 256044,
+      "sha256": "de4ca93b2a4fd0be28d4b73b8aa3acd09715b450700e58a0af0452251bc7ef2c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_069.wav",
+      "bytes": 256044,
+      "sha256": "a9e803153e88372cfaaf0ece5038aa196e99f51d565c0156e1f25c643af39d4e"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_070.wav",
+      "bytes": 256044,
+      "sha256": "e935249961eb146eb1b29620d4e3e29b5132f9e1d4b771a07dfb32fcd81244ba"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_071.wav",
+      "bytes": 256044,
+      "sha256": "56aaa85732c0771f808fc769859f12d60d86c9cfcd400218b82e89e28c6b124f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_072.wav",
+      "bytes": 256044,
+      "sha256": "fe4bad1a9891a7100cf02d39565007984e9974c48d906994d964b619855a4eaf"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_073.wav",
+      "bytes": 256044,
+      "sha256": "a19011a9d9f5ca2eddecf4f7f4edcebfe28fd9b343e71e437dda119f86848873"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_074.wav",
+      "bytes": 256044,
+      "sha256": "95e9b3ea487128f8cdefe7c5abf646a301227c325d8d4956f5ae7f441aed3148"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_075.wav",
+      "bytes": 256044,
+      "sha256": "13fa1b6fbda2e901ec3926f1b2becb145ab1e0c04bdfdbc1e087b09374a50555"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_076.wav",
+      "bytes": 256044,
+      "sha256": "e8b287a30b5e703f7f0e01a2eeaf10270d6c3c8188031e5e9d6b65e013a3b0db"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_077.wav",
+      "bytes": 256044,
+      "sha256": "b8a9c6918e2af5cb4f50b76acedd9b39b676d8f29ba3fa54df912b70c1a4e29f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_078.wav",
+      "bytes": 256044,
+      "sha256": "2dbf9b11818920e511cee9e4842b8a4dcf8bc17be76e82ac32dff3acc6cb08e5"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_079.wav",
+      "bytes": 256044,
+      "sha256": "ec2e52c0493b7f66a72dd45f972bb6fe57d0980d2230628f3f39b6a153e7518c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_080.wav",
+      "bytes": 256044,
+      "sha256": "138df00c66c47ec41e020f783acc357d0cb9532dd366e0b1bdf42784a76b80fb"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_081.wav",
+      "bytes": 256044,
+      "sha256": "240c106e8c7fd5cf0a52831fb66d925da3227d2c33bfabe0d9e5210e6f1cfc8c"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_082.wav",
+      "bytes": 256044,
+      "sha256": "944638720e2f69ba7669226200e89802e7e8f491e9e8e22660fc200aaba78188"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_083.wav",
+      "bytes": 256044,
+      "sha256": "5500b3a27190e1105f6d13890a8906f291ad8e37c35afc68ae043ab53986a7ea"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_084.wav",
+      "bytes": 256044,
+      "sha256": "7241bb8a73456554f9cf7511dd0cf3062adf8df62f4e45c5d896925ba9ec22f2"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_085.wav",
+      "bytes": 256044,
+      "sha256": "3b171024b78fa2e6308d80cc3aee40c4bcee24a8ac7a9734a2f7bf5fcec7b12a"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_086.wav",
+      "bytes": 256044,
+      "sha256": "56774e9c32ec3ba31a5a11dcd30590251d3dc5f7bac56b936cde3e773c10a89d"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_087.wav",
+      "bytes": 256044,
+      "sha256": "88fa941b29055e80c2a849f1b6726a2ca819b7cd98619c7e2f3eb55e679035a5"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_088.wav",
+      "bytes": 256044,
+      "sha256": "7846a0a93904b898c0c3b0ce0d9aaa38ad6d27176247d7c73ecdb16bc8dfdba0"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_089.wav",
+      "bytes": 256044,
+      "sha256": "9eba6d1d0d0ee1c94a115b527b54aacb581c012542d6f023f336de467aec9e4f"
+    },
+    {
+      "root": "raw_root",
+      "path": "Dry/TIMIT_90_test_dry/test8s_090.wav",
+      "bytes": 256044,
+      "sha256": "efa26e40c4a2ff93abf50d4e562e93ad0687363a9aa3e7dc8c2dcb070a68e0b2"
+    },
+    {
+      "root": "raw_root",
+      "path": "Noise/noise92_10_test_noise_unseen/white.wav",
+      "bytes": 7527418,
+      "sha256": "53d72340d4b0b5bf245d3594df6cd23a029a36bc7d57e84ee40329b801750b01"
+    },
+    {
+      "root": "raw_root",
+      "path": "Noise/noise92_10_test_noise_unseen/babble.wav",
+      "bytes": 7527418,
+      "sha256": "68f90f9d72c22a199dd736607be5677bc7b71a6fe94ce317c2429e51478a9b74"
+    },
+    {
+      "root": "raw_root",
+      "path": "RIR/OpenSLR28_307_test_realrir/T60_0.454_000.wav",
+      "bytes": 43732,
+      "sha256": "44d3bdd9b3caa52d156cf3f0ad297bd4aa1aeb5e6ddf7d07e766238ac2591a61"
+    },
+    {
+      "root": "raw_root",
+      "path": "RIR/OpenSLR28_307_test_realrir/T60_0.773.wav",
+      "bytes": 87424,
+      "sha256": "886400c28d0d23e05086038cb7c946814062dbd81ca8fb9217979b9454069f30"
+    },
+    {
+      "root": "raw_root",
+      "path": "RIR/OpenSLR28_307_test_realrir/T60_1.138.wav",
+      "bytes": 128044,
+      "sha256": "02ef4ba3d4ca4c867bfca7edcaf72f33f551a5dd620ae14e3949ff0aa34e77c1"
+    },
+    {
+      "root": "raw_root",
+      "path": "RIR/OpenSLR28_307_test_realrir/t60_calculation_results.csv",
+      "bytes": 28176,
+      "sha256": "1e7a0881c0bb2f44ddeca39d8b5602e592d166b3915db0bea06c33d79fa47ac7"
+    },
+    {
+      "root": "repo_root",
+      "path": "configs/t60_multitask/kan_mse_norm_w_denoise_b005_seed42.yaml",
+      "model_id": "dact_kan_multitask",
+      "role": "config",
+      "bytes": 918,
+      "sha256": "8852c0fe4ee076d9bdce4e1b40030c530e7da289bdb6aa8004c80a2d9d191e1b"
+    },
+    {
+      "root": "repo_root",
+      "path": "runs/kan_multitask_norm_w_denoise_b005_seed42/best_model.pth",
+      "model_id": "dact_kan_multitask",
+      "role": "checkpoint",
+      "bytes": 5720064,
+      "sha256": "0aceedbc83ae06994a3e5038de02d7605527367e77cb8a4551b38014013fe5c6"
+    },
+    {
+      "root": "repo_root",
+      "path": "configs/t60_multitask/mlp_matched_drop01_mse_norm_w_denoise_b005_seed42.yaml",
+      "model_id": "matched_mlp_multitask",
+      "role": "config",
+      "bytes": 1004,
+      "sha256": "ae9343eac18d3ae3a66ecd002221e37ef2a0649c9a779a2c5a1498c5c02b3c8a"
+    },
+    {
+      "root": "repo_root",
+      "path": "runs/mlp_matched_drop01_multitask_norm_w_denoise_b005_seed42/best_model.pth",
+      "model_id": "matched_mlp_multitask",
+      "role": "checkpoint",
+      "bytes": 5718072,
+      "sha256": "c500cf064fe29161a34aa0ac310cba21fe65eefcfaac6a9ffa5afe78b86d521b"
+    },
+    {
+      "root": "repo_root",
+      "path": "configs/t60_single/kan_v2_mse_seed42.yaml",
+      "model_id": "kan_single",
+      "role": "config",
+      "bytes": 804,
+      "sha256": "3959b2528ed4b040fd14b054ea027059e376c749611eab55600a79e44c450e7a"
+    },
+    {
+      "root": "repo_root",
+      "path": "runs/single_t60_kan_v2_mse_seed42/best_model.pth",
+      "model_id": "kan_single",
+      "role": "checkpoint",
+      "bytes": 3523719,
+      "sha256": "9d4ef5c6b25391cfb1a4e3108a7a0833dd163af1a68f6252fc0e7c5ca67e5e9d"
+    },
+    {
+      "root": "repo_root",
+      "path": "configs/t60_single/mlp_matched_drop01_mse_seed42.yaml",
+      "model_id": "matched_mlp_single",
+      "role": "config",
+      "bytes": 846,
+      "sha256": "26e6d2cceecba188f84b4c3d3a021a54aec6de9d44604733e47d742e185c95a4"
+    },
+    {
+      "root": "repo_root",
+      "path": "runs/single_t60_mlp_matched_drop01_mse_seed42/best_model.pth",
+      "model_id": "matched_mlp_single",
+      "role": "checkpoint",
+      "bytes": 3521663,
+      "sha256": "dd0600550552b0957284145e78a6c23b57f1bda21639f24d9a766c4752eb8962"
+    }
+  ]
+}
