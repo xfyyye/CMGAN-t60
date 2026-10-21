@@ -1,0 +1,22 @@
+{
+  "sample_rate": 16000,
+  "rir_length": 32768,
+  "z_dim": 128,
+  "cond_dim": 32,
+  "base_channels": 64,
+  "t60_min": 0.1,
+  "t60_max": 1.5,
+  "batch_size": 32,
+  "epochs": 100,
+  "lr": 0.0001,
+  "beta1": 0.0,
+  "beta2": 0.9,
+  "n_critic": 5,
+  "gradient_penalty": 10.0,
+  "num_workers": 4,
+  "log_interval": 100,
+  "save_interval": 1,
+  "t60_tolerance_sec": 0.05,
+  "min_rms": 0.000001,
+  "max_peak": 1.2
+}
