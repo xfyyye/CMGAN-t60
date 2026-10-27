@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="640" viewBox="0 0 2400 640">
+<rect width="2400" height="640" fill="#ffffff"/>
+<rect x="80" y="95.0" width="160" height="110" rx="18" fill="#eceff3" stroke="#657386" stroke-width="4"/>
+<text x="160.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Input</text>
+<rect x="310" y="95.0" width="190" height="110" rx="18" fill="#eceff3" stroke="#657386" stroke-width="4"/>
+<text x="405.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Reshape</text>
+<rect x="580" y="95.0" width="300" height="110" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="730.0" y="126.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Time</text>
+<text x="730.0" y="174.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Conformer</text>
+<rect x="1100" y="95.0" width="190" height="110" rx="18" fill="#eceff3" stroke="#657386" stroke-width="4"/>
+<text x="1195.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Reshape</text>
+<rect x="1370" y="95.0" width="300" height="110" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="1520.0" y="126.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Frequency</text>
+<text x="1520.0" y="174.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Conformer</text>
+<rect x="1890" y="95.0" width="190" height="110" rx="18" fill="#eceff3" stroke="#657386" stroke-width="4"/>
+<text x="1985.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Reshape</text>
+<rect x="2150" y="95.0" width="170" height="110" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="2235.0" y="150.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="40" fill="#263442">Output</text>
+<polyline points="240,150 310,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="310,150 294.0,141.68 294.0,158.32" fill="#263442"/>
+<polyline points="500,150 580,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="580,150 564.0,141.68 564.0,158.32" fill="#263442"/>
+<polyline points="880,150 966,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="966,150 950.0,141.68 950.0,158.32" fill="#263442"/>
+<polyline points="1014,150 1100,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1100,150 1084.0,141.68 1084.0,158.32" fill="#263442"/>
+<polyline points="1290,150 1370,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1370,150 1354.0,141.68 1354.0,158.32" fill="#263442"/>
+<polyline points="1670,150 1756,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1756,150 1740.0,141.68 1740.0,158.32" fill="#263442"/>
+<polyline points="1804,150 1890,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1890,150 1874.0,141.68 1874.0,158.32" fill="#263442"/>
+<polyline points="2080,150 2150,150" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="2150,150 2134.0,141.68 2134.0,158.32" fill="#263442"/>
+<polyline points="540,150 540,50 990,50 990,126" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="990,126 998.32,110.0 981.68,110.0" fill="#3978b8"/>
+<circle cx="540" cy="150" r="5" fill="#3978b8"/>
+<circle cx="990" cy="150" r="24" fill="white" stroke="#3978b8" stroke-width="4"/>
+<polyline points="979,150 1001,150" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="990,139 990,161" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1330,150 1330,50 1780,50 1780,126" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1780,126 1788.32,110.0 1771.68,110.0" fill="#3978b8"/>
+<circle cx="1330" cy="150" r="5" fill="#3978b8"/>
+<circle cx="1780" cy="150" r="24" fill="white" stroke="#3978b8" stroke-width="4"/>
+<polyline points="1769,150 1791,150" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1780,139 1780,161" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<text x="1200.0" y="265.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" fill="#263442">(a) Time–Frequency Conformer block</text>
+<polyline points="730,205 730,310" fill="none" stroke="#3978b8" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 9"/>
+<rect x="40" y="310" width="2320" height="230" rx="24" fill="#f8fbff" stroke="#3978b8" stroke-width="3"/>
+<text x="96" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="34" fill="#263442">Input</text>
+<polyline points="145,450 200,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="200,450 184.0,441.68 184.0,458.32" fill="#263442"/>
+<rect x="200" y="400.0" width="220" height="100" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="310.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="38" fill="#263442">FFN</text>
+<polyline points="420,450 536,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="536,450 520.0,441.68 520.0,458.32" fill="#263442"/>
+<polyline points="165,450 165,355 560,355 560,426" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="560,426 568.32,410.0 551.68,410.0" fill="#3978b8"/>
+<circle cx="165" cy="450" r="5" fill="#3978b8"/>
+<circle cx="560" cy="450" r="24" fill="#f8fbff" stroke="#3978b8" stroke-width="4"/>
+<polyline points="549,450 571,450" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="560,439 560,461" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="584,450 690,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="690,450 674.0,441.68 674.0,458.32" fill="#263442"/>
+<rect x="690" y="400.0" width="220" height="100" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="800.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="38" fill="#263442">MHSA</text>
+<polyline points="910,450 986,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="986,450 970.0,441.68 970.0,458.32" fill="#263442"/>
+<polyline points="655,450 655,355 1010,355 1010,426" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1010,426 1018.32,410.0 1001.68,410.0" fill="#3978b8"/>
+<circle cx="655" cy="450" r="5" fill="#3978b8"/>
+<circle cx="1010" cy="450" r="24" fill="#f8fbff" stroke="#3978b8" stroke-width="4"/>
+<polyline points="999,450 1021,450" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1010,439 1010,461" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1034,450 1140,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1140,450 1124.0,441.68 1124.0,458.32" fill="#263442"/>
+<rect x="1140" y="400.0" width="260" height="100" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="1270.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="38" fill="#263442">Conv Module</text>
+<polyline points="1400,450 1476,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1476,450 1460.0,441.68 1460.0,458.32" fill="#263442"/>
+<polyline points="1105,450 1105,355 1500,355 1500,426" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1500,426 1508.32,410.0 1491.68,410.0" fill="#3978b8"/>
+<circle cx="1105" cy="450" r="5" fill="#3978b8"/>
+<circle cx="1500" cy="450" r="24" fill="#f8fbff" stroke="#3978b8" stroke-width="4"/>
+<polyline points="1489,450 1511,450" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1500,439 1500,461" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1524,450 1630,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1630,450 1614.0,441.68 1614.0,458.32" fill="#263442"/>
+<rect x="1630" y="400.0" width="220" height="100" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="1740.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="38" fill="#263442">FFN</text>
+<polyline points="1850,450 1966,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1966,450 1950.0,441.68 1950.0,458.32" fill="#263442"/>
+<polyline points="1595,450 1595,355 1990,355 1990,426" fill="none" stroke="#3978b8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1990,426 1998.32,410.0 1981.68,410.0" fill="#3978b8"/>
+<circle cx="1595" cy="450" r="5" fill="#3978b8"/>
+<circle cx="1990" cy="450" r="24" fill="#f8fbff" stroke="#3978b8" stroke-width="4"/>
+<polyline points="1979,450 2001,450" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="1990,439 1990,461" fill="none" stroke="#263442" stroke-width="3" stroke-linejoin="round"/>
+<rect x="2100" y="400.0" width="220" height="100" rx="18" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="2210.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" fill="#263442">Layer Norm</text>
+<polyline points="2014,450 2100,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="2100,450 2084.0,441.68 2084.0,458.32" fill="#263442"/>
+<polyline points="2320,450 2340,450" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="2340,450 2324.0,441.68 2324.0,458.32" fill="#263442"/>
+<text x="1200.0" y="595.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" fill="#263442">(b) Conformer block</text>
+</svg>

@@ -1,0 +1,28 @@
+--- a/docs/main.tex
++++ b/docs/main.tex
+@@ -33,14 +33,13 @@
+ \begin{document}
+ \let\WriteBookmarks\relax
+ 
+-\shorttitle{DACT-KAN: denoising-aided blind $T_{60}$ estimation}
++\shorttitle{DACT-KAN for blind $T_{60}$ estimation}
+ \shortauthors{X. Xie, X. Lu and J. Sang}
+ 
+ \title[mode=title]{DACT-KAN: Denoising-Aided Blind Reverberation Time Estimation Based on a Time--Frequency Conformer}
+ 
+ %% Authors
+-\author[1]{Xinni Xie}[%
+-  type=editor]
++\author[1]{Xinni Xie}
+ 
+ \author[1]{Xikun Lu}
+ 
+@@ -1374,7 +1373,7 @@
+ 
+ % END U189
+ 
+-\bibliographystyle{cas-model2-names}
++\bibliographystyle{elsarticle-num-names}
+ \bibliography{refs}
+ 
+ \end{document}

@@ -1,0 +1,231 @@
+{
+  "base_commit": "7dec6acc6ea53d1044cf1ed63367d0aecb02ddcf",
+  "branch": "exp/kan-multitask",
+  "scientific_files": {
+    "docs/main_zh.md": {
+      "sha256": "0064ce8c72324893763c9d795cadb2bf0754ce22c7b7831d9ebad8fa7810b31e",
+      "bytes": 45394
+    },
+    "docs/main_bilingual.md": {
+      "sha256": "d78108f91be95e92cc0e8c8c637ac1f1d4ed024ce23b567ffd9c9c85601bbe66",
+      "bytes": 115303
+    },
+    "docs/main.tex": {
+      "sha256": "32a8efd19479b551dee21e180084a3b647da133c67bef86da83767acb5078a22",
+      "bytes": 66643
+    },
+    "docs/main_zh.docx": {
+      "sha256": "fd643225debf62880a2f203e294869c7d197ff6a7576f6d56fb3036de798b59a",
+      "bytes": 2158586
+    },
+    "docs/refs.bib": {
+      "sha256": "bdfd72316fcf2ea319c6339750c182540edd27a1baa315b131bf2e25200f7c9b",
+      "bytes": 17913
+    },
+    "figures/ch3/proposed_multitask_framework_v2.png": {
+      "sha256": "d09d19b1533b009267b5f5946575aa87bc079f9a345f6c9a2492f2bbda54924c",
+      "bytes": 569100
+    },
+    "figures/ch3/denoise_encoder_v6.png": {
+      "sha256": "09e6c7fa6fe7e76081c836cec19a84c1325bc3ca8f3f8be93ec6c93979b11d9b",
+      "bytes": 107554
+    },
+    "figures/ch3/ts_conformer_v4.png": {
+      "sha256": "641e12bb0c1825b79bde8e4bb89b23e835d2a27b54a59e008f8998f4f3ed9b85",
+      "bytes": 118296
+    },
+    "figures/ch3/t60_branch_v6.png": {
+      "sha256": "91bdea083beaf6ac3b5d5e87a28287fabe5e79525809660a30747e1fab906ad8",
+      "bytes": 366964
+    },
+    "figures/ch3/denoise_decoder_v4.png": {
+      "sha256": "f2a7f832c4ecfce6bab03ce58cf7f641a07a8b1d69e0030d6cfc4b20ec7f31ea",
+      "bytes": 215773
+    },
+    "docs/figs/ch5_curves/snr_test1_4_six_points_v3.png": {
+      "sha256": "15ca550351d6922878d498765013874f6a3c1aef5625c0d403cc20230565bff2",
+      "bytes": 348436
+    },
+    "docs/figs/ch5_curves/t60_test1_4_v3.png": {
+      "sha256": "547df2e962e3773657e5c08224012d508369b8ac0c007306a8cd6a1a1412432d",
+      "bytes": 360870
+    },
+    "docs/figs_chapter/dataset_distribution_test.png": {
+      "sha256": "7818ec074677f16196701f3e2cec98052ea15444807347766ba186661f3f17e9",
+      "bytes": 72377
+    },
+    "docs/figs_chapter/dataset_distribution_train.png": {
+      "sha256": "ffd61993c11ddee5e147cb184e50deb6e70ca52231c55343edcbdc491bf22b3b",
+      "bytes": 53510
+    },
+    "docs/figs_chapter/denoise_decoder_v4.png": {
+      "sha256": "f2a7f832c4ecfce6bab03ce58cf7f641a07a8b1d69e0030d6cfc4b20ec7f31ea",
+      "bytes": 215773
+    },
+    "docs/figs_chapter/denoise_encoder_v6.png": {
+      "sha256": "09e6c7fa6fe7e76081c836cec19a84c1325bc3ca8f3f8be93ec6c93979b11d9b",
+      "bytes": 107554
+    },
+    "docs/figs_chapter/proposed_multitask_framework_v2.png": {
+      "sha256": "d09d19b1533b009267b5f5946575aa87bc079f9a345f6c9a2492f2bbda54924c",
+      "bytes": 569100
+    },
+    "docs/figs_chapter/snr_test1_4_six_points_v3.png": {
+      "sha256": "15ca550351d6922878d498765013874f6a3c1aef5625c0d403cc20230565bff2",
+      "bytes": 348436
+    },
+    "docs/figs_chapter/t60_branch_v6.png": {
+      "sha256": "91bdea083beaf6ac3b5d5e87a28287fabe5e79525809660a30747e1fab906ad8",
+      "bytes": 366964
+    },
+    "docs/figs_chapter/t60_test1_4_v3.png": {
+      "sha256": "547df2e962e3773657e5c08224012d508369b8ac0c007306a8cd6a1a1412432d",
+      "bytes": 360870
+    },
+    "docs/figs_chapter/ts_conformer_v4.png": {
+      "sha256": "641e12bb0c1825b79bde8e4bb89b23e835d2a27b54a59e008f8998f4f3ed9b85",
+      "bytes": 118296
+    },
+    "figures/ch3/denoise_encoder_v6.svg": {
+      "sha256": "f305af9d288b2d5e33e62bca0710c765392bcccfba647bebb1b5f57f1cdac7aa",
+      "bytes": 9184
+    },
+    "figures/ch3/ts_conformer_v4.svg": {
+      "sha256": "4644846e2c538847417c976e2c1598eba91cff7c9e08020c6acb91c0e2919cc3",
+      "bytes": 10802
+    },
+    "figures/ch3/t60_branch_v6.svg": {
+      "sha256": "a8f5304c35cabf041270cc5f50bf9e5506e45e735c06f9d396ef6f6e1193b25d",
+      "bytes": 40716
+    },
+    "figures/ch3/denoise_decoder_v4.svg": {
+      "sha256": "dbd0484fa5889ea0b6157a4b126fe1e523512cdc6c49ea5bec03b4c355000da3",
+      "bytes": 11780
+    },
+    "figures/ch3/draw_encoder_v6.py": {
+      "sha256": "a8d3fa3f9874f84ae1df8dd889353fa0b4612ce54a4b308c4ce3e212b4d4c63f",
+      "bytes": 6881
+    },
+    "figures/ch3/draw_ts_conformer_v4.py": {
+      "sha256": "1c4ea6db20877d5273b837b69b1a7ea1968be785fd86799c006159e9bd604d9b",
+      "bytes": 6588
+    },
+    "figures/ch3/draw_t60_branch_v6.py": {
+      "sha256": "ec4bbea11fe6895627224edec65bf7a7310a272257f494eeadc6a30f8c0488e9",
+      "bytes": 11096
+    },
+    "figures/ch3/draw_decoder_v4.py": {
+      "sha256": "386c13c58847748dec9fe6d178da58e4f1b3a0532d5d7599c674a03d02e69339",
+      "bytes": 7975
+    },
+    "docs/figs/dataset_distribution_train.png": {
+      "sha256": "ffd61993c11ddee5e147cb184e50deb6e70ca52231c55343edcbdc491bf22b3b",
+      "bytes": 53510
+    },
+    "docs/figs/dataset_distribution_test.png": {
+      "sha256": "7818ec074677f16196701f3e2cec98052ea15444807347766ba186661f3f17e9",
+      "bytes": 72377
+    }
+  },
+  "full_staged_paths": [
+    "docs/main_zh.md",
+    "docs/main_bilingual.md",
+    "docs/main.tex",
+    "docs/main_zh.docx",
+    "docs/refs.bib",
+    "figures/ch3/proposed_multitask_framework_v2.png",
+    "figures/ch3/denoise_encoder_v6.png",
+    "figures/ch3/ts_conformer_v4.png",
+    "figures/ch3/t60_branch_v6.png",
+    "figures/ch3/denoise_decoder_v4.png",
+    "docs/figs/ch5_curves/snr_test1_4_six_points_v3.png",
+    "docs/figs/ch5_curves/t60_test1_4_v3.png",
+    "docs/figs_chapter/dataset_distribution_test.png",
+    "docs/figs_chapter/dataset_distribution_train.png",
+    "docs/figs_chapter/denoise_decoder_v4.png",
+    "docs/figs_chapter/denoise_encoder_v6.png",
+    "docs/figs_chapter/proposed_multitask_framework_v2.png",
+    "docs/figs_chapter/snr_test1_4_six_points_v3.png",
+    "docs/figs_chapter/t60_branch_v6.png",
+    "docs/figs_chapter/t60_test1_4_v3.png",
+    "docs/figs_chapter/ts_conformer_v4.png",
+    "figures/ch3/denoise_encoder_v6.svg",
+    "figures/ch3/ts_conformer_v4.svg",
+    "figures/ch3/t60_branch_v6.svg",
+    "figures/ch3/denoise_decoder_v4.svg",
+    "figures/ch3/draw_encoder_v6.py",
+    "figures/ch3/draw_ts_conformer_v4.py",
+    "figures/ch3/draw_t60_branch_v6.py",
+    "figures/ch3/draw_decoder_v4.py",
+    "docs/research/2026-10-27_paper_github_snapshot/README.md",
+    "docs/research/2026-10-27_paper_github_snapshot/before_after.md",
+    "docs/research/2026-10-27_paper_github_snapshot/xiong_year_sync.diff",
+    "docs/research/2026-10-27_paper_github_snapshot/handover_worktree_change.diff",
+    "docs/research/2026-10-27_paper_github_snapshot/checks.json",
+    "docs/research/2026-10-27_paper_github_snapshot/manifest.json",
+    "docs/research/2026-10-27_paper_github_snapshot/snapshot_from_previous_commit.diff",
+    "docs/research/2026-10-27_paper_github_snapshot/verify_snapshot.py",
+    "docs/research/2026-10-27_paper_github_snapshot/prior_word_before_after.md",
+    "docs/research/2026-10-27_paper_github_snapshot/prior_word_text.diff",
+    "docs/research/2026-10-27_paper_github_snapshot/prior_refs_metadata.diff",
+    "docs/research/2026-10-27_paper_github_snapshot/prior_tex_format.diff"
+  ],
+  "partial_staged_path": "docs/HANDOVER.md",
+  "partial_staged_content": "paper status section only; local RIR sections excluded",
+  "image_correspondence": [
+    {
+      "Chinese_source": "figures/ch3/proposed_multitask_framework_v2.png",
+      "bilingual_source": "figures/ch3/proposed_multitask_framework_v2.png",
+      "LaTeX_asset": "docs/figs_chapter/proposed_multitask_framework_v2.png",
+      "sha256": "d09d19b1533b009267b5f5946575aa87bc079f9a345f6c9a2492f2bbda54924c"
+    },
+    {
+      "Chinese_source": "figures/ch3/denoise_encoder_v6.png",
+      "bilingual_source": "figures/ch3/denoise_encoder_v6.png",
+      "LaTeX_asset": "docs/figs_chapter/denoise_encoder_v6.png",
+      "sha256": "09e6c7fa6fe7e76081c836cec19a84c1325bc3ca8f3f8be93ec6c93979b11d9b"
+    },
+    {
+      "Chinese_source": "figures/ch3/ts_conformer_v4.png",
+      "bilingual_source": "figures/ch3/ts_conformer_v4.png",
+      "LaTeX_asset": "docs/figs_chapter/ts_conformer_v4.png",
+      "sha256": "641e12bb0c1825b79bde8e4bb89b23e835d2a27b54a59e008f8998f4f3ed9b85"
+    },
+    {
+      "Chinese_source": "figures/ch3/t60_branch_v6.png",
+      "bilingual_source": "figures/ch3/t60_branch_v6.png",
+      "LaTeX_asset": "docs/figs_chapter/t60_branch_v6.png",
+      "sha256": "91bdea083beaf6ac3b5d5e87a28287fabe5e79525809660a30747e1fab906ad8"
+    },
+    {
+      "Chinese_source": "figures/ch3/denoise_decoder_v4.png",
+      "bilingual_source": "figures/ch3/denoise_decoder_v4.png",
+      "LaTeX_asset": "docs/figs_chapter/denoise_decoder_v4.png",
+      "sha256": "f2a7f832c4ecfce6bab03ce58cf7f641a07a8b1d69e0030d6cfc4b20ec7f31ea"
+    },
+    {
+      "Chinese_source": "docs/figs/dataset_distribution_train.png",
+      "bilingual_source": "docs/figs/dataset_distribution_train.png",
+      "LaTeX_asset": "docs/figs_chapter/dataset_distribution_train.png",
+      "sha256": "ffd61993c11ddee5e147cb184e50deb6e70ca52231c55343edcbdc491bf22b3b"
+    },
+    {
+      "Chinese_source": "docs/figs/dataset_distribution_test.png",
+      "bilingual_source": "docs/figs/dataset_distribution_test.png",
+      "LaTeX_asset": "docs/figs_chapter/dataset_distribution_test.png",
+      "sha256": "7818ec074677f16196701f3e2cec98052ea15444807347766ba186661f3f17e9"
+    },
+    {
+      "Chinese_source": "docs/figs/ch5_curves/snr_test1_4_six_points_v3.png",
+      "bilingual_source": "docs/figs/ch5_curves/snr_test1_4_six_points_v3.png",
+      "LaTeX_asset": "docs/figs_chapter/snr_test1_4_six_points_v3.png",
+      "sha256": "15ca550351d6922878d498765013874f6a3c1aef5625c0d403cc20230565bff2"
+    },
+    {
+      "Chinese_source": "docs/figs/ch5_curves/t60_test1_4_v3.png",
+      "bilingual_source": "docs/figs/ch5_curves/t60_test1_4_v3.png",
+      "LaTeX_asset": "docs/figs_chapter/t60_test1_4_v3.png",
+      "sha256": "547df2e962e3773657e5c08224012d508369b8ac0c007306a8cd6a1a1412432d"
+    }
+  ]
+}

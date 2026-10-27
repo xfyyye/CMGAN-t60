@@ -18,7 +18,7 @@
   publisher = {Springer},
   year      = {2013},
   pages     = {239--267},
-  doi       = {10.1201/9781315372150}
+  doi       = {10.1007/978-3-540-69460-1_10}
 }
 
 @techreport{iso3382_2_2008,
@@ -41,13 +41,17 @@
 }
 
 @article{benzeghiba2007asrreview,
-  author  = {Benzeghiba, Mohamed and {De Mori}, Renato and Deroo, Olivier and others},
+  author  = {Benzeghiba, Mohamed and {De Mori}, Renato and Deroo, Olivier
+             and Dupont, S. and Erbes, T. and Jouvet, D. and Fissore, L.
+             and Laface, P. and Mertins, A. and Ris, C. and Rose, R.
+             and Tyagi, V. and Wellekens, C.},
   title   = {Automatic speech recognition and speech variability: a review},
   journal = {Speech Communication},
   volume  = {49},
   number  = {10--11},
   pages   = {763--786},
-  year    = {2007}
+  year    = {2007},
+  doi     = {10.1016/j.specom.2007.02.006}
 }
 
 @inproceedings{anthes2016vr,
@@ -177,11 +181,12 @@
 }
 
 @inproceedings{lollmann2010iwaenc,
-  author    = {L{\"o}llmann, Heinrich and Yilmaz, Emre and Jeub, Marco and others},
+  author    = {L{\"o}llmann, Heinrich W. and Yilmaz, Emre and Jeub, Marco and Vary, Peter},
   title     = {An improved algorithm for blind reverberation time estimation},
-  booktitle = {Proc. Int.\ Workshop on Acoustic Echo and Noise Control (IWAENC)},
+  booktitle = {Proc. 12th Int.\ Workshop on Acoustic Echo and Noise Control (IWAENC)},
   year      = {2010},
-  pages     = {1--4}
+  pages     = {1--4},
+  url       = {https://www.iwaenc.org/proceedings/2010/HTML/Uploads/1076.pdf}
 }
 
 % --- Empirical-formula references -----------------------------------
@@ -213,6 +218,17 @@
   year    = {1988}
 }
 
+@inproceedings{antsalo2001modaldecay,
+  author    = {Antsalo, Poju and Makivirta, Aki and Valimaki, Vesa and Peltonen, Timo and Karjalainen, Matti},
+  title     = {Estimation of Modal Decay Parameters from Noisy Response Measurements},
+  booktitle = {AES Convention 110},
+  publisher = {Audio Engineering Society},
+  year      = {2001},
+  month     = may,
+  note      = {Paper 5290},
+  url       = {https://aes.org/publications/elibrary/elibrary-page/?id=9992}
+}
+
 % --- DL-based blind T60 estimators ---------------------------------
 
 @inproceedings{gamper2018cnn,
@@ -226,13 +242,14 @@
 }
 
 @article{xiong2018ercnn,
-  author  = {Xiong, Feifei and Goetze, Stefan and Kollmeier, Birger and others},
+  author  = {Xiong, Feifei and Goetze, Stefan and Kollmeier, Birger and Meyer, Bernd T.},
   title   = {Joint estimation of reverberation time and early-to-late reverberation ratio from single-channel speech signals},
   journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},
   volume  = {27},
   number  = {2},
   pages   = {255--267},
-  year    = {2018}
+  year    = {2019},
+  doi     = {10.1109/TASLP.2018.2877894}
 }
 
 @inproceedings{deng2020crnn,
@@ -254,17 +271,18 @@
 }
 
 @article{goetz2023online,
-  author  = {G{\"o}tz, Philipp and Tuna, Caglar and Walther, Andreas and others},
+  author  = {G{\"o}tz, Philipp and Tuna, Cagdas and Walther, Andreas and Habets, Emanu{\"e}l A.~P.},
   title   = {Online reverberation time and clarity estimation in dynamic acoustic conditions},
   journal = {The Journal of the Acoustical Society of America},
   volume  = {153},
   number  = {6},
   pages   = {3532--3542},
-  year    = {2023}
+  year    = {2023},
+  doi     = {10.1121/10.0019804}
 }
 
 @inproceedings{saini2023mobileaudiotransformer,
-  author    = {Saini, Sahil and Peissig, J{\"u}rgen},
+  author    = {Saini, Shivam and Peissig, J{\"u}rgen},
   title     = {Blind room acoustic parameters estimation using mobile audio transformer},
   booktitle = {2023 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics (WASPAA)},
   publisher = {IEEE},
@@ -273,12 +291,13 @@
 }
 
 @article{duangpummet2022stochastic,
-  author  = {Duangpummet, Suradej and Karnjana, Jessada and Kongprawechnon, Waree and others},
+  author  = {Duangpummet, Suradej and Karnjana, Jessada and Kongprawechnon, Waree and Unoki, Masashi},
   title   = {Blind estimation of speech transmission index and room acoustic parameters based on the extended model of room impulse response},
   journal = {Applied Acoustics},
   volume  = {185},
   pages   = {108372},
-  year    = {2022}
+  year    = {2022},
+  doi     = {10.1016/j.apacoust.2021.108372}
 }
 
 % --- Two-stage / multi-task DL T60 estimators (key baselines) -------
@@ -306,10 +325,11 @@
 @article{wang2025berp,
   author  = {Wang, Lijun and Lu, Yixian and Gao, Ziyan and Li, Kai and Huang, Jianqiang and Kong, Yuntao and Okada, Shogo},
   title   = {{BERP}: A Blind Estimator of Room Parameters for Single-Channel Noisy Speech Signals},
-  journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},
+  journal = {IEEE Transactions on Audio, Speech and Language Processing},
+  volume  = {33},
+  pages   = {2215--2231},
   year    = {2025},
-  doi     = {10.1109/TASLPRO.2025.3574849},
-  note    = {arXiv:2405.04476}
+  doi     = {10.1109/TASLPRO.2025.3574849}
 }
 
 % --- Conformer backbone --------------------------------------------
@@ -334,7 +354,9 @@
   author    = {Cao, Ruizhe and Abdulatif, Sherif and Yang, Bin},
   title     = {{CMGAN}: Conformer-based Metric {GAN} for Speech Enhancement},
   booktitle = {Proc. Interspeech},
-  year      = {2022}
+  year      = {2022},
+  pages     = {936--940},
+  doi       = {10.21437/Interspeech.2022-517}
 }
 
 % --- Speaker embedding pooling (statistic pooling reference) --------
@@ -358,16 +380,15 @@
   note      = {arXiv:2404.19756}
 }
 
-@misc{xu2025fourierkan,
+@article{xu2025fourierkan,
   author       = {Li, Linfei and Zhang, Lin and Wang, Zhong and Zhang, Fengyi and Li, Zelin and Shen, Ying},
   title        = {Representing Sounds as Neural Amplitude Fields: A Benchmark of Coordinate-{MLPs} and a Fourier Kolmogorov-{A}rnold Framework},
-  howpublished = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  journal      = {Proceedings of the AAAI Conference on Artificial Intelligence},
   volume       = {39},
   number       = {23},
   pages        = {24458--24466},
   year         = {2025},
-  doi          = {10.1609/aaai.v39i23.34624},
-  note         = {arXiv:2601.06406}
+  doi          = {10.1609/aaai.v39i23.34624}
 }
 
 % --- Multi-task learning and gradient balancing --------------------
@@ -410,6 +431,28 @@
 }
 
 % --- Evaluation metrics --------------------------------------------
+
+@techreport{itut2007p8622,
+  author      = {{International Telecommunication Union}},
+  title       = {Wideband extension to Recommendation {P.862} for the assessment of wideband telephone networks and speech codecs},
+  institution = {ITU-T},
+  type        = {Recommendation},
+  number      = {P.862.2 (11/2007)},
+  year        = {2007},
+  month       = nov,
+  url         = {https://www.itu.int/rec/T-REC-P.862.2-200711-W/en}
+}
+
+@article{taal2011stoi,
+  author  = {Taal, Cees H. and Hendriks, Richard C. and Heusdens, Richard and Jensen, Jesper},
+  title   = {An Algorithm for Intelligibility Prediction of Time--Frequency Weighted Noisy Speech},
+  journal = {IEEE Transactions on Audio, Speech, and Language Processing},
+  volume  = {19},
+  number  = {7},
+  pages   = {2125--2136},
+  year    = {2011},
+  doi     = {10.1109/TASL.2011.2114881}
+}
 
 @inproceedings{leroux2019sisdr,
   author    = {Le Roux, Jonathan and Wisdom, Scott and Erdogan, Hakan and Hershey, John R.},
