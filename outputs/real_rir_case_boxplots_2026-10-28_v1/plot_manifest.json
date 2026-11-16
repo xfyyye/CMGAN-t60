@@ -1,0 +1,173 @@
+{
+  "selected_cases": [
+    {
+      "case_id": "R13",
+      "scene": "AIR meeting",
+      "metadata": {
+        "sha256": "7b02e9aa1e882ab76a02bb26afdad42078fda3952b2ed8443e33ec13420f9221",
+        "original_filename": "air_type1_air_binaural_meeting_0_4.wav",
+        "original_room_id": "air_binaural_meeting_0",
+        "group_kind": "房间组（保留测量配置）",
+        "historical_t60_s": 0.303,
+        "band": "short",
+        "samples": 13,
+        "test_counts": [
+          0,
+          7,
+          0,
+          6
+        ],
+        "snr_counts": [
+          1,
+          1,
+          3,
+          0,
+          2,
+          6
+        ],
+        "snr_levels": 5,
+        "min_snr_n": 0,
+        "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.303_002.wav",
+        "configuration": {
+          "dummy_head": "0",
+          "distance_index": "4",
+          "distance_m": "",
+          "azimuth_deg": ""
+        },
+        "rir_id": "R13",
+        "candidate_status": "主候选",
+        "candidate_reason": "短T60主候选：AIR会议室；同一AIR binaural来源、不同房间代码、与中长候选同为Test2/4；缺10dB。",
+        "scene": "AIR会议室，room=3",
+        "band_zh": "短"
+      },
+      "test_sample_counts": {
+        "test2": 7,
+        "test4": 6
+      }
+    },
+    {
+      "case_id": "R47",
+      "scene": "AIR lecture",
+      "metadata": {
+        "sha256": "ba7007e1a0075617f8b210334e87e11341c9d5e9fb78aa201b7b69921c01e19e",
+        "original_filename": "air_type1_air_binaural_lecture_0_1.wav",
+        "original_room_id": "air_binaural_lecture_0",
+        "group_kind": "房间组（保留测量配置）",
+        "historical_t60_s": 0.697,
+        "band": "medium",
+        "samples": 19,
+        "test_counts": [
+          0,
+          9,
+          0,
+          10
+        ],
+        "snr_counts": [
+          3,
+          2,
+          2,
+          5,
+          3,
+          4
+        ],
+        "snr_levels": 6,
+        "min_snr_n": 2,
+        "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.697.wav",
+        "configuration": {
+          "dummy_head": "0",
+          "distance_index": "1",
+          "distance_m": "",
+          "azimuth_deg": ""
+        },
+        "rir_id": "R47",
+        "candidate_status": "主候选",
+        "candidate_reason": "中T60主候选：AIR讲堂；满足同来源/不同房间/Test2/4条件后，语音覆盖较多且六SNR齐全。",
+        "scene": "AIR讲堂，room=4",
+        "band_zh": "中"
+      },
+      "test_sample_counts": {
+        "test2": 9,
+        "test4": 10
+      }
+    },
+    {
+      "case_id": "R61",
+      "scene": "AIR stairway",
+      "metadata": {
+        "sha256": "5c74d6846b98a0d439c797c486465ba5ced7dbd3f78f936067ed204f091df6ef",
+        "original_filename": "air_type1_air_binaural_stairway_1_3_30.wav",
+        "original_room_id": "air_binaural_stairway_1_3",
+        "group_kind": "房间组（保留测量配置）",
+        "historical_t60_s": 1.133,
+        "band": "long",
+        "samples": 11,
+        "test_counts": [
+          0,
+          6,
+          0,
+          5
+        ],
+        "snr_counts": [
+          5,
+          2,
+          2,
+          1,
+          1,
+          0
+        ],
+        "snr_levels": 5,
+        "min_snr_n": 0,
+        "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_1.133.wav",
+        "configuration": {
+          "dummy_head": "1",
+          "distance_index": "3",
+          "distance_m": "3",
+          "azimuth_deg": "30"
+        },
+        "rir_id": "R61",
+        "candidate_status": "主候选",
+        "candidate_reason": "长T60主候选：AIR楼梯间；长段中语音数最多、T60最高；缺20dB。",
+        "scene": "AIR楼梯间，room=5",
+        "band_zh": "长"
+      },
+      "test_sample_counts": {
+        "test2": 6,
+        "test4": 5
+      }
+    }
+  ],
+  "n_speech_samples": 43,
+  "n_predictions": 129,
+  "scatter_points_per_panel": [
+    129,
+    129
+  ],
+  "model_definitions": {
+    "matched_mlp_single": "匹配 MLP 单任务",
+    "matched_mlp_multi": "匹配 MLP 多任务",
+    "kan_multi": "KAN 多任务"
+  },
+  "input_sha256_before": {
+    "/Users/xiexinni/case study/case_study_candidate_stats_2026-10-27_v1/sample_predictions_joined.csv": "cb6f8dcc79f44159966c7b7beb25b7c9f17840d81054c861a6663f8471e5f863",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_candidates_2026-10-27_v1/metadata_selection_record.json": "83cc8fe84ef9922467e42a1990848797057e1d1ca68e22c3b4de760391c9d9ac",
+    "/Users/xiexinni/CMGAN-t60/docs/noiseaware.pdf": "edd4c3fa65e12c2d350f65601bd5e8681d4382a19275a946c089832ff0ec9bd7",
+    "/Users/xiexinni/CMGAN-t60/docs/main_zh.md": "0064ce8c72324893763c9d795cadb2bf0754ce22c7b7831d9ebad8fa7810b31e",
+    "/Users/xiexinni/CMGAN-t60/docs/main.tex": "32a8efd19479b551dee21e180084a3b647da133c67bef86da83767acb5078a22",
+    "/Users/xiexinni/CMGAN-t60/docs/main_bilingual.md": "d78108f91be95e92cc0e8c8c637ac1f1d4ed024ce23b567ffd9c9c85601bbe66"
+  },
+  "inputs_and_manuscripts_unchanged": true,
+  "error_ms": "1000 * (predicted_t60_s - historical_t60_s)",
+  "relative_error_pct": "100 * (predicted_t60_s - historical_t60_s) / historical_t60_s",
+  "quartiles": "numpy.percentile method=linear",
+  "whiskers": "minimum and maximum, whis=(0,100)",
+  "box_centre_line": "median",
+  "diamond": "arithmetic mean",
+  "notches": false,
+  "all_samples_retained": true,
+  "snr_reweighted": false,
+  "jitter_seed": 20261028,
+  "jitter_is_horizontal_only": true,
+  "inference_training_or_audio_processing": false,
+  "reference_layout": "noiseaware.pdf section 5.2, Fig.4, PDF page 6",
+  "matplotlib_version": "3.11.2"
+}

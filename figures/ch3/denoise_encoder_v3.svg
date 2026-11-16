@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="760" viewBox="0 0 2200 760">
+<rect width="2200" height="760" fill="#ffffff"/>
+<rect x="80" y="60" width="240" height="160" rx="19" fill="#eceff3" stroke="#657386" stroke-width="4"/>
+<text x="200.0" y="140.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="52" font-weight="400" fill="#263442">Input</text>
+<rect x="400" y="60" width="330" height="160" rx="19" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="565.0" y="112.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="46" font-weight="400" fill="#263442">1 × 1 Conv</text>
+<text x="565.0" y="167.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="46" font-weight="400" fill="#263442">IN + PReLU</text>
+<rect x="810" y="60" width="420" height="160" rx="19" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="1020.0" y="111.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="48" font-weight="400" fill="#263442">Dilated</text>
+<text x="1020.0" y="168.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="48" font-weight="400" fill="#263442">Dense Block</text>
+<rect x="1310" y="60" width="420" height="160" rx="19" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="1520.0" y="87.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">1 × 3 Conv</text>
+<text x="1520.0" y="140.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">s = (1, 2)</text>
+<text x="1520.0" y="193.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">IN + PReLU</text>
+<rect x="1810" y="60" width="300" height="160" rx="19" fill="#ddebfa" stroke="#3978b8" stroke-width="4"/>
+<text x="1960.0" y="140.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="52" font-weight="400" fill="#263442">Output</text>
+<polyline points="320,140.0 400,140.0" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="400,140.0 384.0,131.68 384.0,148.32" fill="#263442"/>
+<polyline points="730,140.0 810,140.0" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="810,140.0 794.0,131.68 794.0,148.32" fill="#263442"/>
+<polyline points="1230,140.0 1310,140.0" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1310,140.0 1294.0,131.68 1294.0,148.32" fill="#263442"/>
+<polyline points="1730,140.0 1810,140.0" fill="none" stroke="#263442" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1810,140.0 1794.0,131.68 1794.0,148.32" fill="#263442"/>
+<polyline points="1020,220 1020,330" fill="none" stroke="#8062a8" stroke-width="3" stroke-linejoin="round" stroke-dasharray="10 9"/>
+<rect x="50" y="330" width="2100" height="370" rx="27" fill="#fbf9fe" stroke="#8062a8" stroke-width="4"/>
+<polyline points="160,570 160,385 615,385 615,520.0" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="615,520.0 623.32,504.0 606.68,504.0" fill="#8062a8"/>
+<polyline points="710,570 710,385 1140,385 1140,520.0" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1140,520.0 1148.32,504.0 1131.68,504.0" fill="#8062a8"/>
+<polyline points="1235,570 1235,385 1665,385 1665,520.0" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1665,520.0 1673.32,504.0 1656.68,504.0" fill="#8062a8"/>
+<rect x="210" y="495" width="270" height="150" rx="19" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="345.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">2 × 3 Conv</text>
+<text x="345.0" y="598.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">d = 1</text>
+<rect x="735" y="495" width="270" height="150" rx="19" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="870.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">2 × 3 Conv</text>
+<text x="870.0" y="598.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">d = 2</text>
+<rect x="1260" y="495" width="270" height="150" rx="19" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="1395.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">2 × 3 Conv</text>
+<text x="1395.0" y="598.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">d = 4</text>
+<rect x="1785" y="495" width="270" height="150" rx="19" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="1920.0" y="541.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">2 × 3 Conv</text>
+<text x="1920.0" y="598.5" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="44" font-weight="400" fill="#263442">d = 8</text>
+<rect x="545" y="520.0" width="140" height="100" rx="16" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="615.0" y="570.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" font-weight="400" fill="#263442">Concat</text>
+<rect x="1070" y="520.0" width="140" height="100" rx="16" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="1140.0" y="570.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" font-weight="400" fill="#263442">Concat</text>
+<rect x="1595" y="520.0" width="140" height="100" rx="16" fill="#eee4fa" stroke="#8062a8" stroke-width="4"/>
+<text x="1665.0" y="570.0" text-anchor="middle" dominant-baseline="central" font-family="Arial, sans-serif" font-size="36" font-weight="400" fill="#263442">Concat</text>
+<polyline points="90,570 210,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="210,570 194.0,561.68 194.0,578.32" fill="#8062a8"/>
+<polyline points="480,570 545,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="545,570 529.0,561.68 529.0,578.32" fill="#8062a8"/>
+<polyline points="685,570 735,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="735,570 719.0,561.68 719.0,578.32" fill="#8062a8"/>
+<polyline points="1005,570 1070,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1070,570 1054.0,561.68 1054.0,578.32" fill="#8062a8"/>
+<polyline points="1210,570 1260,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1260,570 1244.0,561.68 1244.0,578.32" fill="#8062a8"/>
+<polyline points="1530,570 1595,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1595,570 1579.0,561.68 1579.0,578.32" fill="#8062a8"/>
+<polyline points="1735,570 1785,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="1785,570 1769.0,561.68 1769.0,578.32" fill="#8062a8"/>
+<circle cx="160" cy="570" r="6" fill="#8062a8"/>
+<circle cx="710" cy="570" r="6" fill="#8062a8"/>
+<circle cx="1235" cy="570" r="6" fill="#8062a8"/>
+<polyline points="2055,570 2110,570" fill="none" stroke="#8062a8" stroke-width="4" stroke-linejoin="round"/>
+<polygon points="2110,570 2094.0,561.68 2094.0,578.32" fill="#8062a8"/>
+</svg>

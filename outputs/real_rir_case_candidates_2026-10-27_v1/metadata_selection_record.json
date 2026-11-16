@@ -1,0 +1,2342 @@
+{
+  "metadata_fields_used": [
+    "split",
+    "sample_id",
+    "sample_name",
+    "original_room_id",
+    "analysis_group_id",
+    "group_kind",
+    "historical_t60_s",
+    "snr_db",
+    "content_sha256",
+    "final_rir_path",
+    "historical_rir_path",
+    "original_filename",
+    "dummy_head",
+    "distance_index",
+    "distance_m",
+    "azimuth_deg"
+  ],
+  "snr_order_db": [
+    -5,
+    0,
+    5,
+    10,
+    15,
+    20
+  ],
+  "rows": [
+    {
+      "sha256": "bdc40aa11ba8cf65b1ca40e2ad5d2a6a50a39ee505797d9d04b99ef1e72f60a6",
+      "original_filename": "RVB2014_type1_rir_smallroom2_far_anglb.wav",
+      "original_room_id": "RVB2014_smallroom2",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.162,
+      "band": "short",
+      "samples": 10,
+      "test_counts": [
+        0,
+        5,
+        0,
+        5
+      ],
+      "snr_counts": [
+        3,
+        0,
+        2,
+        3,
+        2,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.162.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R01",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_smallroom2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "735d6b00f05b8d89b28a07c053a53628779a9e4dd2fc810baf9428f67737034d",
+      "original_filename": "RVB2014_type2_rir_simroom1_far_angla.wav",
+      "original_room_id": "RVB2014_simroom1",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.184,
+      "band": "short",
+      "samples": 7,
+      "test_counts": [
+        3,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        0,
+        3,
+        2,
+        0,
+        0,
+        2
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.184.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R02",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_simroom1",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "f74f3747ad2cef649cb49322098a1474f6ed27bc214a2326377c20e5da089749",
+      "original_filename": "RVB2014_type2_rir_simroom2_near_anglb.wav",
+      "original_room_id": "RVB2014_simroom2",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.274,
+      "band": "short",
+      "samples": 6,
+      "test_counts": [
+        0,
+        4,
+        0,
+        2
+      ],
+      "snr_counts": [
+        3,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.274.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R03",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_simroom2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "ffa0ad19286ed28b0a52722d78f32cc5a4e0664b3aa9930a12a6a635f6f1ddd9",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp060.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.285,
+      "band": "short",
+      "samples": 5,
+      "test_counts": [
+        1,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.285_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R04",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "22f3e04913ac7166a73212bb721481b25b3d89ac265bda7e9f574ed4c4989601",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp080.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.288,
+      "band": "short",
+      "samples": 7,
+      "test_counts": [
+        2,
+        0,
+        5,
+        0
+      ],
+      "snr_counts": [
+        0,
+        2,
+        1,
+        1,
+        3,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.288.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R05",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "101e62628398495fd55653b38a5e09bfddbf83d2be25597f97ca1171105e525a",
+      "original_filename": "RWCP_type1_rir_circle_e1c_imp150.wav",
+      "original_room_id": "RWCP_circle_e1c",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.293,
+      "band": "short",
+      "samples": 4,
+      "test_counts": [
+        2,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        1,
+        2,
+        0,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.293.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R06",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1c",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "74a5af7ac148c330704cb0f205c8c49eb2817646b745bf3b4f03a0a69af5c193",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp090.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.294,
+      "band": "short",
+      "samples": 7,
+      "test_counts": [
+        4,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        0,
+        0,
+        3,
+        2
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.294_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R07",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "cc00fd603fb6cc1f04c375517e5acfad32547a95208f0b30cc8a6206487f2e96",
+      "original_filename": "RWCP_type1_rir_circle_e1c_imp110.wav",
+      "original_room_id": "RWCP_circle_e1c",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.295,
+      "band": "short",
+      "samples": 14,
+      "test_counts": [
+        0,
+        7,
+        0,
+        7
+      ],
+      "snr_counts": [
+        2,
+        1,
+        4,
+        2,
+        2,
+        3
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 1,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.295.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R08",
+      "candidate_status": "备选",
+      "candidate_reason": "短段备选：14条，六SNR齐全，Test2/4；RWCP条件分组。",
+      "scene": "RWCP_circle_e1c",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "ac44cc52639ee06e001b36b973c218b46884f74e0d3f47c1f942ff0f07a3ea66",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp100.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.296,
+      "band": "short",
+      "samples": 6,
+      "test_counts": [
+        3,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        2,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.296_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R09",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "b872c85e97dc5bafb626d6fbee7cc8cfdb22235aa7c78b2eef5e3bdaff9d327f",
+      "original_filename": "air_type1_air_binaural_meeting_1_3.wav",
+      "original_room_id": "air_binaural_meeting_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.297,
+      "band": "short",
+      "samples": 3,
+      "test_counts": [
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        0,
+        0,
+        2,
+        0,
+        0,
+        1
+      ],
+      "snr_levels": 2,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.297_001.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "3",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R10",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_meeting_1",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "ee0ec63744bce7d32a48b825f5263f9f5424445da4f44568d4b083b8af75699d",
+      "original_filename": "RWCP_type1_rir_circle_e1c_imp010.wav",
+      "original_room_id": "RWCP_circle_e1c",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.301,
+      "band": "short",
+      "samples": 4,
+      "test_counts": [
+        2,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        2,
+        1,
+        0,
+        1,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.301_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R11",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1c",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "f77d0c390ece22410fe8e23a38862ce235b6a9ef7d832733ed57e36193fd3723",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp170.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.303,
+      "band": "short",
+      "samples": 13,
+      "test_counts": [
+        0,
+        8,
+        0,
+        5
+      ],
+      "snr_counts": [
+        1,
+        3,
+        0,
+        5,
+        3,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.303_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R12",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "7b02e9aa1e882ab76a02bb26afdad42078fda3952b2ed8443e33ec13420f9221",
+      "original_filename": "air_type1_air_binaural_meeting_0_4.wav",
+      "original_room_id": "air_binaural_meeting_0",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.303,
+      "band": "short",
+      "samples": 13,
+      "test_counts": [
+        0,
+        7,
+        0,
+        6
+      ],
+      "snr_counts": [
+        1,
+        1,
+        3,
+        0,
+        2,
+        6
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.303_002.wav",
+      "configuration": {
+        "dummy_head": "0",
+        "distance_index": "4",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R13",
+      "candidate_status": "主候选",
+      "candidate_reason": "短T60主候选：AIR会议室；同一AIR binaural来源、不同房间代码、与中长候选同为Test2/4；缺10dB。",
+      "scene": "AIR会议室，room=3",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "234923c255916744ed0adc97516568249df21a6760a65a0fb5b1b4e758aeea39",
+      "original_filename": "RWCP_type1_rir_circle_e1c_imp180.wav",
+      "original_room_id": "RWCP_circle_e1c",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.304,
+      "band": "short",
+      "samples": 3,
+      "test_counts": [
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.304_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R14",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1c",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "3e005ecf7c5ed7d3379fbc5fdefb0925b4a481288ca190761c8af9f57d9ac700",
+      "original_filename": "air_type1_air_binaural_meeting_1_5.wav",
+      "original_room_id": "air_binaural_meeting_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.31,
+      "band": "short",
+      "samples": 1,
+      "test_counts": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snr_levels": 1,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.310.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "5",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R15",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_meeting_1",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "66e77648f507e85b8936614fa1772cad1e984196aa6a1e5865bcb0bd7c803886",
+      "original_filename": "RWCP_type1_rir_circle_e1c_imp120.wav",
+      "original_room_id": "RWCP_circle_e1c",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.312,
+      "band": "short",
+      "samples": 15,
+      "test_counts": [
+        10,
+        0,
+        5,
+        0
+      ],
+      "snr_counts": [
+        1,
+        4,
+        2,
+        3,
+        1,
+        4
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 1,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.312_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R16",
+      "candidate_status": "备选",
+      "candidate_reason": "短段备选：15条，六SNR齐全；仅Test1/3。",
+      "scene": "RWCP_circle_e1c",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "30249195a64b11aa5fe8b511c2b3a6dc13ac3d98186aba5bc19c4f7eba72ed4c",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp110.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.315,
+      "band": "short",
+      "samples": 6,
+      "test_counts": [
+        0,
+        1,
+        0,
+        5
+      ],
+      "snr_counts": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.315.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R17",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "267f9d45e46235f7d8646445123b8902a7057e9e4b2fd079eb86003a326e0b69",
+      "original_filename": "RWCP_type1_rir_circle_e1b_imp010.wav",
+      "original_room_id": "RWCP_circle_e1b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.327,
+      "band": "short",
+      "samples": 5,
+      "test_counts": [
+        2,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.327.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R18",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_circle_e1b",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "c8af4d4f007f1e6ab0662da42ce4a6615e941572b067ef6d23e2751cb4ff1abf",
+      "original_filename": "RVB2014_type1_rir_largeroom1_near_anglb.wav",
+      "original_room_id": "RVB2014_largeroom1",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.353,
+      "band": "short",
+      "samples": 18,
+      "test_counts": [
+        0,
+        10,
+        0,
+        8
+      ],
+      "snr_counts": [
+        5,
+        3,
+        2,
+        4,
+        0,
+        4
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.353.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R19",
+      "candidate_status": "备选",
+      "candidate_reason": "短段语音最多（18条）；缺15dB；RVB房间释义待核。",
+      "scene": "RVB2014_largeroom1",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "b3c926126400c833e7583391fe100a408ec8d76603b1f9f21e63c1dffe5fcfdc",
+      "original_filename": "RVB2014_type2_rir_simroom3_near_angla.wav",
+      "original_room_id": "RVB2014_simroom3",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.366,
+      "band": "short",
+      "samples": 10,
+      "test_counts": [
+        5,
+        0,
+        5,
+        0
+      ],
+      "snr_counts": [
+        2,
+        0,
+        5,
+        2,
+        1,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.366_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R20",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_simroom3",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "4a5d8e7ea47230af2f2392f1ccbdcd19ee6f1f720d29cd3fa04129a8a16926f4",
+      "original_filename": "RVB2014_type2_rir_simroom3_near_anglb.wav",
+      "original_room_id": "RVB2014_simroom3",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.38,
+      "band": "short",
+      "samples": 12,
+      "test_counts": [
+        0,
+        5,
+        0,
+        7
+      ],
+      "snr_counts": [
+        4,
+        3,
+        1,
+        0,
+        1,
+        3
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.380.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R21",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_simroom3",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "e7cba9dd77b7fbce41e83eff5ad022f734fac7de8c92005d048cb0e32346b604",
+      "original_filename": "air_type1_air_phone_lecture_hfrp.wav",
+      "original_room_id": "air_phone_lecture",
+      "group_kind": "phone测量组（分开保留）",
+      "historical_t60_s": 0.385,
+      "band": "short",
+      "samples": 5,
+      "test_counts": [
+        1,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        2,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.385.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R22",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_phone_lecture",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "328ebf13e30dc01ee7d89f1ee54959b0171c0c91e9820ee6b4a87679ed4635d9",
+      "original_filename": "RVB2014_type1_rir_largeroom2_near_anglb.wav",
+      "original_room_id": "RVB2014_largeroom2",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.454,
+      "band": "short",
+      "samples": 3,
+      "test_counts": [
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.454_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R23",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_largeroom2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "eff53f3fb573bcc41bfa7027cb2764d20a02a6e45a1c792369becd7a611f741d",
+      "original_filename": "air_type1_air_phone_kitchen_hfrp.wav",
+      "original_room_id": "air_phone_kitchen",
+      "group_kind": "phone测量组（分开保留）",
+      "historical_t60_s": 0.46,
+      "band": "short",
+      "samples": 4,
+      "test_counts": [
+        1,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        2,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.460.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R24",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_phone_kitchen",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "2424aab42d597cd81604c2d18ad189da41e8bdad23c9f4bc8f45a144a80efdb8",
+      "original_filename": "air_type1_air_phone_lecture1_hfrp.wav",
+      "original_room_id": "air_phone_lecture1",
+      "group_kind": "phone测量组（分开保留）",
+      "historical_t60_s": 0.47,
+      "band": "short",
+      "samples": 11,
+      "test_counts": [
+        5,
+        0,
+        6,
+        0
+      ],
+      "snr_counts": [
+        2,
+        3,
+        2,
+        1,
+        1,
+        2
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 1,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.470.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R25",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_phone_lecture1",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "f86e8cd0f562010275f8741a86bc8577bd02a1d6813394c31f3cdf359b9b23e8",
+      "original_filename": "RVB2014_type2_rir_simroom2_far_anglb.wav",
+      "original_room_id": "RVB2014_simroom2",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.483,
+      "band": "short",
+      "samples": 6,
+      "test_counts": [
+        2,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        0,
+        2,
+        1,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.483_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R26",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_simroom2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "8dd8e0f88a44b1c0a6e8c3c51cf944e7b4fd47a3df1500d842534816cee5f408",
+      "original_filename": "RWCP_type1_rir_cirline_jr2_imp090.wav",
+      "original_room_id": "RWCP_cirline_jr2",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.494,
+      "band": "short",
+      "samples": 6,
+      "test_counts": [
+        3,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        2,
+        1,
+        0,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.494_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R27",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "1c1a3ff8158297d66ce4cf7b6d6952e15e606effd42850c127583f1a00dd5c0a",
+      "original_filename": "RWCP_type1_rir_cirline_jr2_imp080.wav",
+      "original_room_id": "RWCP_cirline_jr2",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.496,
+      "band": "short",
+      "samples": 14,
+      "test_counts": [
+        0,
+        7,
+        0,
+        7
+      ],
+      "snr_counts": [
+        2,
+        2,
+        3,
+        1,
+        3,
+        3
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 1,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.496.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R28",
+      "candidate_status": "备选",
+      "candidate_reason": "短段上沿（0.496s）；14条、六SNR齐全；小榻榻米场景。",
+      "scene": "RWCP_cirline_jr2",
+      "band_zh": "短"
+    },
+    {
+      "sha256": "47e0c6cd626df3c2f97ec5553ebb43e77a8a51c0c0f540c8e16049eb431d9558",
+      "original_filename": "air_type1_air_binaural_office_0_2.wav",
+      "original_room_id": "air_binaural_office_0",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.519,
+      "band": "medium",
+      "samples": 8,
+      "test_counts": [
+        0,
+        5,
+        0,
+        3
+      ],
+      "snr_counts": [
+        1,
+        2,
+        3,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.519.wav",
+      "configuration": {
+        "dummy_head": "0",
+        "distance_index": "2",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R29",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_office_0",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "4378a34292fa7d86b32286b99e6624d87c0098a6e4c9cc06b95ff341f70e3d7f",
+      "original_filename": "RWCP_type2_rir_cirline_jr1_imp050.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.539,
+      "band": "medium",
+      "samples": 3,
+      "test_counts": [
+        1,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.539_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R30",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "000aaf62b855f92851cc798260fc3b7e6e2cbdce3c97b4c327efc41161a0f00d",
+      "original_filename": "RWCP_type2_rir_cirline_ofc_imp130.wav",
+      "original_room_id": "RWCP_cirline_ofc",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.55,
+      "band": "medium",
+      "samples": 8,
+      "test_counts": [
+        4,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        0,
+        2,
+        3,
+        0,
+        0,
+        3
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.550_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R31",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_ofc",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "1986582572bcb25790fae11ff0c96c6eebb13741b49d247b2c6cc6aede7b38ca",
+      "original_filename": "RVB2014_type1_rir_largeroom1_far_angla.wav",
+      "original_room_id": "RVB2014_largeroom1",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.551,
+      "band": "medium",
+      "samples": 4,
+      "test_counts": [
+        3,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.551_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R32",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_largeroom1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "34cf2f5175dec66917449ad0a7559042d5c72e6b1ae0a6ee5aeee63918fae447",
+      "original_filename": "RWCP_type2_rir_cirline_ofc_imp110.wav",
+      "original_room_id": "RWCP_cirline_ofc",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.551,
+      "band": "medium",
+      "samples": 3,
+      "test_counts": [
+        1,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.551_001.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R33",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_ofc",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "6cc5b61aeb0c1e2289e877d94e0428d219064b3e91597a98d25ce110e683be80",
+      "original_filename": "RWCP_type2_rir_cirline_jr1_imp090.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.559,
+      "band": "medium",
+      "samples": 11,
+      "test_counts": [
+        5,
+        0,
+        6,
+        0
+      ],
+      "snr_counts": [
+        2,
+        1,
+        0,
+        4,
+        2,
+        2
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.559.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R34",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "9e8d18fba85924d40607b0722f29a5861943face37c82022b33b25c8b5e5f4d6",
+      "original_filename": "RWCP_type1_rir_cirline_ofc_imp070.wav",
+      "original_room_id": "RWCP_cirline_ofc",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.591,
+      "band": "medium",
+      "samples": 3,
+      "test_counts": [
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.591.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R35",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_ofc",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "4655fa660795ac490dd622bb9712e5cf0c36e7ba2e4752acd4a8ea33cda3fb4f",
+      "original_filename": "RWCP_type1_rir_cirline_jr1_imp060.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.593,
+      "band": "medium",
+      "samples": 8,
+      "test_counts": [
+        6,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        1,
+        2,
+        0,
+        3,
+        1,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.593.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R36",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "3c3821cfc612c373b12fb5ccb83da53f45c508acbb6987e9c31b7de0087fff03",
+      "original_filename": "RVB2014_type1_rir_largeroom1_far_anglb.wav",
+      "original_room_id": "RVB2014_largeroom1",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.594,
+      "band": "medium",
+      "samples": 10,
+      "test_counts": [
+        0,
+        7,
+        0,
+        3
+      ],
+      "snr_counts": [
+        2,
+        0,
+        4,
+        1,
+        2,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.594_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R37",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RVB2014_largeroom1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "4a870c07af1c4de4bb94b02989d06ea654ddb1ce28f0ff3257d7d7ed60f01ef3",
+      "original_filename": "air_type1_air_binaural_stairway_1_1_150.wav",
+      "original_room_id": "air_binaural_stairway_1_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.599,
+      "band": "medium",
+      "samples": 2,
+      "test_counts": [
+        0,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "snr_levels": 2,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.599.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "1",
+        "distance_m": "1",
+        "azimuth_deg": "150"
+      },
+      "rir_id": "R38",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "ebc48876287372d9d0c3b6ed569c79a4fba6e70712b141853dd8d512eeb8a19c",
+      "original_filename": "RWCP_type1_rir_cirline_jr1_imp110.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.6,
+      "band": "medium",
+      "samples": 5,
+      "test_counts": [
+        0,
+        3,
+        0,
+        2
+      ],
+      "snr_counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.600_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R39",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "ce26e0cfa09e7c8f74773ca34341694bb0162f5cc820866a85ae2d488b676a05",
+      "original_filename": "RWCP_type1_rir_cirline_jr1_imp050.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.601,
+      "band": "medium",
+      "samples": 5,
+      "test_counts": [
+        2,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.601.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R40",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "1ef46582dc87a9f0d2f3cd17d8f774db98902877df604a118f4f7ad56a0f26d3",
+      "original_filename": "RWCP_type1_rir_cirline_jr1_imp090.wav",
+      "original_room_id": "RWCP_cirline_jr1",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.607,
+      "band": "medium",
+      "samples": 7,
+      "test_counts": [
+        3,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        0,
+        0,
+        1,
+        3,
+        0,
+        3
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.607_000.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R41",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_jr1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "8fc2eb971f94a4c093020f22d9ffa0389357c98dd715e498d98aa591e56c78c0",
+      "original_filename": "air_type1_air_binaural_stairway_1_1_105.wav",
+      "original_room_id": "air_binaural_stairway_1_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.611,
+      "band": "medium",
+      "samples": 2,
+      "test_counts": [
+        0,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "snr_levels": 2,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.611_000.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "1",
+        "distance_m": "1",
+        "azimuth_deg": "105"
+      },
+      "rir_id": "R42",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "aecb80ba5864289faecc5f5ffccc3353ac1ea6c3af732334e18b44dd202ac548",
+      "original_filename": "RVB2014_type2_rir_simroom3_far_anglb.wav",
+      "original_room_id": "RVB2014_simroom3",
+      "group_kind": "原包组（房间语义待核）",
+      "historical_t60_s": 0.637,
+      "band": "medium",
+      "samples": 23,
+      "test_counts": [
+        0,
+        12,
+        0,
+        11
+      ],
+      "snr_counts": [
+        4,
+        4,
+        6,
+        2,
+        4,
+        3
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 2,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.637.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R43",
+      "candidate_status": "备选",
+      "candidate_reason": "中段语音最多（23条），六SNR齐全；RVB房间释义待核。",
+      "scene": "RVB2014_simroom3",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "c5ddc8a1d8c8aafc0dde4a055d98ddf6d1a41504a39dfbd47511e0db3100bd52",
+      "original_filename": "RWCP_type1_rir_cirline_ofc_imp130.wav",
+      "original_room_id": "RWCP_cirline_ofc",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.638,
+      "band": "medium",
+      "samples": 18,
+      "test_counts": [
+        0,
+        10,
+        0,
+        8
+      ],
+      "snr_counts": [
+        2,
+        2,
+        3,
+        5,
+        4,
+        2
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 2,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.638.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R44",
+      "candidate_status": "备选",
+      "candidate_reason": "中段备选：会议室场景，18条，六SNR齐全，Test2/4。",
+      "scene": "RWCP_cirline_ofc",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "a79a00edc769484e750d54389320786823545e56a7dd9edab7d873c96f8739d8",
+      "original_filename": "air_type1_air_binaural_stairway_1_2_165.wav",
+      "original_room_id": "air_binaural_stairway_1_2",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.676,
+      "band": "medium",
+      "samples": 6,
+      "test_counts": [
+        3,
+        0,
+        3,
+        0
+      ],
+      "snr_counts": [
+        2,
+        0,
+        0,
+        2,
+        2,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.676_000.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "2",
+        "distance_m": "2",
+        "azimuth_deg": "165"
+      },
+      "rir_id": "R45",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_2",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "2291c5f9e0ce13c6385063d254c629819bd5c8f2349af84bfad2f0c258f38ca4",
+      "original_filename": "RWCP_type1_rir_cirline_e2b_imp170.wav",
+      "original_room_id": "RWCP_cirline_e2b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.688,
+      "band": "medium",
+      "samples": 17,
+      "test_counts": [
+        0,
+        9,
+        0,
+        8
+      ],
+      "snr_counts": [
+        2,
+        4,
+        3,
+        2,
+        3,
+        3
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 2,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.688.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R46",
+      "candidate_status": "备选",
+      "candidate_reason": "中段备选：17条，六SNR齐全；可变混响室测量条件。",
+      "scene": "RWCP_cirline_e2b",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "ba7007e1a0075617f8b210334e87e11341c9d5e9fb78aa201b7b69921c01e19e",
+      "original_filename": "air_type1_air_binaural_lecture_0_1.wav",
+      "original_room_id": "air_binaural_lecture_0",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.697,
+      "band": "medium",
+      "samples": 19,
+      "test_counts": [
+        0,
+        9,
+        0,
+        10
+      ],
+      "snr_counts": [
+        3,
+        2,
+        2,
+        5,
+        3,
+        4
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 2,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.697.wav",
+      "configuration": {
+        "dummy_head": "0",
+        "distance_index": "1",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R47",
+      "candidate_status": "主候选",
+      "candidate_reason": "中T60主候选：AIR讲堂；满足同来源/不同房间/Test2/4条件后，语音覆盖较多且六SNR齐全。",
+      "scene": "AIR讲堂，room=4",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "89e159c17697e84aee417330e90e70c13d8f0d84b3287036043cc457c058eec1",
+      "original_filename": "RWCP_type1_rir_cirline_e2b_imp110.wav",
+      "original_room_id": "RWCP_cirline_e2b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.709,
+      "band": "medium",
+      "samples": 11,
+      "test_counts": [
+        0,
+        4,
+        0,
+        7
+      ],
+      "snr_counts": [
+        3,
+        0,
+        3,
+        2,
+        1,
+        2
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.709.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R48",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_e2b",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "c936c2c84f79d2549ad40a1ce2b23573efa650f9bb373d86a4f842bae13cf43f",
+      "original_filename": "air_type1_air_binaural_stairway_1_1_0.wav",
+      "original_room_id": "air_binaural_stairway_1_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.711,
+      "band": "medium",
+      "samples": 2,
+      "test_counts": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "snr_levels": 2,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.711_000.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "1",
+        "distance_m": "1",
+        "azimuth_deg": "0"
+      },
+      "rir_id": "R49",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "ea5a669c1dec447e90f0e48159e92a2058364b9705f8e2a21725834012983c36",
+      "original_filename": "RWCP_type1_rir_cirline_e2b_imp090.wav",
+      "original_room_id": "RWCP_cirline_e2b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.72,
+      "band": "medium",
+      "samples": 6,
+      "test_counts": [
+        0,
+        4,
+        0,
+        2
+      ],
+      "snr_counts": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        1
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.720.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R50",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_e2b",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "4a7b2411180307243a569c782df10f5d46395837d5c9b777fdea649a32849b0d",
+      "original_filename": "RWCP_type2_rir_cirline_e2b_imp110.wav",
+      "original_room_id": "RWCP_cirline_e2b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.722,
+      "band": "medium",
+      "samples": 5,
+      "test_counts": [
+        1,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        1,
+        2,
+        0,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.722.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R51",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_e2b",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "eb6fcd89c2509a9e399981fb73bb5e6edcae8be583188d934cfbb8dc3ca6e9bf",
+      "original_filename": "air_type1_air_binaural_stairway_1_1_60.wav",
+      "original_room_id": "air_binaural_stairway_1_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.736,
+      "band": "medium",
+      "samples": 3,
+      "test_counts": [
+        2,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.736.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "1",
+        "distance_m": "1",
+        "azimuth_deg": "60"
+      },
+      "rir_id": "R52",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "87fc847f056d4ab3fe764d2f6275aa2df722b9e92811028a2ce09c304dc8566e",
+      "original_filename": "RWCP_type2_rir_cirline_e2b_imp130.wav",
+      "original_room_id": "RWCP_cirline_e2b",
+      "group_kind": "测量条件组",
+      "historical_t60_s": 0.75,
+      "band": "medium",
+      "samples": 1,
+      "test_counts": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "snr_counts": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snr_levels": 1,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.750.wav",
+      "configuration": {
+        "dummy_head": "",
+        "distance_index": "",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R53",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "RWCP_cirline_e2b",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "f1e9e8376995140d3aaf2bbd87be4c2c8a0c3e0a094dc8a16227f6468d471a29",
+      "original_filename": "air_type1_air_binaural_stairway_1_2_105.wav",
+      "original_room_id": "air_binaural_stairway_1_2",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.769,
+      "band": "medium",
+      "samples": 7,
+      "test_counts": [
+        2,
+        0,
+        5,
+        0
+      ],
+      "snr_counts": [
+        0,
+        2,
+        1,
+        2,
+        0,
+        2
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.769.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "2",
+        "distance_m": "2",
+        "azimuth_deg": "105"
+      },
+      "rir_id": "R54",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_2",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "886400c28d0d23e05086038cb7c946814062dbd81ca8fb9217979b9454069f30",
+      "original_filename": "air_type1_air_binaural_lecture_1_1.wav",
+      "original_room_id": "air_binaural_lecture_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.773,
+      "band": "medium",
+      "samples": 7,
+      "test_counts": [
+        3,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        0,
+        2,
+        2,
+        0,
+        2,
+        1
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.773.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "1",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R55",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_lecture_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "624c0e7ed96344605d4323323bbfcc65c53c9141c5b8a12b6883e85d74dc9cb6",
+      "original_filename": "air_type1_air_binaural_lecture_1_5.wav",
+      "original_room_id": "air_binaural_lecture_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.841,
+      "band": "medium",
+      "samples": 3,
+      "test_counts": [
+        1,
+        0,
+        2,
+        0
+      ],
+      "snr_counts": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "snr_levels": 3,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.841.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "5",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R56",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_lecture_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "e48b3256f16eeec9c3d8f6c8d68c13609a97d2c8a86d4ab6772b31637e473a62",
+      "original_filename": "air_type1_air_binaural_stairway_1_3_90.wav",
+      "original_room_id": "air_binaural_stairway_1_3",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.851,
+      "band": "medium",
+      "samples": 2,
+      "test_counts": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snr_levels": 1,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.851.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "3",
+        "distance_m": "3",
+        "azimuth_deg": "90"
+      },
+      "rir_id": "R57",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_stairway_1_3",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "53b4cbe8ff71aa107b96211b72426c4aa7270a0fd67b3ce3be28a38674439eaa",
+      "original_filename": "air_type1_air_binaural_lecture_1_3.wav",
+      "original_room_id": "air_binaural_lecture_1",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.86,
+      "band": "medium",
+      "samples": 5,
+      "test_counts": [
+        4,
+        0,
+        1,
+        0
+      ],
+      "snr_counts": [
+        1,
+        1,
+        0,
+        1,
+        2,
+        0
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.860_000.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "3",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R58",
+      "candidate_status": "完整保留",
+      "candidate_reason": "本轮未列入优先候选，仍完整保留。",
+      "scene": "air_binaural_lecture_1",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "06e4407011ef2e2a9cbd877e862fed39aaf58928fc9ff326758e1d8d2b0cd487",
+      "original_filename": "air_type1_air_binaural_lecture_0_6.wav",
+      "original_room_id": "air_binaural_lecture_0",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.874,
+      "band": "medium",
+      "samples": 13,
+      "test_counts": [
+        0,
+        7,
+        0,
+        6
+      ],
+      "snr_counts": [
+        2,
+        1,
+        1,
+        4,
+        3,
+        2
+      ],
+      "snr_levels": 6,
+      "min_snr_n": 1,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_0.874.wav",
+      "configuration": {
+        "dummy_head": "0",
+        "distance_index": "6",
+        "distance_m": "",
+        "azimuth_deg": ""
+      },
+      "rir_id": "R59",
+      "candidate_status": "备选",
+      "candidate_reason": "中段上沿备选：同为AIR讲堂，13条，六SNR齐全。",
+      "scene": "air_binaural_lecture_0",
+      "band_zh": "中"
+    },
+    {
+      "sha256": "9fcced41d1082ec23364825637ef2954702178e7681ddca86738b4dcffd27796",
+      "original_filename": "air_type1_air_binaural_stairway_1_3_105.wav",
+      "original_room_id": "air_binaural_stairway_1_3",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 0.969,
+      "band": "long",
+      "samples": 6,
+      "test_counts": [
+        2,
+        0,
+        4,
+        0
+      ],
+      "snr_counts": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        3
+      ],
+      "snr_levels": 4,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/rirsimulated_514_test/T60_0.969_001.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "3",
+        "distance_m": "3",
+        "azimuth_deg": "105"
+      },
+      "rir_id": "R60",
+      "candidate_status": "备选",
+      "candidate_reason": "长段唯一另一候选：0.969s，6条，仅4档SNR，Test1/3。",
+      "scene": "air_binaural_stairway_1_3",
+      "band_zh": "长"
+    },
+    {
+      "sha256": "5c74d6846b98a0d439c797c486465ba5ced7dbd3f78f936067ed204f091df6ef",
+      "original_filename": "air_type1_air_binaural_stairway_1_3_30.wav",
+      "original_room_id": "air_binaural_stairway_1_3",
+      "group_kind": "房间组（保留测量配置）",
+      "historical_t60_s": 1.133,
+      "band": "long",
+      "samples": 11,
+      "test_counts": [
+        0,
+        6,
+        0,
+        5
+      ],
+      "snr_counts": [
+        5,
+        2,
+        2,
+        1,
+        1,
+        0
+      ],
+      "snr_levels": 5,
+      "min_snr_n": 0,
+      "final_rir_path": "/home/ubuntu/xiexinni/t60/2_new_dataset_raw/realrir_189_test/T60_1.133.wav",
+      "configuration": {
+        "dummy_head": "1",
+        "distance_index": "3",
+        "distance_m": "3",
+        "azimuth_deg": "30"
+      },
+      "rir_id": "R61",
+      "candidate_status": "主候选",
+      "candidate_reason": "长T60主候选：AIR楼梯间；长段中语音数最多、T60最高；缺20dB。",
+      "scene": "AIR楼梯间，room=5",
+      "band_zh": "长"
+    }
+  ],
+  "primary_ids": [
+    "R13",
+    "R47",
+    "R61"
+  ],
+  "alternative_ids": [
+    "R08",
+    "R16",
+    "R19",
+    "R28",
+    "R43",
+    "R44",
+    "R46",
+    "R59",
+    "R60"
+  ],
+  "selection_rules": [
+    "对象：四个Test中全部61条实测来源RIR，按既有内容哈希分组，共462条语音。",
+    "短/中/长暂按T60<0.5、0.5<=T60<0.9、T60>=0.9秒组织；这是本轮工作分段，不是声学标准。",
+    "主组合优先同一AIR binaural来源、不同明确官方房间代码、相同Test2/4范围；再依据语音量、T60分离和SNR覆盖选择。",
+    "全部61条保留，另列跨来源备选；样本量不构成统计充分性门槛。",
+    "本轮只保留元数据列进行选择，不读取/计算预测或误差值；此前已讨论过部分模型结果，因此不声称事前盲选或预注册。",
+    "每条RIR一旦用于展示，默认保留其所有已有语音；本轮不自动抽样或为平衡SNR删样本。",
+    "候选之间SNR、距离、假人头等配置不平衡，仅作固定条件描述，不能将差异单独归因于T60。"
+  ],
+  "summary": {
+    "RIRs": 61,
+    "samples": 462,
+    "min_samples_per_RIR": 1,
+    "max_samples_per_RIR": 23,
+    "median_samples_per_RIR": 6,
+    "at_least_10_samples": 19,
+    "under_5_samples": 18,
+    "primary_samples": 43,
+    "bands": [
+      {
+        "band": "short",
+        "label": "短：<0.5s",
+        "rirs": 28,
+        "samples": 218
+      },
+      {
+        "band": "medium",
+        "label": "中：0.5–<0.9s",
+        "rirs": 31,
+        "samples": 227
+      },
+      {
+        "band": "long",
+        "label": "长：≥0.9s",
+        "rirs": 2,
+        "samples": 17
+      }
+    ]
+  }
+}

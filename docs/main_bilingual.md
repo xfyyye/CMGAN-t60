@@ -6,11 +6,11 @@
 
 **中文原文**
 
-# DACT-KAN：基于时频 Conformer 的去噪辅助盲混响时间估计
+# DACT-KAN：采用 Fourier-KAN 回归头的去噪辅助时频 Conformer 盲混响时间估计方法
 
 **English**
 
-# DACT-KAN: Denoising-Aided Blind Reverberation Time Estimation Based on a Time–Frequency Conformer
+# DACT-KAN: A Denoising-Aided Time–Frequency Conformer with a Fourier-KAN Head for Blind Reverberation Time Estimation
 
 <!-- END U001 -->
 
@@ -233,7 +233,7 @@ The remainder of this paper is organised as follows. Section 2 formalises the ac
 
 **English**
 
-Let $s(t)$ denote the anechoic speech emitted by a sound source at a fixed position, $h(t)$ the room impulse response (RIR) from the source to the microphone, and $n(t)$ the uncorrelated additive noise captured at the microphone. In the time domain, the recorded noisy reverberant signal $y(t)$ is modelled as
+Let $s(t)$ denote the anechoic speech emitted by a sound source at a fixed position, $h(t)$ denote the room impulse response (RIR) from the source to the microphone, and $n(t)$ denote the uncorrelated additive noise captured at the microphone. In the time domain, the recorded noisy reverberant signal $y(t)$ is modelled as
 
 <!-- END U021 -->
 
@@ -263,11 +263,11 @@ where $\ast$ denotes convolution. Let $r(t)=s(t)\ast h(t)$ denote the noise-free
 
 **中文原文**
 
-盲 $T_{60}$ 估计旨在学习映射 $\mathcal{F}:Y \mapsto \hat{T}_{60}$，推理时仅根据录制信号进行预测，无需已知无混响语音、RIR 或噪声分量。上述 $Y(k,l)$ 为未压缩的观测复频谱；第 3 章中的 $\mathbf Y$ 则表示归一化波形经 STFT 和幅度压缩后得到的复频谱。
+盲 $T_{60}$ 估计旨在学习映射 $\mathcal{F}:Y \mapsto \hat{T}_{60}$，其中 $\hat{T}_{60}$ 表示模型给出的混响时间估计值。推理时仅根据录制信号进行预测，无需已知无混响语音、RIR 或噪声分量。上述 $Y(k,l)$ 为未压缩的观测复频谱；第 3 章中的 $\mathbf Y$ 则表示归一化波形经 STFT 和幅度压缩后得到的复频谱。
 
 **English**
 
-Blind $T_{60}$ estimation aims to learn the mapping $\mathcal{F}:Y \mapsto \hat{T}_{60}$. At inference, predictions are made solely from the recorded signal, without requiring the anechoic speech, the RIR, or the noise component. Here, $Y(k,l)$ is the uncompressed observed complex spectrum. In Section 3, $\mathbf Y$ denotes the complex spectrum obtained by applying magnitude compression to the STFT of the normalised waveform.
+Blind $T_{60}$ estimation aims to learn the mapping $\mathcal{F}:Y \mapsto \hat{T}_{60}$, where $\hat{T}_{60}$ denotes the model's estimate of the reverberation time. At inference, predictions are made solely from the recorded signal, without requiring the anechoic speech, the RIR, or the noise component. Here, $Y(k,l)$ is the uncompressed observed complex spectrum. In Section 3, $\mathbf Y$ denotes the complex spectrum obtained by applying magnitude compression to the STFT of the normalised waveform.
 
 <!-- END U024 -->
 
@@ -407,25 +407,13 @@ As shown in Fig. 1, we construct a multi-task framework with $T_{60}$ estimation
 
 **中文原文**
 
-去噪分支用幅度掩码与复数残差结构（Cao 等，2022），重建频谱并通过逆短时傅里叶变换（iSTFT）得到去噪语音。该任务以无噪混响语音为重建目标，在去除加性噪声的同时保留混响。$T_{60}$ 分支直接读取共享特征，经统计量池化和 Fourier-KAN 回归头得到混响时间估计，不以去噪分支输出的语音作为输入。
+去噪分支用幅度掩码与复数残差结构（Cao 等，2022），重建频谱并通过逆短时傅里叶变换（iSTFT）得到去噪语音。该任务以无噪混响语音为重建目标，在去除加性噪声的同时保留混响。$T_{60}$ 分支直接读取共享特征，经统计量池化和 Fourier-KAN 回归头得到混响时间估计。
 
 **English**
 
-The denoising branch reconstructs the spectrum using magnitude masking and complex residuals (Cao et al., 2022). The reconstructed spectrum is then converted to denoised speech using the inverse STFT (iSTFT). Its reconstruction target is noise-free reverberant speech, so that additive noise is removed while reverberation is retained. The $T_{60}$ branch takes the shared features directly as input and estimates reverberation time through multi-statistic pooling and a Fourier-KAN regression head. The denoised speech output is not an input to this branch.
+The denoising branch reconstructs the spectrum using magnitude masking and complex residuals (Cao et al., 2022). The reconstructed spectrum is then converted to denoised speech using the inverse STFT (iSTFT). Its reconstruction target is noise-free reverberant speech, so that additive noise is removed while reverberation is retained. The $T_{60}$ branch takes the shared features directly as input and estimates reverberation time through multi-statistic pooling and a Fourier-KAN regression head.
 
 <!-- END U037 -->
-
-<!-- BEGIN U038 source-lines 86-86 -->
-
-**中文原文**
-
-两个任务在训练时共同更新共享特征提取网络，使其同时接受频谱重建与 $T_{60}$ 回归的监督；各分支的专属参数由对应任务损失优化。图 1 仅展示整体模块和输入输出关系，编码器、TSCB、回归头和去噪解码器的内部结构将在后续章节中介绍。
-
-**English**
-
-During training, both tasks update the shared feature extraction network, providing supervision from spectral reconstruction and $T_{60}$ regression. The parameters specific to each branch are optimised by the corresponding task loss. Figure 1 shows only the overall modules and their input–output relationships; the internal structures of the encoder, TSCBs, regression head, and denoising decoders are described in the following sections.
-
-<!-- END U038 -->
 
 <!-- BEGIN U039 source-lines 88-88 -->
 
@@ -476,9 +464,9 @@ The dense convolutional encoder converts noisy reverberant speech into features 
 **公式（中英共享） / Shared equation**
 
 $$
-c=\sqrt{\frac{L}{\sum_{n=0}^{L-1}y^2[n]+\varepsilon}},
+\tilde y[n]=c\,y[n],
 \qquad
-\tilde y[n]=c\,y[n], \tag{5}
+c=\sqrt{\frac{L}{\sum_{n=0}^{L-1}y^2[n]+\varepsilon}}, \tag{5}
 $$
 
 <!-- END U043 -->
@@ -487,11 +475,11 @@ $$
 
 **中文原文**
 
-其中，$\varepsilon>0$ 为数值稳定项。归一化波形经采用 Hamming 窗的短时傅里叶变换得到复频谱，再对其幅度取固定指数 $\gamma$ 次幂（$0<\gamma<1$），相位保持不变。将所得压缩复谱记为 $\mathbf Y\in\mathbb C^{T\times F}$，其中 $T$ 和 $F$ 分别为时间帧数与频点数。其幅度、实部和虚部沿通道维堆叠，构成编码器的三通道输入：
+其中，$\tilde y[n]$ 为能量归一化后的波形，$c$ 为归一化系数，$\varepsilon>0$ 为数值稳定项。归一化波形经采用 Hamming 窗的短时傅里叶变换得到复频谱，再对其幅度取固定指数 $\gamma$ 次幂（$0<\gamma<1$），相位保持不变。将所得压缩复谱记为 $\mathbf Y\in\mathbb C^{T\times F}$，其中 $T$ 和 $F$ 分别为时间帧数与频点数。其幅度、实部和虚部沿通道维堆叠，构成编码器的三通道输入：
 
 **English**
 
-where $\varepsilon>0$ is a numerical stabilisation term. The normalised waveform is transformed into a complex spectrum using the STFT with a Hamming window. Its magnitude is then raised to a fixed power $\gamma$ ($0<\gamma<1$), while the phase remains unchanged. Denote the resulting compressed complex spectrum by $\mathbf Y\in\mathbb C^{T\times F}$, where $T$ and $F$ are the numbers of time frames and frequency bins, respectively. Its magnitude, real part, and imaginary part are stacked along the channel dimension to form the three-channel encoder input:
+where $\tilde y[n]$ is the energy-normalised waveform, $c$ is the normalisation coefficient, and $\varepsilon>0$ is a numerical stabilisation term. The normalised waveform is transformed into a complex spectrum using the STFT with a Hamming window. Its magnitude is then raised to a fixed power $\gamma$ ($0<\gamma<1$), while the phase remains unchanged. Denote the resulting compressed complex spectrum by $\mathbf Y\in\mathbb C^{T\times F}$, where $T$ and $F$ are the numbers of time frames and frequency bins, respectively. Its magnitude, real part, and imaginary part are stacked along the channel dimension to form the three-channel encoder input:
 
 <!-- END U044 -->
 
@@ -528,11 +516,11 @@ The encoder consists of channel projection, dilated dense encoding, and frequenc
 
 **中文原文**
 
-图 2 下方进一步展开了膨胀稠密块的内部结构。该模块包含四层 $2\times3$ 卷积，卷积核的两个维度分别对应时间轴和频率轴。四层卷积的时间膨胀率依次为 $1,2,4,8$，频率膨胀率均为 $1$，各层通过补零保持时频尺寸，并在卷积后依次施加实例归一化与 PReLU。每层以块输入和此前各层输出的通道拼接为输入，生成 $C$ 通道特征，供后续层继续使用。稠密块对外输出第四层生成的特征，而累积拼接用于块内部的层间连接。
+膨胀稠密块包含四层 $2\times3$ 卷积，卷积核的两个维度分别对应时间轴和频率轴。四层卷积的时间膨胀率依次为 $1,2,4,8$，频率膨胀率均为 $1$，各层通过补零保持时频尺寸，并在卷积后依次施加实例归一化与 PReLU。每层以块输入和此前各层输出的通道拼接为输入，生成 $C$ 通道特征，供后续层继续使用。稠密块对外输出第四层生成的特征，而累积拼接用于块内部的层间连接。
 
 **English**
 
-The lower part of Fig. 2 shows the internal structure of the dilated dense block in more detail. The block contains four $2\times3$ convolutional layers, with the two kernel dimensions corresponding to time and frequency, respectively. The four layers have temporal dilation rates of $1,2,4,8$, respectively, and a frequency dilation rate of $1$. Zero-padding preserves the time–frequency dimensions, and each convolution is followed by instance normalisation and PReLU. Each layer takes as input the channel-wise concatenation of the block input and all preceding layer outputs, and produces a feature map with $C$ channels for use by subsequent layers. The block returns the features produced by its fourth layer. The concatenated features are used for internal connections between layers.
+The dilated dense block contains four $2\times3$ convolutional layers, with the two kernel dimensions corresponding to time and frequency, respectively. The four layers have temporal dilation rates of $1,2,4,8$, respectively, and a frequency dilation rate of $1$. Zero-padding preserves the time–frequency dimensions, and each convolution is followed by instance normalisation and PReLU. Each layer takes as input the channel-wise concatenation of the block input and all preceding layer outputs, and produces a feature map with $C$ channels for use by subsequent layers. The block returns the features produced by its fourth layer. The concatenated features are used for internal connections between layers.
 
 <!-- END U047 -->
 
@@ -599,11 +587,11 @@ $$
 
 **中文原文**
 
-编码器输出的特征 $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ 随后送入 $N=2$ 个串联的时频 Conformer 块（TSCB）。每个 TSCB 由时间 Conformer 和频率 Conformer 依次组成，沿两个轴处理时频特征，并保持输入与输出的维度不变（Cao 等，2022）。
+编码器输出的特征 $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ 随后送入 $N=2$ 个串联的TSCB。每个 TSCB 由时间 Conformer 和频率 Conformer 依次组成，沿两个轴处理时频特征，并保持输入与输出的维度不变（Cao 等，2022）。
 
 **English**
 
-The encoder output $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ is then passed through $N=2$ cascaded time–frequency Conformer blocks (TSCBs). Each TSCB applies a temporal Conformer followed by a frequency Conformer to process the time–frequency features along the two axes while preserving the input dimensions (Cao et al., 2022).
+The encoder output $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ is then passed through $N=2$ cascaded TSCBs. Each TSCB applies a temporal Conformer followed by a frequency Conformer to process the time–frequency features along the two axes while preserving the input dimensions (Cao et al., 2022).
 
 <!-- END U053 -->
 
@@ -656,11 +644,11 @@ $$
 
 **中文原文**
 
-其中，$\mathrm{FFN}_1$、$\mathrm{FFN}_2$ 为两个采用预归一化的逐位置前馈模块（Swish 激活），$\mathrm{MHSA}$ 为带 Shaw 式相对位置编码（Shaw 等，2018）的多头自注意力模块，$\mathrm{Conv}$ 为带门控线性单元与批归一化的深度可分离一维卷积模块。多头自注意力和卷积模块前后各设置一个前馈模块，两个前馈残差分支均采用 $1/2$ 的缩放系数，形成 Macaron 式结构。$\mathrm{MHSA}$ 和 $\mathrm{Conv}$ 同样包含各自入口处的层归一化，$\mathrm{LN}_{\mathrm{out}}$ 表示 Conformer 末端的层归一化。
+其中，$\mathrm{FFN}_1$、$\mathrm{FFN}_2$ 为两个采用预归一化的逐位置前馈模块（Swish 激活）。$\mathrm{MHSA}$ 为带 Shaw 式相对位置编码（Shaw 等，2018）的多头自注意力模块。$\mathrm{Conv}$ 为带门控线性单元与批归一化的深度可分离一维卷积模块。多头自注意力和卷积模块前后各设置一个前馈模块，两个前馈残差分支均采用 $1/2$ 的缩放系数，形成 Macaron 式结构。$\mathrm{MHSA}$ 和 $\mathrm{Conv}$ 同样包含各自入口处的层归一化，$\mathrm{LN}_{\mathrm{out}}$ 表示 Conformer 末端的层归一化。
 
 **English**
 
-Here, $\mathrm{FFN}_1$ and $\mathrm{FFN}_2$ are two pre-normalised position-wise feed-forward modules with Swish activations; $\mathrm{MHSA}$ is a multi-head self-attention module with Shaw-style relative positional encoding (Shaw et al., 2018); and $\mathrm{Conv}$ is a depthwise separable one-dimensional convolution module with a gated linear unit and batch normalisation. The self-attention and convolution modules are placed between the two feed-forward modules. Both feed-forward residual branches use a scaling factor of $1/2$, forming a Macaron-style structure. The $\mathrm{MHSA}$ and $\mathrm{Conv}$ modules also include layer normalisation at their respective inputs, and $\mathrm{LN}_{\mathrm{out}}$ denotes the final layer normalisation of the Conformer.
+Here, $\mathrm{FFN}_1$ and $\mathrm{FFN}_2$ are two pre-normalised position-wise feed-forward modules with Swish activations. $\mathrm{MHSA}$ is a multi-head self-attention module with Shaw-style relative positional encoding (Shaw et al., 2018). $\mathrm{Conv}$ is a depthwise separable one-dimensional convolution module with a gated linear unit and batch normalisation. The self-attention and convolution modules are placed between the two feed-forward modules. Both feed-forward residual branches use a scaling factor of $1/2$, forming a Macaron-style structure. The $\mathrm{MHSA}$ and $\mathrm{Conv}$ modules also include layer normalisation at their respective inputs, and $\mathrm{LN}_{\mathrm{out}}$ denotes the final layer normalisation of the Conformer.
 
 <!-- END U057 -->
 
@@ -1116,11 +1104,11 @@ Both the multiplication and residual addition are performed in the power-compres
 
 **中文原文**
 
-**图 5　去噪解码分支。** 共享 TSCB 特征分别输入幅度掩码解码器与复数残差解码器。掩码与含噪幅度逐元素相乘，结合含噪相位重组成初始复谱，再与复数残差逐元素相加。图中乘法和加法节点分别表示这两种运算；复数残差的两个通道对应实部与虚部。图示运算位于功率压缩域，反压缩与 iSTFT 位于重建复谱之后。
+**图 5　去噪解码分支。** 共享 TSCB 特征分别输入幅度掩码与复数残差解码器，两路输出共同用于重建压缩复谱。
 
 **English**
 
-**Figure 5. Denoising decoder branch.** Shared TSCB features are passed to the magnitude-mask and complex-residual decoders. The mask is multiplied element-wise by the noisy magnitude, and the resulting magnitude is combined with the noisy phase to reconstruct an initial complex spectrum. The complex residual is then added element-wise to this spectrum. The multiplication and addition nodes represent these two operations, respectively; the two channels of the complex residual correspond to its real and imaginary parts. The illustrated operations take place in the power-compressed domain, with inverse compression and the iSTFT applied after complex spectrum reconstruction.
+**Figure 5. Denoising decoder branch.** Shared TSCB features are fed to the magnitude-mask and complex-residual decoders, whose outputs are combined to reconstruct the compressed complex spectrum.
 
 <!-- END U093 -->
 
@@ -1269,7 +1257,7 @@ This scaling adjusts the numerical scales of the two losses. The total loss is
 **公式（中英共享） / Shared equation**
 
 $$
-\mathcal{L}(\boldsymbol{\theta}) = \alpha\,\mathcal{L}_{\text{den}}^{*}(\boldsymbol{\theta}) + \beta\,\mathcal{L}_{T_{60}}^{*}(\boldsymbol{\theta}), \tag{21}
+\mathcal{L}(\boldsymbol{\theta}) = \mathcal{L}_{\text{den}}^{*}(\boldsymbol{\theta}) + \alpha\,\mathcal{L}_{T_{60}}^{*}(\boldsymbol{\theta}), \tag{21}
 $$
 
 <!-- END U106 -->
@@ -1278,11 +1266,11 @@ $$
 
 **中文原文**
 
-其中 $\boldsymbol{\theta}$ 收集共享编码器与 TSCB、Fourier-KAN 头及两个去噪解码器的所有可训练参数。损失权重与主模型配置见 §4.3。
+其中，$\alpha$ 为 $T_{60}$ 回归损失的权重，$\boldsymbol{\theta}$ 收集共享编码器与 TSCB、Fourier-KAN 头及两个去噪解码器的所有可训练参数。主模型的权重设置见 §4.3。
 
 **English**
 
-where $\boldsymbol{\theta}$ comprises all trainable parameters of the shared encoder and TSCBs, the Fourier-KAN head, and the two denoising decoders. The loss weights and main model configuration are given in Section 4.3.
+where $\alpha$ is the weight of the $T_{60}$ regression loss, and $\boldsymbol{\theta}$ comprises all trainable parameters of the shared encoder and TSCBs, the Fourier-KAN head, and the two denoising decoders. The loss weight used for the main model is given in Section 4.3.
 
 <!-- END U107 -->
 
@@ -1332,11 +1320,11 @@ At inference, the sigmoid output is denormalised using the inverse of Eq. (18), 
 
 **中文原文**
 
-训练和验证的干净语音来自 WSJ0-SI84，测试语音来自 TIMIT；训练及已见噪声条件使用 DNS-Challenge 2020 的环境噪声，未见噪声来自 NOISEX-92。仿真 RIR 采用 image-source 法生成；训练和验证使用的实测 RIR 来自 OpenAIR、REVERB Challenge 与 RWCP，由 OpenSLR28 提供，测试使用的实测 RIR 来自 ACE Challenge。
+训练和验证的干净语音来自 WSJ0-SI84（Paul 和 Baker，1992），测试语音来自 TIMIT（Garofolo 等，1993）；训练及已见噪声条件使用 DNS-Challenge 2020（Reddy 等，2020）的环境噪声，未见噪声来自 NOISEX-92（Varga 和 Steeneken，1993）。仿真 RIR 采用 image-source 法生成；训练和验证使用的实测 RIR 来自 OpenAIR、REVERB Challenge 与 RWCP，由 OpenSLR28 提供，测试使用的实测 RIR 来自 ACE Challenge。
 
 **English**
 
-Clean speech for training and validation is drawn from WSJ0-SI84, and test speech is drawn from TIMIT. Environmental noise from DNS-Challenge 2020 is used for training and seen-noise conditions, while unseen noise is drawn from NOISEX-92. Simulated RIRs are generated using the image-source method. Measured RIRs for training and validation are from OpenAIR, REVERB Challenge, and RWCP, provided through OpenSLR28; measured test RIRs are from the ACE Challenge.
+Clean speech for training and validation is drawn from WSJ0-SI84 (Paul and Baker, 1992), and test speech is drawn from TIMIT (Garofolo et al., 1993). Environmental noise from DNS-Challenge 2020 (Reddy et al., 2020) is used for training and seen-noise conditions, while unseen noise is drawn from NOISEX-92 (Varga and Steeneken, 1993). Simulated RIRs are generated using the image-source method. Measured RIRs for training and validation are from OpenAIR, REVERB Challenge, and RWCP, provided through OpenSLR28; measured test RIRs are from the ACE Challenge.
 
 <!-- END U112 -->
 
@@ -1796,11 +1784,11 @@ Table 2 summarises the structural parameters of the proposed model. The shared f
 
 **中文原文**
 
-Fourier-KAN 各层的正弦和余弦系数采用零均值高斯初始化，标准差为 $1/\sqrt{d_{\ell-1}K_\ell}$，输出偏置初始化为零。去噪损失子权重为 $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$，主模型的任务权重为 $(\alpha,\beta)=(1.0,0.05)$。
+Fourier-KAN 各层的正弦和余弦系数采用零均值高斯初始化，标准差为 $1/\sqrt{d_{\ell-1}K_\ell}$，输出偏置初始化为零。去噪损失子权重为 $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$，主模型的 $T_{60}$ 损失权重设为 $\alpha=0.05$。
 
 **English**
 
-The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the main model uses task weights $(\alpha,\beta)=(1.0,0.05)$.
+The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the $T_{60}$ loss weight is set to $\alpha=0.05$ for the main model.
 
 <!-- END U149 -->
 
@@ -1838,11 +1826,11 @@ The main model is trained with a random seed of 42 on four GPUs, using a global 
 
 **中文原文**
 
-### 5.1 与基线的结果对比
+### 5.1 $T_{60}$ 估计结果对比
 
 **English**
 
-### 5.1 Comparison with Baselines
+### 5.1 Comparison of $T_{60}$ Estimation Results
 
 <!-- END U153 -->
 
@@ -1850,11 +1838,11 @@ The main model is trained with a random seed of 42 on four GPUs, using a global 
 
 **中文原文**
 
-本文在四个测试集上比较所提模型与 BERP、noise-aware、DAMTL 及单任务 Fourier-KAN 基线的估计性能，各测试集指标及其均值见表 3。
+表 3 汇总了各方法在四个测试集上的 $T_{60}$ 估计结果及四集均值。所提模型在四个测试集上均取得最低的 RMSE 和 MAE，以及最高的 PCC 和 $R^{2}$。其四集平均 RMSE 为 92.32 ms，相比单任务 Fourier-KAN 基线的 111.45 ms 降低 17.2%。
 
 **English**
 
-We compare the estimation performance of the proposed model with that of BERP, noise-aware, DAMTL, and the single-task Fourier-KAN baseline on four test sets. Table 3 reports the metrics for each test set and their averages.
+Table 3 summarises the $T_{60}$ estimation results for each method on the four test sets and the averages across these sets. The proposed model achieves the lowest RMSE and MAE and the highest PCC and $R^{2}$ on all four test sets. Its average RMSE across the four test sets is 92.32 ms, 17.2% lower than that of the single-task Fourier-KAN baseline (111.45 ms).
 
 <!-- END U154 -->
 
@@ -1876,75 +1864,71 @@ We compare the estimation performance of the proposed model with that of BERP, n
 
 | 测试集 | 方法 | RMSE ↓ | MAE ↓ | PCC ↑ | R² ↑ |
 |---|---|---:|---:|---:|---:|
-| **Test 1 · 仿真／已见** | BERP | 148.22 | 91.70 | 0.9028 | 0.8104 |
+| **Test 1** · 仿真／已见 | BERP | 148.22 | 91.70 | 0.9028 | 0.8104 |
 |  | DAMTL | 140.08 | 85.95 | 0.9125 | 0.8307 |
 |  | noise-aware | 128.80 | 83.87 | 0.9260 | 0.8569 |
 |  | 单任务 Fourier-KAN | 108.41 | 66.99 | 0.9484 | 0.8986 |
-|  | Ours | **88.79** | **51.78** | **0.9660** | **0.9320** |
-| **Test 2 · 真实／已见** | BERP | 158.33 | 95.05 | 0.8909 | 0.7839 |
+|  | **Ours** | **88.79** | **51.78** | **0.9660** | **0.9320** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 2** · 真实／已见 | BERP | 158.33 | 95.05 | 0.8909 | 0.7839 |
 |  | DAMTL | 154.20 | 94.49 | 0.8934 | 0.7950 |
 |  | noise-aware | 145.44 | 86.16 | 0.9046 | 0.8177 |
 |  | 单任务 Fourier-KAN | 122.46 | 74.95 | 0.9337 | 0.8707 |
-|  | Ours | **96.96** | **58.35** | **0.9593** | **0.9190** |
-| **Test 3 · 仿真／未见** | BERP | 137.53 | 86.46 | 0.9176 | 0.8374 |
+|  | **Ours** | **96.96** | **58.35** | **0.9593** | **0.9190** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 3** · 仿真／未见 | BERP | 137.53 | 86.46 | 0.9176 | 0.8374 |
 |  | DAMTL | 136.12 | 85.57 | 0.9179 | 0.8408 |
 |  | noise-aware | 129.50 | 80.85 | 0.9255 | 0.8559 |
 |  | 单任务 Fourier-KAN | 105.76 | 67.14 | 0.9517 | 0.9039 |
-|  | Ours | **88.58** | **54.78** | **0.9669** | **0.9326** |
-| **Test 4 · 真实／未见** | BERP | 144.71 | 89.58 | 0.9069 | 0.8169 |
+|  | **Ours** | **88.58** | **54.78** | **0.9669** | **0.9326** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 4** · 真实／未见 | BERP | 144.71 | 89.58 | 0.9069 | 0.8169 |
 |  | DAMTL | 125.38 | 78.27 | 0.9299 | 0.8625 |
 |  | noise-aware | 130.92 | 78.65 | 0.9223 | 0.8501 |
 |  | 单任务 Fourier-KAN | 109.16 | 67.57 | 0.9469 | 0.8958 |
-|  | Ours | **94.95** | **55.42** | **0.9599** | **0.9212** |
+|  | **Ours** | **94.95** | **55.42** | **0.9599** | **0.9212** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
 | **四集均值** | BERP | 147.20 | 90.70 | 0.9046 | 0.8122 |
 |  | DAMTL | 138.94 | 86.07 | 0.9134 | 0.8323 |
 |  | noise-aware | 133.66 | 82.38 | 0.9196 | 0.8451 |
 |  | 单任务 Fourier-KAN | 111.45 | 69.16 | 0.9452 | 0.8923 |
-|  | Ours | **92.32** | **55.08** | **0.9630** | **0.9262** |
+|  | **Ours** | **92.32** | **55.08** | **0.9630** | **0.9262** |
 
 **English**
 
 | Test set | Method | RMSE ↓ | MAE ↓ | PCC ↑ | R² ↑ |
 |---|---|---:|---:|---:|---:|
-| **Test 1 · Simulated/seen** | BERP | 148.22 | 91.70 | 0.9028 | 0.8104 |
+| **Test 1** · Simulated/seen | BERP | 148.22 | 91.70 | 0.9028 | 0.8104 |
 |  | DAMTL | 140.08 | 85.95 | 0.9125 | 0.8307 |
 |  | noise-aware | 128.80 | 83.87 | 0.9260 | 0.8569 |
 |  | Single-task Fourier-KAN | 108.41 | 66.99 | 0.9484 | 0.8986 |
-|  | Ours | **88.79** | **51.78** | **0.9660** | **0.9320** |
-| **Test 2 · Measured/seen** | BERP | 158.33 | 95.05 | 0.8909 | 0.7839 |
+|  | **Ours** | **88.79** | **51.78** | **0.9660** | **0.9320** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 2** · Measured/seen | BERP | 158.33 | 95.05 | 0.8909 | 0.7839 |
 |  | DAMTL | 154.20 | 94.49 | 0.8934 | 0.7950 |
 |  | noise-aware | 145.44 | 86.16 | 0.9046 | 0.8177 |
 |  | Single-task Fourier-KAN | 122.46 | 74.95 | 0.9337 | 0.8707 |
-|  | Ours | **96.96** | **58.35** | **0.9593** | **0.9190** |
-| **Test 3 · Simulated/unseen** | BERP | 137.53 | 86.46 | 0.9176 | 0.8374 |
+|  | **Ours** | **96.96** | **58.35** | **0.9593** | **0.9190** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 3** · Simulated/unseen | BERP | 137.53 | 86.46 | 0.9176 | 0.8374 |
 |  | DAMTL | 136.12 | 85.57 | 0.9179 | 0.8408 |
 |  | noise-aware | 129.50 | 80.85 | 0.9255 | 0.8559 |
 |  | Single-task Fourier-KAN | 105.76 | 67.14 | 0.9517 | 0.9039 |
-|  | Ours | **88.58** | **54.78** | **0.9669** | **0.9326** |
-| **Test 4 · Measured/unseen** | BERP | 144.71 | 89.58 | 0.9069 | 0.8169 |
+|  | **Ours** | **88.58** | **54.78** | **0.9669** | **0.9326** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
+| **Test 4** · Measured/unseen | BERP | 144.71 | 89.58 | 0.9069 | 0.8169 |
 |  | DAMTL | 125.38 | 78.27 | 0.9299 | 0.8625 |
 |  | noise-aware | 130.92 | 78.65 | 0.9223 | 0.8501 |
 |  | Single-task Fourier-KAN | 109.16 | 67.57 | 0.9469 | 0.8958 |
-|  | Ours | **94.95** | **55.42** | **0.9599** | **0.9212** |
+|  | **Ours** | **94.95** | **55.42** | **0.9599** | **0.9212** |
+| <hr> | <hr> | <hr> | <hr> | <hr> | <hr> |
 | **Four-set average** | BERP | 147.20 | 90.70 | 0.9046 | 0.8122 |
 |  | DAMTL | 138.94 | 86.07 | 0.9134 | 0.8323 |
 |  | noise-aware | 133.66 | 82.38 | 0.9196 | 0.8451 |
 |  | Single-task Fourier-KAN | 111.45 | 69.16 | 0.9452 | 0.8923 |
-|  | Ours | **92.32** | **55.08** | **0.9630** | **0.9262** |
+|  | **Ours** | **92.32** | **55.08** | **0.9630** | **0.9262** |
 
 <!-- END U156 -->
-
-<!-- BEGIN U157 source-lines 500-500 -->
-
-**中文原文**
-
-所提模型在四个测试集上均取得最低的 RMSE 和 MAE，以及最高的 PCC 和 $R^{2}$。其四集平均 RMSE 为 92.32 ms，相比单任务 Fourier-KAN 基线的 111.45 ms 降低 17.2%。
-
-**English**
-
-The proposed model achieves the lowest RMSE and MAE and the highest PCC and $R^{2}$ on all four test sets. Its average RMSE across the four test sets is 92.32 ms, 17.2% lower than that of the single-task Fourier-KAN baseline (111.45 ms).
-
-<!-- END U157 -->
 
 <!-- BEGIN U158 source-lines 502-502 -->
 
@@ -2030,11 +2014,11 @@ As shown in Fig. 7(c) and (d), the proposed method achieves the lowest RMSE at e
 
 **中文原文**
 
-图 8 按真实 $T_{60}$ 将各测试集划分为四个区间，比较不同混响条件下的估计误差。各方法的 RMSE 总体上在长混响区间较高，其中 $T_{60}\in[1.0,1.5]$ s 时，四个测试集中的所有方法均取得各自最高的分组 RMSE。本文方法在 $[0.1,0.4)$ s 区间的 RMSE 为 57.1–76.0 ms，在 $[1.0,1.5]$ s 区间增至 139.4–192.9 ms，表明长混响条件仍是当前模型的主要误差来源之一。
+图 8 按真实 $T_{60}$ 将各测试集划分为五个区间，比较不同混响条件下的估计误差。各方法的 RMSE 总体上在长混响区间较高，其中 $T_{60}\in[1.3,1.5]$ s 时，四个测试集中的所有方法均取得各自最高的分组 RMSE。本文方法在 $[0.1,0.4)$ s 区间的 RMSE 为 57.1–76.0 ms，在 $[1.3,1.5]$ s 区间增至 205.9–302.5 ms，表明长混响条件仍是当前模型的主要误差来源之一。
 
 **English**
 
-Figure 8 compares estimation errors under different reverberation conditions. For each test set, samples are grouped into four intervals of ground-truth $T_{60}$. The RMSEs of the methods are generally higher in the long-reverberation intervals. In particular, at $T_{60}\in[1.0,1.5]$ s, every method reaches its highest RMSE across the four intervals on each of the four test sets. The proposed method has an RMSE of 57.1–76.0 ms in the $[0.1,0.4)$ s interval, increasing to 139.4–192.9 ms in the $[1.0,1.5]$ s interval, indicating that long reverberation remains one of the major sources of estimation error for the current model.
+Figure 8 compares estimation errors under different reverberation conditions. For each test set, samples are grouped into five intervals of ground-truth $T_{60}$. The RMSEs of the methods are generally higher in the long-reverberation intervals. In particular, at $T_{60}\in[1.3,1.5]$ s, every method reaches its highest RMSE across the five intervals on each of the four test sets. The proposed method has an RMSE of 57.1–76.0 ms in the $[0.1,0.4)$ s interval, increasing to 205.9–302.5 ms in the $[1.3,1.5]$ s interval, indicating that long reverberation remains one of the major sources of estimation error for the current model.
 
 <!-- END U165 -->
 
@@ -2042,11 +2026,11 @@ Figure 8 compares estimation errors under different reverberation conditions. Fo
 
 **中文原文**
 
-本文方法在四个测试集的全部 $T_{60}$ 分组中均取得最低 RMSE，在长混响区间也保持了这一优势。以真实 RIR 条件为例，Test 2 中本文方法的 RMSE 为 187.2 ms，而三种对比方法为 282.9–310.3 ms；Test 4 中本文方法为 192.9 ms，对比方法为 258.9–292.5 ms。这说明本文模型在较长混响时间下仍能降低估计误差，但尚未消除长混响与短混响条件之间的精度差距。
+本文方法在四个测试集的大多数 $T_{60}$ 分组中取得最低 RMSE。在 $[1.3,1.5]$ s 区间的真实 RIR 条件下，Test 2 中本文方法的 RMSE 为 273.7 ms，而三种对比方法为 463.3–490.7 ms；Test 4 中本文方法为 302.5 ms，对比方法为 402.5–454.5 ms。这些结果表明，本文模型在多数长混响测试条件下仍能降低估计误差，但尚未消除长混响与短混响条件之间的精度差距。
 
 **English**
 
-The proposed method achieves the lowest RMSE in every $T_{60}$ interval on all four test sets, retaining this advantage in the long-reverberation interval. For example, in this interval with measured RIRs, it achieves an RMSE of 187.2 ms on Test 2, compared with 282.9–310.3 ms for the three comparison methods. On Test 4, the corresponding values are 192.9 ms and 258.9–292.5 ms. Thus, the proposed model still reduces estimation error at longer reverberation times, although it does not eliminate the accuracy gap between long- and short-reverberation conditions.
+The proposed method achieves the lowest RMSE in most $T_{60}$ intervals across the four test sets. In the $[1.3,1.5]$ s interval with measured RIRs, it achieves an RMSE of 273.7 ms on Test 2, compared with 463.3–490.7 ms for the three comparison methods. On Test 4, the corresponding values are 302.5 ms and 402.5–454.5 ms. These results show that the proposed model reduces estimation error under most long-reverberation test conditions, although it does not eliminate the accuracy gap between long- and short-reverberation conditions.
 
 <!-- END U166 -->
 
@@ -2054,17 +2038,17 @@ The proposed method achieves the lowest RMSE in every $T_{60}$ interval on all f
 
 **中文原文**
 
-进一步比较 RIR 类型，在 $[1.0,1.5]$ s 区间，本文方法在真实 RIR 测试集上的 RMSE 高于相应噪声条件下的仿真 RIR 测试集：已见噪声下为 187.2 ms 与 161.7 ms，未见噪声下为 192.9 ms 与 139.4 ms。其余三种方法在该区间也呈现相同的差异方向，而在较短混响区间，仿真与真实 RIR 之间没有一致的高低关系。因此，结果所反映的困难主要集中在真实 RIR 的长混响条件，不能简单归结为所有真实 RIR 场景都更难。不同测试集的样本组成并非严格配对，这些比较反映当前测试数据上的性能差异，尚不能单独确定其形成原因。
+进一步比较 RIR 类型，在 $[1.3,1.5]$ s 区间，本文方法在真实 RIR 测试集上的 RMSE 高于相应噪声条件下的仿真 RIR 测试集：已见噪声下为 273.7 ms 与 258.0 ms，未见噪声下为 302.5 ms 与 205.9 ms。其余三种方法在该区间也呈现相同的差异方向，而在较短混响区间，仿真与真实 RIR 之间没有一致的高低关系。因此，结果所反映的困难主要集中在真实 RIR 的长混响条件，不能简单归结为所有真实 RIR 场景都更难。这些比较反映当前测试数据上的性能差异，尚不能单独确定其形成原因。
 
 **English**
 
-Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measured-RIR test sets than on simulated-RIR test sets under the corresponding noise conditions: 187.2 ms versus 161.7 ms for seen noise and 192.9 ms versus 139.4 ms for unseen noise. The other three methods show the same pattern in this interval, whereas no consistent ordering between simulated and measured RIRs is observed in the shorter-reverberation intervals. The difficulty reflected in these results is therefore concentrated in long-reverberation conditions with measured RIRs; it cannot simply be generalised to all measured-RIR scenarios. Samples in the different test sets are not strictly paired. These comparisons describe performance differences on the current test data and cannot, by themselves, establish their causes.
+Within the $[1.3,1.5]$ s interval, the proposed method has higher RMSE on measured-RIR test sets than on simulated-RIR test sets under the corresponding noise conditions: 273.7 ms versus 258.0 ms for seen noise and 302.5 ms versus 205.9 ms for unseen noise. The other three methods show the same pattern in this interval, whereas no consistent ordering between simulated and measured RIRs is observed in the shorter-reverberation intervals. The difficulty reflected in these results is therefore concentrated in long-reverberation conditions with measured RIRs; it cannot simply be generalised to all measured-RIR scenarios. These comparisons describe performance differences on the current test data and cannot, by themselves, establish their causes.
 
 <!-- END U167 -->
 
 <!-- BEGIN U168 source-lines 522-522 -->
 
-![图 8　四个测试集上不同 T60 区间的 RMSE](figs/ch5_curves/t60_test1_4_v3.png)
+![图 8　四个测试集上不同 T60 区间的 RMSE](figs/ch5_curves/t60_test1_4_v4.png)
 
 *共享图件；中英文图注见下一对应块。 / Shared image; bilingual caption follows.*
 
@@ -2074,11 +2058,11 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-**图 8　混响时间对估计精度的影响。** 子图 (a)–(d) 的测试场景与图 7 一致。按真实 $T_{60}$ 分为 $[0.1,0.4)$、$[0.4,0.7)$、$[0.7,1.0)$ 和 $[1.0,1.5]$ s 四个区间，各点为相应测试集内该区间样本的 RMSE。
+**图 8　混响时间对估计精度的影响。** 子图 (a)–(d) 的测试场景与图 7 一致。按真实 $T_{60}$ 分为 $[0.1,0.4)$、$[0.4,0.7)$、$[0.7,1.0)$、$[1.0,1.3)$ 和 $[1.3,1.5]$ s 五个区间，各点为相应测试集内该区间样本的 RMSE。
 
 **English**
 
-**Figure 8. Effect of reverberation time on estimation accuracy.** The test scenarios in panels (a)–(d) are the same as those in Fig. 7. Samples are grouped by ground-truth $T_{60}$ into four intervals: $[0.1,0.4)$, $[0.4,0.7)$, $[0.7,1.0)$, and $[1.0,1.5]$ s. Each point is the RMSE over the samples in that interval in the corresponding test set.
+**Figure 8. Effect of reverberation time on estimation accuracy.** The test scenarios in panels (a)–(d) are the same as those in Fig. 7. Samples are grouped by ground-truth $T_{60}$ into five intervals: $[0.1,0.4)$, $[0.4,0.7)$, $[0.7,1.0)$, $[1.0,1.3)$, and $[1.3,1.5]$ s. Each point is the RMSE over the samples in that interval in the corresponding test set.
 
 <!-- END U169 -->
 
@@ -2098,11 +2082,11 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-**任务权重敏感性分析。** 为比较不同任务权重配置下的估计性能，表 4 汇总了归一化损失 $\mathcal{L}=\alpha\,\mathcal{L}_{\text{den}}^{*}+\beta\,\mathcal{L}_{T_{60}}^{*}$ 下的七组权重配置。在所考察的配置中，$(\alpha,\beta)=(1.0,0.05)$ 取得最低 RMSE，为 92.32 ms。当 $\alpha=1.0$ 时，将 $\beta$ 进一步减小至 0.02 或 0.01，RMSE 分别为 102.83 ms 和 95.65 ms，均未获得进一步改善。这些结果未呈现随去噪损失相对权重增加而单调改善的趋势。引入去噪辅助任务本身的效果由表 5 的逐步消融进一步检验。
+**$T_{60}$ 损失权重敏感性分析。** 表 4 比较不同 $T_{60}$ 损失权重 $\alpha$ 下的估计性能。在所考察的六个取值中，$\alpha=0.05$ 取得最低的平均 RMSE 和 MAE，分别为 92.32 ms 和 55.08 ms。进一步将 $\alpha$ 减小至 0.02 或 0.01，RMSE 分别升至 102.83 ms 和 95.65 ms，表明减小 $T_{60}$ 损失的相对权重并不总能改善估计性能。引入去噪辅助任务本身的效果由表 5 的逐步消融进一步检验。
 
 **English**
 
-**Task-weight sensitivity analysis.** Table 4 summarises seven weight configurations for the normalised loss $\mathcal{L}=\alpha\,\mathcal{L}_{\text{den}}^{*}+\beta\,\mathcal{L}_{T_{60}}^{*}$ to compare estimation performance under different task weights. Among the configurations examined, $(\alpha,\beta)=(1.0,0.05)$ achieves the lowest RMSE, at 92.32 ms. With $\alpha=1.0$, further decreasing $\beta$ to 0.02 or 0.01 gives RMSEs of 102.83 ms and 95.65 ms, respectively, with no further improvement. These results do not show a monotonic improvement as the relative weight of the denoising loss increases. The effect of introducing the denoising auxiliary task itself is further examined through the stepwise ablation in Table 5.
+**Sensitivity to the $T_{60}$ loss weight.** Table 4 compares estimation performance for different values of the $T_{60}$ loss weight $\alpha$. Among the six values examined, $\alpha=0.05$ achieves the lowest average RMSE and MAE, at 92.32 ms and 55.08 ms, respectively. Further decreasing $\alpha$ to 0.02 or 0.01 increases the RMSE to 102.83 ms and 95.65 ms, respectively. Thus, reducing the relative weight of the $T_{60}$ loss does not consistently improve estimation performance. The effect of introducing the denoising auxiliary task itself is further examined through the stepwise ablation in Table 5.
 
 <!-- END U171 -->
 
@@ -2110,11 +2094,11 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-**表 4　任务权重敏感性分析（归一化损失；test1–test4 平均）**
+**表 4　$T_{60}$ 损失权重敏感性分析（四个测试集平均）**
 
 **English**
 
-**Table 4. Task-weight sensitivity analysis (normalised losses; average over Tests 1–4).**
+**Table 4. Sensitivity to the $T_{60}$ loss weight (average over Tests 1–4).**
 
 <!-- END U172 -->
 
@@ -2122,27 +2106,25 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-| 配置 | $(\alpha,\beta)$ | RMSE (ms) ↓ | MAE (ms) ↓ |
-|---|---|---|---|
-| 去噪主导 | (1.0, 0.01) | 95.65 | 61.78 |
-| 去噪主导 | (1.0, 0.02) | 102.83 | 67.24 |
-| 去噪主导 | (1.0, 0.05) | **92.32** | **55.08** |
-| 去噪主导 | (1.0, 0.1) | 97.79 | 57.95 |
-| 去噪主导 | (1.0, 0.3) | 107.10 | 64.28 |
-| 持平 | (1.0, 1.0) | 109.90 | 67.16 |
-| $T_{60}$ 主导 | (0.1, 1.0) | 109.54 | 68.15 |
+| $T_{60}$ 损失权重 $\alpha$ | RMSE (ms) ↓ | MAE (ms) ↓ |
+|---:|---:|---:|
+| 0.01 | 95.65 | 61.78 |
+| 0.02 | 102.83 | 67.24 |
+| **0.05** | **92.32** | **55.08** |
+| 0.10 | 97.79 | 57.95 |
+| 0.30 | 107.10 | 64.28 |
+| 1.00 | 109.90 | 67.16 |
 
 **English**
 
-| Configuration | $(\alpha,\beta)$ | RMSE (ms) ↓ | MAE (ms) ↓ |
-|---|---|---|---|
-| Denoising-dominant | (1.0, 0.01) | 95.65 | 61.78 |
-| Denoising-dominant | (1.0, 0.02) | 102.83 | 67.24 |
-| Denoising-dominant | (1.0, 0.05) | **92.32** | **55.08** |
-| Denoising-dominant | (1.0, 0.1) | 97.79 | 57.95 |
-| Denoising-dominant | (1.0, 0.3) | 107.10 | 64.28 |
-| Equal-weight | (1.0, 1.0) | 109.90 | 67.16 |
-| $T_{60}$-dominant | (0.1, 1.0) | 109.54 | 68.15 |
+| $T_{60}$ loss weight $\alpha$ | RMSE (ms) ↓ | MAE (ms) ↓ |
+|---:|---:|---:|
+| 0.01 | 95.65 | 61.78 |
+| 0.02 | 102.83 | 67.24 |
+| **0.05** | **92.32** | **55.08** |
+| 0.10 | 97.79 | 57.95 |
+| 0.30 | 107.10 | 64.28 |
+| 1.00 | 109.90 | 67.16 |
 
 <!-- END U173 -->
 
@@ -2150,11 +2132,11 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-**多任务训练与回归头设计消融。** 为分别考察去噪辅助多任务训练和回归头设计的作用，表 5 比较单任务 MLP、多任务 MLP 和多任务 Fourier-KAN 三种配置。各配置采用相同的数据划分、随机种子 42 和全局批大小 16，回归头 dropout 概率均为 0.1。MLP 隐层维度为 (192,192,64)，其回归头参数量与 Fourier-KAN 接近；两组多任务配置均采用任务权重 $(\alpha,\beta)=(1.0,0.05)$。
+**多任务训练与回归头设计消融。** 为分别考察去噪辅助多任务训练和回归头设计的作用，表 5 比较单任务 MLP、多任务 MLP 和多任务 Fourier-KAN 三种配置。各配置采用相同的数据划分、随机种子 42 和全局批大小 16，回归头 dropout 概率均为 0.1。MLP 隐层维度为 (192,192,64)，其回归头参数量与 Fourier-KAN 接近；两组多任务配置均采用 $T_{60}$ 损失权重 $\alpha=0.05$。
 
 **English**
 
-**Ablation of multi-task training and regression head design.** To examine the roles of denoising-aided multi-task training and regression head design separately, Table 5 compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use task weights $(\alpha,\beta)=(1.0,0.05)$.
+**Ablation of multi-task training and regression head design.** To examine the roles of denoising-aided multi-task training and regression head design separately, Table 5 compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
 
 <!-- END U174 -->
 
@@ -2174,19 +2156,19 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-| Configuration | 头参数量 | RMSE ↓ | MAE ↓ | PCC ↑ | $R^{2}$ ↑ |
+| Configuration | 头参数量（K） | RMSE ↓ | MAE ↓ | PCC ↑ | $R^{2}$ ↑ |
 |---|---:|---:|---:|---:|---:|
-| T60-only (MLP) | 86,529 | 108.99 | 66.29 | 0.9474 | 0.8972 |
-| Denoising-aided (MLP) | 86,529 | 97.24 | 59.54 | 0.9590 | 0.9179 |
-| Denoising-aided (Fourier-KAN) | 86,369 | **92.32** | **55.08** | **0.9630** | **0.9262** |
+| T60-only (MLP) | 86.529 | 108.99 | 66.29 | 0.9474 | 0.8972 |
+| Denoising-aided (MLP) | 86.529 | 97.24 | 59.54 | 0.9590 | 0.9179 |
+| Denoising-aided (Fourier-KAN) | 86.369 | **92.32** | **55.08** | **0.9630** | **0.9262** |
 
 **English**
 
-| Configuration | Head parameters | RMSE ↓ | MAE ↓ | PCC ↑ | $R^{2}$ ↑ |
+| Configuration | Head parameters (K) | RMSE ↓ | MAE ↓ | PCC ↑ | $R^{2}$ ↑ |
 |---|---:|---:|---:|---:|---:|
-| T60-only (MLP) | 86,529 | 108.99 | 66.29 | 0.9474 | 0.8972 |
-| Denoising-aided (MLP) | 86,529 | 97.24 | 59.54 | 0.9590 | 0.9179 |
-| Denoising-aided (Fourier-KAN) | 86,369 | **92.32** | **55.08** | **0.9630** | **0.9262** |
+| T60-only (MLP) | 86.529 | 108.99 | 66.29 | 0.9474 | 0.8972 |
+| Denoising-aided (MLP) | 86.529 | 97.24 | 59.54 | 0.9590 | 0.9179 |
+| Denoising-aided (Fourier-KAN) | 86.369 | **92.32** | **55.08** | **0.9630** | **0.9262** |
 
 <!-- END U176 -->
 
@@ -2254,11 +2236,11 @@ The head parameter counts in Table 5 include all trainable parameters within eac
 
 **中文原文**
 
-表 6 报告不同任务权重配置的去噪质量（test1–test4 平均）。按 §3.5 定义的目标，这些指标反映在保留混响前提下的噪声去除。
+表 6 比较 $\alpha=1$ 与主模型 $\alpha=0.05$ 的去噪质量，并列出含噪输入作为参照。按 §3.5 定义的目标，这些指标反映在保留混响前提下的噪声去除。
 
 **English**
 
-Table 6 reports denoising quality for different task-weight configurations, averaged over Tests 1–4. Consistent with the target defined in Section 3.5, these metrics reflect noise removal with reverberation preserved.
+Table 6 compares denoising quality at $\alpha=1$ and at the main model's setting of $\alpha=0.05$, with the noisy input included as a reference. Consistent with the target defined in Section 3.5, these metrics reflect noise removal with reverberation preserved.
 
 <!-- END U182 -->
 
@@ -2266,11 +2248,11 @@ Table 6 reports denoising quality for different task-weight configurations, aver
 
 **中文原文**
 
-**表 6　不同任务权重配置的去噪指标（test1–test4 平均）**
+**表 6　不同 $T_{60}$ 损失权重下的去噪指标（四个测试集平均）**
 
 **English**
 
-**Table 6. Denoising metrics for different task-weight configurations (average over Tests 1–4).**
+**Table 6. Denoising metrics for different $T_{60}$ loss weights (average over Tests 1–4).**
 
 <!-- END U183 -->
 
@@ -2281,18 +2263,16 @@ Table 6 reports denoising quality for different task-weight configurations, aver
 | 配置 | PESQ ↑ | STOI ↑ | SI-SDR (dB) ↑ | ΔSI-SDR |
 |---|---|---|---|---|
 | 含噪输入 | 2.721 | 0.847 | 15.91 | — |
-| $T_{60}$ 主导 | 3.077 | 0.891 | 18.80 | +2.89 |
-| 持平 | 3.178 | 0.907 | 19.79 | +3.88 |
-| **Ours** | **3.481** | **0.930** | **21.21** | **+5.30** |
+| $\alpha=1$ | 3.178 | 0.907 | 19.79 | +3.88 |
+| **Ours**（$\alpha=0.05$） | **3.481** | **0.930** | **21.21** | **+5.30** |
 
 **English**
 
 | Configuration | PESQ ↑ | STOI ↑ | SI-SDR (dB) ↑ | ΔSI-SDR |
 |---|---|---|---|---|
 | Noisy input | 2.721 | 0.847 | 15.91 | — |
-| $T_{60}$-dominant | 3.077 | 0.891 | 18.80 | +2.89 |
-| Equal-weight | 3.178 | 0.907 | 19.79 | +3.88 |
-| **Ours** | **3.481** | **0.930** | **21.21** | **+5.30** |
+| $\alpha=1$ | 3.178 | 0.907 | 19.79 | +3.88 |
+| **Ours** ($\alpha=0.05$) | **3.481** | **0.930** | **21.21** | **+5.30** |
 
 <!-- END U184 -->
 
@@ -2300,11 +2280,11 @@ Table 6 reports denoising quality for different task-weight configurations, aver
 
 **中文原文**
 
-主模型相比含噪输入获得 +0.76 PESQ、+0.08 STOI 和 +5.30 dB SI-SDR 的提升。在表 6 所列的三种任务权重配置中，主模型取得最高的 PESQ、STOI 和 SI-SDR。结合表 4，该配置在所考察的任务权重设置中也取得最低的 $T_{60}$ 估计误差。
+主模型相比含噪输入获得 +0.76 PESQ、+0.08 STOI 和 +5.30 dB SI-SDR 的提升。与 $\alpha=1$ 的配置相比，$\alpha=0.05$ 的主模型取得更高的 PESQ、STOI 和 SI-SDR。结合表 4，该配置也取得所考察权重取值中最低的 $T_{60}$ 估计误差。
 
 **English**
 
-Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. It achieves the highest PESQ, STOI, and SI-SDR among the three task-weight configurations in Table 6. Together with Table 4, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the task weights examined.
+Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. The main model with $\alpha=0.05$ achieves higher PESQ, STOI, and SI-SDR than the configuration with $\alpha=1$. Together with Table 4, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the loss weights examined.
 
 <!-- END U185 -->
 
@@ -2330,11 +2310,11 @@ Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.0
 
 **中文原文**
 
-本文提出一个面向盲 $T_{60}$ 估计的多任务学习框架，以 $T_{60}$ 回归为主任务、去噪重建为辅助任务，共享时频 Conformer 特征提取网络，并采用 Fourier-KAN 回归头进行 $T_{60}$ 估计。在四个测试集上，所提模型取得平均 RMSE 92.32 ms，相比单任务 Fourier-KAN 基线降低 17.2%，并优于 BERP、DAMTL 和 noise-aware 等对比方法。消融实验表明，去噪辅助多任务训练使 MLP 模型的平均 RMSE 降低 10.8%；在此基础上，采用参数量接近、dropout 概率相同的 Fourier-KAN 回归头进一步降低 5.1%。任务权重分析进一步表明，联合训练的性能受到权重设置的影响，在所考察的配置中，$(\alpha,\beta)=(1.0,0.05)$ 表现最好。
+本文提出一个面向盲 $T_{60}$ 估计的多任务学习框架，以 $T_{60}$ 回归为主任务、去噪重建为辅助任务，共享时频 Conformer 特征提取网络，并采用 Fourier-KAN 回归头进行 $T_{60}$ 估计。在四个测试集上，所提模型取得平均 RMSE 92.32 ms，相比单任务 Fourier-KAN 基线降低 17.2%，并优于 BERP、DAMTL 和 noise-aware 等对比方法。消融实验表明，去噪辅助多任务训练使 MLP 模型的平均 RMSE 降低 10.8%；在此基础上，采用参数量接近、dropout 概率相同的 Fourier-KAN 回归头进一步降低 5.1%。权重敏感性分析进一步表明，联合训练的估计性能受到 $T_{60}$ 损失权重的影响，在所考察的取值中，$\alpha=0.05$ 表现最好。
 
 **English**
 
-This paper presents a multi-task learning framework for blind $T_{60}$ estimation, with $T_{60}$ regression as the primary task and denoising reconstruction as the auxiliary task. The tasks share a time–frequency Conformer feature extraction network, and a Fourier-KAN regression head estimates $T_{60}$. Across the four test sets, the proposed model achieves an average RMSE of 92.32 ms, 17.2% lower than that of the single-task Fourier-KAN baseline. It also outperforms comparison methods including BERP, DAMTL, and noise-aware. Ablation experiments show that denoising-aided multi-task training reduces the MLP model's average RMSE by 10.8% relative to single-task training. Under this multi-task setting, replacing the MLP regression head with a Fourier-KAN head that has a similar parameter count and the same dropout rate further reduces average RMSE by 5.1%. Task-weight analysis further shows that joint training performance depends on the weight settings, with $(\alpha,\beta)=(1.0,0.05)$ performing best among the configurations examined.
+This paper presents a multi-task learning framework for blind $T_{60}$ estimation, with $T_{60}$ regression as the primary task and denoising reconstruction as the auxiliary task. The tasks share a time–frequency Conformer feature extraction network, and a Fourier-KAN regression head estimates $T_{60}$. Across the four test sets, the proposed model achieves an average RMSE of 92.32 ms, 17.2% lower than that of the single-task Fourier-KAN baseline. It also outperforms comparison methods including BERP, DAMTL, and noise-aware. Ablation experiments show that denoising-aided multi-task training reduces the MLP model's average RMSE by 10.8% relative to single-task training. Under this multi-task setting, replacing the MLP regression head with a Fourier-KAN head that has a similar parameter count and the same dropout rate further reduces average RMSE by 5.1%. The sensitivity analysis further shows that estimation performance under joint training depends on the $T_{60}$ loss weight, with $\alpha=0.05$ performing best among the values examined.
 
 <!-- END U188 -->
 

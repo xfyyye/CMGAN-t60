@@ -1,0 +1,138 @@
+{
+  "selection": "S1/S2/S3 explicitly adopted by the user, together with the fixed R13/R47/R61; no case substitution or sample filtering.",
+  "n_speech_samples": 81,
+  "n_simulated_speech_samples": 38,
+  "n_real_speech_samples": 43,
+  "n_models": 4,
+  "n_predictions": 324,
+  "n_case_model_groups": 24,
+  "models": {
+    "berp": "BERP",
+    "noiseaware": "noise-aware",
+    "damtl": "DAMTL",
+    "ours": "Ours"
+  },
+  "case_counts": {
+    "S1": 15,
+    "S2": 11,
+    "S3": 12,
+    "R13": 13,
+    "R47": 19,
+    "R61": 11
+  },
+  "speech_sample_counts_by_split": {
+    "test2": 41,
+    "test4": 40
+  },
+  "all_predictions_joined": true,
+  "missing_predictions": 0,
+  "duplicate_selected_keys": 0,
+  "reference_or_snr_conflicts": 0,
+  "nonfinite_predictions": 0,
+  "real_43_predictions_and_metrics_match_previous_output": true,
+  "reference": "Unchanged historical T60 labels from the fixed sample metadata; never replaced by filename rt tokens.",
+  "error_ms": "1000 * (saved_prediction_s - historical_reference_s)",
+  "rmse_ms": "sqrt(sum(error_ms**2)/n)",
+  "mae_ms": "sum(abs(error_ms))/n",
+  "bias_ms": "sum(error_ms)/n; positive means overestimation, negative underestimation",
+  "pooled_metrics": "Combine all sample errors within each stated scope. Do not average case RMSEs.",
+  "numerics": "Decimal used for exact label/SNR comparisons and subtraction of saved decimal predictions; float math.fsum used for means and squared sums.",
+  "archive_error_ms_fields_used": false,
+  "archives": [
+    {
+      "model": "berp",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test2.json",
+      "n_source_samples": 1080,
+      "experiment_name": "berp_t60_v7",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test2"
+    },
+    {
+      "model": "berp",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test4.json",
+      "n_source_samples": 1080,
+      "experiment_name": "berp_t60_v7",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test4"
+    },
+    {
+      "model": "noiseaware",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test2/detailed_results.csv",
+      "n_source_samples": 1080,
+      "format": "detailed_results.csv"
+    },
+    {
+      "model": "noiseaware",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test4/detailed_results.csv",
+      "n_source_samples": 1080,
+      "format": "detailed_results.csv"
+    },
+    {
+      "model": "damtl",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test2.json",
+      "n_source_samples": 1080,
+      "experiment_name": "damtl",
+      "dataset_version": "T60_Dataset_v7_4s",
+      "test_split": "test2"
+    },
+    {
+      "model": "damtl",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test4.json",
+      "n_source_samples": 1080,
+      "experiment_name": "damtl",
+      "dataset_version": "T60_Dataset_v7_4s",
+      "test_split": "test4"
+    },
+    {
+      "model": "ours",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test2.json",
+      "n_source_samples": 1080,
+      "experiment_name": "kan_multitask_norm_w_denoise_b005_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test2"
+    },
+    {
+      "model": "ours",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test4.json",
+      "n_source_samples": 1080,
+      "experiment_name": "kan_multitask_norm_w_denoise_b005_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test4"
+    }
+  ],
+  "input_sha256": {
+    "/Users/xiexinni/CMGAN-t60/outputs/sim_rir_case_candidates_2026-10-28_v1/recommended_sample_metadata.csv": "d565db497da360a4858145f86c7e7b4bd34c20b4fb539c5be486cc655aeca490",
+    "/Users/xiexinni/CMGAN-t60/outputs/sim_rir_case_candidates_2026-10-28_v1/selection_record.json": "4321de43ac6f9e6a9e711e1c42de49fe584b555ba62c1859182e093694911c14",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_baselines_2026-10-28_v1/plot_data.csv": "adfc62f492fc7305db0787f62944b0dc3318af6da30c33b60def0ef7a9f79dad",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_baselines_2026-10-28_v1/summary_metrics.csv": "8855cc9178b0643e302a061d3bffb08c617da446e4fa02c4796c386392460c7d",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_candidates_2026-10-27_v1/metadata_selection_record.json": "83cc8fe84ef9922467e42a1990848797057e1d1ca68e22c3b4de760391c9d9ac",
+    "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test2.json": "3ed2d45c2de9ce5d2af693cc4bbcc6c05aec17ee8c076e8d01499bf8b9cbfdbb",
+    "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test4.json": "65dd138572e68ed9cc973fc09dda95449534ce0e7e2d7758b798e34a5b99e0d9",
+    "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test2/detailed_results.csv": "412f1089985d9b2cb138ab78348a08abcc4f936518fe0e60975d920e0fe9ff4a",
+    "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test4/detailed_results.csv": "a5730b8702c1faa401f2010c60b3942619b58074d5f2319c55f84467c714234e",
+    "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test2.json": "a2ca4725ed51ed7ca1998c4850b4692aaceedb172fbaa2e67aeb8bb007672b74",
+    "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test4.json": "fc704060d4eaca20a599cab072d5c66816093735347b86b5aa74036ce7af8301",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test2.json": "6d746a69b9e503a098d8d9011859ca80693a985159668223284795af1005affe",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test4.json": "d991f76ab13803f83e808a7d47c62c82d5a43b5d1913e3f63a58f19054570675",
+    "/Users/xiexinni/CMGAN-t60/docs/main_zh.md": "0064ce8c72324893763c9d795cadb2bf0754ce22c7b7831d9ebad8fa7810b31e",
+    "/Users/xiexinni/CMGAN-t60/docs/main.tex": "32a8efd19479b551dee21e180084a3b647da133c67bef86da83767acb5078a22",
+    "/Users/xiexinni/CMGAN-t60/docs/main_bilingual.md": "d78108f91be95e92cc0e8c8c637ac1f1d4ed024ce23b567ffd9c9c85601bbe66"
+  },
+  "inputs_and_manuscripts_unchanged": true,
+  "plots_created": false,
+  "models_loaded": false,
+  "inference_training_audio_processing_or_label_recalculation": false,
+  "limitations": [
+    "Existing prediction archives have saved precision limitations, commonly four decimal places in seconds.",
+    "Six cases have different speech, SNR and measurement configurations. Aggregates are descriptive, not matched real/simulated comparisons.",
+    "Existing provenance and migration/cropping limitations remain unchanged; no new audio or RIR identity checks were performed."
+  ]
+}

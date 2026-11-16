@@ -1,0 +1,189 @@
+{
+  "n_samples": 43,
+  "n_predictions": 215,
+  "points_per_panel": [
+    215,
+    215
+  ],
+  "cases": [
+    {
+      "case_id": "R13",
+      "content_sha256": "7b02e9aa1e882ab76a02bb26afdad42078fda3952b2ed8443e33ec13420f9221",
+      "original_filename": "air_type1_air_binaural_meeting_0_4.wav",
+      "historical_t60_s": 0.303,
+      "test_counts": {
+        "test2": 7,
+        "test4": 6
+      }
+    },
+    {
+      "case_id": "R47",
+      "content_sha256": "ba7007e1a0075617f8b210334e87e11341c9d5e9fb78aa201b7b69921c01e19e",
+      "original_filename": "air_type1_air_binaural_lecture_0_1.wav",
+      "historical_t60_s": 0.697,
+      "test_counts": {
+        "test2": 9,
+        "test4": 10
+      }
+    },
+    {
+      "case_id": "R61",
+      "content_sha256": "5c74d6846b98a0d439c797c486465ba5ced7dbd3f78f936067ed204f091df6ef",
+      "original_filename": "air_type1_air_binaural_stairway_1_3_30.wav",
+      "historical_t60_s": 1.133,
+      "test_counts": {
+        "test2": 6,
+        "test4": 5
+      }
+    }
+  ],
+  "models": [
+    {
+      "key": "berp",
+      "label": "BERP",
+      "color": "#557DA5"
+    },
+    {
+      "key": "noiseaware",
+      "label": "noise-aware",
+      "color": "#38958C"
+    },
+    {
+      "key": "damtl",
+      "label": "DAMTL",
+      "color": "#8E74A6"
+    },
+    {
+      "key": "single_kan",
+      "label": "单任务 KAN",
+      "color": "#78818E"
+    },
+    {
+      "key": "ours",
+      "label": "Ours",
+      "color": "#D56838"
+    }
+  ],
+  "archive_metadata": [
+    {
+      "model": "berp",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test2.json",
+      "experiment_name": "berp_t60_v7",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test2",
+      "source_row_count": 1080
+    },
+    {
+      "model": "berp",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test4.json",
+      "experiment_name": "berp_t60_v7",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test4",
+      "source_row_count": 1080
+    },
+    {
+      "model": "noiseaware",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test2/detailed_results.csv",
+      "format": "detailed_results.csv",
+      "source_row_count": 1080
+    },
+    {
+      "model": "noiseaware",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test4/detailed_results.csv",
+      "format": "detailed_results.csv",
+      "source_row_count": 1080
+    },
+    {
+      "model": "damtl",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test2.json",
+      "experiment_name": "damtl",
+      "dataset_version": "T60_Dataset_v7_4s",
+      "test_split": "test2",
+      "source_row_count": 1080
+    },
+    {
+      "model": "damtl",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test4.json",
+      "experiment_name": "damtl",
+      "dataset_version": "T60_Dataset_v7_4s",
+      "test_split": "test4",
+      "source_row_count": 1080
+    },
+    {
+      "model": "single_kan",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/single_t60_kan_v2_mse_seed42/test/evaluation_results_test2.json",
+      "experiment_name": "single_t60_kan_v2_mse_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test2",
+      "source_row_count": 1080
+    },
+    {
+      "model": "single_kan",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/single_t60_kan_v2_mse_seed42/test/evaluation_results_test4.json",
+      "experiment_name": "single_t60_kan_v2_mse_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test4",
+      "source_row_count": 1080
+    },
+    {
+      "model": "ours",
+      "split": "test2",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test2.json",
+      "experiment_name": "kan_multitask_norm_w_denoise_b005_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test2",
+      "source_row_count": 1080
+    },
+    {
+      "model": "ours",
+      "split": "test4",
+      "path": "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test4.json",
+      "experiment_name": "kan_multitask_norm_w_denoise_b005_seed42",
+      "dataset_version": "T60_Dataset_v7",
+      "test_split": "test4",
+      "source_row_count": 1080
+    }
+  ],
+  "input_sha256": {
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_boxplots_2026-10-28_v1/plot_data.csv": "4e9fff217e01a8e7b66dd631909bb03a42852603644cf27aecd01e7af226cb72",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_candidates_2026-10-27_v1/metadata_selection_record.json": "83cc8fe84ef9922467e42a1990848797057e1d1ca68e22c3b4de760391c9d9ac",
+    "/Users/xiexinni/CMGAN-t60/docs/noiseaware.pdf": "edd4c3fa65e12c2d350f65601bd5e8681d4382a19275a946c089832ff0ec9bd7",
+    "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test2.json": "3ed2d45c2de9ce5d2af693cc4bbcc6c05aec17ee8c076e8d01499bf8b9cbfdbb",
+    "/Users/xiexinni/CMGAN-t60/papercompare/berp_t60_v7_fixed/test_results/evaluation_results_test4.json": "65dd138572e68ed9cc973fc09dda95449534ce0e7e2d7758b798e34a5b99e0d9",
+    "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test2/detailed_results.csv": "412f1089985d9b2cb138ab78348a08abcc4f936518fe0e60975d920e0fe9ff4a",
+    "/Users/xiexinni/CMGAN-t60/papercompare/noiseaware/fix-v7dataset-test/fix_normalized_run1_test_test4/detailed_results.csv": "a5730b8702c1faa401f2010c60b3942619b58074d5f2319c55f84467c714234e",
+    "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test2.json": "a2ca4725ed51ed7ca1998c4850b4692aaceedb172fbaa2e67aeb8bb007672b74",
+    "/Users/xiexinni/CMGAN-t60/papercompare/damtl/test/evaluation_results_test4.json": "fc704060d4eaca20a599cab072d5c66816093735347b86b5aa74036ce7af8301",
+    "/Users/xiexinni/CMGAN-t60/runs/single_t60_kan_v2_mse_seed42/test/evaluation_results_test2.json": "23fb7a4287c10039a6bacadda24ba3a048b39d8525bc569ad2b69d5fa34bea9f",
+    "/Users/xiexinni/CMGAN-t60/runs/single_t60_kan_v2_mse_seed42/test/evaluation_results_test4.json": "32d2052776aa6d6f8b5062cc1c290269c5b5fd4df0d702b789715f0e2e48012e",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test2.json": "6d746a69b9e503a098d8d9011859ca80693a985159668223284795af1005affe",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test4.json": "d991f76ab13803f83e808a7d47c62c82d5a43b5d1913e3f63a58f19054570675",
+    "/Users/xiexinni/CMGAN-t60/docs/main_zh.md": "0064ce8c72324893763c9d795cadb2bf0754ce22c7b7831d9ebad8fa7810b31e",
+    "/Users/xiexinni/CMGAN-t60/docs/main.tex": "32a8efd19479b551dee21e180084a3b647da133c67bef86da83767acb5078a22",
+    "/Users/xiexinni/CMGAN-t60/docs/main_bilingual.md": "d78108f91be95e92cc0e8c8c637ac1f1d4ed024ce23b567ffd9c9c85601bbe66"
+  },
+  "inputs_and_manuscripts_unchanged": true,
+  "source_row_counts": "Each of the 10 prediction archives has 1080 unique sample names.",
+  "join": "exact (split,sample_name); reference T60 and SNR checked using Decimal",
+  "all_selected_samples_joined": true,
+  "ours_matches_previous_43_predictions": true,
+  "error_ms": "1000 * (prediction_s - historical_reference_s)",
+  "relative_error_pct": "100 * (prediction_s - historical_reference_s) / historical_reference_s",
+  "quartiles": "numpy.percentile method=linear",
+  "whiskers": "minimum and maximum",
+  "diamond": "mean",
+  "model_filtering": false,
+  "sample_filtering": false,
+  "snr_reweighting": false,
+  "inference_training_or_audio_processing": false,
+  "archive_precision_limit": "Values are recomputed from saved true/pred fields, often rounded to four decimals in seconds. No Error_ms field is used.",
+  "dataset_version_note": "Existing archives retain their original dataset_version declarations, including v7 and v7_4s. This textual join does not newly establish historical waveform byte identity."
+}

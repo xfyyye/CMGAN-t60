@@ -1,0 +1,7 @@
+﻿case_id,rir_type,source_dataset,scene_or_source_group,historical_t60_s,n_samples,n_test2,n_test4,n_snr_-5db,n_snr_0db,n_snr_5db,n_snr_10db,n_snr_15db,n_snr_20db,content_sha256,original_filename
+S1,simulated,ACE_sim,room6,0.290,15,6,9,4,0,3,4,2,2,88f5a2e0373d25f6b324cb95f0a5602d66efe0b12553bebab211a4c7d85e76ca,h_room6_d350cm_alpha-15_rt3.000000e-01.wav
+S2,simulated,ACE_sim,room2,0.694,11,5,6,2,2,1,4,1,1,0a5ed6416658f565e2d1d97db37e3c60274e1c7d83703194d43a539bd89e51ff,h_room2_d130cm_alpha025_rt7.000000e-01.wav
+S3,simulated,ACE_sim,room1,1.088,12,8,4,3,0,1,2,1,5,b69a59abd9c8511e9dd013fa244eef8f6bedbe7583e745cdd24304eccaad6304,h_room1_d070cm_alpha-45_rt1.200000e+00.wav
+R13,real,AIR,AIR meeting,0.303,13,7,6,1,1,3,0,2,6,7b02e9aa1e882ab76a02bb26afdad42078fda3952b2ed8443e33ec13420f9221,air_type1_air_binaural_meeting_0_4.wav
+R47,real,AIR,AIR lecture,0.697,19,9,10,3,2,2,5,3,4,ba7007e1a0075617f8b210334e87e11341c9d5e9fb78aa201b7b69921c01e19e,air_type1_air_binaural_lecture_0_1.wav
+R61,real,AIR,AIR stairway,1.133,11,6,5,5,2,2,1,1,0,5c74d6846b98a0d439c797c486465ba5ced7dbd3f78f936067ed204f091df6ef,air_type1_air_binaural_stairway_1_3_30.wav

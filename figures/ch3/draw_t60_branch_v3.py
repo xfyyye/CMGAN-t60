@@ -56,7 +56,7 @@ text(1865,720,'Learnable coefficients',29)
 # four representative bases
 rows=[820,950,1080,1210]
 labels=['cos(x)','sin(x)','cos(Kx)','sin(Kx)']
-coefs=['× a_ji1','× b_ji1','× a_jiK','× b_jiK']
+coefs=['× a_ji1','× c_ji1','× a_jiK','× c_jiK']
 def plot(x,y,w,h,fn,col):
  d.line((x,y+h/2,x+w,y+h/2),fill='#C5CDD6',width=2)
  d.line((x,y,x,y+h),fill='#C5CDD6',width=2)
@@ -80,5 +80,5 @@ arrow([(sx+38,sy),(2440,sy)],oe)
 text(2785,790,'Edge function φ_ji(x)',32,oe)
 plot(2480,875,625,265,lambda z:(.7*math.cos(z)+.5*math.sin(2*z)-.3*math.cos(3*z))/1.4,oe)
 text(2790,1215,'Illustrative coefficients and curve;\nnot fitted model parameters.',26,gr)
-text(2170,1440,'φ_ji(x) = Σ_k [a_jik cos(kx) + b_jik sin(kx)]',32)
+text(2170,1440,'φ_ji(x) = Σ_k [a_jik cos(kx) + c_jik sin(kx)]',32)
 im.save(P/'t60_branch_v3.png',dpi=(300,300))

@@ -14,3 +14,6 @@ __pycache__/
 swanlog/
 
 .claude/
+
+# Local research records and experiment artifacts
+/docs/research/

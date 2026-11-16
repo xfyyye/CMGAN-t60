@@ -1,0 +1,71 @@
+{
+  "source": "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_baselines_2026-10-28_v1/plot_data.csv",
+  "source_sha256": "adfc62f492fc7305db0787f62944b0dc3318af6da30c33b60def0ef7a9f79dad",
+  "n_samples": 43,
+  "n_predictions": 172,
+  "cases": {
+    "R13": {
+      "historical_t60_s": 0.303,
+      "test_counts": {
+        "test2": 7,
+        "test4": 6
+      }
+    },
+    "R47": {
+      "historical_t60_s": 0.697,
+      "test_counts": {
+        "test2": 9,
+        "test4": 10
+      }
+    },
+    "R61": {
+      "historical_t60_s": 1.133,
+      "test_counts": {
+        "test2": 6,
+        "test4": 5
+      }
+    }
+  },
+  "models": [
+    {
+      "key": "berp",
+      "label": "BERP",
+      "color": "#63AA69"
+    },
+    {
+      "key": "noiseaware",
+      "label": "noise-aware",
+      "color": "#4D8CC2"
+    },
+    {
+      "key": "damtl",
+      "label": "DAMTL",
+      "color": "#F0B27B"
+    },
+    {
+      "key": "ours",
+      "label": "Ours",
+      "color": "#C43C27"
+    }
+  ],
+  "removed_model": "single_kan",
+  "all_four_method_samples_retained": true,
+  "quartiles": "numpy linear interpolation",
+  "whiskers": "minimum and maximum",
+  "centre_line": "median",
+  "scatter": false,
+  "means": false,
+  "notches": false,
+  "error_ms": "1000 * (prediction_s - historical_reference_s)",
+  "relative_error_pct": "100 * (prediction_s - historical_reference_s) / historical_reference_s",
+  "inputs_and_manuscripts_unchanged": true,
+  "input_sha256": {
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_baselines_2026-10-28_v1/plot_data.csv": "adfc62f492fc7305db0787f62944b0dc3318af6da30c33b60def0ef7a9f79dad",
+    "/Users/xiexinni/CMGAN-t60/outputs/real_rir_case_baselines_2026-10-28_v1/summary_metrics.csv": "8855cc9178b0643e302a061d3bffb08c617da446e4fa02c4796c386392460c7d",
+    "/Users/xiexinni/CMGAN-t60/docs/main_zh.md": "0064ce8c72324893763c9d795cadb2bf0754ce22c7b7831d9ebad8fa7810b31e",
+    "/Users/xiexinni/CMGAN-t60/docs/main.tex": "32a8efd19479b551dee21e180084a3b647da133c67bef86da83767acb5078a22",
+    "/Users/xiexinni/CMGAN-t60/docs/main_bilingual.md": "d78108f91be95e92cc0e8c8c637ac1f1d4ed024ce23b567ffd9c9c85601bbe66"
+  },
+  "source_predictions_reused": true,
+  "new_inference_or_training": false
+}

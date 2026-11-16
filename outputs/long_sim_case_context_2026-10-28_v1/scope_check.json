@@ -1,0 +1,51 @@
+{
+  "model": "Ours, kan_multitask_norm_w_denoise_b005_seed42",
+  "fixed_S3": {
+    "n_samples": 12,
+    "rmse_ms": 51.454259622827465,
+    "mae_ms": 41.15833333333333,
+    "bias_ms": -22.641666666666666
+  },
+  "population_context": [
+    {
+      "scope": "Test2+Test4 actual simulated RIRs, [1,1.2) s",
+      "n_rirs": 9,
+      "n_samples": 109,
+      "rmse_ms": 168.00332756643394,
+      "mae_ms": 94.92018348623854,
+      "bias_ms": -68.78256880733944
+    },
+    {
+      "scope": "Test2+Test4 actual simulated RIRs, [1,1.5] s",
+      "n_rirs": 22,
+      "n_samples": 270,
+      "rmse_ms": 184.89714117534328,
+      "mae_ms": 116.29703703703706,
+      "bias_ms": -85.54
+    }
+  ],
+  "S3_20dB_diagnostic": {
+    "n_samples": 5,
+    "rmse_ms": 32.394629184480564,
+    "mae_ms": 25.639999999999997,
+    "bias_ms": 0.07999999999999866
+  },
+  "S3_below20dB_diagnostic": {
+    "n_samples": 7,
+    "rmse_ms": 61.55535255825791,
+    "mae_ms": 52.24285714285714,
+    "bias_ms": -38.871428571428574
+  },
+  "formal_case_or_sample_selection_changed": false,
+  "diagnostic_subsets_replace_original_metrics": false,
+  "causal_explanation_established": false,
+  "input_sha256": {
+    "/Users/xiexinni/case study/four_pool_content_audit_2026-10-27_v1/sample_mapping.csv": "e998bb33b1a135bce35de1bb48908a3ef0447c5a20598fc93c5136c009d8d214",
+    "/Users/xiexinni/CMGAN-t60/outputs/six_rir_case_metrics_2026-10-28_v1/sample_predictions_joined.csv": "d5c29e91dc5077e35877715e4722073b8768ed28821d20b127e6006b21fde56f",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test2.json": "6d746a69b9e503a098d8d9011859ca80693a985159668223284795af1005affe",
+    "/Users/xiexinni/CMGAN-t60/runs/kan_multitask_norm_w_denoise_b005_seed42/test/evaluation_results_test4.json": "d991f76ab13803f83e808a7d47c62c82d5a43b5d1913e3f63a58f19054570675"
+  },
+  "plots_created": false,
+  "models_loaded": false,
+  "paper_modified": false
+}

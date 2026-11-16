@@ -36,7 +36,7 @@
 \shorttitle{DACT-KAN for blind $T_{60}$ estimation}
 \shortauthors{X. Xie, X. Lu and J. Sang}
 
-\title[mode=title]{DACT-KAN: Denoising-Aided Blind Reverberation Time Estimation Based on a Time--Frequency Conformer}
+\title[mode=title]{DACT-KAN: A Denoising-Aided Time--Frequency Conformer with a Fourier-KAN Head for Blind Reverberation Time Estimation}
 
 %% Authors
 \author[1]{Xinni Xie}
@@ -142,7 +142,7 @@ The remainder of this paper is organised as follows. Section~\ref{sec:signal_mod
 
 % BEGIN U021
 
-Let $s(t)$ denote the anechoic speech emitted by a sound source at a fixed position, $h(t)$ the room impulse response (RIR) from the source to the microphone, and $n(t)$ the uncorrelated additive noise captured at the microphone. In the time domain, the recorded noisy reverberant signal $y(t)$ is modelled as
+Let $s(t)$ denote the anechoic speech emitted by a sound source at a fixed position, $h(t)$ denote the room impulse response (RIR) from the source to the microphone, and $n(t)$ denote the uncorrelated additive noise captured at the microphone. In the time domain, the recorded noisy reverberant signal $y(t)$ is modelled as
 
 % END U021
 
@@ -156,13 +156,13 @@ y(t) = s(t)\ast h(t) + n(t), \tag{1}\label{eq:signal}
 
 % BEGIN U023
 
-where $\ast$ denotes convolution. Let $r(t)=s(t)\ast h(t)$ denote the noise-free reverberant speech and $R(k,l)$ its short-time Fourier transform (STFT). By the linearity of the STFT, the observed complex spectrum satisfies $Y(k,l)=R(k,l)+N(k,l)$, where $k$ and $l$ index frequency bins and time frames, respectively, and $N(k,l)$ is the complex spectrum of the noise.
+\noindent where $\ast$ denotes convolution. Let $r(t)=s(t)\ast h(t)$ denote the noise-free reverberant speech and $R(k,l)$ its short-time Fourier transform (STFT). By the linearity of the STFT, the observed complex spectrum satisfies $Y(k,l)=R(k,l)+N(k,l)$, where $k$ and $l$ index frequency bins and time frames, respectively, and $N(k,l)$ is the complex spectrum of the noise.
 
 % END U023
 
 % BEGIN U024
 
-Blind $T_{60}$ estimation aims to learn the mapping $\mathcal{F}:Y \mapsto \hat{T}_{60}$. At inference, predictions are made solely from the recorded signal, without requiring the anechoic speech, the RIR, or the noise component. Here, $Y(k,l)$ is the uncompressed observed complex spectrum. In Section~\ref{sec:proposed}, $\mathbf Y$ denotes the complex spectrum obtained by applying magnitude compression to the STFT of the normalised waveform.
+Blind $T_{60}$ estimation aims to learn the mapping $\mathcal{F}:Y \mapsto \hat{T}_{60}$, where $\hat{T}_{60}$ denotes the model's estimate of the reverberation time. At inference, predictions are made solely from the recorded signal, without requiring the anechoic speech, the RIR, or the noise component. Here, $Y(k,l)$ is the uncompressed observed complex spectrum. In Section~\ref{sec:proposed}, $\mathbf Y$ denotes the complex spectrum obtained by applying magnitude compression to the STFT of the normalised waveform.
 
 % END U024
 
@@ -189,7 +189,7 @@ h(t) = b(t)\, e^{-\delta t},\qquad t\geq 0, \tag{2}\label{eq:polack}
 
 % BEGIN U028
 
-where $b(t)$ is a zero-mean stationary white-noise process with variance $\sigma_b^{2}$, and $\delta>0$ is the room damping constant. The second-order statistics of the model in Eq.~\eqref{eq:polack} give the following decay law for the mean-square energy envelope:
+\noindent where $b(t)$ is a zero-mean stationary white-noise process with variance $\sigma_b^{2}$, and $\delta>0$ is the room damping constant. The second-order statistics of the model in Eq.~\eqref{eq:polack} give the following decay law for the mean-square energy envelope:
 
 % END U028
 
@@ -243,15 +243,9 @@ As shown in Fig.~\ref{fig:framework}, we construct a multi-task framework with $
 
 % BEGIN U037
 
-The denoising branch reconstructs the spectrum using magnitude masking and complex residuals \citep{cao2022cmgan}. The reconstructed spectrum is then converted to denoised speech using the inverse STFT (iSTFT). Its reconstruction target is noise-free reverberant speech, so that additive noise is removed while reverberation is retained. The $T_{60}$ branch takes the shared features directly as input and estimates reverberation time through multi-statistic pooling and a Fourier-KAN regression head. The denoised speech output is not an input to this branch.
+The denoising branch reconstructs the spectrum using magnitude masking and complex residuals \citep{cao2022cmgan}. The reconstructed spectrum is then converted to denoised speech using the inverse STFT (iSTFT). Its reconstruction target is noise-free reverberant speech, so that additive noise is removed while reverberation is retained. The $T_{60}$ branch takes the shared features directly as input and estimates reverberation time through multi-statistic pooling and a Fourier-KAN regression head.
 
 % END U037
-
-% BEGIN U038
-
-During training, both tasks update the shared feature extraction network, providing supervision from spectral reconstruction and $T_{60}$ regression. The parameters specific to each branch are optimised by the corresponding task loss. Figure~\ref{fig:framework} shows only the overall modules and their input--output relationships; the internal structures of the encoder, TSCBs, regression head, and denoising decoders are described in the following sections.
-
-% END U038
 
 % BEGIN U039
 
@@ -280,16 +274,16 @@ The dense convolutional encoder converts noisy reverberant speech into features 
 % BEGIN U043
 
 \begin{equation}
-c=\sqrt{\frac{L}{\sum_{n=0}^{L-1}y^2[n]+\varepsilon}},
+\tilde y[n]=c\,y[n],
 \qquad
-\tilde y[n]=c\,y[n], \tag{5}\label{eq:energy_norm}
+c=\sqrt{\frac{L}{\sum_{n=0}^{L-1}y^2[n]+\varepsilon}}, \tag{5}\label{eq:energy_norm}
 \end{equation}
 
 % END U043
 
 % BEGIN U044
 
-where $\varepsilon>0$ is a numerical stabilisation term. The normalised waveform is transformed into a complex spectrum using the STFT with a Hamming window. Its magnitude is then raised to a fixed power $\gamma$ ($0<\gamma<1$), while the phase remains unchanged. Denote the resulting compressed complex spectrum by $\mathbf Y\in\mathbb C^{T\times F}$, where $T$ and $F$ are the numbers of time frames and frequency bins, respectively. Its magnitude, real part, and imaginary part are stacked along the channel dimension to form the three-channel encoder input:
+\noindent where $\tilde y[n]$ is the energy-normalised waveform, $c$ is the normalisation coefficient, and $\varepsilon>0$ is a numerical stabilisation term. The normalised waveform is transformed into a complex spectrum using the STFT with a Hamming window. Its magnitude is then raised to a fixed power $\gamma$ ($0<\gamma<1$), while the phase remains unchanged. Denote the resulting compressed complex spectrum by $\mathbf Y\in\mathbb C^{T\times F}$, where $T$ and $F$ are the numbers of time frames and frequency bins, respectively. Its magnitude, real part, and imaginary part are stacked along the channel dimension to form the three-channel encoder input:
 
 % END U044
 
@@ -316,7 +310,7 @@ The encoder consists of channel projection, dilated dense encoding, and frequenc
 
 % BEGIN U047
 
-The lower part of Fig.~\ref{fig:encoder} shows the internal structure of the dilated dense block in more detail. The block contains four $2\times3$ convolutional layers, with the two kernel dimensions corresponding to time and frequency, respectively. The four layers have temporal dilation rates of $1,2,4,8$, respectively, and a frequency dilation rate of $1$. Zero-padding preserves the time--frequency dimensions, and each convolution is followed by instance normalisation and PReLU. Each layer takes as input the channel-wise concatenation of the block input and all preceding layer outputs, and produces a feature map with $C$ channels for use by subsequent layers. The block returns the features produced by its fourth layer. The concatenated features are used for internal connections between layers.
+The dilated dense block contains four $2\times3$ convolutional layers, with the two kernel dimensions corresponding to time and frequency, respectively. The four layers have temporal dilation rates of $1,2,4,8$, respectively, and a frequency dilation rate of $1$. Zero-padding preserves the time--frequency dimensions, and each convolution is followed by instance normalisation and PReLU. Each layer takes as input the channel-wise concatenation of the block input and all preceding layer outputs, and produces a feature map with $C$ channels for use by subsequent layers. The block returns the features produced by its fourth layer. The concatenated features are used for internal connections between layers.
 
 % END U047
 
@@ -359,7 +353,7 @@ F'=\left\lceil\frac F2\right\rceil. \tag{7}\label{eq:encoder_output}
 
 % BEGIN U053
 
-The encoder output $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ is then passed through $N=2$ cascaded time--frequency Conformer blocks (TSCBs). Each TSCB applies a temporal Conformer followed by a frequency Conformer to process the time--frequency features along the two axes while preserving the input dimensions \citep{cao2022cmgan}.
+The encoder output $\mathbf F^{(0)}\in\mathbb R^{C\times T\times F'}$ is then passed through $N=2$ cascaded TSCBs. Each TSCB applies a temporal Conformer followed by a frequency Conformer to process the time--frequency features along the two axes while preserving the input dimensions \citep{cao2022cmgan}.
 
 % END U053
 
@@ -396,7 +390,7 @@ Figure~\ref{fig:tscb}(b) shows the internal structure of a single Conformer in m
 
 % BEGIN U057
 
-Here, $\mathrm{FFN}_1$ and $\mathrm{FFN}_2$ are two pre-normalised position-wise feed-forward modules with Swish activations; $\mathrm{MHSA}$ is a multi-head self-attention module with Shaw-style relative positional encoding \citep{shaw2018relativepos}; and $\mathrm{Conv}$ is a depthwise separable one-dimensional convolution module with a gated linear unit and batch normalisation. The self-attention and convolution modules are placed between the two feed-forward modules. Both feed-forward residual branches use a scaling factor of $1/2$, forming a Macaron-style structure. The $\mathrm{MHSA}$ and $\mathrm{Conv}$ modules also include layer normalisation at their respective inputs, and $\mathrm{LN}_{\mathrm{out}}$ denotes the final layer normalisation of the Conformer.
+\noindent Here, $\mathrm{FFN}_1$ and $\mathrm{FFN}_2$ are two pre-normalised position-wise feed-forward modules with Swish activations. $\mathrm{MHSA}$ is a multi-head self-attention module with Shaw-style relative positional encoding \citep{shaw2018relativepos}. $\mathrm{Conv}$ is a depthwise separable one-dimensional convolution module with a gated linear unit and batch normalisation. The self-attention and convolution modules are placed between the two feed-forward modules. Both feed-forward residual branches use a scaling factor of $1/2$, forming a Macaron-style structure. The $\mathrm{MHSA}$ and $\mathrm{Conv}$ modules also include layer normalisation at their respective inputs, and $\mathrm{LN}_{\mathrm{out}}$ denotes the final layer normalisation of the Conformer.
 
 % END U057
 
@@ -488,7 +482,7 @@ The vector is passed through a linear projection followed by layer normalisation
 
 % BEGIN U069
 
-where $\mathbf W_{\mathrm p}$ and $\mathbf b_{\mathrm p}$ are the projection parameters, $d_0$ is the projected feature dimension, and $\operatorname{LN}$ denotes layer normalisation.
+\noindent where $\mathbf W_{\mathrm p}$ and $\mathbf b_{\mathrm p}$ are the projection parameters, $d_0$ is the projected feature dimension, and $\operatorname{LN}$ denotes layer normalisation.
 
 % END U069
 
@@ -515,7 +509,7 @@ b_j^{(\ell)},
 
 % BEGIN U072
 
-where $d_{\ell-1}$ and $d_\ell$ are the input and output dimensions of the layer, respectively, $\phi_{ji}^{(\ell)}$ is the edge function from input node $i$ to output node $j$, and $b_j^{(\ell)}$ is the node bias.
+\noindent where $d_{\ell-1}$ and $d_\ell$ are the input and output dimensions of the layer, respectively, $\phi_{ji}^{(\ell)}$ is the edge function from input node $i$ to output node $j$, and $b_j^{(\ell)}$ is the node bias.
 
 % END U072
 
@@ -542,7 +536,7 @@ c_{jik}^{(\ell)}\sin(kx)
 
 % BEGIN U075
 
-Here, $x$ is the scalar input to the edge function, and $K_\ell$ is the Fourier expansion order of layer $\ell$. The index $k$ takes the fixed integer values $1,\ldots,K_\ell$. The learnable coefficients $a_{jik}^{(\ell)}$ and $c_{jik}^{(\ell)}$ weight the cosine and sine terms, respectively. The shape of the edge function is therefore determined by these basis coefficients and changes as the coefficients are updated during training.
+\noindent Here, $x$ is the scalar input to the edge function, and $K_\ell$ is the Fourier expansion order of layer $\ell$. The index $k$ takes the fixed integer values $1,\ldots,K_\ell$. The learnable coefficients $a_{jik}^{(\ell)}$ and $c_{jik}^{(\ell)}$ weight the cosine and sine terms, respectively. The shape of the edge function is therefore determined by these basis coefficients and changes as the coefficients are updated during training.
 
 % END U075
 
@@ -590,7 +584,7 @@ b_{\mathrm o}
 
 % BEGIN U080
 
-where $\mathbf w_{\mathrm o}$ and $b_{\mathrm o}$ are the output-layer parameters, and $\sigma(\cdot)$ denotes the sigmoid function.
+\noindent where $\mathbf w_{\mathrm o}$ and $b_{\mathrm o}$ are the output-layer parameters, and $\sigma(\cdot)$ denotes the sigmoid function.
 
 % END U080
 
@@ -641,7 +635,7 @@ M=\mathcal D_{\mathrm{mask}}\!\left(\mathbf F^{(N)}\right),
 
 % BEGIN U087
 
-where $\mathcal D_{\mathrm{mask}}$ and $\mathcal D_{\mathrm{complex}}$ denote the mask decoder and complex-residual decoder, respectively.
+\noindent where $\mathcal D_{\mathrm{mask}}$ and $\mathcal D_{\mathrm{complex}}$ denote the mask decoder and complex-residual decoder, respectively.
 
 % END U087
 
@@ -670,7 +664,7 @@ The right-hand side of Fig.~\ref{fig:denoise} shows how the two path outputs are
 
 % BEGIN U090
 
-Here, $\odot$ denotes element-wise multiplication, and $\angle\mathbf Y$ is the input phase. This gives the predicted compressed complex spectrum $\hat{\mathbf Y}=\hat Y_{\mathrm{re}}+j\hat Y_{\mathrm{im}}$: the mask path adjusts the input magnitude component, while the complex-residual path further corrects the reconstructed real and imaginary parts.
+\noindent Here, $\odot$ denotes element-wise multiplication, and $\angle\mathbf Y$ is the input phase. This gives the predicted compressed complex spectrum $\hat{\mathbf Y}=\hat Y_{\mathrm{re}}+j\hat Y_{\mathrm{im}}$: the mask path adjusts the input magnitude component, while the complex-residual path further corrects the reconstructed real and imaginary parts.
 
 % END U090
 
@@ -685,7 +679,7 @@ Both the multiplication and residual addition are performed in the power-compres
 \begin{figure}[pos=htbp]
   \centering
   \includegraphics[width=\columnwidth]{figs_chapter/denoise_decoder_v4.png}
-  \caption{Denoising decoder branch. Shared TSCB features are passed to the magnitude-mask and complex-residual decoders. The mask is multiplied element-wise by the noisy magnitude, and the resulting magnitude is combined with the noisy phase to reconstruct an initial complex spectrum. The complex residual is then added element-wise to this spectrum. The multiplication and addition nodes represent these two operations, respectively; the two channels of the complex residual correspond to its real and imaginary parts. The illustrated operations take place in the power-compressed domain, with inverse compression and the iSTFT applied after complex spectrum reconstruction.}
+  \caption{Denoising decoder branch. Shared TSCB features are fed to the magnitude-mask and complex-residual decoders, whose outputs are combined to reconstruct the compressed complex spectrum.}
   \label{fig:denoise}
 \end{figure}
 
@@ -742,7 +736,7 @@ The denoising loss combines real/imaginary-part and magnitude losses in the comp
 
 % BEGIN U101
 
-Here, $\mathcal{L}_{ri}$ is the sum of the real-part and imaginary-part mean square errors between the predicted compressed complex spectrum and the target $\tilde{S}$, and $\mathcal{L}_{mag}$ is the mean square error between their magnitudes. The time-domain loss $\mathcal{L}_{time}$ is the mean absolute error between the enhanced waveform $\hat s$ and the normalised target $c\,\tilde s$, with $\hat s$ obtained after inverse compression and the iSTFT. The noise-free reverberant speech is $\tilde s=s\ast h$; for each utterance, the target and noisy input share the normalisation coefficient $c$ in Eq.~\eqref{eq:energy_norm}. The compressed complex target spectrum $\tilde{S}$ is obtained by applying the same STFT and power-law compression to this normalised target.
+\noindent Here, $\mathcal{L}_{ri}$ is the sum of the real-part and imaginary-part mean square errors between the predicted compressed complex spectrum and the target $\tilde{S}$, and $\mathcal{L}_{mag}$ is the mean square error between their magnitudes. The time-domain loss $\mathcal{L}_{time}$ is the mean absolute error between the enhanced waveform $\hat s$ and the normalised target $c\,\tilde s$, with $\hat s$ obtained after inverse compression and the iSTFT. The noise-free reverberant speech is $\tilde s=s\ast h$; for each utterance, the target and noisy input share the normalisation coefficient $c$ in Eq.~\eqref{eq:energy_norm}. The compressed complex target spectrum $\tilde{S}$ is obtained by applying the same STFT and power-law compression to this normalised target.
 
 % END U101
 
@@ -766,7 +760,7 @@ m_{q,u}&=\rho\,m_{q,u-1}+(1-\rho)\operatorname{stopgrad}(\mathcal{L}_{q,u}),\qqu
 
 % BEGIN U104
 
-where $\rho=0.99$, $\varepsilon_{\mathrm{EMA}}=10^{-8}$, and $\operatorname{stopgrad}(\cdot)$ denotes the stop-gradient operation. The EMA is initialised directly with the current loss on the first batch. On every call, the EMA is updated before the loss is normalised by the updated value; no gradients are propagated through the denominator. In the implementation, training and validation share the same EMA states, which are updated per mini-batch in both phases and retained continuously across phase transitions and successive epochs. No backpropagation or model parameter updates are performed during validation.
+\noindent where $\rho=0.99$, $\varepsilon_{\mathrm{EMA}}=10^{-8}$, and $\operatorname{stopgrad}(\cdot)$ denotes the stop-gradient operation. The EMA is initialised directly with the current loss on the first batch. On every call, the EMA is updated before the loss is normalised by the updated value; no gradients are propagated through the denominator. In the implementation, training and validation share the same EMA states, which are updated per mini-batch in both phases and retained continuously across phase transitions and successive epochs. No backpropagation or model parameter updates are performed during validation.
 
 % END U104
 
@@ -779,14 +773,14 @@ This scaling adjusts the numerical scales of the two losses. The total loss is
 % BEGIN U106
 
 \begin{equation}
-\mathcal{L}(\boldsymbol{\theta}) = \alpha\,\mathcal{L}_{\text{den}}^{*}(\boldsymbol{\theta}) + \beta\,\mathcal{L}_{T_{60}}^{*}(\boldsymbol{\theta}), \tag{21}\label{eq:joint_loss}
+\mathcal{L}(\boldsymbol{\theta}) = \mathcal{L}_{\text{den}}^{*}(\boldsymbol{\theta}) + \alpha\,\mathcal{L}_{T_{60}}^{*}(\boldsymbol{\theta}), \tag{21}\label{eq:joint_loss}
 \end{equation}
 
 % END U106
 
 % BEGIN U107
 
-where $\boldsymbol{\theta}$ comprises all trainable parameters of the shared encoder and TSCBs, the Fourier-KAN head, and the two denoising decoders. The loss weights and main model configuration are given in Section~\ref{sec:settings}.
+\noindent where $\alpha$ is the weight of the $T_{60}$ regression loss, and $\boldsymbol{\theta}$ comprises all trainable parameters of the shared encoder and TSCBs, the Fourier-KAN head, and the two denoising decoders. The loss weight used for the main model is given in Section~\ref{sec:settings}.
 
 % END U107
 
@@ -812,7 +806,7 @@ At inference, the sigmoid output is denormalised using the inverse of Eq.~\eqref
 
 % BEGIN U112
 
-Clean speech for training and validation is drawn from WSJ0-SI84, and test speech is drawn from TIMIT. Environmental noise from DNS-Challenge 2020 is used for training and seen-noise conditions, while unseen noise is drawn from NOISEX-92. Simulated RIRs are generated using the image-source method. Measured RIRs for training and validation are from OpenAIR, REVERB Challenge, and RWCP, provided through OpenSLR28; measured test RIRs are from the ACE Challenge.
+Clean speech for training and validation is drawn from WSJ0-SI84 \citep{paul1992wsj}, and test speech is drawn from TIMIT \citep{garofolo1993timit}. Environmental noise from DNS-Challenge 2020 \citep{reddy2020dns} is used for training and seen-noise conditions, while unseen noise is drawn from NOISEX-92 \citep{varga1993noisex92}. Simulated RIRs are generated using the image-source method. Measured RIRs for training and validation are from OpenAIR, REVERB Challenge, and RWCP, provided through OpenSLR28; measured test RIRs are from the ACE Challenge.
 
 % END U112
 
@@ -948,7 +942,7 @@ The single-task Fourier-KAN baseline retains the same feature extraction network
 
 % BEGIN U131
 
-where $N$ is the number of samples, and $\hat{T}_{60,i}$ and $T_{60,i}$ are the estimated and ground-truth values for sample $i$, respectively.
+\noindent where $N$ is the number of samples, and $\hat{T}_{60,i}$ and $T_{60,i}$ are the estimated and ground-truth values for sample $i$, respectively.
 
 % END U131
 
@@ -988,7 +982,7 @@ r=\frac{\sum_{i=1}^{N}(\hat{T}_{60,i}-\bar{\hat{T}}_{60})(T_{60,i}-\bar{T}_{60})
 
 % BEGIN U137
 
-where $\bar{\hat{T}}_{60}$ and $\bar{T}_{60}$ are the sample means of the estimated and ground-truth values, respectively.
+\noindent where $\bar{\hat{T}}_{60}$ and $\bar{T}_{60}$ are the sample means of the estimated and ground-truth values, respectively.
 
 % END U137
 
@@ -1079,7 +1073,7 @@ Table~\ref{tab:arch} summarises the structural parameters of the proposed model.
 
 % BEGIN U149
 
-The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the main model uses task weights $(\alpha,\beta)=(1.0,0.05)$.
+The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the $T_{60}$ loss weight is set to $\alpha=0.05$ for the main model.
 
 % END U149
 
@@ -1098,14 +1092,14 @@ The main model is trained with a random seed of 42 on four GPUs, using a global 
 
 % BEGIN U153
 
-\subsection{Comparison with Baselines}
+\subsection{Comparison of $T_{60}$ Estimation Results}
 \label{sec:baseline_results}
 
 % END U153
 
 % BEGIN U154
 
-We compare the estimation performance of the proposed model with that of BERP, noise-aware, DAMTL, and the single-task Fourier-KAN baseline on four test sets. Table~\ref{tab:main} reports the metrics for each test set and their averages.
+Table~\ref{tab:main} summarises the $T_{60}$ estimation results for each method on the four test sets and the averages across these sets. The proposed model achieves the lowest RMSE and MAE and the highest PCC and $R^{2}$ on all four test sets. Its average RMSE across the four test sets is 92.32 ms, 17.2\% lower than that of the single-task Fourier-KAN baseline (111.45 ms).
 
 % END U154
 
@@ -1116,46 +1110,44 @@ We compare the estimation performance of the proposed model with that of BERP, n
   \caption{Results on the four test sets and their averages. RMSE and MAE are in ms; the four-set averages are arithmetic means of the metrics calculated on each test set. The best value of each metric in each group is in bold.}
   \label{tab:main}
   \small
-  \begin{tabular}{p{0.17\linewidth}p{0.28\linewidth}rrrr}
+  \begin{tabular}{lp{0.28\linewidth}rrrr}
     \toprule
     Test set & Method & RMSE $\downarrow$ & MAE $\downarrow$ & PCC $\uparrow$ & $R^{2}$ $\uparrow$ \\
     \midrule
-    \textbf{Test 1 $\cdot$ Simulated/seen} & BERP & 148.22 & 91.70 & 0.9028 & 0.8104 \\
+    \multirow[t]{5}{*}{\begin{tabular}[t]{@{}l@{}}\textbf{Test 1}\\Simulated/seen\end{tabular}} & BERP & 148.22 & 91.70 & 0.9028 & 0.8104 \\
      & DAMTL & 140.08 & 85.95 & 0.9125 & 0.8307 \\
      & noise-aware & 128.80 & 83.87 & 0.9260 & 0.8569 \\
      & Single-task Fourier-KAN & 108.41 & 66.99 & 0.9484 & 0.8986 \\
-     & Ours & \textbf{88.79} & \textbf{51.78} & \textbf{0.9660} & \textbf{0.9320} \\
-    \textbf{Test 2 $\cdot$ Measured/seen} & BERP & 158.33 & 95.05 & 0.8909 & 0.7839 \\
+     & \textbf{Ours} & \textbf{88.79} & \textbf{51.78} & \textbf{0.9660} & \textbf{0.9320} \\
+    \midrule
+    \multirow[t]{5}{*}{\begin{tabular}[t]{@{}l@{}}\textbf{Test 2}\\Measured/seen\end{tabular}} & BERP & 158.33 & 95.05 & 0.8909 & 0.7839 \\
      & DAMTL & 154.20 & 94.49 & 0.8934 & 0.7950 \\
      & noise-aware & 145.44 & 86.16 & 0.9046 & 0.8177 \\
      & Single-task Fourier-KAN & 122.46 & 74.95 & 0.9337 & 0.8707 \\
-     & Ours & \textbf{96.96} & \textbf{58.35} & \textbf{0.9593} & \textbf{0.9190} \\
-    \textbf{Test 3 $\cdot$ Simulated/unseen} & BERP & 137.53 & 86.46 & 0.9176 & 0.8374 \\
+     & \textbf{Ours} & \textbf{96.96} & \textbf{58.35} & \textbf{0.9593} & \textbf{0.9190} \\
+    \midrule
+    \multirow[t]{5}{*}{\begin{tabular}[t]{@{}l@{}}\textbf{Test 3}\\Simulated/unseen\end{tabular}} & BERP & 137.53 & 86.46 & 0.9176 & 0.8374 \\
      & DAMTL & 136.12 & 85.57 & 0.9179 & 0.8408 \\
      & noise-aware & 129.50 & 80.85 & 0.9255 & 0.8559 \\
      & Single-task Fourier-KAN & 105.76 & 67.14 & 0.9517 & 0.9039 \\
-     & Ours & \textbf{88.58} & \textbf{54.78} & \textbf{0.9669} & \textbf{0.9326} \\
-    \textbf{Test 4 $\cdot$ Measured/unseen} & BERP & 144.71 & 89.58 & 0.9069 & 0.8169 \\
+     & \textbf{Ours} & \textbf{88.58} & \textbf{54.78} & \textbf{0.9669} & \textbf{0.9326} \\
+    \midrule
+    \multirow[t]{5}{*}{\begin{tabular}[t]{@{}l@{}}\textbf{Test 4}\\Measured/unseen\end{tabular}} & BERP & 144.71 & 89.58 & 0.9069 & 0.8169 \\
      & DAMTL & 125.38 & 78.27 & 0.9299 & 0.8625 \\
      & noise-aware & 130.92 & 78.65 & 0.9223 & 0.8501 \\
      & Single-task Fourier-KAN & 109.16 & 67.57 & 0.9469 & 0.8958 \\
-     & Ours & \textbf{94.95} & \textbf{55.42} & \textbf{0.9599} & \textbf{0.9212} \\
-    \textbf{Four-set average} & BERP & 147.20 & 90.70 & 0.9046 & 0.8122 \\
+     & \textbf{Ours} & \textbf{94.95} & \textbf{55.42} & \textbf{0.9599} & \textbf{0.9212} \\
+    \midrule
+    \multirow[t]{5}{*}{\textbf{Four-set average}} & BERP & 147.20 & 90.70 & 0.9046 & 0.8122 \\
      & DAMTL & 138.94 & 86.07 & 0.9134 & 0.8323 \\
      & noise-aware & 133.66 & 82.38 & 0.9196 & 0.8451 \\
      & Single-task Fourier-KAN & 111.45 & 69.16 & 0.9452 & 0.8923 \\
-     & Ours & \textbf{92.32} & \textbf{55.08} & \textbf{0.9630} & \textbf{0.9262} \\
+     & \textbf{Ours} & \textbf{92.32} & \textbf{55.08} & \textbf{0.9630} & \textbf{0.9262} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 % END U155
-
-% BEGIN U157
-
-The proposed model achieves the lowest RMSE and MAE and the highest PCC and $R^{2}$ on all four test sets. Its average RMSE across the four test sets is 92.32 ms, 17.2\% lower than that of the single-task Fourier-KAN baseline (111.45 ms).
-
-% END U157
 
 % BEGIN U158
 
@@ -1202,19 +1194,19 @@ As shown in Fig.~\ref{fig:snr}(c) and (d), the proposed method achieves the lowe
 
 % BEGIN U165
 
-Figure~\ref{fig:t60_intervals} compares estimation errors under different reverberation conditions. For each test set, samples are grouped into four intervals of ground-truth $T_{60}$. The RMSEs of the methods are generally higher in the long-reverberation intervals. In particular, at $T_{60}\in[1.0,1.5]$ s, every method reaches its highest RMSE across the four intervals on each of the four test sets. The proposed method has an RMSE of 57.1--76.0 ms in the $[0.1,0.4)$ s interval, increasing to 139.4--192.9 ms in the $[1.0,1.5]$ s interval, indicating that long reverberation remains one of the major sources of estimation error for the current model.
+Figure~\ref{fig:t60_intervals} compares estimation errors under different reverberation conditions. For each test set, samples are grouped into five intervals of ground-truth $T_{60}$. The RMSEs of the methods are generally higher in the long-reverberation intervals. In particular, at $T_{60}\in[1.3,1.5]$ s, every method reaches its highest RMSE across the five intervals on each of the four test sets. The proposed method has an RMSE of 57.1--76.0 ms in the $[0.1,0.4)$ s interval, increasing to 205.9--302.5 ms in the $[1.3,1.5]$ s interval, indicating that long reverberation remains one of the major sources of estimation error for the current model.
 
 % END U165
 
 % BEGIN U166
 
-The proposed method achieves the lowest RMSE in every $T_{60}$ interval on all four test sets, retaining this advantage in the long-reverberation interval. For example, in this interval with measured RIRs, it achieves an RMSE of 187.2 ms on Test 2, compared with 282.9--310.3 ms for the three comparison methods. On Test 4, the corresponding values are 192.9 ms and 258.9--292.5 ms. Thus, the proposed model still reduces estimation error at longer reverberation times, although it does not eliminate the accuracy gap between long- and short-reverberation conditions.
+The proposed method achieves the lowest RMSE in most $T_{60}$ intervals across the four test sets. In the $[1.3,1.5]$ s interval with measured RIRs, it achieves an RMSE of 273.7 ms on Test 2, compared with 463.3--490.7 ms for the three comparison methods. On Test 4, the corresponding values are 302.5 ms and 402.5--454.5 ms. These results show that the proposed model reduces estimation error under most long-reverberation test conditions, although it does not eliminate the accuracy gap between long- and short-reverberation conditions.
 
 % END U166
 
 % BEGIN U167
 
-Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measured-RIR test sets than on simulated-RIR test sets under the corresponding noise conditions: 187.2 ms versus 161.7 ms for seen noise and 192.9 ms versus 139.4 ms for unseen noise. The other three methods show the same pattern in this interval, whereas no consistent ordering between simulated and measured RIRs is observed in the shorter-reverberation intervals. The difficulty reflected in these results is therefore concentrated in long-reverberation conditions with measured RIRs; it cannot simply be generalised to all measured-RIR scenarios. Samples in the different test sets are not strictly paired. These comparisons describe performance differences on the current test data and cannot, by themselves, establish their causes.
+Within the $[1.3,1.5]$ s interval, the proposed method has higher RMSE on measured-RIR test sets than on simulated-RIR test sets under the corresponding noise conditions: 273.7 ms versus 258.0 ms for seen noise and 302.5 ms versus 205.9 ms for unseen noise. The other three methods show the same pattern in this interval, whereas no consistent ordering between simulated and measured RIRs is observed in the shorter-reverberation intervals. The difficulty reflected in these results is therefore concentrated in long-reverberation conditions with measured RIRs; it cannot simply be generalised to all measured-RIR scenarios. These comparisons describe performance differences on the current test data and cannot, by themselves, establish their causes.
 
 % END U167
 
@@ -1222,8 +1214,8 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 \begin{figure}[pos=htbp]
   \centering
-  \includegraphics[width=\columnwidth]{figs_chapter/t60_test1_4_v3.png}
-  \caption{Effect of reverberation time on estimation accuracy. The test scenarios in panels (a)--(d) are the same as those in Fig.~\ref{fig:snr}. Samples are grouped by ground-truth $T_{60}$ into four intervals: $[0.1,0.4)$, $[0.4,0.7)$, $[0.7,1.0)$, and $[1.0,1.5]$ s. Each point is the RMSE over the samples in that interval in the corresponding test set.}
+  \includegraphics[width=\columnwidth]{figs_chapter/t60_test1_4_v4.png}
+  \caption{Effect of reverberation time on estimation accuracy. The test scenarios in panels (a)--(d) are the same as those in Fig.~\ref{fig:snr}. Samples are grouped by ground-truth $T_{60}$ into five intervals: $[0.1,0.4)$, $[0.4,0.7)$, $[0.7,1.0)$, $[1.0,1.3)$, and $[1.3,1.5]$ s. Each point is the RMSE over the samples in that interval in the corresponding test set.}
   \label{fig:t60_intervals}
 \end{figure}
 
@@ -1238,7 +1230,7 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 % BEGIN U171
 
-\textbf{Task-weight sensitivity analysis.} Table~\ref{tab:weight} summarises seven weight configurations for the normalised loss $\mathcal{L}=\alpha\,\mathcal{L}_{\text{den}}^{*}+\beta\,\mathcal{L}_{T_{60}}^{*}$ to compare estimation performance under different task weights. Among the configurations examined, $(\alpha,\beta)=(1.0,0.05)$ achieves the lowest RMSE, at 92.32 ms. With $\alpha=1.0$, further decreasing $\beta$ to 0.02 or 0.01 gives RMSEs of 102.83 ms and 95.65 ms, respectively, with no further improvement. These results do not show a monotonic improvement as the relative weight of the denoising loss increases. The effect of introducing the denoising auxiliary task itself is further examined through the stepwise ablation in Table~\ref{tab:head}.
+\textbf{Sensitivity to the $T_{60}$ loss weight.} Table~\ref{tab:weight} compares estimation performance for different values of the $T_{60}$ loss weight $\alpha$. Among the six values examined, $\alpha=0.05$ achieves the lowest average RMSE and MAE, at 92.32 ms and 55.08 ms, respectively. Further decreasing $\alpha$ to 0.02 or 0.01 increases the RMSE to 102.83 ms and 95.65 ms, respectively. Thus, reducing the relative weight of the $T_{60}$ loss does not consistently improve estimation performance. The effect of introducing the denoising auxiliary task itself is further examined through the stepwise ablation in Table~\ref{tab:head}.
 
 % END U171
 
@@ -1246,20 +1238,19 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 \begin{table}[pos=htbp]
   \centering
-  \caption{Task-weight sensitivity analysis (normalised losses; average over Tests 1--4).}
+  \caption{Sensitivity to the $T_{60}$ loss weight (average over Tests 1--4).}
   \label{tab:weight}
   \small
-  \begin{tabular}{lcrr}
+  \begin{tabular}{rrr}
     \toprule
-    Configuration & $(\alpha,\beta)$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
+    $T_{60}$ loss weight $\alpha$ & RMSE (ms) $\downarrow$ & MAE (ms) $\downarrow$ \\
     \midrule
-    Denoising-dominant & (1.0, 0.01) & 95.65 & 61.78 \\
-    Denoising-dominant & (1.0, 0.02) & 102.83 & 67.24 \\
-    Denoising-dominant & (1.0, 0.05) & \textbf{92.32} & \textbf{55.08} \\
-    Denoising-dominant & (1.0, 0.1) & 97.79 & 57.95 \\
-    Denoising-dominant & (1.0, 0.3) & 107.10 & 64.28 \\
-    Equal-weight & (1.0, 1.0) & 109.90 & 67.16 \\
-    $T_{60}$-dominant & (0.1, 1.0) & 109.54 & 68.15 \\
+    0.01 & 95.65 & 61.78 \\
+    0.02 & 102.83 & 67.24 \\
+    \textbf{0.05} & \textbf{92.32} & \textbf{55.08} \\
+    0.10 & 97.79 & 57.95 \\
+    0.30 & 107.10 & 64.28 \\
+    1.00 & 109.90 & 67.16 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1268,7 +1259,7 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 % BEGIN U174
 
-\textbf{Ablation of multi-task training and regression head design.} To examine the roles of denoising-aided multi-task training and regression head design separately, Table~\ref{tab:head} compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use task weights $(\alpha,\beta)=(1.0,0.05)$.
+\textbf{Ablation of multi-task training and regression head design.} To examine the roles of denoising-aided multi-task training and regression head design separately, Table~\ref{tab:head} compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
 
 % END U174
 
@@ -1281,11 +1272,11 @@ Within the $[1.0,1.5]$ s interval, the proposed method has higher RMSE on measur
   \small
   \begin{tabular}{p{0.39\linewidth}rrrrr}
     \toprule
-    Configuration & Head parameters & RMSE $\downarrow$ & MAE $\downarrow$ & PCC $\uparrow$ & $R^{2}$ $\uparrow$ \\
+    Configuration & Head parameters (K) & RMSE $\downarrow$ & MAE $\downarrow$ & PCC $\uparrow$ & $R^{2}$ $\uparrow$ \\
     \midrule
-    T60-only (MLP) & 86,529 & 108.99 & 66.29 & 0.9474 & 0.8972 \\
-    Denoising-aided (MLP) & 86,529 & 97.24 & 59.54 & 0.9590 & 0.9179 \\
-    Denoising-aided (Fourier-KAN) & 86,369 & \textbf{92.32} & \textbf{55.08} & \textbf{0.9630} & \textbf{0.9262} \\
+    T60-only (MLP) & 86.529 & 108.99 & 66.29 & 0.9474 & 0.8972 \\
+    Denoising-aided (MLP) & 86.529 & 97.24 & 59.54 & 0.9590 & 0.9179 \\
+    Denoising-aided (Fourier-KAN) & 86.369 & \textbf{92.32} & \textbf{55.08} & \textbf{0.9630} & \textbf{0.9262} \\
     \bottomrule
   \end{tabular}
   \par\smallskip
@@ -1323,7 +1314,7 @@ The head parameter counts in Table~\ref{tab:head} include all trainable paramete
 
 % BEGIN U182
 
-Table~\ref{tab:denoise} reports denoising quality for different task-weight configurations, averaged over Tests 1--4. Consistent with the target defined in Section~\ref{sec:denoise}, these metrics reflect noise removal with reverberation preserved.
+Table~\ref{tab:denoise} compares denoising quality at $\alpha=1$ and at the main model's setting of $\alpha=0.05$, with the noisy input included as a reference. Consistent with the target defined in Section~\ref{sec:denoise}, these metrics reflect noise removal with reverberation preserved.
 
 % END U182
 
@@ -1331,7 +1322,7 @@ Table~\ref{tab:denoise} reports denoising quality for different task-weight conf
 
 \begin{table}[pos=htbp]
   \centering
-  \caption{Denoising metrics for different task-weight configurations (average over Tests 1--4).}
+  \caption{Denoising metrics for different $T_{60}$ loss weights (average over Tests 1--4).}
   \label{tab:denoise}
   \small
   \begin{tabular}{lrrrr}
@@ -1339,9 +1330,8 @@ Table~\ref{tab:denoise} reports denoising quality for different task-weight conf
     Configuration & PESQ $\uparrow$ & STOI $\uparrow$ & SI-SDR (dB) $\uparrow$ & $\Delta$SI-SDR \\
     \midrule
     Noisy input & 2.721 & 0.847 & 15.91 & --- \\
-    $T_{60}$-dominant & 3.077 & 0.891 & 18.80 & +2.89 \\
-    Equal-weight & 3.178 & 0.907 & 19.79 & +3.88 \\
-    \textbf{Ours} & \textbf{3.481} & \textbf{0.930} & \textbf{21.21} & \textbf{+5.30} \\
+    $\alpha=1$ & 3.178 & 0.907 & 19.79 & +3.88 \\
+    \textbf{Ours} ($\alpha=0.05$) & \textbf{3.481} & \textbf{0.930} & \textbf{21.21} & \textbf{+5.30} \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1350,7 +1340,7 @@ Table~\ref{tab:denoise} reports denoising quality for different task-weight conf
 
 % BEGIN U185
 
-Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. It achieves the highest PESQ, STOI, and SI-SDR among the three task-weight configurations in Table~\ref{tab:denoise}. Together with Table~\ref{tab:weight}, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the task weights examined.
+Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. The main model with $\alpha=0.05$ achieves higher PESQ, STOI, and SI-SDR than the configuration with $\alpha=1$. Together with Table~\ref{tab:weight}, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the loss weights examined.
 
 % END U185
 
@@ -1363,7 +1353,7 @@ Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.0
 
 % BEGIN U188
 
-This paper presents a multi-task learning framework for blind $T_{60}$ estimation, with $T_{60}$ regression as the primary task and denoising reconstruction as the auxiliary task. The tasks share a time--frequency Conformer feature extraction network, and a Fourier-KAN regression head estimates $T_{60}$. Across the four test sets, the proposed model achieves an average RMSE of 92.32 ms, 17.2\% lower than that of the single-task Fourier-KAN baseline. It also outperforms comparison methods including BERP, DAMTL, and noise-aware. Ablation experiments show that denoising-aided multi-task training reduces the MLP model's average RMSE by 10.8\% relative to single-task training. Under this multi-task setting, replacing the MLP regression head with a Fourier-KAN head that has a similar parameter count and the same dropout rate further reduces average RMSE by 5.1\%. Task-weight analysis further shows that joint training performance depends on the weight settings, with $(\alpha,\beta)=(1.0,0.05)$ performing best among the configurations examined.
+This paper presents a multi-task learning framework for blind $T_{60}$ estimation, with $T_{60}$ regression as the primary task and denoising reconstruction as the auxiliary task. The tasks share a time--frequency Conformer feature extraction network, and a Fourier-KAN regression head estimates $T_{60}$. Across the four test sets, the proposed model achieves an average RMSE of 92.32 ms, 17.2\% lower than that of the single-task Fourier-KAN baseline. It also outperforms comparison methods including BERP, DAMTL, and noise-aware. Ablation experiments show that denoising-aided multi-task training reduces the MLP model's average RMSE by 10.8\% relative to single-task training. Under this multi-task setting, replacing the MLP regression head with a Fourier-KAN head that has a similar parameter count and the same dropout rate further reduces average RMSE by 5.1\%. The sensitivity analysis further shows that estimation performance under joint training depends on the $T_{60}$ loss weight, with $\alpha=0.05$ performing best among the values examined.
 
 % END U188
 
