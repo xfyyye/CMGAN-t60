@@ -410,7 +410,7 @@ The two cascaded TSCBs yield shared time--frequency features $\mathbf F^{(N)}\in
 
 \begin{figure}[pos=htbp]
   \centering
-  \includegraphics[width=\columnwidth]{figs_chapter/ts_conformer_v4.png}
+  \includegraphics[width=\columnwidth]{figs_chapter/ts_conformer_v8.png}
   \caption{Time--frequency Conformer block (TSCB). (a) The temporal and frequency Conformers process the shared features sequentially, with an external residual connection at each stage. (b) The feed-forward, self-attention, and convolution modules within a single Conformer and their residual connections. The temporal and frequency Conformers have the same architecture but independent parameters.}
   \label{fig:tscb}
 \end{figure}
@@ -1040,7 +1040,7 @@ Speech inputs are single-channel, 4 s segments sampled at 16 kHz, with $L=64\,00
 
 % BEGIN U146
 
-Table~\ref{tab:arch} summarises the structural parameters of the proposed model. The shared feature extraction network uses two TSCBs, and the Fourier-KAN regression head uses two mapping layers with Fourier expansion orders of 16 and 8, respectively.
+Table~\ref{tab:arch} summarises the model configuration of DACT-KAN. The Conformer settings apply to both the temporal and frequency Conformers within each TSCB.
 
 % END U146
 
@@ -1048,23 +1048,20 @@ Table~\ref{tab:arch} summarises the structural parameters of the proposed model.
 
 \begin{table}[pos=htbp]
   \centering
-  \caption{Network architecture and regularisation settings.}
+  \caption{Model configuration of DACT-KAN.}
   \label{tab:arch}
   \small
-  \begin{tabular}{p{0.28\linewidth}p{0.43\linewidth}p{0.19\linewidth}}
+  \begin{tabular}{lr}
     \toprule
-    Module & Setting & Value \\
+    Hyperparameter & Value \\
     \midrule
-    Shared feature extraction network & Channels $C$; number of TSCBs & 64; 2 \\
-    Each Conformer block & Attention heads; dimension per head & 4; 16 \\
-    Each Conformer block & Feed-forward expansion factor; 1D convolution kernel size & 4; 31 \\
-    Each Conformer block & Attention and feed-forward dropout rate & 0.2 \\
-    Fourier-KAN regression head & Pooling dimension; projection dimension $d_0$ & 192; 64 \\
-    Fourier-KAN regression head & Output dimensions of the two layers $(d_1,d_2)$ & (32,16) \\
-    Fourier-KAN regression head & Fourier expansion orders $(K_1,K_2)$ & (16,8) \\
-    Fourier-KAN regression head & Inter-layer dropout rate & 0.1 \\
-    MLP regression head (ablation) & Input dimension; three hidden-layer dimensions & 192; (192,192,64) \\
-    MLP regression head (ablation) & Hidden activation; dropout rate & ReLU; 0.1 \\
+    Shared feature channels $C$ & 64 \\
+    Number of TSCBs & 2 \\
+    Conformer attention heads & 4 \\
+    Conformer feed-forward expansion factor & 4 \\
+    Conformer depthwise convolution kernel size & 31 \\
+    Fourier-KAN layer widths $(d_0,d_1,d_2)$ & (64,32,16) \\
+    Fourier expansion orders $(K_1,K_2)$ & (16,8) \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1072,6 +1069,8 @@ Table~\ref{tab:arch} summarises the structural parameters of the proposed model.
 % END U147
 
 % BEGIN U149
+
+The dropout rate is 0.2 in the Conformer attention and feed-forward modules and 0.1 between the Fourier-KAN layers.
 
 The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the $T_{60}$ loss weight is set to $\alpha=0.05$ for the main model.
 
@@ -1259,7 +1258,7 @@ Within the $[1.3,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 % BEGIN U174
 
-\textbf{Ablation of multi-task training and regression head design.} To examine the roles of denoising-aided multi-task training and regression head design separately, Table~\ref{tab:head} compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
+\textbf{Ablation of multi-task training and regression head design.} To examine the roles of denoising-aided multi-task training and regression head design separately, Table~\ref{tab:head} compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP regression head takes the 192-dimensional pooled features as input and has three hidden layers with dimensions of (192,192,64) and ReLU activations, giving it a parameter count close to that of the Fourier-KAN head. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
 
 % END U174
 
@@ -1289,19 +1288,21 @@ Within the $[1.3,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 % BEGIN U178
 
-\textbf{Effect of denoising-aided multi-task training.} As shown in Table~\ref{tab:head}, with the MLP regression head held fixed, adding the denoising auxiliary task reduces average RMSE from 108.99 ms to 97.24 ms, a reduction of 10.8\%. MAE, PCC, and $R^{2}$ also improve. This indicates that, under the configuration examined, denoising-aided multi-task training helps improve $T_{60}$ estimation accuracy.
+\textbf{Effect of denoising-aided multi-task training.} As shown in Table~\ref{tab:head}, with the MLP regression head held fixed, adding the denoising auxiliary task reduces average RMSE from 108.99 ms to 97.24 ms, a reduction of 10.8\%. MAE, PCC, and $R^{2}$ also improve.
 
 % END U178
 
 % BEGIN U179
 
-\textbf{Effect of the Fourier-KAN regression head.} Under the same multi-task setting, replacing the MLP regression head with Fourier-KAN further reduces average RMSE from 97.24 ms to 92.32 ms, a reduction of 5.1\%, while also improving the other three metrics. This result supports the effectiveness of the Fourier-KAN regression head within our multi-task framework. Although the two heads have similar parameter counts, their internal structures still differ. These results therefore compare the complete regression head designs.
+\textbf{Effect of the Fourier-KAN regression head.} Under the same multi-task setting, replacing the MLP regression head with Fourier-KAN further reduces average RMSE from 97.24 ms to 92.32 ms, a reduction of 5.1\%, while also improving the other three metrics.
+
+The benefit of denoising-aided training is already observed with the MLP regression head held fixed, indicating that this benefit does not depend on introducing Fourier-KAN. Under the same multi-task setting, Fourier-KAN further reduces estimation error. These comparisons support the contributions of auxiliary training and regression head design in the configuration examined.
 
 % END U179
 
 % BEGIN U180
 
-The head parameter counts in Table~\ref{tab:head} include all trainable parameters within each regression head, excluding the shared feature extraction network and denoising decoder branch. The two heads use the same feature pooling method and dropout rate but differ in hidden-layer structure, normalisation, and dropout placement. The performance difference therefore cannot be attributed solely to the Fourier basis formulation.
+The head parameter counts in Table~\ref{tab:head} include all trainable parameters within each regression head, excluding the shared feature extraction network and denoising decoder branch. The two heads have similar parameter counts and use the same feature pooling method and dropout rate, but differ in hidden-layer structure, normalisation, and dropout placement. These results therefore compare the complete regression head designs, and the performance difference cannot be attributed solely to the Fourier basis formulation.
 
 % END U180
 
@@ -1340,7 +1341,7 @@ Table~\ref{tab:denoise} compares denoising quality at $\alpha=1$ and at the main
 
 % BEGIN U185
 
-Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. The main model with $\alpha=0.05$ achieves higher PESQ, STOI, and SI-SDR than the configuration with $\alpha=1$. Together with Table~\ref{tab:weight}, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the loss weights examined.
+Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. Together with Table~\ref{tab:weight}, these results show that $\alpha=0.05$ yields both lower $T_{60}$ estimation error and higher denoising scores than $\alpha=1$. Thus, between these two weight settings, the improvement in estimation accuracy is not accompanied by a reduction in denoising quality.
 
 % END U185
 

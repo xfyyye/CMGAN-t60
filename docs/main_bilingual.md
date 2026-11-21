@@ -678,7 +678,7 @@ The two cascaded TSCBs yield shared time–frequency features $\mathbf F^{(N)}\i
 
 <!-- BEGIN U060 source-lines 165-165 -->
 
-![图 3　时频 Conformer 块](../figures/ch3/ts_conformer_v4.png)
+![图 3　时频 Conformer 块](../figures/ch3/ts_conformer_v8.png)
 
 *共享图件；中英文图注见下一对应块。 / Shared image; bilingual caption follows.*
 
@@ -1726,11 +1726,11 @@ Speech inputs are single-channel, 4 s segments sampled at 16 kHz, with $L=64\,00
 
 **中文原文**
 
-所提模型的结构参数汇总于表 2。共享特征提取网络采用两个 TSCB，Fourier-KAN 回归头使用两层映射，基函数阶数依次为 16 和 8。
+DACT-KAN 的模型配置见表 2。表中的 Conformer 配置同时适用于每个 TSCB 中的时间与频率 Conformer。
 
 **English**
 
-Table 2 summarises the structural parameters of the proposed model. The shared feature extraction network uses two TSCBs, and the Fourier-KAN regression head uses two mapping layers with Fourier expansion orders of 16 and 8, respectively.
+Table 2 summarises the model configuration of DACT-KAN. The Conformer settings apply to both the temporal and frequency Conformers within each TSCB.
 
 <!-- END U146 -->
 
@@ -1738,11 +1738,11 @@ Table 2 summarises the structural parameters of the proposed model. The shared f
 
 **中文原文**
 
-**表 2　网络结构与正则化配置**
+**表 2　DACT-KAN 模型配置**
 
 **English**
 
-**Table 2. Network architecture and regularisation settings.**
+**Table 2. Model configuration of DACT-KAN.**
 
 <!-- END U147 -->
 
@@ -1750,33 +1750,27 @@ Table 2 summarises the structural parameters of the proposed model. The shared f
 
 **中文原文**
 
-| 模块 | 配置项 | 取值 |
-|---|---|---|
-| 共享特征提取网络 | 通道数 $C$；TSCB 数量 | 64；2 |
-| 每个 Conformer 块 | 注意力头数；每头维度 | 4；16 |
-| 每个 Conformer 块 | 前馈扩展因子；一维卷积核大小 | 4；31 |
-| 每个 Conformer 块 | 注意力与前馈模块 dropout 概率 | 0.2 |
-| Fourier-KAN 回归头 | 池化维度；投影维度 $d_0$ | 192；64 |
-| Fourier-KAN 回归头 | 两层输出维度 $(d_1,d_2)$ | (32,16) |
-| Fourier-KAN 回归头 | 基函数阶数 $(K_1,K_2)$ | (16,8) |
-| Fourier-KAN 回归头 | 层间 dropout 概率 | 0.1 |
-| MLP 回归头（消融） | 输入维度；三层隐层维度 | 192；(192,192,64) |
-| MLP 回归头（消融） | 隐层激活；dropout 概率 | ReLU；0.1 |
+| 参数 | 取值 |
+|---|---:|
+| 共享特征通道数 $C$ | 64 |
+| TSCB 数量 | 2 |
+| Conformer 注意力头数 | 4 |
+| Conformer 前馈扩展因子 | 4 |
+| Conformer 一维深度卷积核大小 | 31 |
+| Fourier-KAN 层宽 $(d_0,d_1,d_2)$ | (64,32,16) |
+| Fourier 展开阶数 $(K_1,K_2)$ | (16,8) |
 
 **English**
 
-| Module | Setting | Value |
-|---|---|---|
-| Shared feature extraction network | Channels $C$; number of TSCBs | 64; 2 |
-| Each Conformer block | Attention heads; dimension per head | 4; 16 |
-| Each Conformer block | Feed-forward expansion factor; 1D convolution kernel size | 4; 31 |
-| Each Conformer block | Attention and feed-forward dropout rate | 0.2 |
-| Fourier-KAN regression head | Pooling dimension; projection dimension $d_0$ | 192; 64 |
-| Fourier-KAN regression head | Output dimensions of the two layers $(d_1,d_2)$ | (32,16) |
-| Fourier-KAN regression head | Fourier expansion orders $(K_1,K_2)$ | (16,8) |
-| Fourier-KAN regression head | Inter-layer dropout rate | 0.1 |
-| MLP regression head (ablation) | Input dimension; three hidden-layer dimensions | 192; (192,192,64) |
-| MLP regression head (ablation) | Hidden activation; dropout rate | ReLU; 0.1 |
+| Hyperparameter | Value |
+|---|---:|
+| Shared feature channels $C$ | 64 |
+| Number of TSCBs | 2 |
+| Conformer attention heads | 4 |
+| Conformer feed-forward expansion factor | 4 |
+| Conformer depthwise convolution kernel size | 31 |
+| Fourier-KAN layer widths $(d_0,d_1,d_2)$ | (64,32,16) |
+| Fourier expansion orders $(K_1,K_2)$ | (16,8) |
 
 <!-- END U148 -->
 
@@ -1784,9 +1778,13 @@ Table 2 summarises the structural parameters of the proposed model. The shared f
 
 **中文原文**
 
+Conformer 注意力与前馈模块的 dropout 概率均为 0.2，Fourier-KAN 层间 dropout 概率为 0.1。
+
 Fourier-KAN 各层的正弦和余弦系数采用零均值高斯初始化，标准差为 $1/\sqrt{d_{\ell-1}K_\ell}$，输出偏置初始化为零。去噪损失子权重为 $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$，主模型的 $T_{60}$ 损失权重设为 $\alpha=0.05$。
 
 **English**
+
+The dropout rate is 0.2 in the Conformer attention and feed-forward modules and 0.1 between the Fourier-KAN layers.
 
 The sine and cosine coefficients in each Fourier-KAN layer are initialised from a zero-mean Gaussian distribution with standard deviation $1/\sqrt{d_{\ell-1}K_\ell}$, and the output biases are initialised to zero. The denoising loss component weights are $(w_{ri},w_{mag},w_{time})=(0.1,0.9,0.2)$, and the $T_{60}$ loss weight is set to $\alpha=0.05$ for the main model.
 
@@ -2132,11 +2130,11 @@ Within the $[1.3,1.5]$ s interval, the proposed method has higher RMSE on measur
 
 **中文原文**
 
-**多任务训练与回归头设计消融。** 为分别考察去噪辅助多任务训练和回归头设计的作用，表 5 比较单任务 MLP、多任务 MLP 和多任务 Fourier-KAN 三种配置。各配置采用相同的数据划分、随机种子 42 和全局批大小 16，回归头 dropout 概率均为 0.1。MLP 隐层维度为 (192,192,64)，其回归头参数量与 Fourier-KAN 接近；两组多任务配置均采用 $T_{60}$ 损失权重 $\alpha=0.05$。
+**多任务训练与回归头设计消融。** 为分别考察去噪辅助多任务训练和回归头设计的作用，表 5 比较单任务 MLP、多任务 MLP 和多任务 Fourier-KAN 三种配置。各配置采用相同的数据划分、随机种子 42 和全局批大小 16，回归头 dropout 概率均为 0.1。MLP 回归头以 192 维池化特征为输入，三层隐层维度为 (192,192,64)，隐层采用 ReLU 激活，其回归头参数量与 Fourier-KAN 接近。两组多任务配置均采用 $T_{60}$ 损失权重 $\alpha=0.05$。
 
 **English**
 
-**Ablation of multi-task training and regression head design.** To examine the roles of denoising-aided multi-task training and regression head design separately, Table 5 compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP has hidden-layer dimensions of (192,192,64), giving its regression head a parameter count close to that of Fourier-KAN. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
+**Ablation of multi-task training and regression head design.** To examine the roles of denoising-aided multi-task training and regression head design separately, Table 5 compares three configurations: single-task MLP, multi-task MLP, and multi-task Fourier-KAN. All configurations use the same data splits, random seed 42, and global batch size of 16, with a regression head dropout rate of 0.1. The MLP regression head takes the 192-dimensional pooled features as input and has three hidden layers with dimensions of (192,192,64) and ReLU activations, giving it a parameter count close to that of the Fourier-KAN head. Both multi-task configurations use a $T_{60}$ loss weight of $\alpha=0.05$.
 
 <!-- END U174 -->
 
@@ -2188,11 +2186,11 @@ Note: Parentheses indicate the regression head type. T60-only denotes training s
 
 **中文原文**
 
-**去噪辅助多任务训练的作用。** 如表 5 所示，在保持 MLP 回归头不变的条件下，引入去噪辅助任务后，平均 RMSE 从 108.99 ms 降至 97.24 ms，降低 10.8%；MAE、PCC 和 $R^{2}$ 也均得到改善。这表明，在所考察的配置下，去噪辅助多任务训练有助于提高 $T_{60}$ 估计精度。
+**去噪辅助多任务训练的作用。** 如表 5 所示，在保持 MLP 回归头不变的条件下，引入去噪辅助任务后，平均 RMSE 从 108.99 ms 降至 97.24 ms，降低 10.8%；MAE、PCC 和 $R^{2}$ 也均得到改善。
 
 **English**
 
-**Effect of denoising-aided multi-task training.** As shown in Table 5, with the MLP regression head held fixed, adding the denoising auxiliary task reduces average RMSE from 108.99 ms to 97.24 ms, a reduction of 10.8%. MAE, PCC, and $R^{2}$ also improve. This indicates that, under the configuration examined, denoising-aided multi-task training helps improve $T_{60}$ estimation accuracy.
+**Effect of denoising-aided multi-task training.** As shown in Table 5, with the MLP regression head held fixed, adding the denoising auxiliary task reduces average RMSE from 108.99 ms to 97.24 ms, a reduction of 10.8%. MAE, PCC, and $R^{2}$ also improve.
 
 <!-- END U178 -->
 
@@ -2200,11 +2198,15 @@ Note: Parentheses indicate the regression head type. T60-only denotes training s
 
 **中文原文**
 
-**Fourier-KAN 回归头的作用。** 在相同的多任务设置下，采用 Fourier-KAN 后，平均 RMSE 从匹配 MLP 的 97.24 ms 进一步降至 92.32 ms，降低 5.1%，其余三项指标也均得到改善。该结果支持 Fourier-KAN 回归头在本文多任务框架中的有效性。两种头的参数量接近，但内部结构仍有差异，因此上述结果反映完整回归头设计的比较。
+**Fourier-KAN 回归头的作用。** 在相同的多任务设置下，采用 Fourier-KAN 后，平均 RMSE 从匹配 MLP 的 97.24 ms 进一步降至 92.32 ms，降低 5.1%，其余三项指标也均得到改善。
+
+去噪辅助训练的收益在保持 MLP 回归头不变时已经出现，说明这一收益并不依赖 Fourier-KAN 的引入。在此基础上，Fourier-KAN 在相同多任务设置下进一步降低估计误差，表明辅助训练与回归头设计在当前配置下分别带来了改善。
 
 **English**
 
-**Effect of the Fourier-KAN regression head.** Under the same multi-task setting, replacing the MLP regression head with Fourier-KAN further reduces average RMSE from 97.24 ms to 92.32 ms, a reduction of 5.1%, while also improving the other three metrics. This result supports the effectiveness of the Fourier-KAN regression head within our multi-task framework. Although the two heads have similar parameter counts, their internal structures still differ. These results therefore compare the complete regression head designs.
+**Effect of the Fourier-KAN regression head.** Under the same multi-task setting, replacing the MLP regression head with Fourier-KAN further reduces average RMSE from 97.24 ms to 92.32 ms, a reduction of 5.1%, while also improving the other three metrics.
+
+The benefit of denoising-aided training is already observed with the MLP regression head held fixed, indicating that this benefit does not depend on introducing Fourier-KAN. Under the same multi-task setting, Fourier-KAN further reduces estimation error. These comparisons support the contributions of auxiliary training and regression head design in the configuration examined.
 
 <!-- END U179 -->
 
@@ -2212,11 +2214,11 @@ Note: Parentheses indicate the regression head type. T60-only denotes training s
 
 **中文原文**
 
-表 5 中的头参数量统计各回归头内的全部可训练参数，不包含共享特征提取网络与去噪解码分支。两种回归头采用相同的特征池化方式与 dropout 概率，但在隐层结构、归一化及 dropout 位置等方面仍有差异，不能将全部性能差异归因于 Fourier 基函数形式。
+表 5 中的头参数量统计各回归头内的全部可训练参数，不包含共享特征提取网络与去噪解码分支。两种回归头的参数量接近，采用相同的特征池化方式与 dropout 概率，但在隐层结构、归一化及 dropout 位置等方面仍有差异。因此，上述结果反映完整回归头设计的比较，不能将全部性能差异归因于 Fourier 基函数形式。
 
 **English**
 
-The head parameter counts in Table 5 include all trainable parameters within each regression head, excluding the shared feature extraction network and denoising decoder branch. The two heads use the same feature pooling method and dropout rate but differ in hidden-layer structure, normalisation, and dropout placement. The performance difference therefore cannot be attributed solely to the Fourier basis formulation.
+The head parameter counts in Table 5 include all trainable parameters within each regression head, excluding the shared feature extraction network and denoising decoder branch. The two heads have similar parameter counts and use the same feature pooling method and dropout rate, but differ in hidden-layer structure, normalisation, and dropout placement. These results therefore compare the complete regression head designs, and the performance difference cannot be attributed solely to the Fourier basis formulation.
 
 <!-- END U180 -->
 
@@ -2280,11 +2282,11 @@ Table 6 compares denoising quality at $\alpha=1$ and at the main model's setting
 
 **中文原文**
 
-主模型相比含噪输入获得 +0.76 PESQ、+0.08 STOI 和 +5.30 dB SI-SDR 的提升。与 $\alpha=1$ 的配置相比，$\alpha=0.05$ 的主模型取得更高的 PESQ、STOI 和 SI-SDR。结合表 4，该配置也取得所考察权重取值中最低的 $T_{60}$ 估计误差。
+主模型相比含噪输入获得 +0.76 PESQ、+0.08 STOI 和 +5.30 dB SI-SDR 的提升。结合表 4，$\alpha=0.05$ 相比 $\alpha=1$ 同时获得更低的 $T_{60}$ 估计误差和更高的去噪指标。在这两个权重设置的比较中，估计精度的改善并未伴随去噪质量下降。
 
 **English**
 
-Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. The main model with $\alpha=0.05$ achieves higher PESQ, STOI, and SI-SDR than the configuration with $\alpha=1$. Together with Table 4, these results show that this configuration also achieves the lowest $T_{60}$ estimation error among the loss weights examined.
+Relative to the noisy input, the main model improves PESQ by +0.76, STOI by +0.08, and SI-SDR by +5.30 dB. Together with Table 4, these results show that $\alpha=0.05$ yields both lower $T_{60}$ estimation error and higher denoising scores than $\alpha=1$. Thus, between these two weight settings, the improvement in estimation accuracy is not accompanied by a reduction in denoising quality.
 
 <!-- END U185 -->
 
